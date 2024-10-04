@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>File Management</title>
+</head>
+<body>
+<h1>Uploaded Files</h1>
+<ul>
+  <li th:each="file : ${files}">
+    <span th:text="${file}"></span>
+    <a th:href="@{/api/v1/file/deleteFile(fileKey=${file})}">Delete</a>
+  </li>
+</ul>
+</body>
+</html>
