@@ -268,14 +268,23 @@ interface SurveyMapper {
     """)
     List<Survey> surveyList()
 
-    // surveyType, cid 일치하는 설문 조회
+    // survId, cid 일치하는 설문 조회
     @Select("""
         SELECT *
+        FROM formmail_survey
+        WHERE surv_id = #{surv.survId}
+        AND cid = #{surv.cid}
+    """)
+    List<Survey> selectSurveyList(@Param("surv") Survey surv)
+
+    // 이미 등록된 설문지가 있는지 체크
+    @Select("""
+        SELECT surv_id
         FROM formmail_survey
         WHERE survey_type = #{surv.surveyType}
         AND cid = #{surv.cid}
     """)
-    List<Survey> selectSurveyList(@Param("surv") Survey surv)
+    String dupSurvey(@Param("surv") Survey surv)
 
     // 전체 설문 수
     @Select("""

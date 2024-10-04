@@ -31,29 +31,28 @@ public class formMail_surveyService {
 
         try {
             log.info("survey = " + surv);
-            List<Survey> surveyList = surveyMapper.selectSurveyList(surv);
 
             // 설문 타입, cid 일치하는 설문 있으면 새로 등록 x , survId 반환
-            if(surveyList != null && !surveyList.isEmpty()){
-                // 이미 값이 있을때
-                int survId = surveyList.get(0).getSurvId();
-//                // 넣어놓은 리스트 초기화
-//                surveyResponse = new SurveyResponse();
 
-                surveyResponse.setSurvId(survId);
-                surveyResponse.setCode("C002");
-                surveyResponse.setMessage("이미 같은 설문(cid , type)이 존재합니다.");
-            } else {
-                // 값이 없을때 -> 신규 등록
-                int addSurvey = surveyMapper.addSurvey(surv);
-                if(addSurvey == 1){
-                    surveyResponse.setCode("C001");
-                    surveyResponse.setMessage("설문조사 등록 성공");
+                String survId = surveyMapper.dupSurvey(surv);
+                log.info("survId = " + survId);
+                if(survId == null){
+                    // 값이 없을때 -> 신규 등록
+                    int addSurvey = surveyMapper.addSurvey(surv);
+                    if(addSurvey == 1){
+                        surveyResponse.setCode("C001");
+                        surveyResponse.setMessage("설문조사 등록 성공");
+                    } else {
+                        surveyResponse.setCode("C004");
+                        surveyResponse.setMessage("설문조사 등록 실패");
+                    }
                 } else {
-                    surveyResponse.setCode("C004");
-                    surveyResponse.setMessage("설문조사 등록 실패");
+                    // 이미 값이 있을때
+                    surveyResponse.setSurvId(Integer.parseInt(survId));
+                    surveyResponse.setCode("C002");
+                    surveyResponse.setMessage("이미 같은 설문(cid , type)이 존재합니다.");
                 }
-            }
+
 
         } catch (Exception e) {
             surveyResponse.setCode("E001");
