@@ -4,5 +4,5 @@ server:
   address: 0.0.0.0
 spring:
   config:
-    import: application-secret.yml
+    import: "optional:classpath:application-secret.yml"
 
