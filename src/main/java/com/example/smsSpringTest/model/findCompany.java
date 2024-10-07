@@ -50,4 +50,8 @@ public class findCompany {
 
     private String partner;
 
+    private String address;
+
+    private String industry;
+
 }
