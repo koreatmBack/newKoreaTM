@@ -86,13 +86,13 @@ tasks.named('test') {
 sourceSets {
 	main {
 		java {
-			srcDirs 'src/main/java'
+			srcDirs 'src/main/java' // Java 소스 디렉토리
 		}
 		groovy {
-			srcDirs 'src/main/java'
+			srcDirs 'src/main/groovy' // Groovy 소스 디렉토리
 		}
 		resources {
-			srcDirs 'src/main/resources'
+			srcDirs 'src/main/resources' // 리소스 디렉토리
 		}
 	}
 }
