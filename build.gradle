@@ -83,20 +83,23 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+//sourceSets {
+//	main {
+//		java {
+//			srcDirs 'src/main/java', 'src/main/groovy' // Java와 Groovy 소스 모두 포함
+//		}
+//		groovy {
+//			srcDirs 'src/main/groovy' // Groovy 소스 디렉토리
+//		}
+//		resources {
+//			srcDirs 'src/main/resources'
+//		}
+//	}
+//}
 sourceSets {
-	main {
-		java {
-			srcDirs 'src/main/java', 'src/main/groovy' // Java와 Groovy 소스 모두 포함
-		}
-		groovy {
-			srcDirs 'src/main/groovy' // Groovy 소스 디렉토리
-		}
-		resources {
-			srcDirs 'src/main/resources'
-		}
-	}
+	main.java.srcDirs = []
+	main.groovy.srcDirs = ['src/main/java']
 }
-
 tasks.withType(Test) {
 	enabled = false
 }
