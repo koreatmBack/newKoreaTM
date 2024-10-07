@@ -6,6 +6,11 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
@@ -69,6 +74,9 @@ dependencies {
 //
 //	//
 //	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+
+	// api 못찾는 문제
+	implementation 'org.apiguardian:apiguardian-api:1.1.2'
 }
 
 tasks.named('test') {
