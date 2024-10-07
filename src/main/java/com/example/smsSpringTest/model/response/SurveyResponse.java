@@ -21,6 +21,8 @@ import java.util.List;
 public class SurveyResponse extends ApiResponse{
 
     private List<Survey> surveyList;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int survId;
 
 }

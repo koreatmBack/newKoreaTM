@@ -44,7 +44,7 @@ public class formMail_surveyController {
         return surveyResponse;
     }
 
-    // survId와 cid 일치하는 설문지 조회
+    // surveyType과 cid 일치하는 설문지 조회
     @PostMapping("/selectSurveyList")
     public SurveyResponse selectSurveyList(@RequestBody Survey surv) throws Exception {
         SurveyResponse surveyResponse = new SurveyResponse();

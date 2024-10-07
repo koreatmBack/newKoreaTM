@@ -272,7 +272,7 @@ interface SurveyMapper {
     @Select("""
         SELECT *
         FROM formmail_survey
-        WHERE surv_id = #{surv.survId}
+        WHERE survey_type = #{surv.surveyType}
         AND cid = #{surv.cid}
     """)
     List<Survey> selectSurveyList(@Param("surv") Survey surv)

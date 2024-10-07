@@ -84,7 +84,7 @@ public class formMail_surveyService {
         return surveyResponse;
     }
 
-    // survId와 cid 일치하는 설문지 조회
+    // surveyType과 cid 일치하는 설문지 조회
     public SurveyResponse selectSurveyList(Survey surv) throws Exception {
         SurveyResponse surveyResponse = new SurveyResponse();
 
