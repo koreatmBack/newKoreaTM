@@ -5,3 +5,4 @@ server:
 spring:
   config:
     import: application-secret.yml
+
