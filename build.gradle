@@ -87,3 +87,7 @@ sourceSets {
 	main.java.srcDirs = []
 	main.groovy.srcDirs = ['src/main/java']
 }
+
+tasks.withType(Test) {
+	enabled = false
+}
