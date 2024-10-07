@@ -19,4 +19,13 @@ spring:
     username: root
     password: xldpa123
     sql-script-encoding: "UTF-8"
+  jpa:
+    properties:
+      hibernate:
+        "[format_sql]": true # 정렬된 SQL 출력
+        "[auto_quote_keyword]": true
+        show-sql: true # 사용되는 SQL 콘솔창에 출력
+    hibernate:
+      ddl-auto: none # 객체에 매핑되는 기존 테이블 자동 드랍 및 새로운 테이블 생성, create, none, create-drop
+      defer-datasource-initialization: true
 
