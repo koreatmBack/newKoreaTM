@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	//id 'war'
+	id 'groovy'
 	id 'org.springframework.boot' version '2.7.13'  // 호환 가능한 버전으로 설정
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
@@ -72,4 +73,9 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	main.java.srcDirs = []
+	main.groovy.srcDirs = ['src/main/java']
 }
