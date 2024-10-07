@@ -55,4 +55,6 @@ public class formMail_company {
     private String partner;
 
     private String address;
+
+    private String industry;
 }
