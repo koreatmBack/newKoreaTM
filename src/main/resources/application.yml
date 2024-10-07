@@ -2,55 +2,7 @@ server:
   port: 8080
 #  address: 127.0.0.1
   address: 0.0.0.0
-#spring:
-#  config:
-#    import: application-secret.yml
 spring:
-  main:
-    web-application-type: servlet
-  servlet:
-    multipart:
-      max-file-size: 30MB
-      max-request-size: 30MB
-  datasource:
-    dialect: org.hibernate.dialect.MariaDB103Dialect
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/sys
-    username: root
-    password: xldpa123
-    sql-script-encoding: "UTF-8"
-  jpa:
-    properties:
-      hibernate:
-        "[format_sql]": true # 정렬된 SQL 출력
-        "[auto_quote_keyword]": true
-        show-sql: true # 사용되는 SQL 콘솔창에 출력
-    hibernate:
-      ddl-auto: none # 객체에 매핑되는 기존 테이블 자동 드랍 및 새로운 테이블 생성, create, none, create-drop
-      defer-datasource-initialization: true
-  redis:
-    host: localhost
-    port: 6379
-mybatis:
-  type-aliases-package: com.example.smsSpringTest.model.model.*
-  configuration:
-    map-underscore-to-camel-case: true
-    default-executor-type: reuse
+  config:
+    import: application-secret.yml
 
-cloud:
-  aws:
-    credentials:
-      access-key: ${aws_accessKey}
-      secret-key: ${aws_secretKey}
-    s3:
-      bucket: api-echo-bucket
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-sms:
-  userId: ${sms_id}
-  secureKey: ${sms_key}
-
-holiday:
-  service-key: ${holiday_key}
