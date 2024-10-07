@@ -89,7 +89,7 @@ sourceSets {
 			srcDirs 'src/main/java'
 		}
 		groovy {
-			srcDirs 'src/main/groovy'
+			srcDirs 'src/main/java'
 		}
 		resources {
 			srcDirs 'src/main/resources'
