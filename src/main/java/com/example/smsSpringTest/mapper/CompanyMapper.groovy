@@ -27,6 +27,7 @@ interface CompanyMapper {
             , mid
             , survey_type
             , partner
+            , address
         ) VALUES (
             #{comp.cid}
             , #{comp.companyName}
@@ -40,6 +41,7 @@ interface CompanyMapper {
             , #{comp.mid.userId}
             , #{comp.surveyType}
             , #{comp.partner}
+            , #{comp.address}
         )
     """)
     int addComp(@Param("comp") formMail_company comp)
@@ -66,6 +68,7 @@ interface CompanyMapper {
         , fc.partner
         , fc.mid
         , fc.survey_type
+        , fc.address
         , fa.r_name
         , fa.user_name
         , fa.position
@@ -95,6 +98,7 @@ interface CompanyMapper {
         , fc.partner
         , fc.mid
         , fc.survey_type
+        , fc.address
         , fa.r_name
         , fa.user_name
         , fa.position
@@ -151,6 +155,9 @@ interface CompanyMapper {
             </if>
             <if test="comp.partner != null">
                 partner = #{comp.partner},
+            </if>
+            <if test="comp.address != null">
+                address = #{comp.address},
             </if>
         </set>
         WHERE cid = #{comp.cid} 
