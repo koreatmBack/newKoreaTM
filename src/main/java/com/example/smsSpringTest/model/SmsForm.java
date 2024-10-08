@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * author : 신기훈
  * date : 2024-09-20
@@ -33,4 +35,6 @@ public class SmsForm {
     private String rDate;
     private String rTime;
     private String testFlag;
+
+    private LocalDateTime date;
 }

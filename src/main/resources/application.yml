@@ -41,7 +41,7 @@ spring:
     host: localhost
     port: 6379
 mybatis:
-  type-aliases-package: com.example.smsSpringTest.model.model.*
+  type-aliases-package: com.example.smsSpringTest.model.*
   configuration:
     map-underscore-to-camel-case: true
     default-executor-type: reuse
