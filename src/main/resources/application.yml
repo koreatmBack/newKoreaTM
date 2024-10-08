@@ -5,7 +5,8 @@ server:
 spring:
 #  profiles.active: "local"
   config:
-    import: application-secret.yml
+    import: "optional:classpath:application-secret.yml"
+
     #-------
   main:
     web-application-type: servlet
