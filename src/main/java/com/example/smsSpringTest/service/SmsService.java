@@ -137,6 +137,8 @@ public class SmsService {
 
 
                 log.info("문자 테스트 1차 성공");
+
+
                 //logger.info("SMS Content : "+buf.toString());
                 String origin_sms_url = "https://sslsms.cafe24.com/sms_sender.php"; // 인코딩 전 cafe24 제공 url
                 String sms_url = base64Encode("https://sslsms.cafe24.com/sms_sender.php"); // SMS 전송요청 URL
@@ -278,6 +280,14 @@ public class SmsService {
                     smsResponse.setCode("C000");
                     smsResponse.setMessage("문자 전송 성공 !! 남은 잔여 문자 " + Count + "건 남았습니다.");
 //                    return "문자 전송 성공!! 남은 잔여 문자 " + Count; // 성공시 -> 잔여 문자 개수 반환
+
+                    //------ db에 저장할 sPhone, rPhone, smsType, msg
+                    String originSphone = smsForm.getSPhone1() +"-" +smsForm.getSPhone2()+"-"+smsForm.getSPhone3();
+                    String originRphone = smsForm.getRPhone();
+                    String originSmsType = smsForm.getSmsType();
+                    String originMsg = smsForm.getMsg();
+
+                    // --------------------------------------------
                 } else{
 //                    return Result; // 실패시
                     smsResponse.setCode("C001");

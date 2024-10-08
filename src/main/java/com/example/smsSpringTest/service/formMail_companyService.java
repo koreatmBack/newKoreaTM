@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * author : 신기훈
@@ -68,11 +67,11 @@ public class formMail_companyService {
         long cacheTime = 1000 * 60 * 60; // 만료시간 1시간.
 
         // Redis에서 데이터가 있는지 확인
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
-            // Redis에서 데이터 가져오기
-            companyResponse = (CompanyResponse) redisTemplate.opsForValue().get(cacheKey);
-            log.info("Redis에서 고객사 목록을 조회했습니다.");
-        } else {
+//        if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
+//            // Redis에서 데이터 가져오기
+//            companyResponse = (CompanyResponse) redisTemplate.opsForValue().get(cacheKey);
+//            log.info("Redis에서 고객사 목록을 조회했습니다.");
+//        } else {
 
             int page = paging.getPage(); // 현재 페이지
             int size = paging.getSize(); // 한 페이지에 표시할 수
@@ -92,13 +91,13 @@ public class formMail_companyService {
                 companyResponse.setMessage("고객사 조회 성공");
 
                 // Redis에 데이터 저장
-                redisTemplate.opsForValue().set(cacheKey, companyResponse, cacheTime, TimeUnit.MILLISECONDS);
-                log.info("고객사 목록을 Redis에 캐싱했습니다.");
+//                redisTemplate.opsForValue().set(cacheKey, companyResponse, cacheTime, TimeUnit.MILLISECONDS);
+//                log.info("고객사 목록을 Redis에 캐싱했습니다.");
             } else {
                 companyResponse.setCode("E000");
                 companyResponse.setMessage("고객사 조회 실패");
             }
-        }
+//        }
 
         return companyResponse;
     }
