@@ -33,7 +33,7 @@ spring:
       ddl-auto: none # 객체에 매핑되는 기존 테이블 자동 드랍 및 새로운 테이블 생성, create, none, create-drop
       defer-datasource-initialization: true
       mybatis:
-        type-aliases-package: com.example.smsSpringTest.model.model.*
+        type-aliases-package: com.example.smsSpringTest.model.*
         configuration:
           map-underscore-to-camel-case: true
           default-executor-type: reuse
