@@ -20,7 +20,7 @@ spring:
     dialect: org.hibernate.dialect.MariaDB103Dialect
     driver-class-name: org.mariadb.jdbc.Driver
     #    url: jdbc:mariadb://localhost:3306/sys
-    url: jdbc:mariadb://127.0.0.1:3306/sys
+    url: jdbc:mariadb://3.34.81.182:3306/sys
     username: root
     password: xldpa123
     sql-script-encoding: "UTF-8"
