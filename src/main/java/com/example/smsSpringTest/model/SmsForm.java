@@ -21,7 +21,9 @@ public class SmsForm {
     private String msg;
     @JsonProperty("rPhone")
     private String rPhone;
-//    private String sphone;
+
+    private String sPhone;
+
     @JsonProperty("sPhone1")
     private String sPhone1;
     @JsonProperty("sPhone2")

@@ -1,7 +1,9 @@
 package com.example.smsSpringTest.service;
 
+import com.example.smsSpringTest.mapper.SmsMapper;
 import com.example.smsSpringTest.model.SmsForm;
 import com.example.smsSpringTest.model.response.SmsResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ import java.util.Random;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SmsService {
     private final static String apiUrl        =    "https://sslsms.cafe24.com/sms_sender.php";
 
@@ -36,6 +39,8 @@ public class SmsService {
 
 //    private final static boolean isTest        =    true; //
     private final static boolean isTest        =    false;
+
+    private final SmsMapper smsMapper;
 
     // sms 유저 id
     @Value("${sms.userId}")
@@ -287,6 +292,17 @@ public class SmsService {
                     String originSmsType = smsForm.getSmsType();
                     String originMsg = smsForm.getMsg();
 
+                    smsForm.setSPhone(originSphone);
+                    smsForm.setRPhone(originRphone);
+                    smsForm.setSmsType(originSmsType);
+                    smsForm.setMsg(originMsg);
+
+                    int addMsg = smsMapper.addMsg(smsForm);
+                    if(addMsg == 1){
+                        log.info("db에 문자 저장 성공");
+                    } else {
+                        log.info("db에 문자 저장 실패 !!!");
+                    }
                     // --------------------------------------------
                 } else{
 //                    return Result; // 실패시
