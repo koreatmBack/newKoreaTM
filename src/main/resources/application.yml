@@ -48,6 +48,18 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     default-executor-type: reuse
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    s3:
+      bucket: api-echo-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 sms:
   userId: jobkoreatmsms
   secureKey: 31b3614fae273455f0bedf88862ec865
