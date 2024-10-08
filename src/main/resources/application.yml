@@ -19,9 +19,12 @@ spring:
   datasource:
     dialect: org.hibernate.dialect.MariaDB103Dialect
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/sys
-    username: root
+#    url: jdbc:mariadb://localhost:3306/sys
+#    username: root
+#    password: xldpa123
+    url: jdbc:mariadb://koti-springboot2-webservice.csampsip3gfh.ap-northeast-2.rds.amazonaws.com:3306/formmail
     password: xldpa123
+    username: koreatm
     sql-script-encoding: "UTF-8"
   jpa:
     properties:
