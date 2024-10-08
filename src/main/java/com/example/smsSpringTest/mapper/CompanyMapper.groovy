@@ -106,6 +106,7 @@ interface CompanyMapper {
         , fa.r_name
         , fa.user_name
         , fa.position
+        , fa.m_phone
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.mid = fa.user_id
         WHERE fc.cid = #{cid}

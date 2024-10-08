@@ -46,6 +46,9 @@ public class findCompany {
 
     private String position;
 
+    @JsonProperty("mPhone")
+    private String mPhone;
+
     private String surveyType;
 
     private String partner;
