@@ -7,7 +7,7 @@ import com.example.smsSpringTest.mapper.HolidayMapper;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
-import com.example.smsSpringTest.model.ad.fmAdImage;
+import com.example.smsSpringTest.model.formMail_file;
 import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
@@ -38,22 +38,25 @@ public class formMail_adService {
 
     // 광고 등록
     @Transactional
-    public ApiResponse addAd(fmAd ad) throws Exception {
+    public ApiResponse addAd(formMail_file fmFile) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            log.info("ad = " + ad);
+            log.info("ad = " + fmFile);
             String serialNumber = UUID.randomUUID().toString();
             log.info("serialNumber = " + serialNumber);
 
-            ad.setAid(serialNumber);
-            int addAd = adMapper.addAd(ad);
+            fmFile.setAid(serialNumber);
+            int addAd = adMapper.addAd(fmFile);
             if(addAd == 1){
 //                ad.setTotalDay(totalDay);
-                int totalDay = holidayMapper.totalDay(ad, serialNumber);
+                int totalDay = holidayMapper.totalDay(fmFile, serialNumber);
                 log.info("total Day = " + totalDay);
 
                 int addTotalDay = adMapper.addTotalDay(totalDay, serialNumber);
+
+                // formmail_file에 url 등록 -> 광고 이미지에서 등록 실패시 삭제
+                int addUrl = commonMapper.addUrl(fmFile);
                 apiResponse.setCode("C001");
                 apiResponse.setMessage("광고 등록 성공");
             } else {
@@ -231,66 +234,67 @@ public class formMail_adService {
         return s3UploadResponse;
     }
 
-    // 광고 이미지 DB에 저장 . 실패시 S3에 업로드된 해당 파일 삭제
-    public ApiResponse addAdImg(fmAdImage adImage) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-        String url = adImage.getPath();
-        try {
-            String serialNumber = UUID.randomUUID().toString();
-            adImage.setAiId(serialNumber);
-            int addAdImg = adMapper.addAdImg(adImage);
-            log.info(adImage.toString());
+//    // 광고 이미지 DB에 저장 . 실패시 S3에 업로드된 해당 파일 삭제
+//    public ApiResponse addAdImg(fmAdImage adImage) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//        String url = adImage.getPath();
+//        try {
+//            String serialNumber = UUID.randomUUID().toString();
+//            adImage.setAiId(serialNumber);
+//            int addAdImg = adMapper.addAdImg(adImage);
+//            log.info(adImage.toString());
+//
+//            if(addAdImg == 1){
+////                int addUrl = commonMapper.addUrl(url);
+////                log.info("addUrl : " + addUrl);
+//                apiResponse.setCode("C001");
+//                apiResponse.setMessage("이미지 업로드 최종 성공");
+//
+//            } else {
+//                int deleteUrl = commonMapper.deleteUrl(url);
+//                apiResponse.setCode("C005");
+//                apiResponse.setMessage("이미지 업로드 실패, S3 해당 파일 삭제");
+//                s3Uploader.deleteFile(adImage.getPath());
+//            }
+//        }catch (Exception e){
+//            int deleteUrl = commonMapper.deleteUrl(url);
+//            apiResponse.setCode("E001");
+//            apiResponse.setMessage("이미지 업로드 실패, S3 해당 파일 삭제");
+//            s3Uploader.deleteFile(adImage.getPath());
+//            log.info(e.getMessage());
+//        }
+//        return apiResponse;
+//    }
 
-            if(addAdImg == 1){
-//                int addUrl = commonMapper.addUrl(url);
-//                log.info("addUrl : " + addUrl);
-                apiResponse.setCode("C001");
-                apiResponse.setMessage("이미지 업로드 최종 성공");
-            } else {
-                int deleteUrl = commonMapper.deleteUrl(url);
-                apiResponse.setCode("C005");
-                apiResponse.setMessage("이미지 업로드 실패, S3 해당 파일 삭제");
-                s3Uploader.deleteFile(adImage.getPath());
-            }
-        }catch (Exception e){
-            int deleteUrl = commonMapper.deleteUrl(url);
-            apiResponse.setCode("E001");
-            apiResponse.setMessage("이미지 업로드 실패, S3 해당 파일 삭제");
-            s3Uploader.deleteFile(adImage.getPath());
-            log.info(e.getMessage());
-        }
-        return apiResponse;
-    }
-
-    // 광고 이미지 DB 삭제 및 S3에서도 삭제
-    public ApiResponse deleteAdImg(fmAdImage adImage) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-
-        try {
-            log.info(adImage.toString());
-            //db속 이미지 path 갖고오기
-            String path = adMapper.getPath(adImage);
-            log.info("path = " + path);
-            if(path != null) {
-                int deleteAdImg = adMapper.deleteAdImg(adImage);
-                if (deleteAdImg == 1) {
-                    // fa_file 테이블의 url row도 삭제
-                    int deleteUrl = commonMapper.deleteUrl(path);
-                    s3Uploader.deleteFile(path);
-                    apiResponse.setCode("C001");
-                    apiResponse.setMessage("이미지 삭제 및 DB 삭제 성공");
-                } else {
-                    apiResponse.setCode("C004");
-                    apiResponse.setMessage("이미지 삭제 및 DB 삭제 실패");
-                }
-            }
-        } catch(Exception e) {
-            apiResponse.setCode("E001");
-            apiResponse.setMessage("ERROR!");
-            log.info(e.getMessage());
-        }
-        return apiResponse;
-    }
+//    // 광고 이미지 DB 삭제 및 S3에서도 삭제
+//    public ApiResponse deleteAdImg(fmAdImage adImage) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//
+//        try {
+//            log.info(adImage.toString());
+//            //db속 이미지 path 갖고오기
+//            String path = adMapper.getPath(adImage);
+//            log.info("path = " + path);
+//            if(path != null) {
+//                int deleteAdImg = adMapper.deleteAdImg(adImage);
+//                if (deleteAdImg == 1) {
+//                    // fa_file 테이블의 url row도 삭제
+//                    int deleteUrl = commonMapper.deleteUrl(path);
+//                    s3Uploader.deleteFile(path);
+//                    apiResponse.setCode("C001");
+//                    apiResponse.setMessage("이미지 삭제 및 DB 삭제 성공");
+//                } else {
+//                    apiResponse.setCode("C004");
+//                    apiResponse.setMessage("이미지 삭제 및 DB 삭제 실패");
+//                }
+//            }
+//        } catch(Exception e) {
+//            apiResponse.setCode("E001");
+//            apiResponse.setMessage("ERROR!");
+//            log.info(e.getMessage());
+//        }
+//        return apiResponse;
+//    }
 
     // 광고 이미지 전체 조회
     public AdResponse fmAdImageList(AdImageRequest adImage) throws Exception {
@@ -328,6 +332,27 @@ public class formMail_adService {
             return url.substring(index + 4);
         }
         return ""; // 유효한 URL이 아니면 빈 문자열 반환
+    }
+
+    // formmail_file db에서 url 일치하는 데이터 삭제하기
+    public ApiResponse deleteFile(formMail_file file) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            String url = file.getAdImg();
+            int deleteFile = adMapper.deleteFile(file);
+            if(deleteFile == 1) {
+                apiResponse.setCode("C001");
+                apiResponse.setMessage("삭제 완료");
+                s3Uploader.deleteFile(url);
+            } else {
+                apiResponse.setCode("C004");
+                apiResponse.setMessage("삭제 실패");
+            }
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error");
+        }
+        return apiResponse;
     }
 
 }

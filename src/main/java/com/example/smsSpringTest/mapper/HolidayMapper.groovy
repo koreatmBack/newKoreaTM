@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.model.ad.fmAd
+import com.example.smsSpringTest.model.formMail_file
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
@@ -44,7 +44,7 @@ interface HolidayMapper {
     FROM formmail_ad fa
     WHERE fa.aid = #{serialNumber}
     """)
-    int totalDay(@Param("ad") fmAd ad, @Param("serialNumber") String serialNumber)
+    int totalDay(@Param("ad") formMail_file ad, @Param("serialNumber") String serialNumber)
 
 
 }

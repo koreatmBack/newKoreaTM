@@ -4,7 +4,9 @@ import com.example.smsSpringTest.model.ad.AdImageRequest
 import com.example.smsSpringTest.model.ad.AdRequest
 import com.example.smsSpringTest.model.ad.fmAd
 import com.example.smsSpringTest.model.ad.fmAdImage
+import com.example.smsSpringTest.model.formMail_file
 import org.apache.ibatis.annotations.*
+import org.springframework.web.bind.annotation.DeleteMapping
 
 @Mapper
 interface AdMapper {
@@ -33,7 +35,7 @@ interface AdMapper {
             , #{ad.adTypeH}
         )
     """)
-    int addAd(@Param("ad") fmAd ad)
+    int addAd(@Param("ad") formMail_file ad)
 
     // 광고 총 일수 등록
     @Update("""
@@ -161,4 +163,10 @@ interface AdMapper {
     """)
     int getFmAdImageListCount(@Param("adImage") AdImageRequest adImage)
 
+    // formmail_file db에서 url 일치하는 데이터 삭제하기
+    @DeleteMapping("""
+        DELETE FROM formmail_file
+        WHERE ad_img = #{adImage.adImg} 
+    """)
+    int deleteFile(@Param("adImage") formMail_file adImage)
 }

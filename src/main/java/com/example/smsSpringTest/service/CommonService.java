@@ -38,9 +38,6 @@ public class CommonService {
             String formatImageUrl = formatImageUrl(imageUrl);
             log.info("formatImageUrl = " + formatImageUrl);
 
-            // formmail_file에 url 등록 -> 광고 이미지에서 등록 실패시 삭제
-            int addUrl = commonMapper.addUrl(formatImageUrl);
-
             s3UploadResponse.setUrl(formatImageUrl);
             s3UploadResponse.setCode("C001");
             s3UploadResponse.setMessage("S3에 업로드 성공");

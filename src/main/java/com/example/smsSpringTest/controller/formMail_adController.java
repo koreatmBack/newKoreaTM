@@ -3,7 +3,7 @@ package com.example.smsSpringTest.controller;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
-import com.example.smsSpringTest.model.ad.fmAdImage;
+import com.example.smsSpringTest.model.formMail_file;
 import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
@@ -29,7 +29,7 @@ public class formMail_adController {
 
     // 광고 등록
     @PostMapping("/addAd")
-    public ApiResponse addAd(@RequestBody fmAd ad) throws Exception {
+    public ApiResponse addAd(@RequestBody formMail_file ad) throws Exception {
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = formMailAdService.addAd(ad);
@@ -90,23 +90,23 @@ public class formMail_adController {
         return s3UploadResponse;
     }
 
-    // DB에 광고 이미지 저장
-    @PostMapping("/addAdImg")
-    public ApiResponse addAdImg(@RequestBody fmAdImage adImage) throws Exception {
-        log.info(adImage.toString());
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = formMailAdService.addAdImg(adImage);
-        return apiResponse;
-    }
-
-    // S3 및 DB에 해당 이미지 삭제
-    @DeleteMapping("/deleteAdImg")
-    public ApiResponse deleteAdImg(@RequestBody fmAdImage adImage) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-        log.info(" 컨틀롤러 "+ adImage.toString());
-        apiResponse = formMailAdService.deleteAdImg(adImage);
-        return apiResponse;
-    }
+//    // DB에 광고 이미지 저장
+//    @PostMapping("/addAdImg")
+//    public ApiResponse addAdImg(@RequestBody fmAdImage adImage) throws Exception {
+//        log.info(adImage.toString());
+//        ApiResponse apiResponse = new ApiResponse();
+//        apiResponse = formMailAdService.addAdImg(adImage);
+//        return apiResponse;
+//    }
+//
+//    // S3 및 DB에 해당 이미지 삭제
+//    @DeleteMapping("/deleteAdImg")
+//    public ApiResponse deleteAdImg(@RequestBody fmAdImage adImage) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//        log.info(" 컨틀롤러 "+ adImage.toString());
+//        apiResponse = formMailAdService.deleteAdImg(adImage);
+//        return apiResponse;
+//    }
 
     // 광고 고유 id (uid) 일치하는 광고 이미지 조회
     @PostMapping("/fmAdImageList")
@@ -116,5 +116,12 @@ public class formMail_adController {
         return adResponse;
     }
 
+    // formmail_file db에서 url 일치하는 데이터 삭제하기
+    @DeleteMapping("/deleteFile")
+    public ApiResponse deleteFile(@RequestBody formMail_file file) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse = formMailAdService.deleteFile(file);
+        return apiResponse;
+    }
 
 }
