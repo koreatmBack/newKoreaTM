@@ -168,4 +168,13 @@ interface AdMapper {
         WHERE ad_img = #{adImage.adImg} 
     """)
     int deleteFile(@Param("adImage") formMail_file adImage)
+
+    // 파일 등록할때, adImg가 있거나 logoImg가 이미 있으면 올리지 않게.
+    @Select("""
+        SELECT count(*)
+        FROM formmail_file
+        WHERE ad_img = #{adImage.adImg}
+        OR logo_img = #{adImage.logoImg}
+    """)
+    int dupImgUrl(@Param("adImage") formMail_file adImage)
 }
