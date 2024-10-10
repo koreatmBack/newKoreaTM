@@ -7,14 +7,10 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * author : 신기훈
@@ -31,7 +27,7 @@ public class formMail_adminService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final RedisTemplate<String, Object> redisTemplate;
+//    private final RedisTemplate<String, Object> redisTemplate;
 
     // 회원 등록
     @Transactional
@@ -122,19 +118,19 @@ public class formMail_adminService {
                     // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
                     String sessionKey = "login_" + userId;
 
-                    // Redis에서 로그인 정보 조회
-                    String redisUserId = (String) redisTemplate.opsForValue().get(sessionKey);
+//                    // Redis에서 로그인 정보 조회
+//                    String redisUserId = (String) redisTemplate.opsForValue().get(sessionKey);
 
-                    if (redisUserId != null) {
-                        log.info("Redis에서 로그인 정보를 조회했습니다: " + redisUserId);
-                        // Redis에서 남은 TTL 확인
-                        Long ttl = redisTemplate.getExpire(sessionKey, TimeUnit.SECONDS);
-                        log.info("만료까지 남은 시간은 : " + ttl+"초 입니다.");
-                    } else {
-                       // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
-                        redisTemplate.opsForValue().set(sessionKey, userId, 1, TimeUnit.HOURS);
-                        log.info("redis에 저장 성공");
-                    }
+//                    if (redisUserId != null) {
+//                        log.info("Redis에서 로그인 정보를 조회했습니다: " + redisUserId);
+//                        // Redis에서 남은 TTL 확인
+//                        Long ttl = redisTemplate.getExpire(sessionKey, TimeUnit.SECONDS);
+//                        log.info("만료까지 남은 시간은 : " + ttl+"초 입니다.");
+//                    } else {
+//                       // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
+//                        redisTemplate.opsForValue().set(sessionKey, userId, 1, TimeUnit.HOURS);
+//                        log.info("redis에 저장 성공");
+//                    }
 
                 } else {
                     // 입력한 비밀번호와 등록된 비밀번호가 다를때
@@ -159,8 +155,8 @@ public class formMail_adminService {
         try{
             String userId = user.getUserId();
             String sessionKey = "login_" + userId;
-            redisTemplate.delete(sessionKey); // Redis에서 해당 세션 키 삭제
-            log.info("로그아웃 성공. Redis에서 세션 키가 삭제되었습니다.");
+//            redisTemplate.delete(sessionKey); // Redis에서 해당 세션 키 삭제
+//            log.info("로그아웃 성공. Redis에서 세션 키가 삭제되었습니다.");
 
             apiResponse.setCode("C001");
             apiResponse.setMessage("로그아웃 성공");
@@ -181,11 +177,11 @@ public class formMail_adminService {
         long cacheTime = 1000 * 60 * 60; // 만료시간 1시간.
 
         // Redis에서 데이터가 있는지 확인
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
-            // Redis에서 데이터 가져오기
-            userResponse = (UserResponse) redisTemplate.opsForValue().get(cacheKey);
-            log.info("Redis에서 회원 목록을 조회했습니다.");
-        } else {
+//        if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
+//            // Redis에서 데이터 가져오기
+//            userResponse = (UserResponse) redisTemplate.opsForValue().get(cacheKey);
+//            log.info("Redis에서 회원 목록을 조회했습니다.");
+//        } else {
 
             int page = paging.getPage(); // 현재 페이지
             int size = paging.getSize(); // 한 페이지에 표시할 수
@@ -207,15 +203,15 @@ public class formMail_adminService {
                 userResponse.setCode("C001");
                 userResponse.setMessage("회원 목록 조회 완료");
 
-                // Redis에 데이터 저장
-                redisTemplate.opsForValue().set(cacheKey, userResponse, cacheTime, TimeUnit.MILLISECONDS);
-                log.info("회원 목록을 Redis에 캐싱했습니다.");
+//                // Redis에 데이터 저장
+//                redisTemplate.opsForValue().set(cacheKey, userResponse, cacheTime, TimeUnit.MILLISECONDS);
+//                log.info("회원 목록을 Redis에 캐싱했습니다.");
             } else {
                 // 비어있을 때
                 userResponse.setCode("E001");
                 userResponse.setMessage("조회된 계정이 없습니다.");
             }
-        }
+//        }
         return userResponse;
     }
 
@@ -316,9 +312,9 @@ public class formMail_adminService {
                  userResponse.setMessage("유저 업데이트 성공");
 
                  String pattern = "userList_*"; // 패턴 정의
-                 Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
+//                 Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
 
-                 redisTemplate.delete(keys); // 전체 회원 목록 캐시를 삭제
+//                 redisTemplate.delete(keys); // 전체 회원 목록 캐시를 삭제
              }
 
             }

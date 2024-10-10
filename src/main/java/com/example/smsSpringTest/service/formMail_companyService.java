@@ -7,11 +7,9 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.CompanyResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -26,7 +24,7 @@ import java.util.UUID;
 public class formMail_companyService {
 
     private final CompanyMapper companyMapper;
-    private final RedisTemplate<String, Object> redisTemplate;
+//    private final RedisTemplate<String, Object> redisTemplate;
 
     // 고객사 등록
     public ApiResponse addCompany(formMail_company comp) throws Exception{
@@ -113,13 +111,13 @@ public class formMail_companyService {
 
             if(updateCompany == 1) {
                 String pattern = "companyList_*"; // 패턴 정의
-                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
+//                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
 
                 apiResponse.setCode("C001");
                 apiResponse.setMessage("업데이트에 성공했습니다.");
 
-                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
-                log.info("Redis에서 고객사 목록 캐시를 삭제했습니다.");
+//                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
+//                log.info("Redis에서 고객사 목록 캐시를 삭제했습니다.");
             } else {
                 apiResponse.setCode("C004");
                 apiResponse.setMessage("업데이트에 실패했습니다.");
@@ -154,10 +152,10 @@ public class formMail_companyService {
                 apiResponse.setMessage("삭제 성공");
 
                 String pattern = "companyList_*"; // 패턴 정의
-                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
-
-                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
-                log.info("Redis에서 고객사 목록 캐시를 삭제했습니다.");
+//                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
+//
+//                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
+//                log.info("Redis에서 고객사 목록 캐시를 삭제했습니다.");
             } else {
                 // 삭제 실패
                 apiResponse.setCode("C003");

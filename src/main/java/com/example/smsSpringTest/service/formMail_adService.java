@@ -13,14 +13,11 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * author : 신기훈
@@ -37,7 +34,7 @@ public class formMail_adService {
     private final CommonMapper commonMapper;
     private final HolidayMapper holidayMapper;
     private final S3Uploader s3Uploader;
-    private final RedisTemplate<String, Object> redisTemplate;
+//    private final RedisTemplate<String, Object> redisTemplate;
 
     // 광고 등록
     @Transactional
@@ -81,12 +78,12 @@ public class formMail_adService {
             String cacheKey = "fmAdList_" + adRequest.getPage() + "_" + adRequest.getSize();
             long cacheTime = 1000 * 60 * 60; // 만료시간 : 1시간
 
-            // Redis에 데이터가 있는지 확인
-            if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
-                // Redis에서 데이터 가져오기
-                adResponse = (AdResponse) redisTemplate.opsForValue().get(cacheKey);
-                log.info("Redis에서 광고 목록을 조회했습니다.");
-            } else {
+//            // Redis에 데이터가 있는지 확인
+//            if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
+//                // Redis에서 데이터 가져오기
+//                adResponse = (AdResponse) redisTemplate.opsForValue().get(cacheKey);
+//                log.info("Redis에서 광고 목록을 조회했습니다.");
+//            } else {
 
                 int page = adRequest.getPage(); // 현재 페이지
                 int size = adRequest.getSize(); // 한 페이지에 표시할 수
@@ -102,14 +99,14 @@ public class formMail_adService {
                     adResponse.setCode("C001");
                     adResponse.setMessage("광고 목록 조회 성공");
 
-                    // Redis에 데이터 저장
-                    redisTemplate.opsForValue().set(cacheKey, adResponse, cacheTime, TimeUnit.MILLISECONDS);
-                    log.info("광고 목록을 Redis에 캐싱했습니다.");
+//                    // Redis에 데이터 저장
+//                    redisTemplate.opsForValue().set(cacheKey, adResponse, cacheTime, TimeUnit.MILLISECONDS);
+//                    log.info("광고 목록을 Redis에 캐싱했습니다.");
                 } else {
                     adResponse.setCode("C005");
                     adResponse.setMessage("광고 조회 실패");
                 }
-            }
+//            }
         } catch(Exception e){
             adResponse.setCode("E000");
             adResponse.setMessage("광고 조회 실패");
@@ -128,11 +125,11 @@ public class formMail_adService {
                 apiResponse.setCode("C001");
                 apiResponse.setMessage("광고 업데이트 성공");
 
-                String pattern = "fmAdList_*"; // 패턴 정의
-                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
-
-                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
-                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
+//                String pattern = "fmAdList_*"; // 패턴 정의
+//                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
+//
+//                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
+//                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
             } else {
                 apiResponse.setCode("C004");
                 apiResponse.setMessage("광고 업데이트 실패");
@@ -155,11 +152,11 @@ public class formMail_adService {
                 apiResponse.setCode("C001");
                 apiResponse.setMessage("광고 삭제 성공");
 
-                String pattern = "fmAdList_*"; // 패턴 정의
-                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
-
-                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
-                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
+//                String pattern = "fmAdList_*"; // 패턴 정의
+//                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
+//
+//                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
+//                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
             } else {
                 apiResponse.setCode("C004");
                 apiResponse.setMessage("광고 삭제 실패");
