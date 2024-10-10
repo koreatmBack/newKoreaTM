@@ -22,6 +22,22 @@ interface AdMapper {
             , telejob
             , ad_type_m
             , ad_type_h
+            , ad_img
+            , logo_img
+            , concept
+            , user_name
+            , company
+            , address
+            , title
+            , work_start
+            , work_end
+            , rest_time
+            , min_pay
+            , max_pay
+            , work_day
+            , welfare
+            , welfare2
+            , experience
         ) VALUES (
             #{ad.aid}
             , #{ad.cid}
@@ -32,9 +48,25 @@ interface AdMapper {
             , #{ad.telejob}
             , #{ad.adTypeM}
             , #{ad.adTypeH}
+            , #{ad.adImg}
+            , #{ad.logoImg}
+            , #{ad.concept}
+            , #{ad.userName}
+            , #{ad.company}
+            , #{ad.address}
+            , #{ad.title}
+            , #{ad.workStart}
+            , #{ad.workEnd}
+            , #{ad.restTime}
+            , #{ad.minPay}
+            , #{ad.maxPay}
+            , #{ad.workDay}
+            , #{ad.welfare}
+            , #{ad.welfare2}
+            , #{ad.experience}
         )
     """)
-    int addAd(@Param("ad") formMail_file ad)
+    int addAd(@Param("ad") fmAd ad)
 
     // 광고 총 일수 등록
     @Update("""
@@ -98,6 +130,55 @@ interface AdMapper {
         <if test="ad.adTypeH != null">
             ad_type_h = #{ad.adTypeH},
         </if>   
+        <if test="ad.adImg != null">
+            ad_img = #{ad.adImg},
+        </if>   
+        <if test="ad.logoImg != null">
+            logo_img = #{ad.logoImg},
+        </if>   
+        <if test="ad.concept != null">
+            concept = #{ad.concept},
+        </if>   
+        <if test="ad.userName != null">
+            user_name = #{ad.userName},
+        </if>   
+        <if test="ad.company != null">
+            company = #{ad.company},
+        </if>   
+        <if test="ad.address != null">
+            address = #{ad.address},
+        </if>   
+        <if test="ad.title != null">
+            title = #{ad.title},
+        </if>   
+        <if test="ad.workStart != null">
+            work_start = #{ad.workStart},
+        </if>   
+        <if test="ad.workEnd != null">
+            work_end = #{ad.workEnd},
+        </if>   
+        <if test="ad.restTime != null">
+            rest_time = #{ad.restTime},
+        </if>           
+        <if test="ad.minPay != null">
+            min_pay = #{ad.minPay},
+        </if>           
+        <if test="ad.maxPay != null">
+            max_pay = #{ad.maxPay},
+        </if>           
+        <if test="ad.workDay != null">
+            work_day = #{ad.workDay},
+        </if>           
+        <if test="ad.welfare != null">
+            welfare = #{ad.welfare},
+        </if>           
+        <if test="ad.welfare2 != null">
+            welfare2 = #{ad.welfare2},
+        </if>          
+        <if test="ad.experience != null">
+            experience = #{ad.experience},
+        </if>   
+     
      </set>
         WHERE aid = #{ad.aid}
     </script>
@@ -176,5 +257,5 @@ interface AdMapper {
         WHERE ad_img = #{adImage.adImg}
         OR logo_img = #{adImage.logoImg}
     """)
-    int dupImgUrl(@Param("adImage") formMail_file adImage)
+    int dupImgUrl(@Param("adImage") fmAd adImage)
 }

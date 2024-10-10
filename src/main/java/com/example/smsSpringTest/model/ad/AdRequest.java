@@ -49,6 +49,7 @@ public class AdRequest {
     private String adTypeM;
     private String adTypeH;
 
+
     private int page;
     private int size;
     private int offset;

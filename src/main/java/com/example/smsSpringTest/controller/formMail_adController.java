@@ -29,7 +29,7 @@ public class formMail_adController {
 
     // 광고 등록
     @PostMapping("/addAd")
-    public ApiResponse addAd(@RequestBody formMail_file ad) throws Exception {
+    public ApiResponse addAd(@RequestBody fmAd ad) throws Exception {
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = formMailAdService.addAd(ad);

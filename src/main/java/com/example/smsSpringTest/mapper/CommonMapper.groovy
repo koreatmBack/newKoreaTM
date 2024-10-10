@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.model.formMail_file
+import com.example.smsSpringTest.model.ad.fmAd
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
@@ -24,7 +24,7 @@ interface CommonMapper {
        )
        </script>
     """)
-    int addUrl(@Param("adImage") formMail_file adImage)
+    int addUrl(@Param("adImage") fmAd adImage)
 
 //    // db에 저장된 url 삭제
 //    @Delete("""

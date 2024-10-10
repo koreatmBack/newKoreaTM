@@ -53,4 +53,34 @@ public class fmAd {
 
     private String adTypeH; // 유료 광고 타입 - 알바천국
 
+    private String adImg; // 광고 이미지 url
+
+    private String logoImg; // 로고 이미지 url
+
+    private String concept; // 컨셉
+
+    private String userName; // 담당 관리자명
+
+    private String company; // 고객사명
+
+    private String address; // 고객사 주소지
+
+    private String title; // 광고 제목
+
+    private String workStart; // 근무 시작 시간
+
+    private String workEnd; // 근무 종료 시간
+
+    private String restTime; // 휴식 시간
+
+    private String minPay;  // 월 최소 급여
+
+    private String maxPay;  // 월 최대 급여
+
+    private String workDay; // 근무 요일
+    private String welfare; // 복지 혜택 (체크박스로 선택)
+
+    private String welfare2; // 기타 복지 혜택 (체크 박스에 없는 내용)
+
+    private String experience; // 경력 채용 여부
 }

@@ -38,27 +38,27 @@ public class formMail_adService {
 
     // 광고 등록
     @Transactional
-    public ApiResponse addAd(formMail_file fmFile) throws Exception {
+    public ApiResponse addAd(fmAd ad) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            log.info("ad = " + fmFile);
+            log.info("ad = " + ad);
             String serialNumber = UUID.randomUUID().toString();
             log.info("serialNumber = " + serialNumber);
 
-            fmFile.setAid(serialNumber);
-            int addAd = adMapper.addAd(fmFile);
+            ad.setAid(serialNumber);
+            int addAd = adMapper.addAd(ad);
             if(addAd == 1){
 //                ad.setTotalDay(totalDay);
-                int totalDay = holidayMapper.totalDay(fmFile, serialNumber);
+                int totalDay = holidayMapper.totalDay(ad, serialNumber);
                 log.info("total Day = " + totalDay);
 
                 int addTotalDay = adMapper.addTotalDay(totalDay, serialNumber);
 
                 // formmail_file에 url 등록 -> 광고 이미지에서 등록 실패시 삭제
-                int dupImgurl = adMapper.dupImgUrl(fmFile);
+                int dupImgurl = adMapper.dupImgUrl(ad);
                 if(dupImgurl == 0){
-                    int addUrl = commonMapper.addUrl(fmFile);
+                    int addUrl = commonMapper.addUrl(ad);
                 }
                 apiResponse.setCode("C001");
                 apiResponse.setMessage("광고 등록 성공");
