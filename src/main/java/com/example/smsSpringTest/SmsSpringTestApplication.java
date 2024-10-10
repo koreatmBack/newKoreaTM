@@ -10,4 +10,8 @@ public class SmsSpringTestApplication {
 		SpringApplication.run(SmsSpringTestApplication.class, args);
 	}
 
+	static {
+		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
+
 }
