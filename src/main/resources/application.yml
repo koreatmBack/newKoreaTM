@@ -66,3 +66,10 @@ sms:
 
 holiday:
   service-key: ${HOLIDAY_KEY}
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
