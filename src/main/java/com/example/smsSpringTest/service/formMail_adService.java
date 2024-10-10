@@ -74,6 +74,19 @@ public class formMail_adService {
         return apiResponse;
     }
 
+    // 날짜 입력 -> total day 계산 API
+    public int totalDay(fmAd ad) throws Exception {
+
+        try {
+
+        } catch (Exception e) {
+
+        }
+        int onlyTotalDay = holidayMapper.onlyTotalDay(ad);
+
+        return onlyTotalDay;
+    }
+
     // 광고 조회
     public AdResponse fmAdList(AdRequest adRequest) throws Exception {
         AdResponse adResponse = new AdResponse();

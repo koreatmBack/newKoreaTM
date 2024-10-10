@@ -47,4 +47,13 @@ interface HolidayMapper {
     int totalDay(@Param("ad") fmAd ad, @Param("serialNumber") String serialNumber)
 
 
+    // 평일 일수 계산하는법 (시리얼 넘버 필요 x )
+    @Select("""
+    SELECT DATEDIFF(#{ad.endDate}, #{ad.startDate}) + 1
+    - (SELECT COUNT(*) FROM formmail_holiday fh
+       WHERE fh.holiday_date BETWEEN #{ad.startDate} AND #{ad.endDate}) 
+    FROM formmail_ad fa
+    """)
+    int onlyTotalDay(@Param("ad") fmAd ad)
+
 }

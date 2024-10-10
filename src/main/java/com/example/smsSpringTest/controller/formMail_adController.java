@@ -124,4 +124,10 @@ public class formMail_adController {
         return apiResponse;
     }
 
+    // 날짜 입력 -> total day 계산 API
+    @PostMapping("/totalDay")
+    public int totalDay(@RequestBody fmAd ad) throws Exception {
+        int onlyTotalDay = formMailAdService.totalDay(ad);
+        return onlyTotalDay;
+    }
 }
