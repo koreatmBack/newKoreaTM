@@ -56,6 +56,7 @@ public class formMail_adService {
                 int addTotalDay = adMapper.addTotalDay(totalDay, serialNumber);
 
                 // formmail_file에 url 등록 -> 광고 이미지에서 등록 실패시 삭제
+
                 int addUrl = commonMapper.addUrl(fmFile);
                 apiResponse.setCode("C001");
                 apiResponse.setMessage("광고 등록 성공");

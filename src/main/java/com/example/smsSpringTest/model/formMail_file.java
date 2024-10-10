@@ -55,6 +55,10 @@ public class formMail_file {
 
     private String adImg; // 광고 이미지 url
 
+    private String logoImg; // 로고 이미지 url
+
     private String concept; // 컨셉
+
+    private String type; // 광고 이미지인지 , 로고 이미지인지 타입.
 
 }

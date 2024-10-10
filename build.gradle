@@ -77,6 +77,10 @@ dependencies {
 
 	// api 못찾는 문제
 	implementation 'org.apiguardian:apiguardian-api:1.1.2'
+
+	// 아마존
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.792' // S3 사용 시
+	implementation 'com.amazonaws:aws-java-sdk-core:1.11.792' // 기본 SDK
 }
 
 tasks.named('test') {
