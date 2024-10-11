@@ -1,7 +1,9 @@
 package com.example.smsSpringTest.mapper
 
+import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.ad.AdImageRequest
 import com.example.smsSpringTest.model.ad.AdRequest
+import com.example.smsSpringTest.model.ad.JobSite
 import com.example.smsSpringTest.model.ad.fmAd
 import com.example.smsSpringTest.model.ad.fmAdImage
 import com.example.smsSpringTest.model.formMail_file
@@ -38,6 +40,8 @@ interface AdMapper {
             , welfare
             , welfare2
             , experience
+            , ad_num
+            , work_time
         ) VALUES (
             #{ad.aid}
             , #{ad.cid}
@@ -64,6 +68,8 @@ interface AdMapper {
             , #{ad.welfare}
             , #{ad.welfare2}
             , #{ad.experience}
+            , #{ad.adNum}
+            , #{ad.workTime}
         )
     """)
     int addAd(@Param("ad") fmAd ad)
@@ -180,8 +186,13 @@ interface AdMapper {
         </if>          
         <if test="ad.experience != null">
             experience = #{ad.experience},
+        </if>           
+        <if test="ad.adNum != null">
+            ad_num = #{ad.adNum},
+        </if>           
+        <if test="ad.workTime != null">
+            work_time = #{ad.workTime},
         </if>   
-     
      </set>
         WHERE aid = #{ad.aid}
     </script>
@@ -194,6 +205,91 @@ interface AdMapper {
         WHERE aid = #{ad.aid}
     """)
     int deleteAd(@Param("ad") fmAd ad)
+
+    // 폼메일용 광고 목록 전체 조회 (페이징 처리)
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<fmAd> allAdList(@Param("paging") Paging paging)
+
+    // 광고 목록 전체 조회 수 (페이징 토탈 값)
+    @Select("""
+        SELECT count(*)
+        FROM formmail_ad
+    """)
+    int allAdListCount()
+
+    // 폼메일용 adNum 일치하는 광고 목록 전체 조회 (페이징 처리)
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE ad_num = #{ad.adNum}
+    """)
+    List<fmAd> searchAdNumList(@Param("ad") fmAd ad)
+
+
+    // 폼메일용 aid 일치하는 광고 상세 조회
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE aid = #{ad.aid}
+    """)
+    List<fmAd> findOneAd(@Param("ad") fmAd ad)
+
+    // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<JobSite> allJobsiteList(@Param("paging") Paging paging)
+
+    // 잡사이트용 광고 목록 전체 조회 수 (페이징 처리, 종료기간 끝난것 조회 x)
+    @Select("""
+        SELECT count(*)
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+    """)
+    int allJobsiteListCount()
+
+
+    // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE title LIKE '%' || #{ad.title} || '%'
+        AND end_date >= CURDATE()
+    """)
+    List<JobSite> searchTitleList(@Param("ad") fmAd ad)
+
+    // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+        AND aid = #{ad.aid}
+    """)
+    List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
+
+//    // 잡 사이트용 등록순으로 광고 조회 ( 종료기간 끝난것 조회 x )
+//    @Select("""
+//        SELECT *
+//        FROM formmail_ad
+//        ORDER BY
+//    """)
+//    List<JobSite> seaarchTitleList(@Param("ad") fmAd ad)
+
+
+
+
+
+
+
+
+
 
 // ------------------ 광고 테이블 끝 -----------------
 

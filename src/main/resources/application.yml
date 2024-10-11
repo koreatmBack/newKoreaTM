@@ -7,9 +7,6 @@ spring:
   config:
     import: "optional:classpath:application-secret.yml"
 
-    #-------
-#    activeate.on-profile: jdbc
-    #-------
   main:
     web-application-type: servlet
   servlet:

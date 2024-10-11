@@ -83,4 +83,8 @@ public class fmAd {
     private String welfare2; // 기타 복지 혜택 (체크 박스에 없는 내용)
 
     private String experience; // 경력 채용 여부
+
+    private String adNum; // 광고 번호 4자리
+
+    private String workTime; // 근무 시간
 }

@@ -4,6 +4,7 @@ import com.example.smsSpringTest.config.S3Uploader;
 import com.example.smsSpringTest.mapper.AdMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.HolidayMapper;
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
@@ -187,6 +188,165 @@ public class formMail_adService {
         }
         return apiResponse;
     }
+
+
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 start ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 폼메일용 광고 목록 전체 조회
+    public AdResponse allAdList(Paging paging) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            int page = paging.getPage(); // 현재 페이지
+            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = adMapper.allAdListCount(); //전체 수
+            paging.setOffset(offset);
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+            adResponse.setFmAdList(adMapper.allAdList(paging));
+            if (adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
+                adResponse.setCode("C001");
+                adResponse.setMessage("광고 목록 전체 조회 성공");
+            } else {
+                adResponse.setCode("C005");
+                adResponse.setMessage("광고 목록 전체 조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
+    // 폼메일용 adNum 일치하는 광고 전체 조회
+    public AdResponse searchAdNumList(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setFmAdList(adMapper.searchAdNumList(ad));
+            if (adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()) {
+                adResponse.setCode("C001");
+                adResponse.setMessage("광고 목록 조회 성공");
+            } else {
+                adResponse.setCode("C005");
+                adResponse.setMessage("광고 조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
+    // 폼메일용 aid 일치하는 광고 상세 조회
+    public AdResponse findOneAd(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setFmAdList(adMapper.findOneAd(ad));
+            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("aid 일치하는 폼메일용 광고 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("aid 일치하는 폼메일용 광고 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 end ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 잡사이트용 start ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
+    public AdResponse allJobsiteList(Paging paging) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            int page = paging.getPage(); // 현재 페이지
+            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+            paging.setOffset(offset);
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+            adResponse.setJobSiteList(adMapper.allJobsiteList(paging));
+            if (adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
+                adResponse.setCode("C001");
+                adResponse.setMessage("광고 목록 전체 조회 성공");
+            } else {
+                adResponse.setCode("C005");
+                adResponse.setMessage("광고 목록 전체 조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
+    // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
+    public AdResponse searchTitleList(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setJobSiteList(adMapper.searchTitleList(ad));
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("제목 일치하는 잡사이트 목록 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("제목 일치하는 잡사이트 목록 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
+    // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
+    public AdResponse findOneJobsite(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setJobSiteList(adMapper.findOneJobsite(ad));
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("aid 일치하는 잡사이트 광고 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("aid 일치하는 잡사이트 광고 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+//
+//    public AdResponse searchTitleList(fmAd ad) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//
+//        try {
+//
+//        } catch (Exception e) {
+//
+//        }
+//
+//        return adResponse;
+//    }
+
+
+
 
 // ------------------ 광고 테이블 끝 -----------------
 

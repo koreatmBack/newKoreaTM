@@ -72,6 +72,10 @@ public class AdRequest {
 
     private String workDay; // 근무 요일
 
+    private String adNum; // 광고 번호 4자리
+
+    private String workTime; // 근무 시간
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
 

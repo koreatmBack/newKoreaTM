@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.controller;
 
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
@@ -70,6 +71,7 @@ public class formMail_adController {
         return apiResponse;
     }
 
+
 //    // S3에 이미지 업로드 (DB에는 저장 x) --> 파일 여러개 ver.
 //    @PostMapping("/S3Upload")
 //    public S3UploadResponse S3Upload(@RequestParam("file") MultipartFile[] multipartFiles) throws Exception {
@@ -130,4 +132,57 @@ public class formMail_adController {
         Integer onlyTotalDay = formMailAdService.totalDay(ad);
         return onlyTotalDay;
     }
+
+    // 폼메일용 광고 목록 전체 조회
+    @PostMapping("/allAdList")
+    public AdResponse allAdList(@RequestBody Paging paging) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.allAdList(paging);
+        return adResponse;
+    }
+
+    // 폼메일용 adNum 일치하는 광고 전체 조회
+    @PostMapping("/searchAdNumList")
+    public AdResponse searchAdNumList(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.searchAdNumList(ad);
+        return adResponse;
+    }
+
+    // 폼메일용 aid 일치하는 광고 상세 조회
+    @PostMapping("/findOneAd")
+    public AdResponse findOneAd(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.findOneAd(ad);
+        return adResponse;
+    }
+
+    // 잡사이트용 광고 목록 전체 조회 ( 종료기간 끝난것 조회 x )
+    @PostMapping("/allJobsiteList")
+    public AdResponse allJobsiteList(@RequestBody Paging paging) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.allJobsiteList(paging);
+        return adResponse;
+    }
+
+    // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
+    @PostMapping("/searchTitleList")
+    public AdResponse searchTitleList(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.searchTitleList(ad);
+        return adResponse;
+    }
+
+    // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
+    @PostMapping("/findOneJobsite")
+    public AdResponse findOneJobsite(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.findOneJobsite(ad);
+        return adResponse;
+    }
+
+
+
+
+
 }
