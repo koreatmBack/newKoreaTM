@@ -114,7 +114,10 @@ interface AdMapper {
         </if>    
         <if test="ad.endDate != null">
             end_date = #{ad.endDate},
-        </if> 
+        </if>        
+        <if test="ad.extensionDay != null">
+            extensionDay = #{ad.extensionDay},
+        </if>
         <if test="ad.heaven != null">
             heaven = #{ad.heaven},
         </if> 
