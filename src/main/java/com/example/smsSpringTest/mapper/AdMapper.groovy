@@ -238,6 +238,17 @@ interface AdMapper {
     """)
     List<fmAd> findOneAd(@Param("ad") fmAd ad)
 
+    // 폼메일용 title이 포함된 광고 조회
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE title LIKE CONCAT('%', #{ad.title}, '%')
+    """)
+    List<fmAd> searchTitleAd(@Param("ad") fmAd ad)
+
+
+    // ---------------------------------------------
+
     // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
     @Select("""
         SELECT *
@@ -260,10 +271,10 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE title LIKE '%' || #{ad.title} || '%'
+        WHERE title LIKE CONCAT('%', #{ad.title}, '%')
         AND end_date >= CURDATE()
     """)
-    List<JobSite> searchTitleList(@Param("ad") fmAd ad)
+    List<JobSite> searchTitleJobsite(@Param("ad") fmAd ad)
 
     // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
@@ -274,19 +285,41 @@ interface AdMapper {
     """)
     List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
 
-//    // 잡 사이트용 등록순으로 광고 조회 ( 종료기간 끝난것 조회 x )
-//    @Select("""
-//        SELECT *
-//        FROM formmail_ad
-//        ORDER BY
-//    """)
-//    List<JobSite> seaarchTitleList(@Param("ad") fmAd ad)
+    // 잡 사이트용 등록순으로 광고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+        ORDER BY created_at DESC;
+    """)
+    List<JobSite> orderByCreated()
 
+    // 잡 사이트용 급여 높은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+        ORDER BY CAST(max_pay AS UNSIGNED) DESC;
+    """)
+    List<JobSite> orderByMaxPay()
 
+    // 잡 사이트용 근무일수 적은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+        ORDER BY (LENGTH(work_day) - LENGTH(REPLACE(work_day, ',', '')) + 1) ASC;
+    """)
+    List<JobSite> orderByWorkDay()
 
-
-
-
+    // 잡 사이트용 근무시간 짧은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+        ORDER BY work_time ASC;
+    """)
+    List<JobSite> orderByWorkTime()
 
 
 

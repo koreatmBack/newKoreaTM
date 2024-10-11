@@ -157,6 +157,17 @@ public class formMail_adController {
         return adResponse;
     }
 
+    // 폼메일용 title이 포함된 광고 조회
+    @PostMapping("/searchTitleAd")
+    public AdResponse searchTitleAd(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.searchTitleAd(ad);
+        return adResponse;
+    }
+
+    // ---------------------------------------------------------
+
+
     // 잡사이트용 광고 목록 전체 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/allJobsiteList")
     public AdResponse allJobsiteList(@RequestBody Paging paging) throws Exception {
@@ -169,7 +180,7 @@ public class formMail_adController {
     @PostMapping("/searchTitleList")
     public AdResponse searchTitleList(@RequestBody fmAd ad) throws Exception {
         AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.searchTitleList(ad);
+        adResponse = formMailAdService.searchTitleJobsite(ad);
         return adResponse;
     }
 
@@ -181,8 +192,36 @@ public class formMail_adController {
         return adResponse;
     }
 
+    // 잡사이트용 등록일순으로 광고 조회
+    @GetMapping("/orderByCreated")
+    public AdResponse orderByCreated() throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.orderByCreated();
+        return adResponse;
+    }
 
+    // 잡사이트용 근무일수 적은순으로 광고 조회
+    @GetMapping("/orderByWorkDay")
+    public AdResponse orderByWorkDay() throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.orderByWorkDay();
+        return adResponse;
+    }
 
+    // 잡사이트용 급여 높은 순으로 광고 조회
+    @GetMapping("/orderByMaxPay")
+    public AdResponse orderByMaxPay() throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.orderByMaxPay();
+        return adResponse;
+    }
 
+    // 잡사이트용 근무시간 짧은 순으로 광고 조회
+    @GetMapping("/orderByWorkTime")
+    public AdResponse orderByWorkTime() throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.orderByWorkTime();
+        return adResponse;
+    }
 
 }

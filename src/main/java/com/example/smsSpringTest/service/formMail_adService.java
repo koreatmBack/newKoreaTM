@@ -260,6 +260,28 @@ public class formMail_adService {
         }
         return adResponse;
     }
+
+    // 폼메일용 title이 포함된 광고 조회
+    public AdResponse searchTitleAd(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setFmAdList(adMapper.searchTitleAd(ad));
+            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("제목 포함하는 폼메일용 광고 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("제목 포함하는 폼메일용 광고 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
+
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 end ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 
@@ -294,17 +316,17 @@ public class formMail_adService {
     }
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
-    public AdResponse searchTitleList(fmAd ad) throws Exception {
+    public AdResponse searchTitleJobsite(fmAd ad) throws Exception {
         AdResponse adResponse = new AdResponse();
 
         try {
-            adResponse.setJobSiteList(adMapper.searchTitleList(ad));
+            adResponse.setJobSiteList(adMapper.searchTitleJobsite(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 adResponse.setCode("C001");
-                adResponse.setMessage("제목 일치하는 잡사이트 목록 조회 성공");
+                adResponse.setMessage("제목 포함하는 잡사이트 목록 조회 성공");
             } else {
                 adResponse.setCode("C004");
-                adResponse.setMessage("제목 일치하는 잡사이트 목록 조회 실패");
+                adResponse.setMessage("제목 포함하는 잡사이트 목록 조회 실패");
             }
         } catch (Exception e) {
             adResponse.setCode("E001");
@@ -332,18 +354,100 @@ public class formMail_adService {
         }
         return adResponse;
     }
-//
-//    public AdResponse searchTitleList(fmAd ad) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//
-//        try {
-//
-//        } catch (Exception e) {
-//
-//        }
-//
-//        return adResponse;
-//    }
+
+    // 잡사이트용 등록일순으로 광고 조회
+    public AdResponse orderByCreated() throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setJobSiteList(adMapper.orderByCreated());
+
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("등록일 최신순으로 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("등록일 최신순으로조회 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+
+        return adResponse;
+    }
+
+    // 잡사이트용 급여 높은 순으로 광고 조회
+    public AdResponse orderByMaxPay() throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+
+            adResponse.setJobSiteList(adMapper.orderByMaxPay());
+
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("급여 높은 순으로 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("급여 높은 순으로 조회 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+
+        return adResponse;
+    }
+
+
+    // 잡사이트용 근무일수 적은순으로 광고 조회
+    public AdResponse orderByWorkDay() throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+
+            adResponse.setJobSiteList(adMapper.orderByWorkDay());
+
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("근무일수 적은순으로 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("근무일수 적은순으로 조회 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+
+        return adResponse;
+    }
+
+
+    // 잡사이트용 근무시간 짧은 순으로 광고 조회
+    public AdResponse orderByWorkTime() throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+
+            adResponse.setJobSiteList(adMapper.orderByWorkTime());
+
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("근무시간 짧은 순으로 조회 성공");
+            } else {
+                adResponse.setCode("C004");
+                adResponse.setMessage("근무시간 짧은 순으로 조회 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+
+        return adResponse;
+    }
+
 
 
 
