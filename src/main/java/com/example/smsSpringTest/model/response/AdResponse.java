@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.model.response;
 
+import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.ad.fmAdImage;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,6 +23,7 @@ import java.util.List;
 public class AdResponse extends ApiResponse{
 
     private List<fmAd> fmAdList;
+    private List<AdRequest> findFmAdList;
     private List<fmAdImage> fmAdImageList;
     private int totalPages;
 }

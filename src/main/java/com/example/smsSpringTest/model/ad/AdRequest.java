@@ -42,15 +42,41 @@ public class AdRequest {
 
     private int totalDay;
 
-    private String heaven;
-    private String albamon;
-    private String telejob;
+//    private String heaven;
+//    private String albamon;
+//    private String telejob;
+//
+//    private String adTypeM;
+//    private String adTypeH;
+    private String adImg; // 광고 이미지 url
 
-    private String adTypeM;
-    private String adTypeH;
+    private String logoImg; // 로고 이미지 url
 
+    private String userName; // 담당 관리자명
 
+    private String company; // 고객사명
+
+    private String address; // 고객사 주소지
+
+    private String title; // 광고 제목
+
+    private String workStart; // 근무 시작 시간
+
+    private String workEnd; // 근무 종료 시간
+
+    private String restTime; // 휴식 시간
+
+    private String minPay;  // 월 최소 급여
+
+    private String maxPay;  // 월 최대 급여
+
+    private String workDay; // 근무 요일
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int size;
+
     private int offset;
 }

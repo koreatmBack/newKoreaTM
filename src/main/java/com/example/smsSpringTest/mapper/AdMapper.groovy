@@ -91,7 +91,7 @@ interface AdMapper {
         WHERE cid = #{adRequest.cid}
         LIMIT #{adRequest.size} OFFSET #{adRequest.offset}
     """)
-    List<fmAd> fmAdList(@Param("adRequest") AdRequest adRequest)
+    List<AdRequest> findFmAdList(@Param("adRequest") AdRequest adRequest)
 
     // 해당되는 고객사 광고 수
     @Select("""

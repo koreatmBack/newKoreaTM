@@ -75,14 +75,14 @@ public class formMail_adService {
     }
 
     // 날짜 입력 -> total day 계산 API
-    public int totalDay(fmAd ad) throws Exception {
+    public Integer totalDay(fmAd ad) throws Exception {
 
         try {
 
         } catch (Exception e) {
 
         }
-        int onlyTotalDay = holidayMapper.onlyTotalDay(ad);
+        Integer onlyTotalDay = holidayMapper.onlyTotalDay(ad);
 
         return onlyTotalDay;
     }
@@ -110,8 +110,8 @@ public class formMail_adService {
                 int totalCount = adMapper.getFmAdListCount(adRequest); //전체 수
                 adRequest.setOffset(offset);
                 log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-                adResponse.setFmAdList(adMapper.fmAdList(adRequest));
-                if (adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()) {
+                adResponse.setFindFmAdList(adMapper.findFmAdList(adRequest));
+                if (adResponse.getFindFmAdList() != null && !adResponse.getFindFmAdList().isEmpty()) {
                     int totalPages = (int) Math.ceil((double) totalCount / size);
                     log.info("totalPages = " + totalPages);
                     adResponse.setTotalPages(totalPages);
