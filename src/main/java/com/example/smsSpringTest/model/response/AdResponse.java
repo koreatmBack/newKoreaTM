@@ -4,6 +4,7 @@ import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.JobSite;
 import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.ad.fmAdImage;
+import com.example.smsSpringTest.model.findCompanyAndUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class AdResponse extends ApiResponse{
     private List<fmAd> fmAdList;
     private List<AdRequest> findFmAdList;
     private List<JobSite> jobSiteList;
+    private List<findCompanyAndUser> findCompanyAndUserList;
     private List<fmAdImage> fmAdImageList;
     private int totalPages;
 }

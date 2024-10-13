@@ -1,10 +1,8 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Apply
-import org.apache.ibatis.annotations.Insert
-import org.apache.ibatis.annotations.Mapper
-import org.apache.ibatis.annotations.Param
-import org.apache.ibatis.annotations.Update
+import com.example.smsSpringTest.model.Paging
+import org.apache.ibatis.annotations.*
 
 @Mapper
 interface ApplyMapper {
@@ -16,31 +14,27 @@ interface ApplyMapper {
            , aid
            , cid
            , user_id
+           , company
+           , partner
            , apply_name
-           , gender
-           , birth
-           , a_phone
-           , address
-           , applied_time
+           , apply_birth
+           , apply_gender
+           , apply_address
            , interview_time
            , admin_memo
-           , interview_memo
-           , last_applied_time
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
             ,#{apply.cid}
             ,#{apply.userId}
+            ,#{apply.company}
+            ,#{apply.partner}
             ,#{apply.applyName}
-            ,#{apply.gender}
-            ,#{apply.birth}
-            ,#{apply.aPhone}
-            ,#{apply.address}
-            ,#{apply.appliedTime}
+            ,#{apply.applyBirth}
+            ,#{apply.applyGender}
+            ,#{apply.applyAddress}
             ,#{apply.interviewTime}
             ,#{apply.adminMemo}
-            ,#{apply.interviewMemo}
-            ,#{apply.lastAppliedTime}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -50,17 +44,17 @@ interface ApplyMapper {
     <script>
         UPDATE formmail_apply
        <set>
-       
            <if test="apply.aid != null"> aid = #{apply.aid},   </if>
-           <if test="apply.cid != null">  cid = #{apply.cid},   </if>
+           <if test="apply.cid != null"> cid = #{apply.cid},   </if>
            <if test="apply.userId != null"> user_id = #{apply.userId},   </if>
-           <if test="apply.gender != null"> gender = #{apply.gender},   </if>
-           <if test="apply.address != null"> address = #{apply.address},   </if>
-           <if test="apply.appliedTime != null"> applied_time = #{apply.appliedTime},   </if>
+           <if test="apply.company != null"> company = #{apply.company},   </if>
+           <if test="apply.partner != null">  partner = #{apply.partner},   </if>
+           <if test="apply.applyName != null"> apply_name = #{apply.applyName},   </if>
+           <if test="apply.applyBirth != null"> apply_birth = #{apply.applyBirth},   </if>
+           <if test="apply.applyGender != null"> apply_gender = #{apply.applyGender},   </if>
+           <if test="apply.applyAddress != null"> apply_address = #{apply.applyAddress},   </if>
            <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
            <if test="apply.adminMemo != null"> admin_memo  = #{apply.adminMemo},   </if>
-           <if test="apply.interviewMemo  != null"> interview_memo  = #{apply.interviewMemo},   </if>
-           <if test="apply.lastAppliedTime  != null"> last_applied_time  = #{apply.lastAppliedTime},   </if>
                      
        </set> 
         WHERE apply_id = #{apply.applyId}
@@ -68,6 +62,18 @@ interface ApplyMapper {
     """)
     int updateApply(@Param("apply") Apply apply)
 
+    // 지원자 전체 조회 (페이징 처리)
+    @Select("""
+        SELECT *
+        FROM formmail_apply
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<Apply> applyList(@Param("paging") Paging paging)
 
-
+    // 지원자 전체 수
+    @Select("""
+        SELECT count(*)
+        FROM formmail_apply
+    """)
+    int applyListCount()
 }

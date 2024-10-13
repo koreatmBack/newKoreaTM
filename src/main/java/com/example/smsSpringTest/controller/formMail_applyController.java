@@ -1,7 +1,9 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Apply;
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.ApplyResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +32,19 @@ public class formMail_applyController {
     }
 
     // 지원자 수정
-    @PutMapping("updateApply")
+    @PutMapping("/updateApply")
     public ApiResponse updateApply(@RequestBody Apply apply) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = formMailApplyService.updateApply(apply);
         return apiResponse;
+    }
+
+    // 지원자 전체 조회
+    @PostMapping("/applyList")
+    public ApplyResponse applyList(@RequestBody Paging paging) throws Exception {
+        ApplyResponse applyResponse = new ApplyResponse();
+        applyResponse = formMailApplyService.applyList(paging);
+        return applyResponse;
     }
 
 }

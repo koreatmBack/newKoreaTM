@@ -1,11 +1,12 @@
 package com.example.smsSpringTest.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 /**
  * author : 신기훈
@@ -20,8 +21,6 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Apply {
 
-    private int no;
-
     private String applyId;
 
     private String aid;
@@ -30,19 +29,21 @@ public class Apply {
 
     private String userId;
 
+    private String company;
+
+    private String partner;
+
     private String applyName;
 
-    private String gender;
-    private String birth;
+    private String applyBirth;
 
-    @JsonProperty("aPhone")
-    private String aPhone;
+    private String applyGender;
 
-    private String address;
-    private String appliedTime;
+    private String applyAddress;
+
     private String interviewTime;
-    private String adminMemo;
-    private String interviewMemo;
-    private String lastAppliedTime;
 
+    private String adminMemo;
+
+    private LocalDateTime createdAt;
 }

@@ -193,34 +193,44 @@ public class formMail_adController {
     }
 
     // 잡사이트용 등록일순으로 광고 조회
-    @GetMapping("/orderByCreated")
-    public AdResponse orderByCreated() throws Exception {
+    @PostMapping("/orderByCreated")
+    public AdResponse orderByCreated(@RequestBody Paging paging) throws Exception {
         AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByCreated();
+        adResponse = formMailAdService.orderByCreated(paging);
         return adResponse;
     }
 
     // 잡사이트용 근무일수 적은순으로 광고 조회
-    @GetMapping("/orderByWorkDay")
-    public AdResponse orderByWorkDay() throws Exception {
+    @PostMapping("/orderByWorkDay")
+    public AdResponse orderByWorkDay(@RequestBody Paging paging) throws Exception {
         AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByWorkDay();
+        adResponse = formMailAdService.orderByWorkDay(paging);
         return adResponse;
     }
 
     // 잡사이트용 급여 높은 순으로 광고 조회
-    @GetMapping("/orderByMaxPay")
-    public AdResponse orderByMaxPay() throws Exception {
+    @PostMapping("/orderByMaxPay")
+    public AdResponse orderByMaxPay(@RequestBody Paging paging) throws Exception {
         AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByMaxPay();
+        adResponse = formMailAdService.orderByMaxPay(paging);
         return adResponse;
     }
 
     // 잡사이트용 근무시간 짧은 순으로 광고 조회
-    @GetMapping("/orderByWorkTime")
-    public AdResponse orderByWorkTime() throws Exception {
+    @PostMapping("/orderByWorkTime")
+    public AdResponse orderByWorkTime(@RequestBody Paging paging) throws Exception {
         AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByWorkTime();
+        adResponse = formMailAdService.orderByWorkTime(paging);
+        return adResponse;
+    }
+
+    // -------------------------
+
+    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
+    @PostMapping("/findCompanyAndUser")
+    public AdResponse findCompanyAndUser(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.findCompanyAndUser(ad);
         return adResponse;
     }
 

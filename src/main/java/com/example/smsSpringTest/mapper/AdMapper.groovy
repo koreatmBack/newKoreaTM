@@ -1,11 +1,8 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Paging
-import com.example.smsSpringTest.model.ad.AdImageRequest
-import com.example.smsSpringTest.model.ad.AdRequest
-import com.example.smsSpringTest.model.ad.JobSite
-import com.example.smsSpringTest.model.ad.fmAd
-import com.example.smsSpringTest.model.ad.fmAdImage
+import com.example.smsSpringTest.model.ad.*
+import com.example.smsSpringTest.model.findCompanyAndUser
 import com.example.smsSpringTest.model.formMail_file
 import org.apache.ibatis.annotations.*
 
@@ -290,38 +287,68 @@ interface AdMapper {
         SELECT *
         FROM formmail_ad
         WHERE end_date >= CURDATE()
-        ORDER BY created_at DESC;
+        ORDER BY created_at DESC
+        LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
-    List<JobSite> orderByCreated()
+    List<JobSite> orderByCreated(@Param("paging") Paging paging)
 
     // 잡 사이트용 급여 높은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
         FROM formmail_ad
         WHERE end_date >= CURDATE()
-        ORDER BY CAST(max_pay AS UNSIGNED) DESC;
+        ORDER BY CAST(max_pay AS UNSIGNED) DESC
+        LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
-    List<JobSite> orderByMaxPay()
+    List<JobSite> orderByMaxPay(@Param("paging") Paging paging)
 
     // 잡 사이트용 근무일수 적은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
         FROM formmail_ad
         WHERE end_date >= CURDATE()
-        ORDER BY (LENGTH(work_day) - LENGTH(REPLACE(work_day, ',', '')) + 1) ASC;
+        ORDER BY (LENGTH(work_day) - LENGTH(REPLACE(work_day, ',', '')) + 1) ASC
+        LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
-    List<JobSite> orderByWorkDay()
+    List<JobSite> orderByWorkDay(@Param("paging") Paging paging)
 
     // 잡 사이트용 근무시간 짧은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
         FROM formmail_ad
         WHERE end_date >= CURDATE()
-        ORDER BY work_time ASC;
+        ORDER BY work_time ASC
+        LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
-    List<JobSite> orderByWorkTime()
+    List<JobSite> orderByWorkTime(@Param("paging") Paging paging)
 
 
+    //-------------------------------------
+
+    // aid로 cid 찾기
+    @Select("""
+        SELECT cid
+        FROM formmail_ad
+        WHERE aid = #{ad.aid}
+    """)
+    String findCid(@Param("ad") fmAd ad)
+
+    // 찾은 cid로 고객사 정보와 유저 정보 찾기
+    @Select("""
+        SELECT
+        fc.company_name
+        , fc.company_branch
+        , fa.r_name
+        , fa.user_name
+        , fa.position
+        , fa.user_id
+        , fc.cid
+        FROM formmail_company fc
+        JOIN formmail_admin fa ON fc.mid = fa.user_id
+        WHERE fc.cid = #{cid}
+        LIMIT 1;
+    """)
+    List<findCompanyAndUser> findCompanyAndUser(@Param("cid") String cid)
 
 
 // ------------------ 광고 테이블 끝 -----------------
