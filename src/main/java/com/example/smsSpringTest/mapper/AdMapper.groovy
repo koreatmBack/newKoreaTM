@@ -42,10 +42,10 @@ interface AdMapper {
             , work_time
         ) VALUES (
             #{ad.aid},
-        <if test="ad.cid != null">
+        <if test="ad.cid != null and ad.cid != ''">
             #{ad.cid},
         </if>        
-        <if test="ad.cid == null">
+        <if test="ad.cid == null or ad.cid == ''">
             NULL,
         </if>
              #{ad.startDate}
