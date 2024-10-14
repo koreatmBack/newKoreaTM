@@ -11,6 +11,7 @@ interface AdMapper {
 
     // 광고 등록
     @Insert("""
+<script>
         INSERT INTO formmail_ad(
             aid
             , cid
@@ -40,9 +41,14 @@ interface AdMapper {
             , ad_num
             , work_time
         ) VALUES (
-            #{ad.aid}
-            , #{ad.cid}
-            , #{ad.startDate}
+            #{ad.aid},
+        <if test="ad.cid != null">
+            #{ad.cid},
+        </if>        
+        <if test="ad.cid == null">
+            NULL,
+        </if>
+             #{ad.startDate}
             , #{ad.endDate}
             , #{ad.heaven}
             , #{ad.albamon}
@@ -68,6 +74,7 @@ interface AdMapper {
             , #{ad.adNum}
             , #{ad.workTime}
         )
+</script>        
     """)
     int addAd(@Param("ad") fmAd ad)
 
