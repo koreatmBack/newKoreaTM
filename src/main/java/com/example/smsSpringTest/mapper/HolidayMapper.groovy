@@ -51,8 +51,7 @@ interface HolidayMapper {
     @Select("""
     SELECT DATEDIFF(#{ad.endDate}, #{ad.startDate})
     - (SELECT COUNT(*) FROM formmail_holiday fh
-       WHERE fh.holiday_date BETWEEN #{ad.startDate} AND #{ad.endDate}) 
-    FROM formmail_ad fa
+       WHERE fh.holiday_date BETWEEN #{ad.startDate} AND #{ad.endDate}) AS total_days
     """)
     Integer onlyTotalDay(@Param("ad") fmAd ad)
 

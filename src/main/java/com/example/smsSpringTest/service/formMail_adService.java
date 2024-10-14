@@ -79,13 +79,13 @@ public class formMail_adService {
     public Integer totalDay(fmAd ad) throws Exception {
 
         try {
+            Integer onlyTotalDay = holidayMapper.onlyTotalDay(ad);
 
+            return onlyTotalDay;
         } catch (Exception e) {
-
+            log.info(e.getMessage());
+            return null;
         }
-        Integer onlyTotalDay = holidayMapper.onlyTotalDay(ad);
-
-        return onlyTotalDay;
     }
 
     // 광고 조회
