@@ -87,5 +87,6 @@ interface ApplyMapper {
         WHERE apply_id = #{apply.applyId}
     """)
     List<Apply> findOneApply(@Param("apply") Apply apply)
+
 }
 
