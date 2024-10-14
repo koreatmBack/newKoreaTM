@@ -20,6 +20,7 @@ interface ApplyMapper {
            , apply_birth
            , apply_gender
            , apply_address
+           , apply_phone
            , interview_time
            , admin_memo
         ) VALUES (
@@ -33,6 +34,7 @@ interface ApplyMapper {
             ,#{apply.applyBirth}
             ,#{apply.applyGender}
             ,#{apply.applyAddress}
+            ,#{apply.applyPhone}
             ,#{apply.interviewTime}
             ,#{apply.adminMemo}
         )
@@ -53,6 +55,7 @@ interface ApplyMapper {
            <if test="apply.applyBirth != null"> apply_birth = #{apply.applyBirth},   </if>
            <if test="apply.applyGender != null"> apply_gender = #{apply.applyGender},   </if>
            <if test="apply.applyAddress != null"> apply_address = #{apply.applyAddress},   </if>
+           <if test="apply.applyPhone  != null"> apply_phone = #{apply.applyPhone},   </if>
            <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
            <if test="apply.adminMemo != null"> admin_memo  = #{apply.adminMemo},   </if>
                      

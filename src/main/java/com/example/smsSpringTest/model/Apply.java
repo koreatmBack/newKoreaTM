@@ -41,6 +41,8 @@ public class Apply {
 
     private String applyAddress;
 
+    private String applyPhone;
+
     private String interviewTime;
 
     private String adminMemo;
