@@ -33,6 +33,8 @@ public class JobSite {
 
     private String title;
 
+    private String adImg;
+
     private String logoImg;
 
     private String workStart;
