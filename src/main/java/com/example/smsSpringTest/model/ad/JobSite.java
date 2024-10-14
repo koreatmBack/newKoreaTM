@@ -51,6 +51,8 @@ public class JobSite {
 
     private String maxPay;
 
+    private String welfare;
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
 
