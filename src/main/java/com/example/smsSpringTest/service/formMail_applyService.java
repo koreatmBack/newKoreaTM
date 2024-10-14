@@ -102,4 +102,28 @@ public class formMail_applyService {
         return applyResponse;
     }
 
+
+    // 지원자 한명 조회 (apply_id 일치하는)
+    public ApplyResponse findOneApply(Apply apply) throws Exception {
+
+        ApplyResponse applyResponse = new ApplyResponse();
+
+        try {
+            applyResponse.setApplyList(applyMapper.findOneApply(apply));
+            if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
+                applyResponse.setCode("C001");
+                applyResponse.setMessage("지원자 한명 조회 성공");
+            } else {
+                applyResponse.setCode("C004");
+                applyResponse.setMessage("지원자 한명 조회 실패");
+            }
+        } catch (Exception e) {
+            applyResponse.setCode("E001");
+            applyResponse.setMessage("ERROR");
+            log.info(e.getMessage());
+        }
+
+        return applyResponse;
+    }
+
 }

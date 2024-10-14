@@ -47,4 +47,11 @@ public class formMail_applyController {
         return applyResponse;
     }
 
+    // 지원자 한명 조회 (apply_id 일치하는)
+    @PostMapping("/findOneApply")
+    public ApplyResponse findOneApply(@RequestBody Apply apply) throws Exception {
+        ApplyResponse applyResponse = new ApplyResponse();
+        applyResponse = formMailApplyService.findOneApply(apply);
+        return applyResponse;
+    }
 }

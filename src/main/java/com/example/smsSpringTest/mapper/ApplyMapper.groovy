@@ -76,4 +76,13 @@ interface ApplyMapper {
         FROM formmail_apply
     """)
     int applyListCount()
+
+    // 지원자 한명 조회 (apply_id 일치하는)
+    @Select("""
+        SELECT *
+        FROM formmail_apply
+        WHERE apply_id = #{apply.applyId}
+    """)
+    List<Apply> findOneApply(@Param("apply") Apply apply)
 }
+
