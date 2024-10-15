@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/formMail_ad")
+@RequestMapping("/v1/formMail_ad")
 @Slf4j
 public class formMail_adController {
 
