@@ -315,6 +315,27 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // get 테스트용 -> 삭제 예정
+    public AdResponse jobSiteListTest() throws Exception {
+            AdResponse adResponse = new AdResponse();
+        try {
+            adResponse.setJobSiteList(adMapper.jobSiteListTest());
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C001");
+                adResponse.setMessage("광고 목록 전체 조회 성공");
+            } else {
+                adResponse.setCode("C005");
+                adResponse.setMessage("광고 목록 전체 조회 실패");
+            }
+
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
+
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     public AdResponse searchTitleJobsite(fmAd ad) throws Exception {
         AdResponse adResponse = new AdResponse();

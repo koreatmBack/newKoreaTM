@@ -424,4 +424,15 @@ interface AdMapper {
         OR logo_img = #{adImage.logoImg}
     """)
     int dupImgUrl(@Param("adImage") fmAd adImage)
+
+
+    // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE end_date >= CURDATE()
+    """)
+    List<JobSite> jobSiteListTest()
+
+
 }

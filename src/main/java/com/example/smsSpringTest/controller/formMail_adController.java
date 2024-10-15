@@ -234,4 +234,9 @@ public class formMail_adController {
         return adResponse;
     }
 
+    // get 테스트용 -> 삭제 예정
+    @GetMapping("/jobSiteListTest")
+    public AdResponse jobSiteListTest() throws Exception {
+        return formMailAdService.jobSiteListTest();
+    }
 }
