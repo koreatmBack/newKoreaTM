@@ -26,7 +26,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/formmail_holiday")
+@RequestMapping({"/api/v1/formMail_holiday", "/v1/formMail_holiday"})
 @Slf4j
 public class formMail_holidayController {
 

@@ -22,7 +22,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/v1/formMail_admin")
+@RequestMapping({"/api/v1/formMail_admin", "/v1/formMail_admin"})
 public class formMail_adminController {
 
     private final formMail_adminService formMailAdminService;

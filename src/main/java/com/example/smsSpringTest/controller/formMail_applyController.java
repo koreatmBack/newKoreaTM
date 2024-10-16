@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/formMail_apply")
+@RequestMapping({"/api/v1/formMail_apply", "/v1/formMail_apply"})
 @Slf4j
 public class formMail_applyController {
 

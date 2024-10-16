@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/v1/formMail")
+@RequestMapping({"/api/v1/formMail", "/v1/formMail"})
 @Slf4j
 public class SmsController {
 

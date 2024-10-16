@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/formMail_common")
+@RequestMapping({"/api/v1/formMail_common", "/v1/formMail_common"})
 @Slf4j
 public class CommonController {
 
