@@ -76,6 +76,8 @@ public class AdRequest {
 
     private String workTime; // 근무 시간
 
+    private int grade;
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
 

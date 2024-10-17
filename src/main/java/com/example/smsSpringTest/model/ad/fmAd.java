@@ -87,4 +87,6 @@ public class fmAd {
     private String adNum; // 광고 번호 4자리
 
     private String workTime; // 근무 시간
+
+    private int grade;
 }

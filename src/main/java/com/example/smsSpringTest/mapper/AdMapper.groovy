@@ -40,6 +40,7 @@ interface AdMapper {
             , experience
             , ad_num
             , work_time
+            , grade
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -73,6 +74,7 @@ interface AdMapper {
             , #{ad.experience}
             , #{ad.adNum}
             , #{ad.workTime}
+            , #{ad.grade}
         )
 </script>        
     """)
@@ -196,7 +198,10 @@ interface AdMapper {
         </if>           
         <if test="ad.workTime != null">
             work_time = #{ad.workTime},
-        </if>   
+        </if>         
+        <if test="ad.grade != null">
+            grade = #{ad.grade},
+        </if>     
      </set>
         WHERE aid = #{ad.aid}
     </script>
