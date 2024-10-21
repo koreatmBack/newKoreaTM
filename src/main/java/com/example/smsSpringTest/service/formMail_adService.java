@@ -61,10 +61,10 @@ public class formMail_adService {
                 if(dupImgurl == 0){
                     int addUrl = commonMapper.addUrl(ad);
                 }
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("광고 등록 성공");
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("광고 등록 실패");
             }
         } catch (Exception e) {
@@ -116,19 +116,19 @@ public class formMail_adService {
                     int totalPages = (int) Math.ceil((double) totalCount / size);
                     log.info("totalPages = " + totalPages);
                     adResponse.setTotalPages(totalPages);
-                    adResponse.setCode("C001");
+                    adResponse.setCode("C000");
                     adResponse.setMessage("광고 목록 조회 성공");
 
 //                    // Redis에 데이터 저장
 //                    redisTemplate.opsForValue().set(cacheKey, adResponse, cacheTime, TimeUnit.MILLISECONDS);
 //                    log.info("광고 목록을 Redis에 캐싱했습니다.");
                 } else {
-                    adResponse.setCode("C005");
+                    adResponse.setCode("E005");
                     adResponse.setMessage("광고 조회 실패");
                 }
 //            }
         } catch(Exception e){
-            adResponse.setCode("E000");
+            adResponse.setCode("E001");
             adResponse.setMessage("광고 조회 실패");
             log.error("광고 목록 조회 중 오류 발생: ", e);
         }
@@ -142,7 +142,7 @@ public class formMail_adService {
         try {
             int updateAd = adMapper.updateAd(ad);
             if(updateAd == 1){
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("광고 업데이트 성공");
 
 //                String pattern = "fmAdList_*"; // 패턴 정의
@@ -151,7 +151,7 @@ public class formMail_adService {
 //                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
 //                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("광고 업데이트 실패");
             }
         }catch (Exception e){
@@ -169,7 +169,7 @@ public class formMail_adService {
         try {
             int deleteAd = adMapper.deleteAd(ad);
             if(deleteAd == 1){
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("광고 삭제 성공");
 
 //                String pattern = "fmAdList_*"; // 패턴 정의
@@ -178,7 +178,7 @@ public class formMail_adService {
 //                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
 //                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("광고 삭제 실패");
             }
         }catch (Exception e){
@@ -208,10 +208,10 @@ public class formMail_adService {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
                 adResponse.setTotalPages(totalPages);
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("광고 목록 전체 조회 성공");
             } else {
-                adResponse.setCode("C005");
+                adResponse.setCode("E005");
                 adResponse.setMessage("광고 목록 전체 조회 실패");
             }
         } catch (Exception e){
@@ -228,10 +228,10 @@ public class formMail_adService {
         try {
             adResponse.setFmAdList(adMapper.searchAdNumList(ad));
             if (adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()) {
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("광고 목록 조회 성공");
             } else {
-                adResponse.setCode("C005");
+                adResponse.setCode("E005");
                 adResponse.setMessage("광고 조회 실패");
             }
         } catch (Exception e){
@@ -248,10 +248,10 @@ public class formMail_adService {
         try {
             adResponse.setFmAdList(adMapper.findOneAd(ad));
             if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("aid 일치하는 폼메일용 광고 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("aid 일치하는 폼메일용 광고 조회 실패");
             }
         } catch (Exception e) {
@@ -268,10 +268,10 @@ public class formMail_adService {
         try {
             adResponse.setFmAdList(adMapper.searchTitleAd(ad));
             if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("제목 포함하는 폼메일용 광고 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("제목 포함하는 폼메일용 광고 조회 실패");
             }
         } catch (Exception e) {
@@ -302,10 +302,10 @@ public class formMail_adService {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
                 adResponse.setTotalPages(totalPages);
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("광고 목록 전체 조회 성공");
             } else {
-                adResponse.setCode("C005");
+                adResponse.setCode("E005");
                 adResponse.setMessage("광고 목록 전체 조회 실패");
             }
         } catch (Exception e){
@@ -321,10 +321,10 @@ public class formMail_adService {
         try {
             adResponse.setJobSiteList(adMapper.jobSiteListTest());
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("광고 목록 전체 조회 성공");
             } else {
-                adResponse.setCode("C005");
+                adResponse.setCode("E005");
                 adResponse.setMessage("광고 목록 전체 조회 실패");
             }
 
@@ -343,10 +343,10 @@ public class formMail_adService {
         try {
             adResponse.setJobSiteList(adMapper.searchTitleJobsite(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("제목 포함하는 잡사이트 목록 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("제목 포함하는 잡사이트 목록 조회 실패");
             }
         } catch (Exception e) {
@@ -363,10 +363,10 @@ public class formMail_adService {
         try {
             adResponse.setJobSiteList(adMapper.findOneJobsite(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("aid 일치하는 잡사이트 광고 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("aid 일치하는 잡사이트 광고 조회 실패");
             }
         } catch (Exception e) {
@@ -393,10 +393,10 @@ public class formMail_adService {
             adResponse.setJobSiteList(adMapper.orderByCreated(paging));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 adResponse.setTotalPages(totalCount);
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("등록일 최신순으로 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("등록일 최신순으로조회 조회 실패");
             }
         } catch (Exception e) {
@@ -424,10 +424,10 @@ public class formMail_adService {
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 adResponse.setTotalPages(totalCount);
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("급여 높은 순으로 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("급여 높은 순으로 조회 조회 실패");
             }
         } catch (Exception e) {
@@ -455,10 +455,10 @@ public class formMail_adService {
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 adResponse.setTotalPages(totalCount);
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("근무일수 적은순으로 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("근무일수 적은순으로 조회 조회 실패");
             }
         } catch (Exception e) {
@@ -486,10 +486,10 @@ public class formMail_adService {
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 adResponse.setTotalPages(totalCount);
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("근무시간 짧은 순으로 조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("근무시간 짧은 순으로 조회 실패");
             }
         } catch (Exception e) {
@@ -511,10 +511,10 @@ public class formMail_adService {
             adResponse.setFindCompanyAndUserList(adMapper.findCompanyAndUser(cid));
             log.info(adMapper.findCompanyAndUser(cid).toString());
             if(adResponse.getFindCompanyAndUserList() != null && !adResponse.getFindCompanyAndUserList().isEmpty()){
-                adResponse.setCode("C001");
+                adResponse.setCode("C000");
                 adResponse.setMessage("조회 성공");
             } else {
-                adResponse.setCode("C004");
+                adResponse.setCode("E004");
                 adResponse.setMessage("조회 실패");
             }
         } catch (Exception e) {
@@ -578,7 +578,7 @@ public class formMail_adService {
                 String formatImageUrl = formatImageUrl(imageUrl);
                 log.info("formatImageUrl = " + formatImageUrl);
                 s3UploadResponse.setUrl(formatImageUrl);
-                s3UploadResponse.setCode("C001");
+                s3UploadResponse.setCode("C000");
                 s3UploadResponse.setMessage("S3에 업로드 성공");
         } catch (Exception e){
             s3UploadResponse.setCode("E001");
@@ -666,10 +666,10 @@ public class formMail_adService {
             int totalPages = (int) Math.ceil((double) totalCount / size);
             log.info("totalPages = " + totalPages);
             adResponse.setTotalPages(totalPages);
-            adResponse.setCode("C001");
+            adResponse.setCode("C000");
             adResponse.setMessage("고객사 조회 성공");
         } else {
-            adResponse.setCode("E000");
+            adResponse.setCode("E001");
             adResponse.setMessage("고객사 조회 실패");
         }
         return adResponse;
@@ -695,11 +695,11 @@ public class formMail_adService {
             String url = file.getAdImg();
             int deleteFile = adMapper.deleteFile(file);
             if(deleteFile == 1) {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("삭제 완료");
                 s3Uploader.deleteFile(url);
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("삭제 실패");
             }
         } catch (Exception e){

@@ -38,10 +38,10 @@ public class formMail_companyService {
                 int result = companyMapper.addComp(comp);
                 log.info("result = " + result);
                 if(result == 1){
-                    apiResponse.setCode("C001");
+                    apiResponse.setCode("C000");
                     apiResponse.setMessage("고객사 등록이 완료되었습니다.");
                 } else {
-                    apiResponse.setCode("C001");
+                    apiResponse.setCode("E002");
                     apiResponse.setMessage("고객사 등록 실패 !!");
                 }
 
@@ -85,14 +85,14 @@ public class formMail_companyService {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
                 companyResponse.setTotalPages(totalPages);
-                companyResponse.setCode("C001");
+                companyResponse.setCode("C000");
                 companyResponse.setMessage("고객사 조회 성공");
 
                 // Redis에 데이터 저장
 //                redisTemplate.opsForValue().set(cacheKey, companyResponse, cacheTime, TimeUnit.MILLISECONDS);
 //                log.info("고객사 목록을 Redis에 캐싱했습니다.");
             } else {
-                companyResponse.setCode("E000");
+                companyResponse.setCode("E001");
                 companyResponse.setMessage("고객사 조회 실패");
             }
 //        }
@@ -113,13 +113,13 @@ public class formMail_companyService {
                 String pattern = "companyList_*"; // 패턴 정의
 //                Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
 
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("업데이트에 성공했습니다.");
 
 //                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
 //                log.info("Redis에서 고객사 목록 캐시를 삭제했습니다.");
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("업데이트에 실패했습니다.");
             }
 
@@ -148,7 +148,7 @@ public class formMail_companyService {
             // 삭제 로그에 등록 성공하면
             if(deleteCompany == 1) {
                 // 삭제 성공
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("삭제 성공");
 
                 String pattern = "companyList_*"; // 패턴 정의
@@ -158,13 +158,13 @@ public class formMail_companyService {
 //                log.info("Redis에서 고객사 목록 캐시를 삭제했습니다.");
             } else {
                 // 삭제 실패
-                apiResponse.setCode("C003");
+                apiResponse.setCode("E003");
                 apiResponse.setMessage("삭제 실패");
             }
 
         } else {
             // 삭제 및 삭제 로그 등록 실패
-            apiResponse.setCode("C005");
+            apiResponse.setCode("E005");
             apiResponse.setMessage("삭제 및 삭제 로그 등록 실패");
         }
 
@@ -186,13 +186,13 @@ public class formMail_companyService {
         try {
             String cid = comp.getCid();
             if(cid == null ){
-                companyResponse.setCode("C005");
+                companyResponse.setCode("C000");
                 companyResponse.setMessage("고객사 조회 실패");
             } else {
 
                 companyResponse.setCompany(companyMapper.findCompany(cid).get(0));
 //            companyResponse.setCompanyList(companyMapper.findCompany(comp));
-                companyResponse.setCode("C001");
+                companyResponse.setCode("E002");
                 companyResponse.setMessage("고객사 조회 성공");
             }
 

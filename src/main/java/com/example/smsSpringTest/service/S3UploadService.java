@@ -36,7 +36,7 @@ public class S3UploadService {
             String formatImageUrl = formatImageUrl(imageUrl);
             log.info("formatImageUrl = " + formatImageUrl);
             s3UploadResponse.setUrl(formatImageUrl);
-            s3UploadResponse.setCode("C001");
+            s3UploadResponse.setCode("C000");
             s3UploadResponse.setMessage("업로드 성공");
         } catch (Exception e) {
             s3UploadResponse.setCode("E001");
@@ -57,7 +57,7 @@ public class S3UploadService {
 //            if(S3DeleteFile == 1) {
              s3Uploader.deleteFile(delUrl);
              log.info("service -> deleteFileKey = "+ delUrl);
-             apiResponse.setCode("C001");
+             apiResponse.setCode("C000");
              apiResponse.setMessage("S3 파일 삭제 완료");
 //            } else {
 //                apiResponse.setCode("C004");
@@ -77,7 +77,7 @@ public class S3UploadService {
 
         try {
             s3UploadResponse.setS3UploadList(s3UploadMapper.s3UploadList());
-            s3UploadResponse.setCode("C001");
+            s3UploadResponse.setCode("C000");
             s3UploadResponse.setMessage("파일 조회 성공");
         } catch(Exception e) {
             s3UploadResponse.setCode("E001");

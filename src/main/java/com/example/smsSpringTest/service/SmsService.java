@@ -282,7 +282,7 @@ public class SmsService {
 
                 if(Result.equals("success")){
                     smsResponse.setSmsForm(smsForm);
-                    smsResponse.setCode("C001");
+                    smsResponse.setCode("C000");
                     smsResponse.setMessage("문자 전송 성공 !! 남은 잔여 문자 " + Count + "건 남았습니다.");
 //                    return "문자 전송 성공!! 남은 잔여 문자 " + Count; // 성공시 -> 잔여 문자 개수 반환
 
@@ -306,7 +306,7 @@ public class SmsService {
                     // --------------------------------------------
                 } else{
 //                    return Result; // 실패시
-                    smsResponse.setCode("C001");
+                    smsResponse.setCode("E002");
                     smsResponse.setMessage(Result);
                 }
             }else{

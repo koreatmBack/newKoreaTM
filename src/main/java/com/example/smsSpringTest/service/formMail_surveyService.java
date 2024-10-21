@@ -40,16 +40,16 @@ public class formMail_surveyService {
                     // 값이 없을때 -> 신규 등록
                     int addSurvey = surveyMapper.addSurvey(surv);
                     if(addSurvey == 1){
-                        surveyResponse.setCode("C001");
+                        surveyResponse.setCode("C000");
                         surveyResponse.setMessage("설문조사 등록 성공");
                     } else {
-                        surveyResponse.setCode("C004");
+                        surveyResponse.setCode("E004");
                         surveyResponse.setMessage("설문조사 등록 실패");
                     }
                 } else {
                     // 이미 값이 있을때
                     surveyResponse.setSurvId(Integer.parseInt(survId));
-                    surveyResponse.setCode("C002");
+                    surveyResponse.setCode("E002");
                     surveyResponse.setMessage("이미 같은 설문(cid , type)이 존재합니다.");
                 }
 
@@ -74,7 +74,7 @@ public class formMail_surveyService {
 
             surveyResponse.setSurveyList(surveyMapper.surveyList());
 
-            surveyResponse.setCode("C001");
+            surveyResponse.setCode("C000");
             surveyResponse.setMessage("설문조사 조회 성공");
         }catch (Exception e) {
             surveyResponse.setCode("E001");
@@ -96,7 +96,7 @@ public class formMail_surveyService {
             }
             log.info(surveyMapper.selectSurveyList(surv).toString());
             surveyResponse.setSurveyList(surveyMapper.selectSurveyList(surv));
-            surveyResponse.setCode("C001");
+            surveyResponse.setCode("C000");
             surveyResponse.setMessage("설문조사 조회 성공");
         }catch (Exception e) {
             surveyResponse.setCode("E001");
@@ -115,10 +115,10 @@ public class formMail_surveyService {
         try {
             int updateSurvey = surveyMapper.updateSurvey(surv);
             if(updateSurvey == 1) {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("설문조사 업데이트 완료");
             } else {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("E002");
                 apiResponse.setMessage("설문조사 업데이트 실패");
             }
 
@@ -139,10 +139,10 @@ public class formMail_surveyService {
         try {
             int deleteSurvey = surveyMapper.deleteSurvey(surv);
             if(deleteSurvey == 1) {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("설문조사 삭제 완료");
             } else {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("E002");
                 apiResponse.setMessage("설문조사 삭제 실패");
             }
 

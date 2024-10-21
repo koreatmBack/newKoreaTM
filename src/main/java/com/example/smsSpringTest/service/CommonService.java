@@ -41,7 +41,7 @@ public class CommonService {
             log.info("formatImageUrl = " + formatImageUrl);
 
             s3UploadResponse.setUrl(formatImageUrl);
-            s3UploadResponse.setCode("C001");
+            s3UploadResponse.setCode("C000");
             s3UploadResponse.setMessage("S3에 업로드 성공");
         } catch (Exception e){
             s3UploadResponse.setCode("E001");

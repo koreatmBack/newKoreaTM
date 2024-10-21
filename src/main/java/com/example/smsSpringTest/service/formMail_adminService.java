@@ -49,16 +49,16 @@ public class formMail_adminService {
 
                 if (result == 1) {
 
-                    apiResponse.setCode("C001");
+                    apiResponse.setCode("C000");
                     apiResponse.setMessage("회원 등록이 완료되었습니다.");
                 } else {
-                    apiResponse.setCode("C001");
+                    apiResponse.setCode("E003");
                     apiResponse.setMessage("회원 등록 실패 !!");
                 }
 
             } else {
                 //id 중복 있음
-                apiResponse.setCode("C002");
+                apiResponse.setCode("E002");
                 apiResponse.setMessage("등록 불가 ! 이미 등록된 ID입니다.");
             }
         } catch (Exception e) {
@@ -83,11 +83,11 @@ public class formMail_adminService {
             int dupChkId = userMapper.userDuplicatedChkId(userId);
             if(dupChkId == 0){
                 // 등록된 아이디 없음
-                userResponse.setCode("C004");
+                userResponse.setCode("E004");
                 userResponse.setMessage("등록된 id가 없습니다.");
 
                 if(userId == null){
-                    userResponse.setCode("C004");
+                    userResponse.setCode("E004");
                     userResponse.setMessage("ID를 입력해주세요.");
                 }
 
@@ -111,7 +111,7 @@ public class formMail_adminService {
                     log.info("로그인 유저 정보 = " + userMapper.user(userId));
                     userResponse.setUser(userMapper.user(userId));
 //                    userResponse.setUserProfile(userMapper.userProfile(userId));
-                    userResponse.setCode("C001");
+                    userResponse.setCode("C000");
                     userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
 
 
@@ -134,7 +134,7 @@ public class formMail_adminService {
 
                 } else {
                     // 입력한 비밀번호와 등록된 비밀번호가 다를때
-                    userResponse.setCode("C005");
+                    userResponse.setCode("E005");
                     userResponse.setMessage("로그인 실패, 비밀번호 다시 확인해주세요");
                 }
 
@@ -158,7 +158,7 @@ public class formMail_adminService {
 //            redisTemplate.delete(sessionKey); // Redis에서 해당 세션 키 삭제
 //            log.info("로그아웃 성공. Redis에서 세션 키가 삭제되었습니다.");
 
-            apiResponse.setCode("C001");
+            apiResponse.setCode("C000");
             apiResponse.setMessage("로그아웃 성공");
         } catch (Exception e) {
             apiResponse.setCode("E001");
@@ -200,7 +200,7 @@ public class formMail_adminService {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("userResponse :  totalPages = " + totalPages);
                 userResponse.setTotalPages(totalPages);
-                userResponse.setCode("C001");
+                userResponse.setCode("C000");
                 userResponse.setMessage("회원 목록 조회 완료");
 
 //                // Redis에 데이터 저장
@@ -223,7 +223,7 @@ public class formMail_adminService {
         try {
             String userId = user.getUserId();
             userResponse.setUserProfile(userMapper.findOneUser(userId));
-            userResponse.setCode("C001");
+            userResponse.setCode("C000");
             userResponse.setMessage("조회 성공");
         } catch (Exception e) {
             userResponse.setCode("E001");
@@ -246,10 +246,10 @@ public class formMail_adminService {
             userResponse.setUserList(userMapper.findUsers(userName));
             log.info(userResponse.getUserList().toString());
             if(!userResponse.getUserList().isEmpty()) {
-                userResponse.setCode("C001");
+                userResponse.setCode("C000");
                 userResponse.setMessage("이름 검색 성공");
             } else {
-                userResponse.setCode("C004");
+                userResponse.setCode("E004");
                 userResponse.setMessage("이름 검색 실패");
             }
 
@@ -305,10 +305,10 @@ public class formMail_adminService {
              int updateUser = userMapper.updateUser(user);
 
              if(updateUser == 0){
-                 userResponse.setCode("C008");
+                 userResponse.setCode("E003");
                  userResponse.setMessage("유저 업데이트 실패");
              } else {
-                 userResponse.setCode("C001");
+                 userResponse.setCode("C000");
                  userResponse.setMessage("유저 업데이트 성공");
 
                  String pattern = "userList_*"; // 패턴 정의
@@ -338,17 +338,17 @@ public class formMail_adminService {
                 int validPhoneChk = userMapper.validPhoneChk(phoneNumber);
                 if(validPhoneChk == 1){
                     // 연락처가 중복이면
-                    apiResponse.setCode("C004");
+                    apiResponse.setCode("E004");
                     apiResponse.setMessage("이미 등록된 연락처입니다.");
                 } else {
                     // 연락처가 중복 아닐때
                     userMapper.addPhoneNum(phoneNumber);
-                    apiResponse.setCode("C001");
+                    apiResponse.setCode("C000");
                     apiResponse.setMessage("연락처가 저장되었습니다.");
                 }
             } else {
                 // 형식이 일치하지 않으면
-                apiResponse.setCode("C001");
+                apiResponse.setCode("E002");
                 apiResponse.setMessage("연락처 형식이 올바르지 않습니다.");
             }
         } catch (Exception e) {
@@ -371,7 +371,7 @@ public class formMail_adminService {
         UserResponse userResponse = new UserResponse();
 
         userResponse.setPhoneNumList(userMapper.allPhoneNumList());
-        userResponse.setCode("C001");
+        userResponse.setCode("C000");
         userResponse.setMessage("조회 성공");
 
         return userResponse;
@@ -383,12 +383,12 @@ public class formMail_adminService {
         ApiResponse apiResponse = new ApiResponse();
 
             if(phoneNumber == null){
-                apiResponse.setCode("C003");
+                apiResponse.setCode("E003");
                 apiResponse.setMessage("삭제할 연락처를 입력해주세요.");
             } else {
                 int delPhoneNum = userMapper.delPhoneNum(phoneNumber);
                 if(delPhoneNum == 1){
-                    apiResponse.setCode("C001");
+                    apiResponse.setCode("C000");
                     apiResponse.setMessage("연락처가 삭제되었습니다.");
                 } else {
                     apiResponse.setCode("E001");
@@ -404,13 +404,13 @@ public class formMail_adminService {
         try{
             if(phoneNumber == null){
                 // 연락처 입력 못 받았을 때
-                userResponse.setCode("E001");
+                userResponse.setCode("E002");
                 userResponse.setMessage("조회할 연락처를 입력해주세요.");
             } else {
                 // 연락처 입력 받음
 
                 userResponse.setFindUserList(userMapper.findUserList(phoneNumber));
-                userResponse.setCode("C001");
+                userResponse.setCode("C000");
                 userResponse.setMessage("조회 성공");
             }
         } catch (Exception e) {

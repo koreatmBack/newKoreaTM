@@ -35,10 +35,10 @@ public class formMail_applyService {
             apply.setApplyId(serialNumber);
             int addApply = applyMapper.addApply(apply);
             if(addApply == 1) {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("지원자 등록 성공");
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("지원자 등록 실패");
             }
 
@@ -58,10 +58,10 @@ public class formMail_applyService {
         try{
             int updateApply = applyMapper.updateApply(apply);
             if(updateApply == 1) {
-                apiResponse.setCode("C001");
+                apiResponse.setCode("C000");
                 apiResponse.setMessage("지원자 수정 성공");
             } else {
-                apiResponse.setCode("C004");
+                apiResponse.setCode("E004");
                 apiResponse.setMessage("지원자 수정 실패");
             }
         }catch(Exception e){
@@ -88,10 +88,10 @@ public class formMail_applyService {
 
             if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
                 applyResponse.setTotalPages(totalCount);
-                applyResponse.setCode("C001");
+                applyResponse.setCode("C000");
                 applyResponse.setMessage("지원자 전제 조회 성공");
             } else {
-                applyResponse.setCode("C004");
+                applyResponse.setCode("E004");
                 applyResponse.setMessage("지원자 전제 조회 실패");
             }
         } catch (Exception e) {
@@ -111,10 +111,10 @@ public class formMail_applyService {
         try {
             applyResponse.setApplyList(applyMapper.findOneApply(apply));
             if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
-                applyResponse.setCode("C001");
+                applyResponse.setCode("C000");
                 applyResponse.setMessage("지원자 한명 조회 성공");
             } else {
-                applyResponse.setCode("C004");
+                applyResponse.setCode("E004");
                 applyResponse.setMessage("지원자 한명 조회 실패");
             }
         } catch (Exception e) {
