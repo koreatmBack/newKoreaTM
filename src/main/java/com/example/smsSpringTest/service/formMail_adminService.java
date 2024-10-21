@@ -49,7 +49,7 @@ public class formMail_adminService {
 
                 if (result == 1) {
 
-                    apiResponse.setCode("C000");
+                    apiResponse.setCode("C001");
                     apiResponse.setMessage("회원 등록이 완료되었습니다.");
                 } else {
                     apiResponse.setCode("C001");
@@ -111,7 +111,7 @@ public class formMail_adminService {
                     log.info("로그인 유저 정보 = " + userMapper.user(userId));
                     userResponse.setUser(userMapper.user(userId));
 //                    userResponse.setUserProfile(userMapper.userProfile(userId));
-                    userResponse.setCode("C000");
+                    userResponse.setCode("C001");
                     userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
 
 
@@ -308,7 +308,7 @@ public class formMail_adminService {
                  userResponse.setCode("C008");
                  userResponse.setMessage("유저 업데이트 실패");
              } else {
-                 userResponse.setCode("C000");
+                 userResponse.setCode("C001");
                  userResponse.setMessage("유저 업데이트 성공");
 
                  String pattern = "userList_*"; // 패턴 정의
@@ -343,7 +343,7 @@ public class formMail_adminService {
                 } else {
                     // 연락처가 중복 아닐때
                     userMapper.addPhoneNum(phoneNumber);
-                    apiResponse.setCode("C000");
+                    apiResponse.setCode("C001");
                     apiResponse.setMessage("연락처가 저장되었습니다.");
                 }
             } else {
@@ -371,7 +371,7 @@ public class formMail_adminService {
         UserResponse userResponse = new UserResponse();
 
         userResponse.setPhoneNumList(userMapper.allPhoneNumList());
-        userResponse.setCode("C000");
+        userResponse.setCode("C001");
         userResponse.setMessage("조회 성공");
 
         return userResponse;
@@ -388,7 +388,7 @@ public class formMail_adminService {
             } else {
                 int delPhoneNum = userMapper.delPhoneNum(phoneNumber);
                 if(delPhoneNum == 1){
-                    apiResponse.setCode("C000");
+                    apiResponse.setCode("C001");
                     apiResponse.setMessage("연락처가 삭제되었습니다.");
                 } else {
                     apiResponse.setCode("E001");
@@ -410,7 +410,7 @@ public class formMail_adminService {
                 // 연락처 입력 받음
 
                 userResponse.setFindUserList(userMapper.findUserList(phoneNumber));
-                userResponse.setCode("C000");
+                userResponse.setCode("C001");
                 userResponse.setMessage("조회 성공");
             }
         } catch (Exception e) {

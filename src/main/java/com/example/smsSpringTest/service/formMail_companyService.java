@@ -38,7 +38,7 @@ public class formMail_companyService {
                 int result = companyMapper.addComp(comp);
                 log.info("result = " + result);
                 if(result == 1){
-                    apiResponse.setCode("C000");
+                    apiResponse.setCode("C001");
                     apiResponse.setMessage("고객사 등록이 완료되었습니다.");
                 } else {
                     apiResponse.setCode("C001");
