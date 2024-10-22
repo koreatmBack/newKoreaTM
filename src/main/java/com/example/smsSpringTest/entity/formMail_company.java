@@ -57,4 +57,8 @@ public class formMail_company {
     private String address;
 
     private String industry;
+
+    private String sido;
+
+    private String sigungu;
 }

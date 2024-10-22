@@ -88,5 +88,9 @@ public class fmAd {
 
     private String workTime; // 근무 시간
 
+    private String sido;
+
+    private String sigungu;
+
     private int grade;
 }

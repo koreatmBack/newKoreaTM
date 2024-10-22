@@ -63,6 +63,9 @@ sms:
 holiday:
   service-key: ${HOLIDAY_KEY}
 
+jwt:
+  secret: ${JWT_SECRET}
+
 logging:
   level:
     com:

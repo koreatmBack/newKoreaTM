@@ -41,6 +41,8 @@ interface AdMapper {
             , ad_num
             , work_time
             , grade
+            , sido
+            , sigungu
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -75,6 +77,8 @@ interface AdMapper {
             , #{ad.adNum}
             , #{ad.workTime}
             , #{ad.grade}
+            , #{ad.sido}
+            , #{ad.sigungu}
         )
 </script>        
     """)

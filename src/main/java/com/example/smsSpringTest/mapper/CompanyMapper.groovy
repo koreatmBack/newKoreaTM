@@ -29,6 +29,8 @@ interface CompanyMapper {
             , partner
             , address
             , industry
+            , sido
+            , sigungu
         ) VALUES (
             #{comp.cid}
             , #{comp.companyName}
@@ -44,6 +46,8 @@ interface CompanyMapper {
             , #{comp.partner}
             , #{comp.address}
             , #{comp.industry}
+            , #{comp.sido}
+            , #{comp.sigungu}
         )
     """)
     int addComp(@Param("comp") formMail_company comp)

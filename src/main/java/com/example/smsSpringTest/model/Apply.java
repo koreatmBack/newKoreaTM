@@ -47,5 +47,9 @@ public class Apply {
 
     private String adminMemo;
 
+    private String sido;
+
+    private String sigungu;
+
     private LocalDateTime createdAt;
 }

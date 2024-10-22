@@ -23,6 +23,8 @@ interface ApplyMapper {
            , apply_phone
            , interview_time
            , admin_memo
+           , sido
+           , sigungu
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -37,6 +39,8 @@ interface ApplyMapper {
             ,#{apply.applyPhone}
             ,#{apply.interviewTime}
             ,#{apply.adminMemo}
+            ,#{apply.sido}
+            ,#{apply.sigungu}
         )
     """)
     int addApply(@Param("apply") Apply apply)

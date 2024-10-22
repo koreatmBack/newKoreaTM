@@ -78,6 +78,10 @@ public class AdRequest {
 
     private int grade;
 
+    private String sido;
+
+    private String sigungu;
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
 
