@@ -105,6 +105,7 @@ public class MemberService {
                 log.info("남은 리프레시 토큰 유효기간 밀리seconds = " + remainingMilliseconds );
                 if(remainingMilliseconds == null || remainingMilliseconds <= 0) {
                     // 리프레시 토큰 유효기간이 null 이거나 0보다 같거나 작을때
+                    // 즉, 리프레시 토큰이 만료되면
                     commonMapper.deleteUserToken(userId);
 
                     // 토큰(access, refresh) 재생성
@@ -127,7 +128,7 @@ public class MemberService {
                 } else {
                     // 현재 날짜가, uptdate + 28일보다 이전이면서 , refresh 토큰도 유효할때
                     token = jwtTokenProvider.accessToken(authentication);
-                    log.info("값 있을때 token = " + token);
+                    log.info("값 있을때 AccessToken = " + token);
                     Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
                     log.info("accessToken 유효기간 밀리seconds = " + accessTokenExpiration);
                 }
@@ -216,4 +217,37 @@ public class MemberService {
 
         return refResponse;
     }
+
+    // jwt 로그아웃 -> 로그아웃시 리프레시 토큰도 삭제하기.
+    public ApiResponse logout(JwtUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        String accessToken = response.getHeader("Authorization").substring(7);
+
+        // AccessToken 검증
+        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+
+            // AccessToken에서 authentication을 가져옵니다.
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            user.setUserId(authentication.getName());
+
+            RefToken refDB = jwtTokenProvider.getUserRefToken(user.getUserId());
+
+            if(refDB.getRefreshToken() != null) {
+                // 토큰 삭제
+                commonMapper.deleteUserToken(authentication.getName());
+                log.info("토큰 삭제");
+                apiResponse.setCode("C000");
+                apiResponse.setMessage(authentication.getName() + "님 로그아웃 되었습니다.");
+            }
+
+        } else {
+            apiResponse.setCode("E401");
+            apiResponse.setMessage("유효하지 않은 접근입니다.");
+        }
+
+        return apiResponse;
+    }
+
+
 }

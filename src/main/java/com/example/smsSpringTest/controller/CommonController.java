@@ -10,10 +10,12 @@ import com.example.smsSpringTest.service.CommonService;
 import com.example.smsSpringTest.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 /**
  * author : 신기훈
@@ -68,6 +70,17 @@ public class CommonController {
     // access토큰 만료됐을때, 토큰 재발급 요청
     @PostMapping("/reissu/token")
     public RefResponse reissuToken(@RequestBody RefToken refToken) throws Exception {
+
         return memberService.reissuToken(refToken);
+    }
+
+    // jwt 로그아웃
+    @PostMapping("/logout")
+    public ApiResponse logout(@NotNull Authentication authentication) throws Exception {
+
+        JwtUser user = new JwtUser();
+        user.setUserId(authentication.getName());
+
+        return memberService.logout(user);
     }
 }
