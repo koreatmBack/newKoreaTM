@@ -43,6 +43,7 @@ interface AdMapper {
             , grade
             , sido
             , sigungu
+            , hashtag
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -79,6 +80,7 @@ interface AdMapper {
             , #{ad.grade}
             , #{ad.sido}
             , #{ad.sigungu}
+            , #{ad.hashtag}
         )
 </script>        
     """)
@@ -132,7 +134,7 @@ interface AdMapper {
             end_date = #{ad.endDate},
         </if>        
         <if test="ad.extensionDay != null">
-            extensionDay = #{ad.extensionDay},
+            extension_day = #{ad.extensionDay},
         </if>
         <if test="ad.heaven != null">
             heaven = #{ad.heaven},
@@ -202,6 +204,9 @@ interface AdMapper {
         </if>           
         <if test="ad.workTime != null">
             work_time = #{ad.workTime},
+        </if>
+        <if test="ad.hashtag != null">
+            hashtag = #{ad.hashtag},
         </if>         
         <if test="ad.grade != null">
             grade = #{ad.grade},
@@ -259,7 +264,13 @@ interface AdMapper {
     """)
     List<fmAd> searchTitleAd(@Param("ad") fmAd ad)
 
-
+    // 폼메일용 hashtag( 배열 형식 ) 중 완전 일치하는 리스트 반환
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE FIND_IN_SET(#{ad.hashtag} , REPLACE(hashtag, ' ','')) > 0 ;
+    """)
+    List<fmAd> searchHashtagAd(@Param("ad") fmAd ad)
     // ---------------------------------------------
 
     // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)

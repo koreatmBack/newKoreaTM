@@ -165,6 +165,14 @@ public class formMail_adController {
         return adResponse;
     }
 
+    // 폼메일용 hashtag 일치하는 광고 조회
+    @PostMapping("/searchHashtagAd")
+    public AdResponse searchHashtagAd(@RequestBody fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.searchHashtagAd(ad);
+        return adResponse;
+    }
+
     // ---------------------------------------------------------
 
 

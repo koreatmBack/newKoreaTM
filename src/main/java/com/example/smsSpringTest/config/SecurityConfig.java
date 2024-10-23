@@ -54,6 +54,10 @@ public class SecurityConfig {
                 .and().cors(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomFilter(), JwtFilter.class);
+//                .authorizeRequests()
+//                .antMatchers("/v1/formMail_admin/join","/api/v1/formMail_admin/join","/v1/formMail_admin/login","/api/v1/formMail_admin/login"
+//                ,"/v1/formMail_common/login").permitAll()
+//                .anyRequest().authenticated();
         return http.build();
     }
 

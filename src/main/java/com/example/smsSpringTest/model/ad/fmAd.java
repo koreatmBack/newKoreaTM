@@ -39,7 +39,7 @@ public class fmAd {
 @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate endDate;
 
-    private int extensionDay;
+    private Integer extensionDay;
 
     private int totalDay;
 
@@ -92,5 +92,7 @@ public class fmAd {
 
     private String sigungu;
 
-    private int grade;
+    private String hashtag;
+
+    private Integer grade;
 }

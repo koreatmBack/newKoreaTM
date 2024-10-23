@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -43,6 +44,8 @@ public class JwtTokenProvider {
 //    private static final long ACCESS_TOKEN_EXPIRE_TIME = 36000;             // 36초 // 테스트용임.
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 30;  // 30일
 //    private static final long REFRESH_TOKEN_EXPIRE_TIME = 36000;  // 36초 // 테스트용임.
+
+    private static final long Cookie_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME / 1000;
     private final Key key;
 
     // application.yml에서 secret 값 가져와서 key에 저장
@@ -302,5 +305,29 @@ public class JwtTokenProvider {
             return null;
         }
     }
+
+    // 쿠키 생성
+    public Cookie createCookie(String userId, String accesstoken) {
+        String cookieName = "accesstoken_"+userId;
+        String cookieValue = accesstoken; // 쿠키벨류엔 글자제한이 있으므로, 벨류로 만들어담아준다.
+        log.info("cookieValue = " + cookieValue);
+        Cookie cookie = new Cookie(cookieName, cookieValue);
+        // 쿠키 속성 설정
+        cookie.setHttpOnly(true);  //httponly 옵션 설정
+//        cookie.setSecure(true); //https 옵션 설정
+        cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
+        cookie.setMaxAge((int) Cookie_EXPIRE_TIME); //쿠키 만료시간 설정 - accesstoken과 일치하게
+        return cookie;
+    }
+
+//    // 쿠키 삭제 -> 만료 시간 0으로 설정하면 자동 삭제됨
+//    public Cookie deleteCookie(String cookieName) {
+//        Cookie cookie = new Cookie(cookieName, null);
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+//        cookie.setMaxAge(0);
+//        return cookie;
+//    }
 
 }

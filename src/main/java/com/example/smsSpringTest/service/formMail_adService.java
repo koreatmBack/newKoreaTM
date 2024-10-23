@@ -281,6 +281,26 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // 폼메일용 hashtag 일치하는 광고 조회
+    public AdResponse searchHashtagAd(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setFmAdList(adMapper.searchHashtagAd(ad));
+            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
+                adResponse.setCode("C000");
+                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 성공");
+            } else {
+                adResponse.setCode("E004");
+                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+
+        return adResponse;
+    }
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 end ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 

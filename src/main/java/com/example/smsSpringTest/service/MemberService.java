@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
@@ -44,6 +46,7 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final HttpServletResponse response;
     private final PasswordEncoder passwordEncoder;
+    private final HttpServletRequest request;
 
     // 회원가입
     @Transactional
@@ -152,6 +155,8 @@ public class MemberService {
                 memberResponse.setMember(memberMapper.getFrontUserProfile(userId));
                 memberResponse.setCode("C000");
                 memberResponse.setMessage("로그인 완료");
+                Cookie cookie = jwtTokenProvider.createCookie(userId, token.getAccessToken());
+                response.addCookie(cookie);
                 response.setHeader(HttpHeaders.AUTHORIZATION, token.getGrantType() + " " + token.getAccessToken());
             } else {
                 // 최종적으로 access 토큰이 없을때
@@ -226,10 +231,29 @@ public class MemberService {
 
         // AccessToken 검증
         if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+            log.info("로그아웃시 accessToken = " + accessToken);
 
             // AccessToken에서 authentication을 가져옵니다.
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             user.setUserId(authentication.getName());
+
+            // test
+            Cookie rc[] = request.getCookies();
+            String accesstoken = "";
+
+            for(Cookie cookie : rc){
+                if(accessToken.equals(cookie.getValue())){
+                    // 해당 쿠키 삭제
+                    accesstoken = cookie.getValue();
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+            log.info("쿠키 accesstoken = " + accesstoken);
+
+            // ---
 
             RefToken refDB = jwtTokenProvider.getUserRefToken(user.getUserId());
 
