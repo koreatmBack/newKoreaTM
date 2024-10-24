@@ -173,6 +173,14 @@ public class formMail_adController {
         return adResponse;
     }
 
+    // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
+    @PostMapping("/searchAddressAd")
+    public AdResponse searchAddressAd(fmAd ad) throws Exception{
+        AdResponse adResponse = new AdResponse();
+        adResponse = formMailAdService.searchAddressAd(ad);
+        return adResponse;
+    }
+
     // ---------------------------------------------------------
 
 
@@ -247,4 +255,5 @@ public class formMail_adController {
     public AdResponse jobSiteListTest() throws Exception {
         return formMailAdService.jobSiteListTest();
     }
+
 }

@@ -228,6 +228,7 @@ public class MemberService {
         ApiResponse apiResponse = new ApiResponse();
 
         String accessToken = response.getHeader("Authorization").substring(7);
+// substring 빼고, 쿠키로만 할거니까 그냥 그대로 가져다 쓰면 될듯?
 
         // AccessToken 검증
         if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){

@@ -271,6 +271,20 @@ interface AdMapper {
         WHERE FIND_IN_SET(#{ad.hashtag} , REPLACE(hashtag, ' ','')) > 0 ;
     """)
     List<fmAd> searchHashtagAd(@Param("ad") fmAd ad)
+
+    // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
+    // 만약 sido, sigungu 같이 입력시 -> 2개 항목 다 완전 일치하는 것
+    @Select("""
+<script>
+        SELECT *
+        FROM formmail_ad
+        WHERE sido = #{ad.sido}
+        <if test="ad.sigungu != null">
+        AND sigungu = #{ad.sigungu}
+        </if>
+</script>   
+    """)
+    List<fmAd> searchAddressAd(@Param("ad") fmAd ad)
     // ---------------------------------------------
 
     // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)

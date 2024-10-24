@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,26 +41,41 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
+        Cookie[] cookies = request.getCookies();
+
         String requestURI = request.getRequestURI();
         boolean hasError = false;
+        String cookieToken = "";
+        if(cookies != null){
 
+            log.info("쿠키 있음");
+            for(Cookie cookie : cookies) {
+                cookieToken = cookie.getValue();
+            }
+        } else {
+            log.info("쿠키 없음");
+            cookieToken = resolveToken(request);
+        }
+            log.info("cookieToken = " + cookieToken);
+
+//        if(isAllowedURI(requestURI)) {
 //        // 쿠키 없을때 토큰 가져오는 방식
             String resolveToken = resolveToken(request);
 
 //        String resolveToken = response.
 
             log.info("requestURI: {}", requestURI);
-            log.info("resolveToken = " + resolveToken);
+//            log.info("resolveToken = " + resolveToken);
 
-        if (!StringUtils.hasText(resolveToken)) {
-            log.debug("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
-            filterChain.doFilter(request, response);
-            return;
-        }
+//            if (!StringUtils.hasText(resolveToken)) {
+//                log.debug("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
 
-        String tokenStatus = jwtTokenProvider.validateToken(resolveToken);
+            String tokenStatus = jwtTokenProvider.validateToken(cookieToken);
 
-            if(!tokenStatus.equals("ACCESS")) {
+            if (StringUtils.hasText(cookieToken) && !tokenStatus.equals("ACCESS")) {
                 ApiResponse apiResponse = new ApiResponse("E401", "유효하지 않은 접근입니다.");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
@@ -73,22 +89,33 @@ public class JwtFilter extends OncePerRequestFilter {
 //                            .collect(Collectors.joining(","));
 
 
-            // validateToken 으로 유효성 검사
-            if(tokenStatus.equals("ACCESS")) {
+            if(StringUtils.hasText(cookieToken) && !hasError) {
+                // validateToken 으로 유효성 검사
+                if (tokenStatus.equals("ACCESS")) {
 
 //                    String blackListChk = jwtTokenProvider.getRedisAccessToken(resolveToken);
 //                    Claims claims = jwtTokenProvider.parseClaims(resolveToken);
 //                    String customId = claims.getSubject() + "_edit";
 //                    String pwdEditTime = jwtTokenProvider.getPwdEditTime(customId);
-                    log.info("이때 resolveToken 있음? " + resolveToken);
-                    setAuthenticationAndRequest(request, response, resolveToken);
+                    log.info("이때 resolveToken 있음? " + cookieToken);
+                    setAuthenticationAndRequest(request, response, cookieToken);
 
-            } else {
-                hasError = true;
-                log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+                } else {
+                    hasError = true;
+                    log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+                }
             }
+//        }
 
-        filterChain.doFilter(request, response); // 필터 체인 호출
+        if(!hasError){
+            filterChain.doFilter(request, response);
+        } else {
+            ApiResponse apiResponse = new ApiResponse("E403", "접근 가능한 권한이 없습니다.");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("utf-8");
+            new ObjectMapper().writeValue(response.getWriter(), apiResponse);
+        }
+
     }
 //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -259,6 +286,23 @@ public class JwtFilter extends OncePerRequestFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("utf-8");
         new ObjectMapper().writeValue(response.getWriter(), apiResponse);
+    }
+
+    // 토큰 조회가 필요없는 API
+    private boolean isAllowedURI(String requestURI) {
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        String[] allowedURIs = {
+                "/v1/formMail_admin/join", "/api/v1/formMail_admin/join",
+                "/v1/formMail_admin/login", "/api/v1/formMail_admin/login",
+                "/v1/formMail_common/login", "/v1/formMail_common/join"
+        };
+
+        for (String allowedURI : allowedURIs) {
+            if(pathMatcher.match(allowedURI, requestURI)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /*

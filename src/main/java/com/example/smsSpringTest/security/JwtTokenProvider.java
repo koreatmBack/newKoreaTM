@@ -308,7 +308,8 @@ public class JwtTokenProvider {
 
     // 쿠키 생성
     public Cookie createCookie(String userId, String accesstoken) {
-        String cookieName = "accesstoken_"+userId;
+//        String cookieName = "accesstoken_"+userId;
+        String cookieName = "accesstoken";
         String cookieValue = accesstoken; // 쿠키벨류엔 글자제한이 있으므로, 벨류로 만들어담아준다.
         log.info("cookieValue = " + cookieValue);
         Cookie cookie = new Cookie(cookieName, cookieValue);

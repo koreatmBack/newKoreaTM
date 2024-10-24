@@ -19,7 +19,7 @@ public void addCorsMappings(CorsRegistry registry) {
             .allowedOrigins("http://localhost:3013", "http://192.168.0.34:3013","http://localhost:3014", "http://192.168.0.34:3014", "http://koti-jobsite.s3-website.ap-northeast-2.amazonaws.com", "\n" +
                     "https://koti-capture.web.app","\n" +
                     "https://kotijobs-22c81.web.app", "https://d2stq19td41ktj.cloudfront.net", "\n" +
-                    "https://d3f6f197wev30u.cloudfront.net" ) // 허용할 도메인
+                    "https://d3f6f197wev30u.cloudfront.net", "http://koti-formmail.s3-website.ap-northeast-2.amazonaws.com/" ) // 허용할 도메인
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
             .allowedHeaders("*") // 허용할 헤더
             .allowCredentials(true) // 자격 증명 허용 (예: 쿠키)
