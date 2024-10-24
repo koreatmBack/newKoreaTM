@@ -352,6 +352,7 @@ public class formMail_adService {
         } catch (Exception e){
             adResponse.setCode("E001");
             adResponse.setMessage("ERROR");
+            log.info(e.getMessage());
         }
         return adResponse;
     }
