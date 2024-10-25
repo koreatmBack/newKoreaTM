@@ -50,7 +50,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
             log.info("쿠키 있음");
             for(Cookie cookie : cookies) {
-                cookieToken = cookie.getValue();
+                if("accesstoken".equals(cookie.getName())){
+                     cookieToken = cookie.getValue();
+                }
             }
         } else {
             log.info("쿠키 없음");

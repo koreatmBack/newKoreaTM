@@ -341,15 +341,19 @@ public class formMail_adminService {
 
         Cookie cookies[] = request.getCookies();
         String accessToken = "";
-        if(cookies == null) {
-            apiResponse.setCode("E401");
-            apiResponse.setMessage("로그인 후 다시 이용해주세요.");
-            return apiResponse;
-        }
 
         // 만약 쿠키가 있다면
         for(Cookie cookie : cookies) {
-            accessToken = cookie.getValue();
+            if("accesstoken".equals(cookie.getName())){
+                accessToken = cookie.getValue();
+            }
+        }
+
+        // 쿠키가 없을때
+        if(accessToken == null) {
+            apiResponse.setCode("E401");
+            apiResponse.setMessage("로그인 후 다시 이용해주세요.");
+            return apiResponse;
         }
         log.info("로그아웃시 accessToken = " + accessToken);
 
@@ -702,13 +706,14 @@ public class formMail_adminService {
             // 쿠키 찾기
             Cookie[] cookies = request.getCookies();
 
-            if(cookies == null){
+            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+
+            // 만약 쿠키 없으면
+            if(cookieToken == null){
                 apiResponse.setCode("E004");
                 apiResponse.setMessage("쿠키가 없습니다. 로그인이 필요합니다.");
                 return apiResponse;
             }
-
-            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
 
             Long remain = jwtTokenProvider.getExpiration(cookieToken) / 1000; // 초로 변환
             apiResponse.setCode("C000");
