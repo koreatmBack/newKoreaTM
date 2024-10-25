@@ -54,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } else {
             log.info("쿠키 없음");
-            cookieToken = resolveToken(request);
+//            cookieToken = resolveToken(request);
         }
             log.info("cookieToken = " + cookieToken);
 
