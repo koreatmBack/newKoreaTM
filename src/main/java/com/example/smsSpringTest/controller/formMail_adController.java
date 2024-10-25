@@ -254,6 +254,7 @@ public class formMail_adController {
     // get 테스트용 -> 삭제 예정
     @GetMapping("/jobSiteListTest")
     public AdResponse jobSiteListTest() throws Exception {
+        log.info("jobSiteListTest 컨트롤러 들어옴");
         return formMailAdService.jobSiteListTest();
     }
 

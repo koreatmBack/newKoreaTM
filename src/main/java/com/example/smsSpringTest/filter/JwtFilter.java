@@ -67,15 +67,15 @@ public class JwtFilter extends OncePerRequestFilter {
             log.info("requestURI: {}", requestURI);
 //            log.info("resolveToken = " + resolveToken);
 
-//            if (!StringUtils.hasText(resolveToken)) {
-//                log.debug("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
-//                filterChain.doFilter(request, response);
-//                return;
-//            }
+            if (!StringUtils.hasText(resolveToken)) {
+                log.debug("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             String tokenStatus = jwtTokenProvider.validateToken(cookieToken);
 
-            if (StringUtils.hasText(cookieToken) && !tokenStatus.equals("ACCESS")) {
+            if (!tokenStatus.equals("ACCESS")) {
                 ApiResponse apiResponse = new ApiResponse("E401", "유효하지 않은 접근입니다.");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
@@ -89,7 +89,7 @@ public class JwtFilter extends OncePerRequestFilter {
 //                            .collect(Collectors.joining(","));
 
 
-            if(StringUtils.hasText(cookieToken) && !hasError) {
+
                 // validateToken 으로 유효성 검사
                 if (tokenStatus.equals("ACCESS")) {
 
@@ -104,7 +104,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     hasError = true;
                     log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
                 }
-            }
+
 //        }
 
         if(!hasError){

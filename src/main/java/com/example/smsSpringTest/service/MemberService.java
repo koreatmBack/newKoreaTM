@@ -224,35 +224,50 @@ public class MemberService {
     }
 
     // jwt 로그아웃 -> 로그아웃시 리프레시 토큰도 삭제하기.
-    public ApiResponse logout(JwtUser user) throws Exception {
+    public ApiResponse logout() throws Exception {
         ApiResponse apiResponse = new ApiResponse();
+        JwtUser user = new JwtUser();
 
-        String accessToken = response.getHeader("Authorization").substring(7);
+                    // test
+            Cookie cookies[] = request.getCookies();
+            String accessToken = "";
+            if(cookies == null){
+                apiResponse.setCode("E401");
+                apiResponse.setMessage("유효하지 않은 접근입니다.");
+                return apiResponse;
+            }
+        for(Cookie cookie : cookies) {
+            accessToken = cookie.getValue();
+        }
+//        String accessToken = response.getHeader("Authorization").substring(7);
 // substring 빼고, 쿠키로만 할거니까 그냥 그대로 가져다 쓰면 될듯?
 
+        // 쿠키 사용 할때
+//        String accessToken = response.getHeader("Authorization");
+        log.info("로그아웃시 accessToken = " + accessToken);
         // AccessToken 검증
         if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
-            log.info("로그아웃시 accessToken = " + accessToken);
+
 
             // AccessToken에서 authentication을 가져옵니다.
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             user.setUserId(authentication.getName());
 
-            // test
-            Cookie rc[] = request.getCookies();
-            String accesstoken = "";
+//            // test
+//            Cookie rc[] = request.getCookies();
+//            String accesstoken = "";
 
-            for(Cookie cookie : rc){
+            for(Cookie cookie : cookies){
                 if(accessToken.equals(cookie.getValue())){
                     // 해당 쿠키 삭제
-                    accesstoken = cookie.getValue();
+//                    accesstoken = cookie.getValue();
                     cookie.setMaxAge(0);
                     cookie.setPath("/");
                     response.addCookie(cookie);
                     break;
                 }
             }
-            log.info("쿠키 accesstoken = " + accesstoken);
+//            log.info("쿠키 accesstoken = " + accesstoken);
 
             // ---
 
