@@ -82,6 +82,11 @@ public class formMail_adminController {
         return formMailAdminService.reissuToken(refToken);
     }
 
+    @GetMapping("/refresh/AccessToken")
+    public ApiResponse refreshAccessToken() throws Exception {
+        return formMailAdminService.refreshAccessToken();
+    }
+
     // 회원 목록
     @PostMapping("/userList")
     public UserResponse userList(@RequestBody Paging paging) throws Exception{

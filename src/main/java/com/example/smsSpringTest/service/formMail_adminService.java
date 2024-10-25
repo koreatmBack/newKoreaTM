@@ -12,7 +12,6 @@ import com.example.smsSpringTest.model.response.UserResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -671,7 +670,9 @@ public class formMail_adminService {
                         Authentication authentication = jwtTokenProvider.getAuthentication(resolveToken);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         Token token = jwtTokenProvider.accessToken(authentication);
-                        response.setHeader(HttpHeaders.AUTHORIZATION, "bearer " + token.getAccessToken());
+//                        response.setHeader(HttpHeaders.AUTHORIZATION, "bearer " + token.getAccessToken());
+                        Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+                        response.addCookie(cookie);
 
                         log.info("새로 발급받은 access Token = " + token.getAccessToken());
                         refResponse.setRefToken(dbRefToken);
@@ -694,6 +695,40 @@ public class formMail_adminService {
         return refResponse;
     }
 
+    // access 토큰 재생성 -> 쿠키에 다시 담아주기 ( 쿠키 갱신하는법 )
+    public ApiResponse refreshAccessToken() throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            // 쿠키 찾기
+            Cookie[] cookies = request.getCookies();
+
+            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+
+            // 만약 쿠키 없으면
+            if(cookieToken == null){
+                apiResponse.setCode("E004");
+                apiResponse.setMessage("쿠키가 없습니다. 로그인이 필요합니다.");
+                return apiResponse;
+            }
+
+            Authentication authentication = jwtTokenProvider.getAuthentication(cookieToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Token token = jwtTokenProvider.accessToken(authentication);
+//                        response.setHeader(HttpHeaders.AUTHORIZATION, "bearer " + token.getAccessToken());
+            Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+            response.addCookie(cookie);
+
+            log.info("새로 발급받은 access Token = " + token.getAccessToken());
+            apiResponse.setCode("C000");
+            apiResponse.setMessage("access token 및 쿠키 재발급 성공");
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("ERROR!!");
+        }
+
+        return apiResponse;
+    }
 
     // 로그인시, 쿠키에 유효한 accessToken이 있으면 비밀번호 따로 입력 안 해도 자동 로그인
 
