@@ -1,16 +1,33 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.UserMapper;
 import com.example.smsSpringTest.model.Paging;
+import com.example.smsSpringTest.model.common.RefToken;
+import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.RefResponse;
 import com.example.smsSpringTest.model.response.UserResponse;
+import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 
 /**
  * author : 신기훈
@@ -23,8 +40,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Transactional
 public class formMail_adminService {
 
+    private final CommonMapper commonMapper;
     private final UserMapper userMapper;
-
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final HttpServletResponse response;
+    private final HttpServletRequest request;
     private final PasswordEncoder passwordEncoder;
 
 //    private final RedisTemplate<String, Object> redisTemplate;
@@ -70,7 +91,104 @@ public class formMail_adminService {
         return apiResponse;
     }
 
-    // 로그인
+//    // 로그인
+//    @Transactional
+//    public UserResponse logIn(UserProfile user) throws Exception {
+//
+//        UserResponse userResponse = new UserResponse();
+//
+//        try{
+//            String userId = user.getUserId();
+//
+//            // 아이디 있는지 확인
+//            int dupChkId = userMapper.userDuplicatedChkId(userId);
+//            if(dupChkId == 0){
+//                // 등록된 아이디 없음
+//                userResponse.setCode("E004");
+//                userResponse.setMessage("등록된 id가 없습니다.");
+//
+//                if(userId == null){
+//                    userResponse.setCode("E004");
+//                    userResponse.setMessage("ID를 입력해주세요.");
+//                }
+//
+//            } else {
+//                // 아이디 존재
+//
+//                // 입력 받은 PW
+//                String userPwd = user.getUserPwd();
+//
+//                // 입력받은 ID로 PW 체크 ( 등록된 비밀번호 체크 )
+//                String dupPw = userMapper.userPassword(userId);
+//
+//                // 비밀번호 검증
+//                boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPw);
+//
+//                if(isMatchPwd){
+//                    // 입력한 비밀번호와 등록된 비밀번호가 같을때
+//                    String userName = userMapper.userName(userId);
+//                    log.info("userId = " + userId);
+//                    log.info("userPwd = " + userPwd);
+//                    log.info("로그인 유저 정보 = " + userMapper.user(userId));
+//                    userResponse.setUser(userMapper.user(userId));
+////                    userResponse.setUserProfile(userMapper.userProfile(userId));
+//                    userResponse.setCode("C000");
+//                    userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
+//
+//
+//                    // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
+//                    String sessionKey = "login_" + userId;
+//
+////                    // Redis에서 로그인 정보 조회
+////                    String redisUserId = (String) redisTemplate.opsForValue().get(sessionKey);
+//
+////                    if (redisUserId != null) {
+////                        log.info("Redis에서 로그인 정보를 조회했습니다: " + redisUserId);
+////                        // Redis에서 남은 TTL 확인
+////                        Long ttl = redisTemplate.getExpire(sessionKey, TimeUnit.SECONDS);
+////                        log.info("만료까지 남은 시간은 : " + ttl+"초 입니다.");
+////                    } else {
+////                       // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
+////                        redisTemplate.opsForValue().set(sessionKey, userId, 1, TimeUnit.HOURS);
+////                        log.info("redis에 저장 성공");
+////                    }
+//
+//                } else {
+//                    // 입력한 비밀번호와 등록된 비밀번호가 다를때
+//                    userResponse.setCode("E005");
+//                    userResponse.setMessage("로그인 실패, 비밀번호 다시 확인해주세요");
+//                }
+//
+//            }
+//
+//        }catch (Exception e){
+//            log.error("로그인 중 예외 발생: {}", e.getMessage(), e);
+//            userResponse.setCode("E001");
+//            userResponse.setMessage("비밀번호를 입력해주세요.");
+//        }
+//
+//        return userResponse;
+//    }
+
+//    // 로그아웃
+//    public ApiResponse logOut(UserProfile user) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//        try{
+//            String userId = user.getUserId();
+//            String sessionKey = "login_" + userId;
+////            redisTemplate.delete(sessionKey); // Redis에서 해당 세션 키 삭제
+////            log.info("로그아웃 성공. Redis에서 세션 키가 삭제되었습니다.");
+//
+//            apiResponse.setCode("C000");
+//            apiResponse.setMessage("로그아웃 성공");
+//        } catch (Exception e) {
+//            apiResponse.setCode("E001");
+//            apiResponse.setMessage("로그아웃 에러");
+//        }
+//        return apiResponse;
+//    }
+
+    // jwt 로그인
     @Transactional
     public UserResponse logIn(UserProfile user) throws Exception {
 
@@ -105,32 +223,99 @@ public class formMail_adminService {
 
                 if(isMatchPwd){
                     // 입력한 비밀번호와 등록된 비밀번호가 같을때
-                    String userName = userMapper.userName(userId);
+                try {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPwd);
+                    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+                    log.info("authenticationToken = " + authenticationToken);
+                    log.info("authentication = " + authentication);
+
+                    userId = authentication.getName();
                     log.info("userId = " + userId);
-                    log.info("userPwd = " + userPwd);
-                    log.info("로그인 유저 정보 = " + userMapper.user(userId));
-                    userResponse.setUser(userMapper.user(userId));
-//                    userResponse.setUserProfile(userMapper.userProfile(userId));
-                    userResponse.setCode("C000");
-                    userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
 
+                    RefToken refToken = commonMapper.getUserRefreshTokenData(userId);
+                    log.info("refToken = " + refToken);
+                    RefToken refToken2 = new RefToken();
+                    Token token = null;
 
-                    // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
-                    String sessionKey = "login_" + userId;
+                    if (refToken != null) {
+                        // refresh token이 null이 아닐때
+                        LocalDate now = LocalDate.now();
+                        String uptDate = refToken.getUptDate();
+                        LocalDate parseUptDate = LocalDate.parse(uptDate);
+                        log.info("uptDate = " + uptDate);
+                        log.info("parseUptDate = " + parseUptDate);
 
-//                    // Redis에서 로그인 정보 조회
-//                    String redisUserId = (String) redisTemplate.opsForValue().get(sessionKey);
+                        Long remainingMilliseconds = jwtTokenProvider.getExpiration(refToken.getRefreshToken());
+                        log.info("남은 Refresh Token 유효 기간 밀리seconds = " + remainingMilliseconds);
 
-//                    if (redisUserId != null) {
-//                        log.info("Redis에서 로그인 정보를 조회했습니다: " + redisUserId);
-//                        // Redis에서 남은 TTL 확인
-//                        Long ttl = redisTemplate.getExpire(sessionKey, TimeUnit.SECONDS);
-//                        log.info("만료까지 남은 시간은 : " + ttl+"초 입니다.");
-//                    } else {
-//                       // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
-//                        redisTemplate.opsForValue().set(sessionKey, userId, 1, TimeUnit.HOURS);
-//                        log.info("redis에 저장 성공");
-//                    }
+                        if (remainingMilliseconds == null || remainingMilliseconds <= 0) {
+                            // refresh token 유효기간이 null 이거나 0보다 같거나 작을때 ( 즉, 만료 되었을 때 )
+                            commonMapper.deleteUserToken(userId);
+
+                            // 토큰(access, refresh) 재생성
+                            token = jwtTokenProvider.generateToken(authentication);
+                            log.info("만료되었을때 재생성한 토큰 = " + token);
+                            refToken2.setUserId(userId);
+                            refToken2.setGrantType(token.getGrantType());
+                            refToken2.setRefreshToken(token.getRefreshToken());
+                            commonMapper.addUserToken(refToken2);
+                        } else if (now.isAfter(parseUptDate.plusDays(28))) {
+                            // 현재 날짜가, uptdate + 28일보다 이후일때
+                            // 토큰 재생성
+                            token = jwtTokenProvider.generateToken(authentication);
+                            log.info("After 28 -> token = " + token);
+                            refToken2.setUserId(userId);
+                            refToken2.setGrantType(token.getGrantType());
+                            refToken2.setRefreshToken(token.getRefreshToken());
+                            commonMapper.updateUserToken(refToken2);
+                        } else {
+                            // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
+                            token = jwtTokenProvider.accessToken(authentication);
+                            log.info("아직 유효한 AccessToken = " + token);
+                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
+                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
+                        }
+                    } else {
+                        // refresh token이 null
+
+                        // 토큰 재생성
+                        token = jwtTokenProvider.generateToken(authentication);
+                        log.info("refToken이 null일때 token = " + token);
+                        refToken2.setUserId(userId);
+                        refToken2.setGrantType(token.getGrantType());
+                        refToken2.setRefreshToken(token.getRefreshToken());
+                        commonMapper.addUserToken(refToken2);
+                    }
+
+                    log.info("token : {}", token.getAccessToken());
+
+                    if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
+                        // 최종적으로 Access token이 있을때
+                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
+
+                        String userName = userMapper.userName(userId);
+                        userResponse.setCode("C000");
+                        userResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
+                        Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+                        response.addCookie(cookie);
+                    } else {
+                        // 최종적으로 access 토큰이 없을때
+                        userResponse.setCode("E001");
+                        userResponse.setMessage("최종적으로 Access Token이 없습니다.");
+                    }
+
+                } catch (BadCredentialsException e){
+                    userResponse.setCode("E003");
+                    userResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
+                }
+//                    String userName = userMapper.userName(userId);
+//                    log.info("userId = " + userId);
+//                    log.info("userPwd = " + userPwd);
+//                    log.info("로그인 유저 정보 = " + userMapper.user(userId));
+//                    userResponse.setUser(userMapper.user(userId));
+////                    userResponse.setUserProfile(userMapper.userProfile(userId));
+//                    userResponse.setCode("C000");
+//                    userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
 
                 } else {
                     // 입력한 비밀번호와 등록된 비밀번호가 다를때
@@ -149,23 +334,58 @@ public class formMail_adminService {
         return userResponse;
     }
 
-    // 로그아웃
-    public ApiResponse logOut(UserProfile user) throws Exception {
+    //jwt 로그아웃 -> 로그아웃시 리프레쉬 토큰, 해당 쿠키도 삭제
+    public ApiResponse logout() throws Exception {
         ApiResponse apiResponse = new ApiResponse();
-        try{
-            String userId = user.getUserId();
-            String sessionKey = "login_" + userId;
-//            redisTemplate.delete(sessionKey); // Redis에서 해당 세션 키 삭제
-//            log.info("로그아웃 성공. Redis에서 세션 키가 삭제되었습니다.");
+        UserProfile user = new UserProfile();
 
-            apiResponse.setCode("C000");
-            apiResponse.setMessage("로그아웃 성공");
-        } catch (Exception e) {
-            apiResponse.setCode("E001");
-            apiResponse.setMessage("로그아웃 에러");
+        Cookie cookies[] = request.getCookies();
+        String accessToken = "";
+        if(cookies == null) {
+            apiResponse.setCode("E401");
+            apiResponse.setMessage("로그인 후 다시 이용해주세요.");
+            return apiResponse;
+        }
+
+        // 만약 쿠키가 있다면
+        for(Cookie cookie : cookies) {
+            accessToken = cookie.getValue();
+        }
+        log.info("로그아웃시 accessToken = " + accessToken);
+
+        // AccessToken 검증
+        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+            //AccessToken에서 authentication 가져오기
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            user.setUserId(authentication.getName());
+
+            for(Cookie cookie : cookies){
+                if(accessToken.equals(cookie.getValue())){
+                    // 해당 쿠키 삭제
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+
+            // db속 refresh token 가져오기
+            RefToken refDB = jwtTokenProvider.getUserRefToken(user.getUserId());
+            if(refDB.getRefreshToken() != null) {
+                // refresh 토큰 삭제
+                commonMapper.deleteUserToken(authentication.getName());
+                log.info("refresh 토큰 삭제");
+                apiResponse.setCode("C000");
+                apiResponse.setMessage(authentication.getName() + "님 로그아웃 되었습니다.");
+            }
+
+        } else {
+            apiResponse.setCode("E401");
+            apiResponse.setMessage("유효하지 않은 접근입니다.");
         }
         return apiResponse;
     }
+
 
     // 전체 회원 목록
     public UserResponse userList(Paging paging) {
@@ -419,5 +639,88 @@ public class formMail_adminService {
         }
         return userResponse;
     }
+
+    // 토큰 재발급 요청
+    public RefResponse reissuToken(RefToken refToken) throws Exception {
+
+        RefResponse refResponse = new RefResponse();
+
+        if(refToken.getRefreshToken() != null && !refToken.getRefreshToken().equals("")) {
+            int refCnt = commonMapper.getRefreshTokenCount(refToken);
+
+            if (refCnt == 1) {
+                RefToken dbRefToken = commonMapper.getRefreshTokenData(refToken);
+                Long remainingMilliseconds = jwtTokenProvider.getExpiration(dbRefToken.getRefreshToken());
+
+                if (dbRefToken.getRefreshToken() != null && !dbRefToken.getRefreshToken().isBlank()) {
+                    if (remainingMilliseconds == null || remainingMilliseconds <= 0) {
+                        refResponse.setCode("E999");
+                        refResponse.setMessage("로그아웃");
+                    } else if (refToken.getRefreshToken().equals(dbRefToken.getRefreshToken())) {
+                        String resolveToken = refToken.getResolveToken();
+                        String bearer_prefix = "bearer ";
+                        log.info("resolve Token = " + resolveToken);
+                        if (StringUtils.hasText(resolveToken) && resolveToken.startsWith(bearer_prefix)) {
+                            resolveToken = resolveToken.substring(7);
+                        }
+
+                        Authentication authentication = jwtTokenProvider.getAuthentication(resolveToken);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        Token token = jwtTokenProvider.accessToken(authentication);
+                        response.setHeader(HttpHeaders.AUTHORIZATION, "bearer " + token.getAccessToken());
+
+                        log.info("새로 발급받은 access Token = " + token.getAccessToken());
+                        refResponse.setRefToken(dbRefToken);
+                        refResponse.setCode("C000");
+                        refResponse.setMessage("재발급");
+                    }
+                } else {
+                    refResponse.setCode("E999");
+                    refResponse.setMessage("로그아웃");
+                }
+            } else {
+                refResponse.setCode("E999");
+                refResponse.setMessage("로그아웃");
+            }
+        } else {
+            refResponse.setCode("E999");
+            refResponse.setMessage("로그아웃");
+        }
+
+        return refResponse;
+    }
+
+
+    // 로그인시, 쿠키에 유효한 accessToken이 있으면 비밀번호 따로 입력 안 해도 자동 로그인
+
+
+    // 쿠키 찾아온 후, 만료 시간 반환
+    public ApiResponse exper_cookie() throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            // 쿠키 찾기
+            Cookie[] cookies = request.getCookies();
+
+            if(cookies == null){
+                apiResponse.setCode("E004");
+                apiResponse.setMessage("쿠키가 없습니다. 로그인이 필요합니다.");
+                return apiResponse;
+            }
+
+            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+
+            Long remain = jwtTokenProvider.getExpiration(cookieToken) / 1000; // 초로 변환
+            apiResponse.setCode("C000");
+            apiResponse.setMessage(remain + "초 남았습니다.");
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("error!!");
+            log.info(e.getMessage());
+        }
+
+        return apiResponse;
+    }
+
 }
 

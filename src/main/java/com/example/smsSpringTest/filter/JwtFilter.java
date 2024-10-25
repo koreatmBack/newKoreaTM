@@ -67,8 +67,18 @@ public class JwtFilter extends OncePerRequestFilter {
             log.info("requestURI: {}", requestURI);
 //            log.info("resolveToken = " + resolveToken);
 
-            if (!StringUtils.hasText(resolveToken)) {
-                log.debug("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
+        // 쿠키 없고, 로그인 및 회원가입 창 아닐때 다른 uri 접근 금지
+        if(!isAllowedURI(requestURI) && cookieToken == null){
+            log.info("쿠키 없으므로 접근 불가능, 재 로그인 필요함");
+            ApiResponse apiResponse = new ApiResponse("E401", "로그인 후 이용 부탁드립니다.");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("utf-8");
+            new ObjectMapper().writeValue(response.getWriter(), apiResponse);
+            return;
+        }
+
+            if (!StringUtils.hasText(cookieToken)) {
+                log.info("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -235,25 +245,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
-
-//        //test
-//        Cookie[] rc = request.getCookies();
-//            String cookieTest = request.getHeader("Cookie");
-//            log.info("cookieTest = " + cookieTest);
-//        //--
-//        String cookieName = "";
-//        String cookieVal = "";
-//        if(rc != null) {
-//            for (Cookie cookie : rc) {
-//                if (cookie.getValue().equals(bearerToken.substring(7))) {
-//                    cookieName = cookie.getName();
-//                    cookieVal = cookie.getValue();
-//                }
-//            }
-//            log.info("cookieName = " + cookieName);
-//            log.info("cookieVal = " + cookieVal);
-//            //--
-//        }
         log.info("bearerToken = " + bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 
@@ -269,18 +260,6 @@ public class JwtFilter extends OncePerRequestFilter {
         response.setHeader(HttpHeaders.AUTHORIZATION, request.getHeader(AUTHORIZATION_HEADER));
     }
 
-    // 쿠키에서 토큰 가져오기
-    private String extractTokenFromCookies(Cookie[] cookies) {
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("accesstoken")) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
-
     private void tokenExpErrorLogout(HttpServletResponse response) throws IOException {
         ApiResponse apiResponse = new ApiResponse("E999", "세션이 만료되었습니다. 다시 로그인해 주세요");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -294,6 +273,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String[] allowedURIs = {
                 "/v1/formMail_admin/join", "/api/v1/formMail_admin/join",
                 "/v1/formMail_admin/login", "/api/v1/formMail_admin/login",
+                "/v1/formMail_admin/exper_cookie", "/api/v1/formMail_admin/exper_cookie",
                 "/v1/formMail_common/login", "/v1/formMail_common/join"
         };
 

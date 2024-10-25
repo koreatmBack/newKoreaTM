@@ -155,7 +155,7 @@ public class MemberService {
                 memberResponse.setMember(memberMapper.getFrontUserProfile(userId));
                 memberResponse.setCode("C000");
                 memberResponse.setMessage("로그인 완료");
-                Cookie cookie = jwtTokenProvider.createCookie(userId, token.getAccessToken());
+                Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                 response.addCookie(cookie);
                 response.setHeader(HttpHeaders.AUTHORIZATION, token.getGrantType() + " " + token.getAccessToken());
             } else {

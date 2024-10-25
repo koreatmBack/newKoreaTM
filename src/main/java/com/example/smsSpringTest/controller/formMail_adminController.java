@@ -3,7 +3,9 @@ package com.example.smsSpringTest.controller;
 import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.User;
+import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.RefResponse;
 import com.example.smsSpringTest.model.response.UserResponse;
 import com.example.smsSpringTest.service.formMail_adminService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,15 @@ public class formMail_adminController {
         return apiResponse;
     }
 
+    // 쿠키에 값 있으면 자동 로그인
+
+
+    // 쿠키 만료시간 보내주기
+    @GetMapping("/exper_cookie")
+    public ApiResponse exper_cookie() throws Exception {
+        return formMailAdminService.exper_cookie();
+    }
+
     // 회원 로그인
     @PostMapping("/login")
     public UserResponse login(@RequestBody UserProfile user) throws Exception {
@@ -50,13 +61,25 @@ public class formMail_adminController {
         return userResponse;
     }
 
-    // 회원 로그아웃
-    @PostMapping("/logout")
-    public ApiResponse logOut(@RequestBody UserProfile user) throws Exception {
+//    // 회원 로그아웃
+//    @PostMapping("/logout")
+//    public ApiResponse logOut(@RequestBody UserProfile user) throws Exception {
+//
+//        ApiResponse apiResponse = new ApiResponse();
+//        apiResponse = formMailAdminService.logOut(user);
+//        return apiResponse;
+//    }
 
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = formMailAdminService.logOut(user);
-        return apiResponse;
+    // jwt 회원 로그아웃
+    @PostMapping("/logout")
+    public ApiResponse logOut() throws Exception {
+        return formMailAdminService.logout();
+    }
+
+    // access토큰 만료됐을때, 토큰 재발급 요청 -> 만료시, 로그인하면 자동 재생성되긴함
+    @PostMapping("/reissu/token")
+    public RefResponse reissuToken(@RequestBody RefToken refToken) throws Exception {
+        return formMailAdminService.reissuToken(refToken);
     }
 
     // 회원 목록

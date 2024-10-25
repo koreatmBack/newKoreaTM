@@ -307,7 +307,7 @@ public class JwtTokenProvider {
     }
 
     // 쿠키 생성
-    public Cookie createCookie(String userId, String accesstoken) {
+    public Cookie createCookie(String accesstoken) {
 //        String cookieName = "accesstoken_"+userId;
         String cookieName = "accesstoken";
         String cookieValue = accesstoken; // 쿠키벨류엔 글자제한이 있으므로, 벨류로 만들어담아준다.
@@ -321,6 +321,17 @@ public class JwtTokenProvider {
         return cookie;
     }
 
+    // 쿠키에서 토큰 가져오기
+    public String extractTokenFromCookies(Cookie[] cookies) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accesstoken")) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 //    // 쿠키 삭제 -> 만료 시간 0으로 설정하면 자동 삭제됨
 //    public Cookie deleteCookie(String cookieName) {
 //        Cookie cookie = new Cookie(cookieName, null);

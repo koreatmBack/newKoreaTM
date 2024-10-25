@@ -11,7 +11,7 @@ import java.util.Optional;
  * comment : JPA 회원 조회 Repository (JWT 용)
  */
 
-public interface UserRepository extends JpaRepository<UserProfile, Long> {
+public interface AdminRepository extends JpaRepository<UserProfile, Long> {
 
     Optional<UserProfile> findByUserId(String userId);
 }
