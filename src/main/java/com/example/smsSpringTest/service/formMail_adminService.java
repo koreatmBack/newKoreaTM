@@ -291,8 +291,8 @@ public class formMail_adminService {
 
                     if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                         // 최종적으로 Access token이 있을때
-                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
-
+//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
+                        userResponse.setUserProfile(userMapper.findOneUser(userId));
                         String userName = userMapper.userName(userId);
                         userResponse.setCode("C000");
                         userResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
@@ -735,7 +735,7 @@ public class formMail_adminService {
 
 
     // 쿠키 찾아온 후, 만료 시간 반환
-    public AccessResponse exper_cookie() throws Exception {
+    public AccessResponse experCookie() throws Exception {
         AccessResponse accessResponse = new AccessResponse();
 
         try {

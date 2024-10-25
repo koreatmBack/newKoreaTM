@@ -46,8 +46,8 @@ public class formMail_adminController {
 
     // 쿠키 만료시간 보내주기
     @GetMapping("/exper_cookie")
-    public AccessResponse exper_cookie() throws Exception {
-        return formMailAdminService.exper_cookie();
+    public AccessResponse experCookie() throws Exception {
+        return formMailAdminService.experCookie();
     }
 
     // 회원 로그인
@@ -79,10 +79,11 @@ public class formMail_adminController {
 
     // 리프레쉬 토큰 + 어쎄스 토큰 재발급
     @PostMapping("/reissu/RefreshToken")
-    public RefResponse reissuToken(@RequestBody RefToken refToken) throws Exception {
+    public RefResponse reissuRefreshToken(@RequestBody RefToken refToken) throws Exception {
         return formMailAdminService.reissuToken(refToken);
     }
 
+    // access 토큰 재발급 및 쿠키 재발급
     @GetMapping("/reissu/AccessToken")
     public ApiResponse reissuAccessToken() throws Exception {
         return formMailAdminService.reissuAccessToken();
