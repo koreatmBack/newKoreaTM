@@ -6,6 +6,7 @@ import com.example.smsSpringTest.mapper.UserMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
+import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.RefResponse;
 import com.example.smsSpringTest.model.response.UserResponse;
@@ -696,7 +697,7 @@ public class formMail_adminService {
     }
 
     // access 토큰 재생성 -> 쿠키에 다시 담아주기 ( 쿠키 갱신하는법 )
-    public ApiResponse refreshAccessToken() throws Exception {
+    public ApiResponse reissuAccessToken() throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
@@ -734,8 +735,8 @@ public class formMail_adminService {
 
 
     // 쿠키 찾아온 후, 만료 시간 반환
-    public ApiResponse exper_cookie() throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
+    public AccessResponse exper_cookie() throws Exception {
+        AccessResponse accessResponse = new AccessResponse();
 
         try {
             // 쿠키 찾기
@@ -745,21 +746,22 @@ public class formMail_adminService {
 
             // 만약 쿠키 없으면
             if(cookieToken == null){
-                apiResponse.setCode("E004");
-                apiResponse.setMessage("쿠키가 없습니다. 로그인이 필요합니다.");
-                return apiResponse;
+                accessResponse.setCode("E004");
+                accessResponse.setMessage("쿠키가 없습니다. 로그인이 필요합니다.");
+                return accessResponse;
             }
 
-            Long remain = jwtTokenProvider.getExpiration(cookieToken) / 1000; // 초로 변환
-            apiResponse.setCode("C000");
-            apiResponse.setMessage(remain + "초 남았습니다.");
+            Long limit = jwtTokenProvider.getExpiration(cookieToken) / 1000; // 초로 변환
+            accessResponse.setCode("C000");
+            accessResponse.setMessage(Math.toIntExact(limit) + "초 남았습니다.");
+            accessResponse.setLimit(Math.toIntExact(limit));
         } catch (Exception e){
-            apiResponse.setCode("E001");
-            apiResponse.setMessage("error!!");
+            accessResponse.setCode("E001");
+            accessResponse.setMessage("error!!");
             log.info(e.getMessage());
         }
 
-        return apiResponse;
+        return accessResponse;
     }
 
 }

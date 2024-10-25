@@ -4,6 +4,7 @@ import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
+import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.RefResponse;
 import com.example.smsSpringTest.model.response.UserResponse;
@@ -45,7 +46,7 @@ public class formMail_adminController {
 
     // 쿠키 만료시간 보내주기
     @GetMapping("/exper_cookie")
-    public ApiResponse exper_cookie() throws Exception {
+    public AccessResponse exper_cookie() throws Exception {
         return formMailAdminService.exper_cookie();
     }
 
@@ -76,15 +77,15 @@ public class formMail_adminController {
         return formMailAdminService.logout();
     }
 
-    // access토큰 만료됐을때, 토큰 재발급 요청 -> 만료시, 로그인하면 자동 재생성되긴함
-    @PostMapping("/reissu/token")
+    // 리프레쉬 토큰 + 어쎄스 토큰 재발급
+    @PostMapping("/reissu/RefreshToken")
     public RefResponse reissuToken(@RequestBody RefToken refToken) throws Exception {
         return formMailAdminService.reissuToken(refToken);
     }
 
-    @GetMapping("/refresh/AccessToken")
-    public ApiResponse refreshAccessToken() throws Exception {
-        return formMailAdminService.refreshAccessToken();
+    @GetMapping("/reissu/AccessToken")
+    public ApiResponse reissuAccessToken() throws Exception {
+        return formMailAdminService.reissuAccessToken();
     }
 
     // 회원 목록
