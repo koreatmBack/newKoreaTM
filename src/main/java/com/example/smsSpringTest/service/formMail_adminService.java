@@ -228,6 +228,11 @@ public class formMail_adminService {
                     Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
                     log.info("authenticationToken = " + authenticationToken);
                     log.info("authentication = " + authentication);
+                    log.info("auth ROLE = " + authentication.getAuthorities());
+//                    String role = authentication.getAuthorities().toString();
+//                    if(role.contains("ADMIN")){
+//                        log.info("롤 테스트 성공" + role);
+//                    }
 
                     userId = authentication.getName();
                     log.info("userId = " + userId);

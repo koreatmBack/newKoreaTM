@@ -1,7 +1,10 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.mapper.SmsMapper;
+import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.SmsForm;
+import com.example.smsSpringTest.model.jobsite.CertSMS;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SmsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,7 @@ public class SmsService {
     private final static boolean isTest        =    false;
 
     private final SmsMapper smsMapper;
+    private final JobUserMapper jobUserMapper;
 
     // sms 유저 id
     @Value("${sms.userId}")
@@ -54,6 +58,7 @@ public class SmsService {
     //private static final Logger logger =    Logger.getLogger(smsService.class);
 
 
+    // 폼메일용 문자 전송
     public SmsResponse sendSms(SmsForm smsForm) throws IOException {
 
 
@@ -329,6 +334,237 @@ public class SmsService {
           return smsResponse;
     }
 
+
+
+    // 잡사이트용 본인인증 (문자 전송)
+    public ApiResponse certificateSMS(CertSMS certSMS) throws IOException {
+
+        ApiResponse apiResponse = new ApiResponse();
+            if(certSMS.getPhone() == null || certSMS.getUserName() == null) {
+                apiResponse.setCode("E004");
+                apiResponse.setMessage("이름과 연락처를 다시 입력해주세요.");
+                return apiResponse;
+            }
+        try{
+
+            log.info("try 후 호출 됨");
+            URL obj = new URL(apiUrl);
+
+            HttpsURLConnection con= (HttpsURLConnection) obj.openConnection();
+
+//            con.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Content-type", "application/json"); //json으로 받기위해서
+
+            con.setRequestProperty("Accept-Charset", charset);
+
+            con.setRequestMethod("POST");
+
+            con.setRequestProperty("User-Agent", userAgent);
+
+            String randomNumber = randomNumber();
+            String originMsg = String.format("[(주)코리아티엠] 인증번호 [%s]를 입력해주세요. 사칭/전화사기에 주의하세요.", randomNumber);
+            String originSphone1 = "1644";
+            String originSphone2 = "4223";
+            log.info("rnd num = "+ randomNumber);
+            String postParams = "user_id="+base64Encode(smsId)
+
+                    +"&secure="+base64Encode(secureKey)
+
+//                    +"&msg="+base64Encode(smsForm.getMsg())+"&sphone="+base64Encode(smsForm.getSphone())
+                    +"&msg="+base64Encode(originMsg)+"&sPhone1="+base64Encode(originSphone1)+"&sPhone2="+base64Encode(originSphone2)
+
+                    +"&mode="+base64Encode("1")+"&smsType="+base64Encode("S"); // SMS/LMS 여부
+
+            log.info("포스트파람 = " + postParams);
+
+
+            //For POST only    - START
+
+            con.setDoOutput(true);
+
+            OutputStream os = con.getOutputStream();
+
+            os.write(postParams.getBytes());
+
+            os.flush();
+
+            os.close();
+
+            //For POST only - END
+
+            int responseCode = con.getResponseCode();
+
+            if(responseCode == HttpURLConnection.HTTP_OK){ // success
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                String inputLine;
+
+                StringBuffer buf  = new StringBuffer();
+
+                while((inputLine=in.readLine())!=null){
+                    log.info("Response Line: " + inputLine);
+                    buf.append(inputLine);
+
+                }
+
+                in.close();
+
+                log.info("문자 테스트 1차 성공");
+
+                String origin_sms_url = "https://sslsms.cafe24.com/sms_sender.php"; // 인코딩 전 cafe24 제공 url
+                String sms_url = base64Encode("https://sslsms.cafe24.com/sms_sender.php"); // SMS 전송요청 URL
+                String user_id = base64Encode(smsId); // SMS아이디
+                String secure = base64Encode(secureKey);//인증키
+                String msg = base64Encode(originMsg);
+                String rPhone = base64Encode(certSMS.getPhone());
+                String sPhone1 = base64Encode(originSphone1);
+                String sPhone2 = base64Encode(originSphone2);
+
+                String mode = base64Encode("1");
+
+                String smsType = base64Encode("S");
+
+                log.info("origin_sms_url = " + origin_sms_url);
+                log.info("SMSurl = " + sms_url);
+
+
+                String[] host_info = origin_sms_url.split("/");
+
+                log.info("host_info = " + host_info);
+
+                String host = host_info[2];
+
+                log.info("host = " + host);
+
+                String path = "/" + host_info[3];
+                int port = 80;
+
+                String charsetType = "UTF-8";
+
+                // 데이터 맵핑 변수 정의
+                String arrKey[]
+                        = new String[] {"user_id","secure","msg", "rphone","sphone1","sphone2",
+                        "mode","smsType"};
+                String valKey[]= new String[arrKey.length] ;
+                valKey[0] = user_id;
+                valKey[1] = secure;
+                valKey[2] = msg;
+                valKey[3] = rPhone;
+                valKey[4] = sPhone1;
+                valKey[5] = sPhone2;
+                valKey[6] = mode;
+                valKey[7] = smsType;
+
+
+                String boundary = "";
+                Random rnd = new Random();
+                String rndKey = Integer.toString(rnd.nextInt(32000));
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte[] bytData = rndKey.getBytes();
+                md.update(bytData);
+                byte[] digest = md.digest();
+                for(int i =0;i<digest.length;i++)
+                {
+                    boundary = boundary + Integer.toHexString(digest[i] & 0xFF);
+                }
+                boundary = "---------------------"+boundary.substring(0,11);
+
+                // 본문 생성
+                String data = "";
+                String index = "";
+                String value = "";
+                for (int i=0;i<arrKey.length; i++)
+                {
+                    index =  arrKey[i];
+                    value = valKey[i];
+                    data +="--"+boundary+"\r\n";
+                    data += "Content-Disposition: form-data; name=\""+index+"\"\r\n";
+                    data += "\r\n"+value+"\r\n";
+                    data +="--"+boundary+"\r\n";
+                }
+
+                //out.println(data);
+
+                log.info("data = " + data);
+
+                InetAddress addr = InetAddress.getByName(host);
+                Socket socket = new Socket(host, port);
+                // 헤더 전송
+                BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), charsetType));
+                wr.write("POST "+path+" HTTP/1.0\r\n");
+                wr.write("Content-Length: "+data.length()+"\r\n");
+                wr.write("Content-type: multipart/form-data, boundary="+boundary+"\r\n");
+                wr.write("\r\n");
+
+                // 데이터 전송
+                wr.write(data);
+                wr.flush();
+
+                // 결과값 얻기
+                BufferedReader rd = new BufferedReader(new InputStreamReader(socket.getInputStream(),charsetType));
+                String line;
+                String alert = "";
+                ArrayList tmpArr = new ArrayList();
+                while ((line = rd.readLine()) != null) {
+                    tmpArr.add(line);
+                }
+                wr.close();
+                rd.close();
+
+                String tmpMsg = (String)tmpArr.get(tmpArr.size()-1);
+                String[] rMsg = tmpMsg.split(",");
+                String Result= rMsg[0]; //발송결과
+
+                String Count= ""; //잔여건수
+                if(rMsg.length>1) {Count= rMsg[1]; }
+
+                log.info("tmpMsg = " + tmpMsg);
+                log.info("rMsg = " + rMsg);
+
+                log.info("Result = " + Result);
+                log.info("잔여 문자 개수 : Count = " + Count);
+
+                if(Result.equals("success")){
+
+                    apiResponse.setCode("C000");
+                    apiResponse.setMessage("문자 전송 성공 !! 남은 잔여 문자 " + Count + "건 남았습니다.");
+
+                    certSMS.setSmsCode(randomNumber);
+                    int dupSmsCode = jobUserMapper.dupSmsCode(certSMS);
+                    if(dupSmsCode == 0){
+                        // 이미 저장된 값 없으면 새로 등록
+                        int addCertSMS = smsMapper.addCertSMS(certSMS);
+                        if(addCertSMS == 1){
+                            log.info("SMS CODE 새로 등록 성공");
+                        } else {
+                            log.info("SMS CODE 새로 등록 실패 !!!");
+                        }
+                    } else {
+                        log.info("SMS CODE 덮어 씌우기 성공");
+                    }
+
+                } else{
+                    apiResponse.setCode("E002");
+                    apiResponse.setMessage(Result);
+                }
+            }else{
+                log.info("문자 테스트 실패");
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("오류가 발생하였습니다.");
+            }
+
+        }catch(IOException ex){
+
+            log.info("SMS IOException:"+ex.getMessage());
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return apiResponse;
+    }
+
+
     public static String base64Encode(String str)  throws java.io.IOException {
 
         if (str == null) {
@@ -359,6 +595,12 @@ public class SmsService {
         byte[] strByte = decoder.decode(str);
         String result = new String(strByte);
         return result ;
+    }
+
+    public static String randomNumber(){
+        Random random = new Random();
+        int randomNumber = 100000 + random.nextInt(900000);
+        return String.valueOf(randomNumber);
     }
 
 }

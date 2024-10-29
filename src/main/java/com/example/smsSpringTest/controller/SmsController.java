@@ -1,11 +1,15 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.SmsForm;
+import com.example.smsSpringTest.model.jobsite.CertSMS;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SmsResponse;
 import com.example.smsSpringTest.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * author : 신기훈
@@ -56,5 +60,11 @@ public class SmsController {
 
 
         return smsResponse;
+    }
+
+    // 잡사이트용 본인인증 (문자 전송)
+    @PostMapping("/cert/sms")
+    public ApiResponse certificateSMS(@RequestBody CertSMS certSMS) throws IOException {
+        return smsService.certificateSMS(certSMS);
     }
 }

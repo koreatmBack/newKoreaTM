@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
@@ -19,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 /**
  * author : 신기훈
@@ -59,64 +61,83 @@ public class JwtFilter extends OncePerRequestFilter {
         }
             log.info("cookieToken = " + cookieToken);
 
-//        if(isAllowedURI(requestURI)) {
-//        // 쿠키 없을때 토큰 가져오는 방식
-            String resolveToken = resolveToken(request);
-
-//        String resolveToken = response.
 
             log.info("requestURI: {}", requestURI);
-//            log.info("resolveToken = " + resolveToken);
 
-        // 쿠키 없고, 로그인 및 회원가입 창 아닐때 다른 uri 접근 금지
-        if(!isAllowedURI(requestURI) && cookieToken == null){
-            log.info("쿠키 없으므로 접근 불가능, 재 로그인 필요함");
-            ApiResponse apiResponse = new ApiResponse("E401", "로그인 후 이용 부탁드립니다.");
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("utf-8");
-            new ObjectMapper().writeValue(response.getWriter(), apiResponse);
-            return;
-        }
+            // 토큰 조회가 필요한 API 일때
+       if(!(isAllowedURI(requestURI))) {
+           if(!StringUtils.hasText(cookieToken)){
+               // 만약 쿠키가 없다면
+               hasError = true;
+           } else {
+               String tokenStatus = jwtTokenProvider.validateToken(cookieToken);
 
-            if (!StringUtils.hasText(cookieToken)) {
-                log.info("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
-                filterChain.doFilter(request, response);
-                return;
-            }
+               // 쿠키가 있지만, 그 쿠키가 ACCESS가 아닐때
+               if (StringUtils.hasText(cookieToken) && !tokenStatus.equals("ACCESS")) {
+                   log.info("유효하지 않은 접근");
+                   ApiResponse apiResponse = new ApiResponse("E401", "로그인 후 이용 부탁드립니다.");
+                   response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                   response.setCharacterEncoding("utf-8");
+                   new ObjectMapper().writeValue(response.getWriter(), apiResponse);
+                   return;
+               }
+//           if (!(isAllowedURI(requestURI)) && !StringUtils.hasText(cookieToken)) {
+//               log.info("쿠키 없으므로 접근 불가능, 재 로그인 필요함");
+//               ApiResponse apiResponse = new ApiResponse("E401", "로그인 후 이용 부탁드립니다.");
+//               response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//               response.setCharacterEncoding("utf-8");
+//               new ObjectMapper().writeValue(response.getWriter(), apiResponse);
+//               return;
+//           }
 
-            String tokenStatus = jwtTokenProvider.validateToken(cookieToken);
-
-            if (!tokenStatus.equals("ACCESS")) {
-                ApiResponse apiResponse = new ApiResponse("E401", "유효하지 않은 접근입니다.");
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding("utf-8");
-                new ObjectMapper().writeValue(response.getWriter(), apiResponse);
-                return;
-            }
-
-//                    Authentication authentication = jwtTokenProvider.getAuthentication(resolveToken);
-//                    String authorities = authentication.getAuthorities().stream()
-//                            .map(GrantedAuthority::getAuthority)
-//                            .collect(Collectors.joining(","));
+//           if (!StringUtils.hasText(cookieToken)) {
+//               log.info("JWT 토큰이 존재하지 않거나 비어 있습니다, uri: {}", requestURI);
+//               filterChain.doFilter(request, response);
+//               return;
+//           }
 
 
+//           if (!tokenStatus.equals("ACCESS")) {
+//               ApiResponse apiResponse = new ApiResponse("E401", "유효하지 않은 접근입니다.");
+//               response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//               response.setCharacterEncoding("utf-8");
+//               new ObjectMapper().writeValue(response.getWriter(), apiResponse);
+//               return;
+//           }
 
-                // validateToken 으로 유효성 검사
-                if (tokenStatus.equals("ACCESS")) {
+
+               Authentication authentication = jwtTokenProvider.getAuthentication(cookieToken);
+               String authorities = authentication.getAuthorities().stream()
+                       .map(GrantedAuthority::getAuthority)
+                       .collect(Collectors.joining(","));
+
+               if(authorities.equals("ROLE_USER")) {
+                   if(!isUserEndpoint(requestURI)){
+                       //권한이 잡사이트 유저인데, 유저 권한없는 엔드포인트 접근
+                       hasError = true;
+                   }
+               }
+
+
+               // validateToken 으로 유효성 검사
+               if (tokenStatus.equals("ACCESS") && !hasError) {
+
+                   log.info("JWT Filter role check = " + jwtTokenProvider.getAuthentication(cookieToken).getAuthorities());
 
 //                    String blackListChk = jwtTokenProvider.getRedisAccessToken(resolveToken);
 //                    Claims claims = jwtTokenProvider.parseClaims(resolveToken);
 //                    String customId = claims.getSubject() + "_edit";
 //                    String pwdEditTime = jwtTokenProvider.getPwdEditTime(customId);
-                    log.info("이때 resolveToken 있음? " + cookieToken);
-                    setAuthenticationAndRequest(request, response, cookieToken);
 
-                } else {
-                    hasError = true;
-                    log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
-                }
+                   setAuthenticationAndRequest(request, response, cookieToken);
 
+               } else {
+                   hasError = true;
+                   log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+               }
+           } // 쿠키 있을때 끝
 //        }
+       }
 
         if(!hasError){
             filterChain.doFilter(request, response);
@@ -272,14 +293,34 @@ public class JwtFilter extends OncePerRequestFilter {
     private boolean isAllowedURI(String requestURI) {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         String[] allowedURIs = {
+                "/v1/formMail/sendSms", "/api/v1/formMail/sendSms",
+                "/v1/formMail/cert/sms", "/api/v1/formMail/cert/sms",
                 "/v1/formMail_admin/join", "/api/v1/formMail_admin/join",
                 "/v1/formMail_admin/login", "/api/v1/formMail_admin/login",
                 "/v1/formMail_admin/exper_cookie", "/api/v1/formMail_admin/exper_cookie",
-                "/v1/formMail_common/login", "/v1/formMail_common/join"
+                "/v1/formMail_common/login", "/api/v1/formMail_common/login",
+                "/v1/formMail_common/join", "/api/v1/formMail_common/join",
+                "/v1/jobsite/user/join", "/api/v1/jobsite/user/join",
+                "/v1/jobsite/user/login", "/api/v1/jobsite/user/login",
+                "/v1/jobsite/user/cert", "/api/v1/jobsite/user/cert"
         };
 
         for (String allowedURI : allowedURIs) {
             if(pathMatcher.match(allowedURI, requestURI)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isUserEndpoint(String requestURI){
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        String[] userEndpoints = {
+                "/v1/jobsite/**", "/api/v1/jobsite/**"
+        };
+
+        for (String userEndpoint : userEndpoints) {
+            if(pathMatcher.match(userEndpoint, requestURI)) {
                 return true;
             }
         }

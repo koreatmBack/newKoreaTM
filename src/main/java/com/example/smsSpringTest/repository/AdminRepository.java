@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * author : 신기훈
  * date : 2024-10-24
- * comment : JPA 회원 조회 Repository (JWT 용)
+ * comment : JPA 관리자 조회 Repository (JWT 용)
  */
 
 public interface AdminRepository extends JpaRepository<UserProfile, Long> {
