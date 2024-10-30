@@ -45,4 +45,6 @@ public class JobsiteUserEntity {
     private String photo;
 
     private String marketing;
+
+    private String addressDetail;
 }

@@ -38,6 +38,8 @@ public class JobsiteUser {
 
     private String marketing;
 
+    private String addressDetail;
+
     private String role;
 
 }

@@ -29,5 +29,7 @@ public class AdResponse extends ApiResponse{
     private List<JobSite> jobSiteList;
     private List<findCompanyAndUser> findCompanyAndUserList;
     private List<fmAdImage> fmAdImageList;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
 }

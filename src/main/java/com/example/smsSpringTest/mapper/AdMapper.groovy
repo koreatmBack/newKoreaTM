@@ -374,7 +374,7 @@ interface AdMapper {
     """)
     String findCid(@Param("ad") fmAd ad)
 
-    // 찾은 cid로 고객사 정보와 유저 정보 찾기
+    // aid 입력 후 찾은 cid로 고객사 정보와 유저 정보 찾기
     @Select("""
         SELECT
         fc.company_name

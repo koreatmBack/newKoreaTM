@@ -51,5 +51,7 @@ public class Apply {
 
     private String sigungu;
 
+    private String addressDetail;
+
     private LocalDateTime createdAt;
 }

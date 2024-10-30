@@ -46,6 +46,7 @@ interface JobUserMapper {
             , birth
             , photo
             , marketing
+            , address_detail
         ) VALUES (
             #{user.userId}
             , #{user.userPwd}
@@ -58,6 +59,7 @@ interface JobUserMapper {
             , #{user.birth}
             , #{user.photo}
             , #{user.marketing}
+            , #{user.addressDetail}
         )
     """)
     int jobSignUp(@Param("user") JobsiteUser user);
@@ -111,6 +113,7 @@ interface JobUserMapper {
            <if test="user.birth != null"> birth = #{user.birth},</if>
            <if test="user.photo != null"> photo = #{user.photo} ,</if>
            <if test="user.marketing != null"> marketing = #{user.marketing},</if>  
+           <if test="user.addressDetail != null"> address_detail = #{user.addressDetail},</if>
       </set>
         WHERE user_id = #{user.userId}  
 </script>        
@@ -129,6 +132,7 @@ interface JobUserMapper {
         , birth
         , photo
         , marketing
+        , address_detail
         FROM jobsite_user
         WHERE user_id = #{userId}
     """)
@@ -153,6 +157,7 @@ interface JobUserMapper {
         , birth
         , photo
         , marketing
+        , address_detail
         FROM jobsite_user
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)

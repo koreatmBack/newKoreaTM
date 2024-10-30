@@ -1,13 +1,13 @@
 package com.example.smsSpringTest.controller.jobsite;
 
+import com.example.smsSpringTest.model.Apply;
 import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.service.formMail_applyService;
 import com.example.smsSpringTest.service.jobsite.jobsite_commonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * author : 신기훈
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class jobsite_commonController {
 
     private final jobsite_commonService jobsiteCommonService;
+    private final formMail_applyService formMailApplyService;
 
     // 쿠키 만료시간 보내주기
     @GetMapping("/exper_cookie")
@@ -40,4 +41,13 @@ public class jobsite_commonController {
     public ApiResponse reissuAccessToken() throws Exception {
         return jobsiteCommonService.reissuAccessToken();
     }
+
+    // 지원자 등록하기 (회원 , 비회원 둘다 가능)
+    @PostMapping("/addApply")
+    public ApiResponse addApply(@RequestBody Apply apply) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse = formMailApplyService.addApply(apply);
+        return apiResponse;
+    }
+
 }

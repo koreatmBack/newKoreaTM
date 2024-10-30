@@ -24,5 +24,7 @@ public class CompanyResponse extends ApiResponse{
     private formMail_company formMailCompany;
     private findCompany company;
     private List<findCompany> companyList;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
 }

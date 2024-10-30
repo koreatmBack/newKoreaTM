@@ -25,6 +25,7 @@ interface ApplyMapper {
            , admin_memo
            , sido
            , sigungu
+           , address_detail
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -41,6 +42,7 @@ interface ApplyMapper {
             ,#{apply.adminMemo}
             ,#{apply.sido}
             ,#{apply.sigungu}
+            ,#{apply.addressDetail}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -62,7 +64,7 @@ interface ApplyMapper {
            <if test="apply.applyPhone  != null"> apply_phone = #{apply.applyPhone},   </if>
            <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
            <if test="apply.adminMemo != null"> admin_memo  = #{apply.adminMemo},   </if>
-                     
+           <if test="apply.addressDetail != null"> address_detail  = #{apply.addressDetail},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
