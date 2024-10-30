@@ -302,7 +302,15 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_common/join", "/api/v1/formMail_common/join",
                 "/v1/jobsite/user/join", "/api/v1/jobsite/user/join",
                 "/v1/jobsite/user/login", "/api/v1/jobsite/user/login",
-                "/v1/jobsite/user/cert", "/api/v1/jobsite/user/cert"
+                "/v1/jobsite/user/cert", "/api/v1/jobsite/user/cert",
+                // 잡사이트 조회용
+                "/v1/formMail_ad/allJobsiteList", "/api/v1/formMail_ad/allJobsiteList",
+                "/v1/formMail_ad/findOneJobsite", "/api/v1/formMail_ad/findOneJobsite",
+                "/v1/formMail_ad/searchTitleList", "/api/v1/formMail_ad/searchTitleList",
+                "/v1/formMail_ad/orderByCreated", "/api/v1/formMail_ad/orderByCreated",
+                "/v1/formMail_ad/orderByWorkDay", "/api/v1/formMail_ad/orderByWorkDay",
+                "/v1/formMail_ad/orderByMaxPay", "/api/v1/formMail_ad/orderByMaxPay",
+                "/v1/formMail_ad/orderByWorkTime", "/api/v1/formMail_ad/orderByWorkTime"
         };
 
         for (String allowedURI : allowedURIs) {
@@ -317,6 +325,7 @@ public class JwtFilter extends OncePerRequestFilter {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         String[] userEndpoints = {
                 "/v1/jobsite/**", "/api/v1/jobsite/**"
+
         };
 
         for (String userEndpoint : userEndpoints) {

@@ -5,6 +5,7 @@ import com.example.smsSpringTest.entity.UserProfile
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser
+import com.example.smsSpringTest.model.FormMailAdmin
 import org.apache.ibatis.annotations.*
 
 @Mapper
@@ -106,7 +107,7 @@ interface UserMapper {
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
-    UserProfile findOneUser(@Param("userId") String userId)
+    FormMailAdmin findOneUser(@Param("userId") String userId)
 
     // 회원 수정
     @Update("""

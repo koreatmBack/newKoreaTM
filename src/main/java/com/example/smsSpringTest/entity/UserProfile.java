@@ -60,4 +60,5 @@ public class UserProfile {
     @Column(name = "r_phone")
     @JsonProperty("rPhone")
     private String rPhone;
+
 }

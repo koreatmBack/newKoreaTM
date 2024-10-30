@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.controller.jobsite;
 
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.jobsite.CertSMS;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
 import com.example.smsSpringTest.model.response.ApiResponse;
@@ -7,10 +8,7 @@ import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
 import com.example.smsSpringTest.service.jobsite.jobsite_userService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * author : 신기훈
@@ -50,4 +48,21 @@ public class jobsite_userController {
         return jobsiteUserService.jobLogout();
     }
 
+    // jobsite 회원 정보 수정
+    @PutMapping("/update")
+    public JobUserResponse jobUserUpdate(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.jobUserUpdate(user);
+    }
+
+    // jobsite 회원 한 명 정보 반환
+    @PostMapping("/findOne")
+    public JobUserResponse findOneJobUser(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findOneJobUser(user);
+    }
+
+    // jobsite 전체 회원 목록 반환
+    @PostMapping("/findAll")
+    public JobUserResponse findAllJobUser(@RequestBody Paging paging) throws Exception {
+        return jobsiteUserService.findAllJobUser(paging);
+    }
 }

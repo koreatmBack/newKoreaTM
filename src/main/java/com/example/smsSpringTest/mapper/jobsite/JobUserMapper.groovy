@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.mapper.jobsite
 
-
+import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.jobsite.CertSMS
 import com.example.smsSpringTest.model.jobsite.JobsiteUser
 import org.apache.ibatis.annotations.*
@@ -62,6 +62,14 @@ interface JobUserMapper {
     """)
     int jobSignUp(@Param("user") JobsiteUser user);
 
+    // 회원가입 할때 폼메일 id와 일치하면 같은 id 사용 못하게 막기 위해
+    @Select("""
+        SELECT count(*)
+        FROM formmail_admin
+        WHERE user_id = #{userId}
+    """)
+    int dupFormMailIdCheck(@Param("userId") String userId)
+
     // 암호화된 비밀번호 반환 ( 로그인시 비밀번호 체크용 )
     @Select("""
         SELECT user_pwd
@@ -70,7 +78,7 @@ interface JobUserMapper {
     """)
     String dupPwd(@Param("user") JobsiteUser user);
 
-    // 회원 한명(pw 제외) 반환
+    // 회원 한명(id, 이름, 연락처) 반환
     @Select("""
         SELECT user_id
         , user_name
@@ -78,7 +86,7 @@ interface JobUserMapper {
         FROM jobsite_user
         WHERE user_id = #{userId}
     """)
-    JobsiteUser findOneUser(@Param("userId") String userId)
+    JobsiteUser findOneJobLoginUser(@Param("userId") String userId)
 
     // 이름 반환
     @Select("""
@@ -87,4 +95,68 @@ interface JobUserMapper {
         WHERE user_id = #{userId}
     """)
     String userName(@Param("userId") String userId)
+
+    // 잡사이트 회원 정보 수정
+    @Update("""
+<script>
+        UPDATE jobsite_user
+      <set>
+           <if test="user.userPwd != null"> user_pwd = #{user.userPwd},</if>
+           <if test="user.userName !=null"> user_name = #{user.userName},</if>
+           <if test="user.phone != null"> phone = #{user.phone},</if>
+           <if test="user.address != null"> address = #{user.address} ,</if>
+           <if test="user.sido != null"> sido = #{user.sido},</if>
+           <if test="user.sigungu!= null"> sigungu = #{user.sigungu},</if>
+           <if test="user.gender != null"> gender = #{user.gender} ,</if>
+           <if test="user.birth != null"> birth = #{user.birth},</if>
+           <if test="user.photo != null"> photo = #{user.photo} ,</if>
+           <if test="user.marketing != null"> marketing = #{user.marketing},</if>  
+      </set>
+        WHERE user_id = #{user.userId}  
+</script>        
+    """)
+    int jobUserUpdate(@Param("user") JobsiteUser user)
+
+    // 회원 한명 (비밀번호 제외) 조회
+    @Select("""
+        SELECT user_id
+        , user_name
+        , phone
+        , address
+        , sido
+        , sigungu
+        , gender
+        , birth
+        , photo
+        , marketing
+        FROM jobsite_user
+        WHERE user_id = #{userId}
+    """)
+    JobsiteUser findOneJobUser(@Param("userId") String userId)
+
+    // 회원 전체 수 조회
+    @Select("""
+        SELECT count(*)
+        from jobsite_user
+    """)
+    int getUserListCount()
+
+    // 전체 회원 리스트
+    @Select("""
+        SELECT user_id
+        , user_name
+        , phone
+        , address
+        , sido
+        , sigungu
+        , gender
+        , birth
+        , photo
+        , marketing
+        FROM jobsite_user
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<JobsiteUser> jobsiteUserList(@Param("paging") Paging paging)
+
+
 }

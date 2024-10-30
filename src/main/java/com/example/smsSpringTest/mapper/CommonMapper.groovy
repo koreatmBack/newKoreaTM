@@ -125,6 +125,17 @@ interface CommonMapper {
 
     // -------- jwt 토큰 관련 admin 버전 mapper -------------------------
 
+    // 폼메일 계정 RefreshToken 전체 조회
+    @Select("""
+        SELECT user_id
+                , grant_type
+                , refresh_token
+                , reg_date
+                , upt_date
+          FROM formmail_user_token
+    """)
+    List<RefToken> getFormMailUserRefreshTokenAll()
+
         // RefreshToken 조회
     @Select("""
         SELECT user_id

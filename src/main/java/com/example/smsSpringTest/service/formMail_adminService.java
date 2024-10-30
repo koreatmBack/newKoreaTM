@@ -6,6 +6,7 @@ import com.example.smsSpringTest.mapper.UserMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
+import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.RefResponse;
@@ -297,7 +298,13 @@ public class formMail_adminService {
                     if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                         // 최종적으로 Access token이 있을때
 //                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
-                        userResponse.setUserProfile(userMapper.findOneUser(userId));
+                        FormMailAdmin user2 = userMapper.findOneUser(userId);
+                        if(user2.isAdmin()){
+                            user2.setRole("admin");
+                        } else {
+                            user2.setRole("manager");
+                        }
+                        userResponse.setFormMailAdmin(user2);
                         String userName = userMapper.userName(userId);
                         userResponse.setCode("C000");
                         userResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
@@ -379,7 +386,7 @@ public class formMail_adminService {
             }
 
             // db속 refresh token 가져오기
-            RefToken refDB = jwtTokenProvider.getUserRefToken(user.getUserId());
+            RefToken refDB = getUserRefToken(user.getUserId());
             if(refDB.getRefreshToken() != null) {
                 // refresh 토큰 삭제
                 commonMapper.deleteUserToken(authentication.getName());
@@ -445,13 +452,13 @@ public class formMail_adminService {
     }
 
     // 회원 한명 정보 반환
-    public UserResponse findOneUser(UserProfile user) throws Exception{
+    public UserResponse findOneUser(FormMailAdmin user) throws Exception{
 
         UserResponse userResponse = new UserResponse();
         log.info("회원 정보 : " + user);
         try {
             String userId = user.getUserId();
-            userResponse.setUserProfile(userMapper.findOneUser(userId));
+            userResponse.setFormMailAdmin(userMapper.findOneUser(userId));
             userResponse.setCode("C000");
             userResponse.setMessage("조회 성공");
         } catch (Exception e) {
@@ -769,5 +776,30 @@ public class formMail_adminService {
         return accessResponse;
     }
 
+
+    // DB 에 저장되어 있는 RefreshToken 조회
+    public RefToken getUserRefToken(String userId) {
+
+        RefToken refToken = new RefToken();
+
+        if(userId != null && !userId.equals("")) {
+            int result = commonMapper.getUserRefreshTokenCount(userId);
+
+            if(result == 1) {
+                refToken = commonMapper.getUserRefreshTokenData(userId);
+                refToken.setCode("C000");
+                refToken.setMessage("조회 완료");
+            } else {
+                refToken.setCode("E001");
+                refToken.setMessage("권한 정보가 없습니다.");
+            }
+
+        } else {
+            refToken.setCode("E001");
+            refToken.setMessage("권한 정보가 없습니다.");
+        }
+
+        return refToken;
+    }
 }
 

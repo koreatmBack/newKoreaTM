@@ -4,6 +4,7 @@ import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
+import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.RefResponse;
@@ -102,7 +103,7 @@ public class formMail_adminController {
 
     // 회원 한명 정보 반환
     @PostMapping("/findOneUser")
-    public UserResponse findOneUser(@RequestBody UserProfile user) throws Exception{
+    public UserResponse findOneUser(@RequestBody FormMailAdmin user) throws Exception{
 
         UserResponse userResponse = new UserResponse();
 

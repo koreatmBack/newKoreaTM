@@ -8,6 +8,17 @@ import org.apache.ibatis.annotations.*
 @Mapper
 interface JobCommonMapper {
 
+    // 잡사이트 회원 RefreshToken 전체 조회
+    @Select("""
+        SELECT user_id
+                , grant_type
+                , refresh_token
+                , reg_date
+                , upt_date
+        FROM jobsite_user_token
+    """)
+    List<RefToken> getJobUserRefreshTokenAll()
+
     // RefreshToken 조회
     @Select("""
         SELECT user_id

@@ -5,6 +5,8 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * author : 신기훈
  * date : 2024-10-29
@@ -18,5 +20,11 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobUserResponse extends ApiResponse {
+
     private JobsiteUser user;
+
+    private List<JobsiteUser> jobsiteUserList;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int totalPages;
 }

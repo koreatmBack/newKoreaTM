@@ -2,6 +2,7 @@ package com.example.smsSpringTest.service.jobsite;
 
 import com.example.smsSpringTest.mapper.jobsite.JobCommonMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.jobsite.CertSMS;
@@ -35,6 +36,7 @@ import java.time.LocalDate;
 @Transactional
 public class jobsite_userService {
 
+    private final jobsite_commonService jobsiteCommonService;
     private final JobUserMapper jobUserMapper;
     private final JobCommonMapper commonMapper;
     private final PasswordEncoder passwordEncoder;
@@ -72,6 +74,13 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            int dupFormMailIdCheck = jobUserMapper.dupFormMailIdCheck(user.getUserId());
+            if(dupFormMailIdCheck != 0){
+                // 폼메일에 같은 id가 있으면
+                apiResponse.setCode("E004");
+                apiResponse.setMessage("폼메일에서 사용중인 id입니다. 다른 id를 입력해주세요");
+                return apiResponse;
+            }
             user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
             int result = jobUserMapper.jobSignUp(user);
 
@@ -109,7 +118,6 @@ public class jobsite_userService {
 
             if(isMatchPwd){
                 // 비밀번호 일치
-
                 try {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPwd);
                     Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -178,7 +186,9 @@ public class jobsite_userService {
                     if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                         // 최종적으로 Access token이 있을때
 //                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
-                        jobUserResponse.setUser(jobUserMapper.findOneUser(userId));
+                        JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                        user2.setRole("user");
+                        jobUserResponse.setUser(user2);
                         String userName = jobUserMapper.userName(userId);
                         jobUserResponse.setCode("C000");
                         jobUserResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
@@ -192,6 +202,7 @@ public class jobsite_userService {
                 } catch (BadCredentialsException e) {
                     jobUserResponse.setCode("E003");
                     jobUserResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
+                    log.info(e.getMessage());
                 }
             } else {
                 // id 값이 없거나(다르거나), 비밀번호 일치 X
@@ -246,7 +257,7 @@ public class jobsite_userService {
             }
 
             // db속 refresh token 가져오기
-            RefToken refDB = jwtTokenProvider.getUserRefToken(user.getUserId());
+            RefToken refDB = jobsiteCommonService.getUserRefToken(user.getUserId());
             if(refDB.getRefreshToken() != null) {
                 // refresh 토큰 삭제
                 commonMapper.deleteUserToken(authentication.getName());
@@ -260,6 +271,83 @@ public class jobsite_userService {
             apiResponse.setMessage("유효하지 않은 접근입니다.");
         }
         return apiResponse;
+    }
+
+    // 잡사이트 회원 정보 수정
+    @Transactional
+    public JobUserResponse jobUserUpdate(JobsiteUser user) throws Exception {
+        JobUserResponse jobUserResponse = new JobUserResponse();
+
+        try {
+            // 비밀번호 수정할 값이 있으면, 비밀번호 암호화
+            if(user.getUserPwd() != null) {
+//                String newPwd = passwordEncoder.encode(user.getUserPwd());
+                user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+            }
+            int jobUserUpdate = jobUserMapper.jobUserUpdate(user);
+            if(jobUserUpdate == 1) {
+                jobUserResponse.setUser(jobUserMapper.findOneJobUser(user.getUserId()));
+                jobUserResponse.setCode("C000");
+                jobUserResponse.setMessage("회원 정보 수정 완료");
+            } else {
+                jobUserResponse.setCode("E002");
+                jobUserResponse.setMessage("변경할 정보를 입력하세요");
+            }
+        } catch (Exception e){
+            jobUserResponse.setCode("E001");
+            jobUserResponse.setMessage("ERROR!!!");
+            log.info(e.getMessage());
+        }
+
+        return jobUserResponse;
+    }
+
+    // 잡사이트 회원 한명 정보 반환
+    public JobUserResponse findOneJobUser(JobsiteUser user) throws Exception {
+        JobUserResponse jobUserResponse = new JobUserResponse();
+
+        try {
+            jobUserResponse.setUser(jobUserMapper.findOneJobUser(user.getUserId()));
+            jobUserResponse.setCode("C000");
+            jobUserResponse.setMessage("잡사이트 회원 한 명 정보 조회 성공");
+        } catch (Exception e) {
+            jobUserResponse.setCode("E001");
+            jobUserResponse.setMessage("조회할 회원의 아이디를 입력하세요");
+        }
+        return jobUserResponse;
+    }
+
+    // 잡사이트 전체 회원 정보 반환
+    public JobUserResponse findAllJobUser(Paging paging) throws Exception {
+        JobUserResponse jobUserResponse = new JobUserResponse();
+
+        try {
+            int page = paging.getPage(); // 현재 페이지
+            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = jobUserMapper.getUserListCount();
+
+            paging.setOffset(offset);
+            jobUserResponse.setJobsiteUserList(jobUserMapper.jobsiteUserList(paging));
+            log.info(jobUserMapper.jobsiteUserList(paging).toString());
+            log.info("userResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
+
+            if(jobUserResponse.getJobsiteUserList() != null && !jobUserResponse.getJobsiteUserList().isEmpty()){
+                // 비어있지 않을 때
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                jobUserResponse.setTotalPages(totalPages);
+                jobUserResponse.setCode("C000");
+                jobUserResponse.setMessage("잡사이트 회원 전체 조회 성공");
+            } else {
+                // 비어 있을 때
+                jobUserResponse.setCode("E002");
+                jobUserResponse.setMessage("조회된 계정이 없습니다.");
+            }
+        } catch (Exception e) {
+            jobUserResponse.setCode("E001");
+            jobUserResponse.setMessage("ERROR!!!");
+        }
+        return jobUserResponse;
     }
 
 }

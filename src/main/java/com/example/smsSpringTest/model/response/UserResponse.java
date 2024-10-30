@@ -1,9 +1,10 @@
 package com.example.smsSpringTest.model.response;
 
-import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.entity.PhoneNum;
+import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.findUser;
+import com.example.smsSpringTest.model.FormMailAdmin;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class UserResponse extends ApiResponse{
 
     private UserProfile userProfile;
+    private FormMailAdmin formMailAdmin;
     private User user;
     private List<UserProfile> userList;
     private String position;
