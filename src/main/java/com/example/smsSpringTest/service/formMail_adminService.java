@@ -59,9 +59,9 @@ public class formMail_adminService {
 
         try{
             // id 중복체크 ( 값이 0 -> 중복 없음 )
-            int dupChkId = userMapper.userDuplicatedChkId(user.getUserId());
-            log.info("중복 값 = " + dupChkId);
-            if(dupChkId == 0) {
+            int dupJobsiteIdCheck = userMapper.dupJobsiteIdCheck(user.getUserId());
+            log.info("잡사이트id와 중복 값 = " + dupJobsiteIdCheck);
+            if(dupJobsiteIdCheck == 0) {
                 // id 중복 없음
 
                 // 비밀번호 암호화
@@ -70,22 +70,20 @@ public class formMail_adminService {
                 int result = userMapper.signUp(user);
 
                 if (result == 1) {
-
                     apiResponse.setCode("C000");
                     apiResponse.setMessage("회원 등록이 완료되었습니다.");
                 } else {
                     apiResponse.setCode("E003");
                     apiResponse.setMessage("회원 등록 실패 !!");
                 }
-
             } else {
                 //id 중복 있음
                 apiResponse.setCode("E002");
-                apiResponse.setMessage("등록 불가 ! 이미 등록된 ID입니다.");
+                apiResponse.setMessage("등록 불가 ! 이미 jobsite에서 사용중인 ID입니다.");
             }
         } catch (Exception e) {
             apiResponse.setCode("E001");
-            apiResponse.setMessage(e.getMessage());
+            apiResponse.setMessage("ERROR!!! Id와 pw를 다시 입력하세요.");
             throw new RuntimeException(e);
         }
 
@@ -513,32 +511,16 @@ public class formMail_adminService {
                 userResponse.setMessage("아이디를 입력해주세요");
             } else {
                 // 아이디가 있을때
-                // 기존 유저 정보
-                UserProfile originUser = userMapper.userProfile(user.getUserId());
-
-                log.info("기존 유저 정보 !! = "+originUser.toString());
 
                 // 비밀번호가 null이 아니면 암호화
                 if (user.getUserPwd() != null) {
                     String encodedPassword = passwordEncoder.encode(user.getUserPwd());
                     user.setUserPwd(encodedPassword); // 암호화된 비밀번호로 설정
-                } else{
-                    user.setUserPwd(originUser.getUserPwd());
                 }
-
-                log.info("admin 값 = "+String.valueOf(user.isAdmin()));
-
-                // user 업데이트
-                user.setRName(user.getRName() != null ? user.getRName() : originUser.getRName());
-                user.setUserName(user.getUserName() != null ? user.getUserName() : originUser.getUserName());
-                user.setPosition(user.getPosition() != null ? user.getPosition() : originUser.getPosition());
-//                user.setAdmin(user.isAdmin() ? user.isAdmin() : originUser.isAdmin());
-                user.setTeam(user.getTeam() != null ? user.getTeam() : originUser.getTeam());
-                user.setMPhone(user.getMPhone() != null ? user.getMPhone() : originUser.getMPhone());
-                user.setRPhone(user.getRPhone() != null ? user.getRPhone() : originUser.getRPhone());
 
                 // 0 = 업데이트 실패, 1 = 업데이트 성공
              int updateUser = userMapper.updateUser(user);
+
 
              if(updateUser == 0){
                  userResponse.setCode("E003");
@@ -555,7 +537,8 @@ public class formMail_adminService {
 
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            userResponse.setCode("E001");
+            userResponse.setMessage("ERROR!!!");
         }
 
         return userResponse;

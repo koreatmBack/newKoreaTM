@@ -45,6 +45,14 @@ interface UserMapper {
     """)
     int userDuplicatedChkId(@Param("userId") String userId)
 
+    // 잡사이트 아이디와 같으면 가입 x
+    @Select("""
+        SELECT count(*) 
+         FROM jobsite_user
+         WHERE user_id = #{userId}
+    """)
+    int dupJobsiteIdCheck(@Param("userId") String userId)
+
     // 로그인시 비밀번호 반환
     @Select("""
         SELECT user_pwd
@@ -111,16 +119,19 @@ interface UserMapper {
 
     // 회원 수정
     @Update("""
+<script>
         UPDATE formmail_admin
-        SET user_pwd = #{user.userPwd}
-            , r_name = #{user.rName}
-            , user_name = #{user.userName}
-            , position = #{user.position}
-            , admin = #{user.admin}
-            , team = #{user.team}
-            , m_phone = #{user.mPhone}
-            , r_phone = #{user.rPhone}
+      <set>
+        <if test="user.userPwd != null"> user_pwd = #{user.userPwd},</if>
+        <if test="user.rName != null"> r_name = #{user.rName},</if>
+        <if test="user.userName != null"> user_name = #{user.userName},</if>
+        <if test="user.position != null"> position = #{user.position},</if>
+        <if test="user.team != null"> team = #{user.team},</if>
+        <if test="user.mPhone != null"> m_phone = #{user.mPhone},</if>
+        <if test="user.rPhone != null"> r_phone = #{user.rPhone},</if>
+      </set>
         WHERE user_id = #{user.userId}
+</script>
     """)
     int updateUser(@Param("user") UserProfile user)
 

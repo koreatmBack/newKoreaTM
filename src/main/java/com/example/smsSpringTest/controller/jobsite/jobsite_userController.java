@@ -65,4 +65,11 @@ public class jobsite_userController {
     public JobUserResponse findAllJobUser(@RequestBody Paging paging) throws Exception {
         return jobsiteUserService.findAllJobUser(paging);
     }
+
+    // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인 API
+    @PostMapping("/check/id")
+    public ApiResponse checkId(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.checkId(user);
+    }
+
 }

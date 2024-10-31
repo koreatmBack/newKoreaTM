@@ -72,6 +72,14 @@ interface JobUserMapper {
     """)
     int dupFormMailIdCheck(@Param("userId") String userId)
 
+    // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user
+        WHERE user_id = #{userId}
+    """)
+    int checkId(@Param("userId") String userId)
+
     // 암호화된 비밀번호 반환 ( 로그인시 비밀번호 체크용 )
     @Select("""
         SELECT user_pwd

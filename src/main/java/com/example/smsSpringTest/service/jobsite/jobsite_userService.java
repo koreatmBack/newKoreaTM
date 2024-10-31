@@ -166,10 +166,33 @@ public class jobsite_userService {
                             commonMapper.updateUserToken(refToken2);
                         } else {
                             // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
+                            // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
+                            Cookie cookies[] = request.getCookies();
+                            String accessToken = "";
+
+                            // 만약 쿠키가 있다면
+                            if(cookies != null) {
+                                for (Cookie cookie : cookies) {
+                                    if ("accesstoken".equals(cookie.getName())) {
+                                        accessToken = cookie.getValue();
+                                    }
+                                }
+                                if(accessToken != null && !accessToken.isBlank()) {
+                                    // accesstoken 이라는 쿠키가 있을때
+                                    log.info("아직 유효한 cookie = " + accessToken);
+                                    Long accessTokenExpiration = jwtTokenProvider.getExpiration(accessToken);
+                                    log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                    jobUserResponse.setCode("C000");
+                                    String userName = jobUserMapper.userName(userId);
+                                    jobUserResponse.setMessage(userName + "님 현재 로그인 상태입니다.");
+                                    return jobUserResponse;
+                                }
+                            }
+
                             token = jwtTokenProvider.accessToken(authentication);
-                            log.info("아직 유효한 AccessToken = " + token);
-                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
-                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
+                            log.info("새로 생성한 AccessToken = " + token);
+//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
+//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
                         }
                     } else {
                         // refresh token이 null
@@ -349,5 +372,32 @@ public class jobsite_userService {
         }
         return jobUserResponse;
     }
+
+    // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인 API
+    public ApiResponse checkId(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            // 잡사이트에서 체크
+            int jobCheckId = jobUserMapper.checkId(user.getUserId());
+
+            // 폼메일에서 체크
+            int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
+
+            if(jobCheckId == 0 && formCheckId == 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("사용 가능한 ID입니다.");
+            } else {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("(폼메일, 잡사이트) 이미 사용중인 ID입니다.");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("ERROR!!!");
+        }
+
+        return apiResponse;
+    }
+
 
 }
