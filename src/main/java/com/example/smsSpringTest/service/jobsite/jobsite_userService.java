@@ -177,11 +177,12 @@ public class jobsite_userService {
                                         accessToken = cookie.getValue();
                                     }
                                 }
-                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
+//                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
 //                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
 //                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
-                                if(accessToken != null && !accessToken.isBlank() && userId.equals(cookieName)) {
+                                if(accessToken != null && !accessToken.isBlank() && userId.equals(jwtTokenProvider.getAuthentication(accessToken).getName())) {
                                     // accesstoken 이라는 쿠키가 있을때
+                                    String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
                                     userId = cookieName;
                                     log.info("아직 유효한 cookie = " + accessToken);
                                     Long accessTokenExpiration = jwtTokenProvider.getExpiration(accessToken);
