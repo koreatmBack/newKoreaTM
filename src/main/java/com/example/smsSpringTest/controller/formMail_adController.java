@@ -187,7 +187,6 @@ public class formMail_adController {
     // 잡사이트용 광고 목록 전체 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/allJobsiteList")
     public AdResponse allJobsiteList(@RequestBody Paging paging) throws Exception {
-        log.info("allJobsiteList 컨트롤러 호출은 정상적임");
         AdResponse adResponse = new AdResponse();
         adResponse = formMailAdService.allJobsiteList(paging);
         return adResponse;

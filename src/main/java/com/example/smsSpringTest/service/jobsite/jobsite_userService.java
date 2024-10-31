@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -168,19 +169,19 @@ public class jobsite_userService {
                             // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
                             // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
                             Cookie cookies[] = request.getCookies();
-                            String accessToken = "";
 
                             // 만약 쿠키가 있다면
                             if(cookies != null) {
-                                for (Cookie cookie : cookies) {
-                                    if ("accesstoken".equals(cookie.getName())) {
-                                        accessToken = cookie.getValue();
-                                    }
-                                }
+                                String accessToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+//                                for (Cookie cookie : cookies) {
+//                                    if ("accesstoken".equals(cookie.getName())) {
+//                                        accessToken = cookie.getValue();
+//                                    }
+//                                }
 //                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
 //                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
 //                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
-                                if(accessToken != null && !accessToken.isBlank() && userId.equals(jwtTokenProvider.getAuthentication(accessToken).getName())) {
+                                if(StringUtils.hasText(accessToken) && userId.equals(jwtTokenProvider.getAuthentication(accessToken).getName())) {
                                     // accesstoken 이라는 쿠키가 있을때
                                     String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
                                     userId = cookieName;
@@ -262,7 +263,7 @@ public class jobsite_userService {
         }
 
         // 쿠키가 없을때
-        if(accessToken == null) {
+        if(!StringUtils.hasText(accessToken)) {
             apiResponse.setCode("E401");
             apiResponse.setMessage("로그인 후 다시 이용해주세요.");
             return apiResponse;
@@ -292,7 +293,8 @@ public class jobsite_userService {
                 commonMapper.deleteUserToken(authentication.getName());
                 log.info("refresh 토큰 삭제");
                 apiResponse.setCode("C000");
-                apiResponse.setMessage(authentication.getName() + "님 로그아웃 되었습니다.");
+                String userName = jobUserMapper.userName(user.getUserId());
+                apiResponse.setMessage(userName + "님 로그아웃 되었습니다.");
             }
 
         } else {
