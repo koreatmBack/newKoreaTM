@@ -325,6 +325,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return false;
     }
 
+    // 잡사이트 회원이 이용 가능한 API
     private boolean isUserEndpoint(String requestURI){
         AntPathMatcher pathMatcher = new AntPathMatcher();
         String[] userEndpoints = {

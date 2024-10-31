@@ -186,7 +186,7 @@ public class jobsite_userService {
                                     log.info("아직 유효한 cookie = " + accessToken);
                                     Long accessTokenExpiration = jwtTokenProvider.getExpiration(accessToken);
                                     log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
-                                    jobUserResponse.setCode("C000");
+                                    jobUserResponse.setCode("C001");
                                     String userName = jobUserMapper.userName(userId);
                                     jobUserResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                             accessTokenExpiration/1000 + "초 남았습니다.");
