@@ -301,7 +301,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_common/login", "/api/v1/formMail_common/login",
                 "/v1/formMail_common/join", "/api/v1/formMail_common/join",
                 "/v1/jobsite/user/join", "/api/v1/jobsite/user/join",
-                "/v1/jobsite/user/login", "/api/v1/jobsite/user/login",
+                "/v1/jobsite/user/login/**", "/api/v1/jobsite/user/login/**",
                 "/v1/jobsite/user/cert", "/api/v1/jobsite/user/cert",
                 "/v1/jobsite/user/check/id", "/api/v1/jobsite/user/check/id",
                 // 잡사이트 조회용
@@ -313,7 +313,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_ad/orderByMaxPay", "/api/v1/formMail_ad/orderByMaxPay",
                 "/v1/formMail_ad/orderByWorkTime", "/api/v1/formMail_ad/orderByWorkTime",
                 // 잡사이트 지원자 등록
-                "v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
+                "/v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
+                // kakao 로그인
+                , "/v1/social/**", "/v1/jobsite/user/kakao/**"
+                , "/api/v1/social/**", "/api/v1/jobsite/user/kakao/**"
 
         };
 

@@ -3,6 +3,7 @@ package com.example.smsSpringTest.mapper.jobsite
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.jobsite.CertSMS
 import com.example.smsSpringTest.model.jobsite.JobsiteUser
+import com.example.smsSpringTest.model.jobsite.Social
 import org.apache.ibatis.annotations.*
 
 @Mapper
@@ -171,5 +172,49 @@ interface JobUserMapper {
     """)
     List<JobsiteUser> jobsiteUserList(@Param("paging") Paging paging)
 
+    // 소셜 연동된 userId 찾기
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user_social
+        WHERE user_id = #{userId}
+        AND use_status != 'N'
+    """)
+    int dupSocialUserIdCheck(@Param("userId") String userId)
 
+    // 카카오 로그인 회원 중복 체크
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user_social
+        WHERE social_id = #{id}
+        AND use_status != 'N'
+    """)
+    int kakaoUserChk(@Param("id") String id)
+
+    // 카카오 로그인 회원 아이디 조회
+    @Select("""
+        SELECT user_id
+          FROM jobsite_user_social
+         WHERE social_id = #{id}
+    """)
+    String kakaoUserId(@Param("id") String id)
+
+    // 프로모션을 통한 소셜 회원가입
+    @Insert("""
+        INSERT INTO jobsite_user_social (
+                user_id
+                , social_type
+                , social_id
+                , use_status
+                , reg_date
+                , upt_date
+        ) VALUES (
+                #{social.userId}
+                , #{social.socialType}
+                , #{social.socialId}
+                , 'Y'
+                , sysdate()
+                , sysdate()
+        )
+    """)
+    int addSocialData(@Param("social") Social social)
 }

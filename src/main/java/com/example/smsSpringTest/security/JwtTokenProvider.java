@@ -140,6 +140,62 @@ public class JwtTokenProvider {
                 .build();
     }
 
+    // 소셜 로그인 토큰 생성
+    public Token socialGenerateToken(String userId) throws Exception {
+
+        LocalDateTime now = LocalDateTime.now();
+        Date currentDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
+        // Access Toekn 생성
+        String accessToken = Jwts.builder()
+                .setSubject(userId)
+                .claim(AUTHORITIES_KEY, "ROLE_USER")
+                .claim("type", TYPE_ACCESS)
+                .setIssuedAt(currentDate)
+                .setExpiration(new Date(currentDate.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .claim("type", TYPE_REFRESH)
+                .setIssuedAt(currentDate)
+                .setExpiration(new Date(currentDate.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return Token.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
+                .refreshToken(refreshToken)
+                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
+    // 소셜 로그인 AccessToken 생성
+    public Token socialAccessToken(String userId) throws Exception {
+
+        LocalDateTime now = LocalDateTime.now();
+        Date currentDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
+        // Access Toekn 생성
+        String accessToken = Jwts.builder()
+                .setSubject(userId)
+                .claim(AUTHORITIES_KEY, "ROLE_USER")
+                .claim("type", TYPE_ACCESS)
+                .setIssuedAt(currentDate)
+                .setExpiration(new Date(currentDate.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return Token.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
 //    // 소셜 로그인 토큰 생성
 //    public Token socialGenerateToken(String userId) throws Exception {
 //

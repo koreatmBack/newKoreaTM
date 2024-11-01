@@ -66,6 +66,16 @@ holiday:
 jwt:
   secret: ${JWT_SECRET}
 
+kakao:
+  client-id: ${KAKAO_CLIENT_ID}
+  client-secret: ${KAKAO_CLIENT_SECRET}
+  redirect-uri: http://localhost:8080/v1/jobsite/user/login/kakao
+
+naver:
+  client-id: ${NAVER_CLIENT_ID}
+  client-secret: ${NAVER_CLIENT_SECRET}
+  redirect-uri: http://localhost:8080/v1/jobsite/user/login/naver
+
 logging:
   level:
     com:

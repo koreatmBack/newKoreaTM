@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.jobsite.CertSMS;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
+import com.example.smsSpringTest.model.response.jobsite.SocialResponse;
 import com.example.smsSpringTest.service.jobsite.jobsite_userService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,5 +72,33 @@ public class jobsite_userController {
     public ApiResponse checkId(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.checkId(user);
     }
+
+    // -- kakao 로그인 테스트 위한 코드들
+    @GetMapping("/login/kakao")
+    public SocialResponse kakaoLogin(@RequestParam String code) throws Exception{
+//        SocialResponse socialResponse = new SocialResponse();
+        log.info("code = " + code);
+
+        return jobsiteUserService.kakaoLogin(code);
+    }
+
+    // 로그인 회원 kakao 소셜 로그인 연동
+    @GetMapping("/kakao/integ")
+    public ApiResponse userIntegKakao(@RequestParam String code) throws Exception {
+
+        return jobsiteUserService.userIntegKakao(code);
+    }
+
+    // -------- 카카오 끝
+
+    // NAVER 시작
+    @GetMapping("/login/naver")
+    public SocialResponse naverLogin(@RequestParam String code) throws Exception{
+//        SocialResponse socialResponse = new SocialResponse();
+        log.info("code = " + code);
+
+        return jobsiteUserService.naverLogin(code);
+    }
+
 
 }

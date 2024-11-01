@@ -7,11 +7,17 @@ import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.jobsite.CertSMS;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
+import com.example.smsSpringTest.model.jobsite.Social;
+import com.example.smsSpringTest.model.jobsite.SocialUser;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
+import com.example.smsSpringTest.model.response.jobsite.SocialResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,6 +30,9 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 
 /**
@@ -45,6 +54,24 @@ public class jobsite_userService {
     private final JwtTokenProvider jwtTokenProvider;
     private final HttpServletResponse response;
     private final HttpServletRequest request;
+
+    @Value("${kakao.client-id}")
+    private String kakaoClientId;
+
+    @Value("${kakao.client-secret}")
+    private String kakaoClientSecret;
+
+    @Value("${kakao.redirect-uri}")
+    private String kakaoRedirectUri;
+
+    @Value("${naver.client-id}")
+    private String naverClientId;
+
+    @Value("${naver.client-secret}")
+    private String naverClientSecret;
+
+    @Value("${naver.redirect-uri}")
+    private String naverRedirectUri;
 
     // 본인인증 코드 일치하는지 확인하기
     public ApiResponse cert(CertSMS certSMS) throws Exception {
@@ -86,6 +113,16 @@ public class jobsite_userService {
             int result = jobUserMapper.jobSignUp(user);
 
             if (result == 1) {
+
+                if(StringUtils.hasText(user.getSocialId())){
+                    // 만약 소셜 고유id가 있으면
+                    Social social = new Social();
+                    social.setUserId(user.getUserId());
+                    social.setSocialId(user.getSocialId());
+                    social.setSocialType(user.getSocialType());
+                    jobUserMapper.addSocialData(social);
+                }
+
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("회원 등록이 완료되었습니다.");
             } else {
@@ -407,5 +444,545 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+
+    // 카카오 로그인 TEST ---------------------------
+
+    @Transactional
+    public SocialResponse kakaoLogin(String code) throws Exception {
+
+        SocialResponse socialResponse = new SocialResponse();
+
+        String host = "https://kauth.kakao.com/oauth/token";
+        URL url = new URL(host);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String accessToken = null;
+//        String redirectUrl = "http://localhost:8080/v1/jobsite/user/login/kakao";
+
+        try {
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true); // 데이터 기록 알려주기
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
+            String sb = "grant_type=authorization_code" +
+                    "&client_id=" + kakaoClientId +
+                    "&client_secret=" + kakaoClientSecret +
+                    "&redirect_uri=" + kakaoRedirectUri +
+                    "&code=" + code;
+
+            bw.write(sb);
+            bw.flush();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            StringBuilder result = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+
+            JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
+            accessToken = keys.get("access_token").getAsString();
+
+            br.close();
+            bw.close();
+
+            log.info("카카오 accessToken = " + accessToken);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SocialUser socialUser = getKakaoUserDetail(accessToken);
+        log.info("SocialUser = " + socialUser);
+        log.info("id = " + socialUser.getId());
+        int result = jobUserMapper.kakaoUserChk(socialUser.getId());
+
+        if(result == 0) {
+//            socialUser.setSocialType("kakao");
+            socialResponse.setSocialId(socialUser.getId());
+            socialResponse.setSocialType("kakao");
+//            socialResponse.setSocialUser(socialUser);
+            socialResponse.setCode("C003");
+            socialResponse.setMessage("최초 로그인 1회 한정 본인 인증이 필요합니다.");
+        } else {
+
+            String userId = jobUserMapper.kakaoUserId(socialUser.getId());
+
+            try {
+
+                log.info("userId = " + userId);
+
+                RefToken refToken = commonMapper.getUserRefreshTokenData(userId);
+                log.info("refToken = " + refToken);
+                RefToken refToken2 = new RefToken();
+                Token token = null;
+
+                if (refToken != null) {
+                    // refresh token이 null이 아닐때
+                    LocalDate now = LocalDate.now();
+                    String uptDate = refToken.getUptDate();
+                    LocalDate parseUptDate = LocalDate.parse(uptDate);
+                    log.info("uptDate = " + uptDate);
+                    log.info("parseUptDate = " + parseUptDate);
+
+                    Long remainingMilliseconds = jwtTokenProvider.getExpiration(refToken.getRefreshToken());
+                    log.info("남은 Refresh Token 유효 기간 밀리seconds = " + remainingMilliseconds);
+
+                    if (remainingMilliseconds == null || remainingMilliseconds <= 0) {
+                        // refresh token 유효기간이 null 이거나 0보다 같거나 작을때 ( 즉, 만료 되었을 때 )
+                        commonMapper.deleteUserToken(userId);
+
+                        // 토큰(access, refresh) 재생성
+                        token = jwtTokenProvider.socialGenerateToken(userId);
+                        log.info("만료되었을때 재생성한 토큰 = " + token);
+                        refToken2.setUserId(userId);
+                        refToken2.setGrantType(token.getGrantType());
+                        refToken2.setRefreshToken(token.getRefreshToken());
+                        commonMapper.addUserToken(refToken2);
+                    } else if (now.isAfter(parseUptDate.plusDays(28))) {
+                        // 현재 날짜가, uptdate + 28일보다 이후일때
+                        // 토큰 재생성
+                        token = jwtTokenProvider.socialGenerateToken(userId);
+                        log.info("After 28 -> token = " + token);
+                        refToken2.setUserId(userId);
+                        refToken2.setGrantType(token.getGrantType());
+                        refToken2.setRefreshToken(token.getRefreshToken());
+                        commonMapper.updateUserToken(refToken2);
+                    } else {
+                        // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
+                        // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
+                        Cookie cookies[] = request.getCookies();
+
+                        // 만약 쿠키가 있다면
+                        if(cookies != null) {
+                            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+//                                for (Cookie cookie : cookies) {
+//                                    if ("accesstoken".equals(cookie.getName())) {
+//                                        accessToken = cookie.getValue();
+//                                    }
+//                                }
+//                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
+//                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
+//                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
+                            if(StringUtils.hasText(cookieToken) && userId.equals(jwtTokenProvider.getAuthentication(cookieToken).getName())) {
+                                // accesstoken 이라는 쿠키가 있을때
+                                String cookieName = jwtTokenProvider.getAuthentication(cookieToken).getName();
+                                userId = cookieName;
+                                log.info("아직 유효한 cookie = " + cookieToken);
+                                Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
+                                log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                socialResponse.setCode("C001");
+                                String userName = jobUserMapper.userName(userId);
+                                socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
+                                        accessTokenExpiration/1000 + "초 남았습니다.");
+                                return socialResponse;
+                            }
+                        }
+
+                        token = jwtTokenProvider.socialAccessToken(userId);
+                        log.info("새로 생성한 AccessToken = " + token);
+//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
+//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
+                    }
+                } else {
+                    // refresh token이 null
+
+                    // 토큰 재생성
+                    token = jwtTokenProvider.socialGenerateToken(userId);
+                    log.info("refToken이 null일때 token = " + token);
+                    refToken2.setUserId(userId);
+                    refToken2.setGrantType(token.getGrantType());
+                    refToken2.setRefreshToken(token.getRefreshToken());
+                    commonMapper.addUserToken(refToken2);
+                }
+
+                if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
+                    // 최종적으로 Access token이 있을때
+//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
+                    JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                    user2.setRole("user");
+                    socialResponse.setUser(user2);
+                    String userName = jobUserMapper.userName(userId);
+                    socialResponse.setCode("C000");
+                    socialResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
+                    Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+                    response.addCookie(cookie);
+                } else {
+                    // 최종적으로 access 토큰이 없을때
+                    socialResponse.setCode("E001");
+                    socialResponse.setMessage("최종적으로 Access Token이 없습니다.");
+                }
+            } catch (BadCredentialsException e) {
+                socialResponse.setCode("E003");
+                socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
+                log.info(e.getMessage());
+            }
+        }
+
+        return socialResponse;
+    }
+
+    // KAKAO API 호출해서 카카오계정(정보) 가져오기
+    @Transactional
+    private SocialUser getKakaoUserDetail(String accessToken) throws Exception {
+
+        SocialUser socialUser = new SocialUser();
+        String host = "https://kapi.kakao.com/v2/user/me";
+
+        try {
+
+            URL url = new URL(host);
+
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            urlConnection.setRequestMethod("GET");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            StringBuilder res = new StringBuilder();
+            while((line=br.readLine())!=null) {
+                res.append(line);
+            }
+
+            JsonObject keys = (JsonObject) JsonParser.parseString(res.toString());
+            JsonObject kakao_account = (JsonObject) keys.get("kakao_account");
+            log.info("kakao keys = " + keys);
+            String id = keys.get("id").toString();
+//            String emailWithQuotes = kakao_account.get("email").toString();
+//            String email = emailWithQuotes.replaceAll("^\"|\"$", "");
+
+            socialUser.setId(id);
+//            socialUser.setEmail(email);
+
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return socialUser;
+    }
+
+
+    // 로그인 회원 kakao 소셜 로그인 연동
+    public ApiResponse userIntegKakao(String code) throws Exception {
+
+        ApiResponse apiResponse = new ApiResponse();
+
+        Cookie cookies[] = request.getCookies();
+        String userId = null;
+        // 만약 쿠키가 있다면
+        if (cookies != null) {
+            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+            if (StringUtils.hasText(cookieToken)) {
+                userId = jwtTokenProvider.getAuthentication(cookieToken).getName();
+            }
+
+        }
+
+        if(!StringUtils.hasText(userId)){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("No Cookie ERROR!!!");
+            return apiResponse;
+        }
+        log.info("연동시 userId = " + userId);
+
+        String host = "https://kauth.kakao.com/oauth/token";
+        URL url = new URL(host);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String accessToken = null;
+        String rediretUrl = "http://localhost:8080/v1/jobsite/user/kakao/integ";
+
+        try {
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true); // 데이터 기록 알려주기
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
+            String sb = "grant_type=authorization_code" +
+                    "&client_id=" + kakaoClientId +
+                    "&client_secret=" + kakaoClientSecret +
+                    "&redirect_uri=" + rediretUrl +
+                    "&code=" + code;
+
+            bw.write(sb);
+            bw.flush();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            StringBuilder result = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+
+            JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
+            accessToken = keys.get("access_token").getAsString();
+
+            br.close();
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SocialUser socialUser = getKakaoUserDetail(accessToken);
+
+        // 카카오만 쓸때 필요하고, 현재는 x
+//        int result = jobUserMapper.kakaoUserChk(socialUser.getId());
+
+        // 소셜 id 말고 userId로 찾는 이유는 kakao 뿐만 아니라 naver도 사용
+        int result = jobUserMapper.dupSocialUserIdCheck(userId);
+
+        try {
+            if (result == 0) {
+                Social social = new Social();
+//            String email = userMapper.getUserEmail(user.getUserId());
+//
+//            if(email == null || email.isBlank()) {
+//                user.setEmail(socialUser.getEmail());
+//                userMapper.editUserEmail(user);
+//            }
+
+
+                social.setUserId(userId);
+                social.setSocialId(socialUser.getId());
+                social.setSocialType("kakao");
+
+                jobUserMapper.addSocialData(social);
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("연동 완료");
+
+            } else {
+                apiResponse.setCode("E003");
+                apiResponse.setMessage("이미 소셜 로그인 연동완료된 카카오계정입니다.");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("ERROR!!!");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
+    }
+
+    // 카카오 끝
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // NAVER 로그인
+
+    @Transactional
+    public SocialResponse naverLogin(String code) throws Exception {
+
+        SocialResponse socialResponse = new SocialResponse();
+
+        String host = "https://nid.naver.com/oauth2.0/token";
+        URL url = new URL(host);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String accessToken = null;
+//        String redirectUrl = "http://localhost:8080/v1/jobsite/user/login/kakao";
+
+        try {
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true); // 데이터 기록 알려주기
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
+            String sb = "grant_type=authorization_code" +
+                    "&client_id=" + naverClientId +
+                    "&client_secret=" + naverClientSecret +
+                    "&redirect_uri=" + naverRedirectUri +
+                    "&code=" + code;
+
+            bw.write(sb);
+            bw.flush();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            StringBuilder result = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+
+            JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
+            accessToken = keys.get("access_token").getAsString();
+
+            br.close();
+            bw.close();
+
+            log.info("네이버 accessToken = " + accessToken);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SocialUser socialUser = getNaverUserDetail(accessToken);
+        log.info("SocialUser = " + socialUser);
+        log.info("id = " + socialUser.getId());
+        String naverSocialId = socialUser.getId().replaceAll("\"","");
+        int result = jobUserMapper.kakaoUserChk(naverSocialId);
+
+        if(result == 0) {
+//            socialUser.setSocialType("naver");
+            socialResponse.setSocialId(naverSocialId);
+            socialResponse.setSocialType("naver");
+//            socialResponse.setSocialUser(socialUser);
+            socialResponse.setCode("C003");
+            socialResponse.setMessage("최초 로그인 1회 한정 본인 인증이 필요합니다.");
+        } else {
+
+            String userId = jobUserMapper.kakaoUserId(naverSocialId);
+
+            try {
+
+                log.info("userId = " + userId);
+
+                RefToken refToken = commonMapper.getUserRefreshTokenData(userId);
+                log.info("refToken = " + refToken);
+                RefToken refToken2 = new RefToken();
+                Token token = null;
+
+                if (refToken != null) {
+                    // refresh token이 null이 아닐때
+                    LocalDate now = LocalDate.now();
+                    String uptDate = refToken.getUptDate();
+                    LocalDate parseUptDate = LocalDate.parse(uptDate);
+                    log.info("uptDate = " + uptDate);
+                    log.info("parseUptDate = " + parseUptDate);
+
+                    Long remainingMilliseconds = jwtTokenProvider.getExpiration(refToken.getRefreshToken());
+                    log.info("남은 Refresh Token 유효 기간 밀리seconds = " + remainingMilliseconds);
+
+                    if (remainingMilliseconds == null || remainingMilliseconds <= 0) {
+                        // refresh token 유효기간이 null 이거나 0보다 같거나 작을때 ( 즉, 만료 되었을 때 )
+                        commonMapper.deleteUserToken(userId);
+
+                        // 토큰(access, refresh) 재생성
+                        token = jwtTokenProvider.socialGenerateToken(userId);
+                        log.info("만료되었을때 재생성한 토큰 = " + token);
+                        refToken2.setUserId(userId);
+                        refToken2.setGrantType(token.getGrantType());
+                        refToken2.setRefreshToken(token.getRefreshToken());
+                        commonMapper.addUserToken(refToken2);
+                    } else if (now.isAfter(parseUptDate.plusDays(28))) {
+                        // 현재 날짜가, uptdate + 28일보다 이후일때
+                        // 토큰 재생성
+                        token = jwtTokenProvider.socialGenerateToken(userId);
+                        log.info("After 28 -> token = " + token);
+                        refToken2.setUserId(userId);
+                        refToken2.setGrantType(token.getGrantType());
+                        refToken2.setRefreshToken(token.getRefreshToken());
+                        commonMapper.updateUserToken(refToken2);
+                    } else {
+                        // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
+                        // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
+                        Cookie cookies[] = request.getCookies();
+
+                        // 만약 쿠키가 있다면
+                        if(cookies != null) {
+                            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+//                                for (Cookie cookie : cookies) {
+//                                    if ("accesstoken".equals(cookie.getName())) {
+//                                        accessToken = cookie.getValue();
+//                                    }
+//                                }
+//                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
+//                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
+//                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
+                            if(StringUtils.hasText(cookieToken) && userId.equals(jwtTokenProvider.getAuthentication(cookieToken).getName())) {
+                                // accesstoken 이라는 쿠키가 있을때
+                                String cookieName = jwtTokenProvider.getAuthentication(cookieToken).getName();
+                                userId = cookieName;
+                                log.info("아직 유효한 cookie = " + cookieToken);
+                                Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
+                                log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                socialResponse.setCode("C001");
+                                String userName = jobUserMapper.userName(userId);
+                                socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
+                                        accessTokenExpiration/1000 + "초 남았습니다.");
+                                return socialResponse;
+                            }
+                        }
+
+                        token = jwtTokenProvider.socialAccessToken(userId);
+                        log.info("새로 생성한 AccessToken = " + token);
+//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
+//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
+                    }
+                } else {
+                    // refresh token이 null
+
+                    // 토큰 재생성
+                    token = jwtTokenProvider.socialGenerateToken(userId);
+                    log.info("refToken이 null일때 token = " + token);
+                    refToken2.setUserId(userId);
+                    refToken2.setGrantType(token.getGrantType());
+                    refToken2.setRefreshToken(token.getRefreshToken());
+                    commonMapper.addUserToken(refToken2);
+                }
+
+                if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
+                    // 최종적으로 Access token이 있을때
+//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
+                    JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                    user2.setRole("user");
+                    socialResponse.setUser(user2);
+                    String userName = jobUserMapper.userName(userId);
+                    socialResponse.setCode("C000");
+                    socialResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
+                    Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+                    response.addCookie(cookie);
+                } else {
+                    // 최종적으로 access 토큰이 없을때
+                    socialResponse.setCode("E001");
+                    socialResponse.setMessage("최종적으로 Access Token이 없습니다.");
+                }
+            } catch (BadCredentialsException e) {
+                socialResponse.setCode("E003");
+                socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
+                log.info(e.getMessage());
+            }
+        }
+
+        return socialResponse;
+    }
+
+    // NAVER API 호출해서 카카오계정(정보) 가져오기
+    @Transactional
+    private SocialUser getNaverUserDetail(String accessToken) throws Exception {
+
+        SocialUser socialUser = new SocialUser();
+        String host = "https://openapi.naver.com/v1/nid/me";
+
+        try {
+
+            URL url = new URL(host);
+
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            urlConnection.setRequestMethod("GET");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            StringBuilder res = new StringBuilder();
+            while((line=br.readLine())!=null) {
+                res.append(line);
+            }
+
+            JsonObject keys = (JsonObject) JsonParser.parseString(res.toString());
+
+            JsonObject naver_response = (JsonObject) keys.get("response");
+            log.info("naver_response = " + naver_response);
+            String mobile = naver_response.get("mobile").toString();
+            String id = naver_response.get("id").toString();
+            log.info("naver mobile = " + mobile);
+            log.info("naver id = " + id);
+
+            socialUser.setId(id);
+
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return socialUser;
+    }
+
+    // NAVER 로그인 끝
 
 }

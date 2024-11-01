@@ -42,4 +42,8 @@ public class JobsiteUser {
 
     private String role;
 
+    private String socialId; // 소셜로그인시 받은 고유 id
+
+    private String socialType; // 소셜로그인시 받은 type
+
 }
