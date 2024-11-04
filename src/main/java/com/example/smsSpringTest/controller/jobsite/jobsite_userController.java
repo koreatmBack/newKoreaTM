@@ -92,6 +92,8 @@ public class jobsite_userController {
     // -------- 카카오 끝
 
     // NAVER 시작
+
+    // NAVER 소셜 로그인
     @GetMapping("/login/naver")
     public SocialResponse naverLogin(@RequestParam String code) throws Exception{
 //        SocialResponse socialResponse = new SocialResponse();
@@ -100,5 +102,26 @@ public class jobsite_userController {
         return jobsiteUserService.naverLogin(code);
     }
 
+    // 로그인 회원 naver 소셜 로그인 연동
+    @GetMapping("/naver/integ")
+    public ApiResponse userIntegNaver(@RequestParam String code) throws Exception {
 
+        return jobsiteUserService.userIntegNaver(code);
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ NAVER 끝 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // ----- Google 시작
+    @GetMapping("/login/google")
+    public SocialResponse googleLogin(@RequestParam String code) throws Exception {
+        log.info("code = " + code);
+        return jobsiteUserService.googleLogin(code);
+    }
+
+    // 로그인 회원 google 소셜 로그인 연동
+    @GetMapping("/google/integ")
+    public ApiResponse userIntegGoogle(@RequestParam String code) throws Exception {
+
+        return jobsiteUserService.userIntegGoogle(code);
+    }
 }

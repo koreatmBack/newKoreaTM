@@ -188,7 +188,7 @@ interface JobUserMapper {
         WHERE social_id = #{id}
         AND use_status != 'N'
     """)
-    int kakaoUserChk(@Param("id") String id)
+    int dupSocialIdCheck(@Param("id") String id)
 
     // 카카오 로그인 회원 아이디 조회
     @Select("""

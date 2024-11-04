@@ -309,7 +309,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE title LIKE CONCAT('%', #{ad.title}, '%')
+        AND title LIKE CONCAT('%', #{ad.title}, '%')
         AND end_date >= CURDATE()
     """)
     List<JobSite> searchTitleJobsite(@Param("ad") fmAd ad)
