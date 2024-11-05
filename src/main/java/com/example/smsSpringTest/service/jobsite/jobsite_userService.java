@@ -698,7 +698,8 @@ public class jobsite_userService {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-        String rediretUrl = "http://localhost:8080/v1/jobsite/user/kakao/integ";
+//        String rediretUrl = "http://localhost:8080/v1/jobsite/user/kakao/integ";
+        String rediretUrl = "https://koti-job.kro.kr/v1/jobsite/user/kakao/integ";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1024,7 +1025,8 @@ public class jobsite_userService {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-        String rediretUrl = "http://localhost:8080/v1/jobsite/user/naver/integ";
+//        String rediretUrl = "http://localhost:8080/v1/jobsite/user/naver/integ";
+        String rediretUrl = "https://koti-job.kro.kr/v1/jobsite/user/naver/integ";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1357,7 +1359,8 @@ public class jobsite_userService {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-        String rediretUrl = "http://localhost:8080/v1/jobsite/user/google/integ";
+//        String rediretUrl = "http://localhost:8080/v1/jobsite/user/google/integ";
+        String rediretUrl = "https://koti-job.kro.kr/v1/jobsite/user/google/integ";
 
         try {
             urlConnection.setRequestMethod("POST");

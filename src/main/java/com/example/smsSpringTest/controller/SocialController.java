@@ -77,7 +77,8 @@ public class SocialController {
         StringBuffer url = new StringBuffer();
         url.append("https://nid.naver.com/oauth2.0/authorize?");
         url.append("client_id="+naverClientId);
-        url.append("&redirect_uri=http://localhost:8080/v1/jobsite/user/naver/integ");
+//        url.append("&redirect_uri=http://localhost:8080/v1/jobsite/user/naver/integ");
+        url.append("&redirect_uri=https://koti-job.kro.kr/v1/jobsite/user/naver/integ");
         url.append("&response_type=code");
         return "redirect:"+url.toString();
     }
@@ -103,8 +104,8 @@ public class SocialController {
         StringBuffer url = new StringBuffer();
         url.append("https://accounts.google.com/o/oauth2/v2/auth?");
         url.append("client_id="+googleClientId);
-//        url.append("&redirect_uri=http://localhost:8080/v1/jobsite/user/google/integ");
-        url.append("&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fv1%2Fjobsite%2Fuser%2Fgoogle%2Finteg");
+//        url.append("&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fv1%2Fjobsite%2Fuser%2Fgoogle%2Finteg");
+        url.append("&redirect_uri=https%3A%2F%2Fkoti-job.kro.kr%2Fv1%2Fjobsite%2Fuser%2Fgoogle%2Finteg");
         url.append("&response_type=code");
         url.append("&scope=email profile");
         return "redirect:"+url.toString();
