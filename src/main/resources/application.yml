@@ -69,16 +69,19 @@ jwt:
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
   client-secret: ${KAKAO_CLIENT_SECRET}
+  redirect-uri: https://koti-job.kro.kr/v1/jobsite/user/login/kakao
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/kakao
 
 naver:
   client-id: ${NAVER_CLIENT_ID}
   client-secret: ${NAVER_CLIENT_SECRET}
+  redirect-uri: https://koti-job.kro.kr/v1/jobsite/user/login/naver
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/naver
 
 google:
   client-id: ${GOOGLE_CLIENT_ID}
   client-secret: ${GOOGLE_CLIENT_SECRET}
+  redirect-uri: https://koti-job.kro.kr/v1/jobsite/user/login/google
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/google
 
 logging:
