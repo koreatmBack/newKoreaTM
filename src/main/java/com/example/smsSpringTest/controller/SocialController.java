@@ -50,7 +50,8 @@ public class SocialController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id="+kakaoClientId);
-        url.append("&redirect_uri=http://localhost:8080/v1/jobsite/user/kakao/integ");
+        url.append("&redirect_uri=https://koti-job.kro.kr/v1/jobsite/user/kakao/integ");
+//        url.append("&redirect_uri=http://localhost:8080/v1/jobsite/user/kakao/integ");
         url.append("&response_type=code");
         return "redirect:"+url.toString();
     }
