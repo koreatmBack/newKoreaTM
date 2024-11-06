@@ -318,7 +318,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/v1/social/**", "/v1/jobsite/user/kakao/**"
                 , "/api/v1/social/**", "/api/v1/jobsite/user/kakao/**"
                 // 회원 사진 등록
-                , "/v1/common/upload/formMail/photo", "/api/v1/common/upload/formMail/photo"
+                , "/v1/common/upload/photo", "/api/v1/common/upload/photo"
 
         };
 

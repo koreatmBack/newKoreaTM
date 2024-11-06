@@ -25,8 +25,8 @@ public class CommonService {
     private final S3Uploader s3Uploader;
     private final CommonMapper commonMapper;
 
-    // 폼메일 광고 이미지 올리기 : S3에 이미지 파일 업로드 ( db에 저장은 X) --> 파일 1개 ver.
-    public S3UploadResponse uploadFormMailAd(MultipartFile multipartFile, String folder) throws Exception {
+    // S3에 이미지 파일 업로드 ( db에 저장은 X) --> 파일 1개 ver.
+    public S3UploadResponse S3Upload(MultipartFile multipartFile, String folder) throws Exception {
 
         S3UploadResponse s3UploadResponse = new S3UploadResponse();
 

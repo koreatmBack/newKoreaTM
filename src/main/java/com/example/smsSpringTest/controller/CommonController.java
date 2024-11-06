@@ -23,12 +23,12 @@ public class CommonController {
     private final CommonService commonService;
 
 
-    // 폼메일 광고 이미지 올리기 : S3에 이미지 업로드 (DB에는 저장 x) --> 파일 1개 ver.
-    @PostMapping("/upload/formMail/{folder}")
-    public S3UploadResponse uploadFormMailAd(@PathVariable("folder") String folder, @RequestParam("file") MultipartFile multipartFile) throws Exception {
+    // S3에 이미지 업로드 (DB에는 저장 x) --> 파일 1개 ver.
+    @PostMapping("/upload/{folder}")
+    public S3UploadResponse S3Upload(@PathVariable("folder") String folder, @RequestParam("file") MultipartFile multipartFile) throws Exception {
         S3UploadResponse s3UploadResponse = new S3UploadResponse();
 
-        s3UploadResponse = commonService.uploadFormMailAd(multipartFile, folder);
+        s3UploadResponse = commonService.S3Upload(multipartFile, folder);
 
         return s3UploadResponse;
     }
