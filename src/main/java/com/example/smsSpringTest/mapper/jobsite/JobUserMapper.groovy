@@ -123,6 +123,8 @@ interface JobUserMapper {
            <if test="user.photo != null"> photo = #{user.photo} ,</if>
            <if test="user.marketing != null"> marketing = #{user.marketing},</if>  
            <if test="user.addressDetail != null"> address_detail = #{user.addressDetail},</if>
+           <if test="user.favorite != null"> favorite = #{user.favorite},</if>
+           <if test="user.clipping != null"> clipping = #{user.clipping},</if>
       </set>
         WHERE user_id = #{user.userId}  
 </script>        
@@ -142,10 +144,45 @@ interface JobUserMapper {
         , photo
         , marketing
         , address_detail
+        , favorite
+        , clipping
         FROM jobsite_user
         WHERE user_id = #{userId}
     """)
     JobsiteUser findOneJobUser(@Param("userId") String userId)
+
+    // userId가 일치할때, 즐겨찾기 지우기 (컬럼 null로 변경)
+    @Update("""
+        UPDATE jobsite_user
+        SET favorite = null
+        WHERE user_id = #{user.userId}
+    """)
+    int deleteFavorite(@Param("user") JobsiteUser user)
+
+    // userId가 일치할때, 스크랩 지우기 (컬럼 null로 변경)
+    @Update("""
+        UPDATE jobsite_user
+        SET clipping = null
+        WHERE user_id = #{user.userId}
+    """)
+    int deleteClipping(@Param("user") JobsiteUser user)
+
+    // userId가 일치할때, 즐겨찾기 목록 반환
+    @Select("""
+        SELECT favorite
+        FROM jobsite_user
+        WHERE user_id = #{user.userId}
+    """)
+    String findFavorite(@Param("user") JobsiteUser user)
+
+    // userId가 일치할때, 스크랩 목록 반환
+    @Select("""
+        SELECT clipping
+        FROM jobsite_user
+        WHERE user_id = #{user.userId}
+    """)
+    String findClipping(@Param("user") JobsiteUser user)
+
 
     // 회원 전체 수 조회
     @Select("""

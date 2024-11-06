@@ -314,9 +314,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_ad/orderByWorkTime", "/api/v1/formMail_ad/orderByWorkTime",
                 // 잡사이트 지원자 등록
                 "/v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
-                // kakao 로그인
+                // 소셜 로그인
                 , "/v1/social/**", "/v1/jobsite/user/kakao/**"
                 , "/api/v1/social/**", "/api/v1/jobsite/user/kakao/**"
+                // 회원 사진 등록
+                , "/v1/common/upload/formMail/photo", "/api/v1/common/upload/formMail/photo"
 
         };
 

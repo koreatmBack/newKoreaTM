@@ -73,6 +73,31 @@ public class jobsite_userController {
         return jobsiteUserService.checkId(user);
     }
 
+    // 회원 id 일치할때 즐겨찾기 삭제
+    @PutMapping("/delete/favorite")
+    public ApiResponse deleteFavorite(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.deleteFavorite(user);
+    }
+
+    // 회원 id 일치할때 스크랩 삭제
+    @PutMapping("/delete/clipping")
+    public ApiResponse deleteClipping(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.deleteClipping(user);
+    }
+
+    // 회원 id 일치할때 즐겨찾기 목록 조회
+    @PostMapping("/find/favorite")
+    public JobUserResponse findFavorite(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findFavorite(user);
+    }
+
+    // 회원 id 일치할때 스크랩 목록 조회
+    @PostMapping("/find/clipping")
+    public JobUserResponse findClipping(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findClipping(user);
+    }
+
+
     // -- kakao 로그인 테스트 위한 코드들
     @GetMapping("/login/kakao")
     public SocialResponse kakaoLogin(@RequestParam String code) throws Exception{
@@ -123,5 +148,19 @@ public class jobsite_userController {
     public ApiResponse userIntegGoogle(@RequestParam String code) throws Exception {
 
         return jobsiteUserService.userIntegGoogle(code);
+    }
+
+    // ----- facebook 시작
+    @GetMapping("/login/facebook")
+    public SocialResponse facebookLogin(@RequestParam String code) throws Exception {
+        log.info("code = " + code);
+        return jobsiteUserService.facebookLogin(code);
+    }
+
+    // 로그인 회원 google 소셜 로그인 연동
+    @GetMapping("/facebook/integ")
+    public ApiResponse userIntegFacebook(@RequestParam String code) throws Exception {
+
+        return jobsiteUserService.userIntegFacebook(code);
     }
 }

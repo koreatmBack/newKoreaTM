@@ -84,6 +84,11 @@ google:
   redirect-uri: https://koti-job.kro.kr/v1/jobsite/user/login/google
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/google
 
+facebook:
+  client-id: ${FACEBOOK_CLIENT_ID}
+  client-secret: ${FACEBOOK_CLIENT_SECRET}
+  redirect-uri: http://localhost:8080/v1/jobsite/user/login/facebook
+
 logging:
   level:
     com:

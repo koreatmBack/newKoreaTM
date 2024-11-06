@@ -46,4 +46,8 @@ public class JobsiteUser {
 
     private String socialType; // 소셜로그인시 받은 type
 
+    private String favorite; // 즐겨찾기
+
+    private String clipping; // 스크랩
+
 }

@@ -31,7 +31,13 @@ public class SocialController {
     @Value("${google.redirect-uri}")
     private String googleRedirectUri;
 
-    // -- kakao 로그인 테스트 위한 코드들
+    @Value("${facebook.client-id}")
+    private String facebookClientId;
+
+    @Value("${facebook.redirect-uri}")
+    private String facebookRedirectUri;
+
+    // -- kakao 로그인
 
     // 로그인 시작
     @GetMapping("/login/kakao/start")
@@ -109,6 +115,32 @@ public class SocialController {
         url.append("&redirect_uri=https%3A%2F%2Fkoti-job.kro.kr%2Fv1%2Fjobsite%2Fuser%2Fgoogle%2Finteg");
         url.append("&response_type=code");
         url.append("&scope=email profile");
+        return "redirect:"+url.toString();
+    }
+
+    // facebook 시작 --
+
+    // facebook 로그인 시작
+    @GetMapping("/login/facebook/start")
+    public String facebookLoginStart(){
+        StringBuffer url = new StringBuffer();
+        url.append("https://www.facebook.com/v15.0/dialog/oauth?");
+        url.append("client_id="+facebookClientId);
+        url.append("&redirect_uri="+facebookRedirectUri);
+        url.append("&response_type=code");
+//        url.append("&scope=email profile");
+        return "redirect:"+url.toString();
+    }
+
+    // facebook 소셜 연동
+    @GetMapping("/facebook/integ")
+    public String facebookInteg(){
+        StringBuffer url = new StringBuffer();
+        url.append("https://www.facebook.com/v15.0/dialog/oauth?");
+        url.append("client_id="+facebookClientId);
+        url.append("&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fv1%2Fjobsite%2Fuser%2Ffacebook%2Finteg");
+        url.append("&response_type=code");
+//        url.append("&scope=email profile");
         return "redirect:"+url.toString();
     }
 

@@ -25,6 +25,9 @@ public class JobUserResponse extends ApiResponse {
 
     private List<JobsiteUser> jobsiteUserList;
 
+    private String favorite; // 즐겨찾기
+    private String clipping; // 스크랩
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
 }

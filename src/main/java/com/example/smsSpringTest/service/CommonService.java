@@ -25,13 +25,13 @@ public class CommonService {
     private final S3Uploader s3Uploader;
     private final CommonMapper commonMapper;
 
-    // S3에 이미지 파일 업로드 ( db에 저장은 X) --> 파일 1개 ver.
-    public S3UploadResponse S3Upload(MultipartFile multipartFile) throws Exception {
+    // 폼메일 광고 이미지 올리기 : S3에 이미지 파일 업로드 ( db에 저장은 X) --> 파일 1개 ver.
+    public S3UploadResponse uploadFormMailAd(MultipartFile multipartFile, String folder) throws Exception {
 
         S3UploadResponse s3UploadResponse = new S3UploadResponse();
 
         try {
-            String imageUrl = s3Uploader.upload(multipartFile, "images");
+            String imageUrl = s3Uploader.upload(multipartFile, "images/"+folder);
             log.info("multipartFile = " + multipartFile);
             log.info("imageUrl = " + imageUrl);
 //            int S3UploadFile = s3UploadMapper.S3UploadFile(imageUrl);
@@ -50,6 +50,8 @@ public class CommonService {
         }
         return s3UploadResponse;
     }
+
+
 
     // 파일 url 상대경로
     public static String formatImageUrl(String url) {
