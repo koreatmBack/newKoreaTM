@@ -99,6 +99,34 @@ interface JobUserMapper {
     """)
     JobsiteUser findOneJobLoginUser(@Param("userId") String userId)
 
+    // id찾기용
+    // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인
+    @Select("""
+        SELECT user_id
+        FROM jobsite_user
+        WHERE phone = #{phone}
+    """)
+    String findJobUserId(@Param("phone") String phone)
+
+    // 비밀번호 찾기용
+    // userId, userName, phone 일치하는지
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user
+        WHERE user_id = #{user.userId}
+        AND user_name = #{user.userName}
+        AND phone = #{user.phone}
+    """)
+    int findJobUserPwd(@Param("user") JobsiteUser user);
+
+    // 비밀번호 업데이트
+    @Update("""
+        UPDATE jobsite_user
+        SET user_pwd = #{user.userPwd}
+        WHERE phone = #{user.phone}
+    """)
+    int updateNewPwd(@Param("user") JobsiteUser user);
+
     // 이름 반환
     @Select("""
         SELECT user_name

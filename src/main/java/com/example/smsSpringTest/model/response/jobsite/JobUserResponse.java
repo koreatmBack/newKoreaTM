@@ -22,7 +22,7 @@ import java.util.List;
 public class JobUserResponse extends ApiResponse {
 
     private JobsiteUser user;
-
+    private String userId;
     private List<JobsiteUser> jobsiteUserList;
 
     private String favorite; // 즐겨찾기

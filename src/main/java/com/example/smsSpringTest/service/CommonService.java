@@ -52,7 +52,6 @@ public class CommonService {
     }
 
 
-
     // 파일 url 상대경로
     public static String formatImageUrl(String url) {
         // 'com' 다음 인덱스 찾기

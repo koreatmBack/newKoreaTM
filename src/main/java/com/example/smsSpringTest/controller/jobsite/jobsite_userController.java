@@ -31,6 +31,24 @@ public class jobsite_userController {
         return jobsiteUserService.cert(certSMS);
     }
 
+    // 본인 인증 후 넘겨받은 연락처로 Id 찾기
+    @PostMapping("/find/id")
+    public JobUserResponse findJobUserId(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findJobUserId(user);
+    }
+
+    // 연락처로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone 필요)
+    @PostMapping("/find/pwd")
+    public ApiResponse findJobUserPwd(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findJobUserPwd(user);
+    }
+
+    // 본인인증 성공시 새로운 비밀번호 입력 받은 후 DB에 암호화하여 저장
+    @PutMapping("/update/pwd")
+    public ApiResponse updateNewPwd(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.updateNewPwd(user);
+    }
+
     // jobsite 회원가입
     @PostMapping("/join")
     public ApiResponse jobSignUp(@RequestBody JobsiteUser user) throws Exception {

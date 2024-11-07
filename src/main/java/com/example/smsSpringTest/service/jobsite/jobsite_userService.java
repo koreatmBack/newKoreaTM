@@ -115,6 +115,28 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+    // 본인 인증 후 넘겨받은 연락처로 Id 찾기
+    public JobUserResponse findJobUserId(JobsiteUser user) throws Exception {
+        JobUserResponse jobUserResponse = new JobUserResponse();
+
+        try {
+            String findJobUserId = jobUserMapper.findJobUserId(user.getPhone());
+            if(!StringUtils.hasText(findJobUserId)){
+                jobUserResponse.setCode("E003");
+                jobUserResponse.setMessage("Id 찾기 실패");
+            } else {
+                jobUserResponse.setUserId(findJobUserId);
+                jobUserResponse.setCode("C000");
+                jobUserResponse.setMessage("Id 찾기 성공");
+            }
+        } catch (Exception e) {
+                jobUserResponse.setCode("E001");
+                jobUserResponse.setMessage("Error !!!");
+        }
+
+        return jobUserResponse;
+    }
+
     // 본인 인증 후 회원가입
     public ApiResponse jobSignUp(JobsiteUser user) throws Exception{
         ApiResponse apiResponse = new ApiResponse();
@@ -551,8 +573,50 @@ public class jobsite_userService {
 
 
     // 비밀번호 찾기 -> 재생성하게.
-    // 본인인증 -> id, 이름, 연락처 입력 후 일치하면 본인인증 문자 발송 ?
+
+    // 연락처로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone 필요)
+    public ApiResponse findJobUserPwd(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            int findJobUserPwd = jobUserMapper.findJobUserPwd(user);
+            if(findJobUserPwd == 0) {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("등록된 Id가 없습니다.");
+            } else {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("등록된 Id가 존재합니다.");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error !!!");
+        }
+
+        return apiResponse;
+    }
+
     // 본인인증 성공시 새로운 비밀번호 입력 받은 후 DB에 암호화하여 저장
+    public ApiResponse updateNewPwd(JobsiteUser user) throws Exception {
+
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+            int updateNewPwd = jobUserMapper.updateNewPwd(user);
+            if(updateNewPwd == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("비밀번호 수정 성공");
+            } else {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("비밀번호 수정 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error !!!");
+        }
+
+        return apiResponse;
+    }
 
 
 
