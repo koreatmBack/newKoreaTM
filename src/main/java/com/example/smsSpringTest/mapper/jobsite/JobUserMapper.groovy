@@ -103,10 +103,11 @@ interface JobUserMapper {
     // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인
     @Select("""
         SELECT user_id
+        , created_at
         FROM jobsite_user
         WHERE phone = #{phone}
     """)
-    String findJobUserId(@Param("phone") String phone)
+    JobsiteUser findJobUserId(@Param("phone") String phone)
 
     // 비밀번호 찾기용
     // userId, userName, phone 일치하는지

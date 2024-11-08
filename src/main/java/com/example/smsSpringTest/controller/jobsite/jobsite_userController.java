@@ -31,7 +31,7 @@ public class jobsite_userController {
         return jobsiteUserService.cert(certSMS);
     }
 
-    // 본인 인증 후 넘겨받은 연락처로 Id 찾기
+    // 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
     @PostMapping("/find/id")
     public JobUserResponse findJobUserId(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.findJobUserId(user);

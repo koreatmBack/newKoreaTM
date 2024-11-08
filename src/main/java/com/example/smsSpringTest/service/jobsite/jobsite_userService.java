@@ -115,17 +115,20 @@ public class jobsite_userService {
         return apiResponse;
     }
 
-    // 본인 인증 후 넘겨받은 연락처로 Id 찾기
+    // 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
     public JobUserResponse findJobUserId(JobsiteUser user) throws Exception {
         JobUserResponse jobUserResponse = new JobUserResponse();
 
         try {
-            String findJobUserId = jobUserMapper.findJobUserId(user.getPhone());
+
+            String findJobUserId = jobUserMapper.findJobUserId(user.getPhone()).getUserId();
+            LocalDate findJobUserCreate = jobUserMapper.findJobUserId(user.getPhone()).getCreatedAt();
             if(!StringUtils.hasText(findJobUserId)){
                 jobUserResponse.setCode("E003");
                 jobUserResponse.setMessage("Id 찾기 실패");
             } else {
                 jobUserResponse.setUserId(findJobUserId);
+                jobUserResponse.setCreatedAt(findJobUserCreate);
                 jobUserResponse.setCode("C000");
                 jobUserResponse.setMessage("Id 찾기 성공");
             }

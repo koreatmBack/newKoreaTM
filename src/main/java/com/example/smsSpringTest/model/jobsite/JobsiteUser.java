@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 /**
  * author : 신기훈
  * date : 2024-10-29
@@ -49,5 +51,7 @@ public class JobsiteUser {
     private String favorite; // 즐겨찾기
 
     private String clipping; // 스크랩
+
+    private LocalDate createdAt; // 가입일
 
 }

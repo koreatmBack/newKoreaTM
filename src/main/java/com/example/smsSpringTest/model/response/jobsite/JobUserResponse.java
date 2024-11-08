@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class JobUserResponse extends ApiResponse {
 
     private JobsiteUser user;
     private String userId;
+    private LocalDate createdAt;
     private List<JobsiteUser> jobsiteUserList;
 
     private String favorite; // 즐겨찾기
