@@ -320,7 +320,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // 회원 사진 등록
                 , "/v1/common/upload/photo", "/api/v1/common/upload/photo"
                 // swagger
-                , "/swagger/*", "/v3/*"
+                , "/swagger-ui/*", "/v3/*"
 
         };
 
