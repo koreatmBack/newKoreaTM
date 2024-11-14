@@ -41,7 +41,7 @@ spring:
     port: 6379
   mail:
     host: smtp.mail.nate.com
-    port: 587
+    port: 465
     username: ${EMAIL_NAME}
     password: ${EMAIL_PWD}
     properties:
