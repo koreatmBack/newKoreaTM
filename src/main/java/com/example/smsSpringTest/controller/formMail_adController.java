@@ -9,6 +9,7 @@ import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.service.formMail_adService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -48,19 +49,16 @@ public class formMail_adController {
 
     // 고객사(cid) 일치하는 광고 조회
     @PostMapping("/fmAdList")
+    @Operation(summary = "고객사 일치하는 광고 조회", description="필수 값 : cid")
     public AdResponse fmAdList(@RequestBody AdRequest adRequest) throws Exception {
-
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.fmAdList(adRequest);
-        return adResponse;
+        return formMailAdService.fmAdList(adRequest);
     }
 
     // 광고 업데이트
     @PutMapping("/updateAd")
+
     public ApiResponse updateAd(@RequestBody fmAd ad) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = formMailAdService.updateAd(ad);
-        return apiResponse;
+        return formMailAdService.updateAd(ad);
     }
 
     // 광고 삭제
@@ -84,12 +82,10 @@ public class formMail_adController {
 
     // S3에 이미지 업로드 (DB에는 저장 x) --> 파일 1개 ver.
     @PostMapping("/S3Upload")
+    @Operation(summary = "AWS S3에 이미지 업로드", description="db에는 저장 x , file , MultipartFile")
     public S3UploadResponse S3Upload(@RequestParam("file") MultipartFile multipartFile) throws Exception {
-        S3UploadResponse s3UploadResponse = new S3UploadResponse();
 
-        s3UploadResponse = formMailAdService.S3Upload(multipartFile);
-
-        return s3UploadResponse;
+        return formMailAdService.S3Upload(multipartFile);
     }
 
 //    // DB에 광고 이미지 저장
@@ -121,13 +117,12 @@ public class formMail_adController {
     // formmail_file db에서 url 일치하는 데이터 삭제하기
     @DeleteMapping("/deleteFile")
     public ApiResponse deleteFile(@RequestBody formMail_file file) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = formMailAdService.deleteFile(file);
-        return apiResponse;
+        return formMailAdService.deleteFile(file);
     }
 
     // 날짜 입력 -> total day 계산 API
     @PostMapping("/totalDay")
+    @Operation(summary = "광고 일 수 계산하기 (평일만)", description="필수 값 : startDate , endDate")
     public Integer totalDay(@RequestBody fmAd ad) throws Exception {
         Integer onlyTotalDay = formMailAdService.totalDay(ad);
         return onlyTotalDay;
@@ -135,50 +130,45 @@ public class formMail_adController {
 
     // 폼메일용 광고 목록 전체 조회
     @PostMapping("/allAdList")
+    @Operation(summary = "광고 목록 전체 조회", description="페이징 처리, 필수 값 : page, size")
     public AdResponse allAdList(@RequestBody Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.allAdList(paging);
-        return adResponse;
+
+        return formMailAdService.allAdList(paging);
     }
 
     // 폼메일용 adNum 일치하는 광고 전체 조회
     @PostMapping("/searchAdNumList")
+    @Operation(summary = "광고번호 일치하는 광고 전체 조회", description="필수 값 : adNum")
     public AdResponse searchAdNumList(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.searchAdNumList(ad);
-        return adResponse;
+        return formMailAdService.searchAdNumList(ad);
     }
 
     // 폼메일용 aid 일치하는 광고 상세 조회
     @PostMapping("/findOneAd")
+    @Operation(summary = "광고 고유id 일치하는 광고 조회", description="필수 값 : aid")
     public AdResponse findOneAd(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.findOneAd(ad);
-        return adResponse;
+        return formMailAdService.findOneAd(ad);
     }
 
     // 폼메일용 title이 포함된 광고 조회
     @PostMapping("/searchTitleAd")
+    @Operation(summary = "검색한 내용이 제목에 포함된 광고 조회", description="필수 값 : title")
     public AdResponse searchTitleAd(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.searchTitleAd(ad);
-        return adResponse;
+        return formMailAdService.searchTitleAd(ad);
     }
 
     // 폼메일용 hashtag 일치하는 광고 조회
     @PostMapping("/searchHashtagAd")
+    @Operation(summary = "해시태그 일치하는 광고 조회", description="필수 값 : hashtag")
     public AdResponse searchHashtagAd(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.searchHashtagAd(ad);
-        return adResponse;
+        return formMailAdService.searchHashtagAd(ad);
     }
 
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
+    @Operation(summary = "sido, sigungu 일치하는 광고 조회", description="sido는 필수, sigungu는 필수 아님")
     @PostMapping("/searchAddressAd")
     public AdResponse searchAddressAd(fmAd ad) throws Exception{
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.searchAddressAd(ad);
-        return adResponse;
+        return formMailAdService.searchAddressAd(ad);
     }
 
     // ---------------------------------------------------------
@@ -186,54 +176,49 @@ public class formMail_adController {
 
     // 잡사이트용 광고 목록 전체 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/allJobsiteList")
+    @Operation(summary = "광고 목록 전체 조회 (종료기간 끝난 것 조회 X)", description="페이징 처리, 필수 값 : page, size")
     public AdResponse allJobsiteList(@RequestBody Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.allJobsiteList(paging);
-        return adResponse;
+        return formMailAdService.allJobsiteList(paging);
     }
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/searchTitleList")
+    @Operation(summary = "검색한 단어가 제목에 포함된 광고 조회", description="필수 값 : title")
     public AdResponse searchTitleList(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.searchTitleJobsite(ad);
-        return adResponse;
+        return formMailAdService.searchTitleJobsite(ad);
     }
 
     // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/findOneJobsite")
+    @Operation(summary = "광고 고유id 일치하는 광고 상세 조회(종료기간 끝난 것 조회 X)", description="필수 값 : aid")
     public AdResponse findOneJobsite(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.findOneJobsite(ad);
-        return adResponse;
+        return formMailAdService.findOneJobsite(ad);
     }
 
     // 잡사이트용 등록일순으로 광고 조회
     @PostMapping("/orderByCreated")
+    @Operation(summary = "등록일 내림차순 광고 전체 조회", description="페이징 처리, 필수 값 : page, size")
     public AdResponse orderByCreated(@RequestBody Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByCreated(paging);
-        return adResponse;
+        return formMailAdService.orderByCreated(paging);
     }
 
     // 잡사이트용 근무일수 적은순으로 광고 조회
     @PostMapping("/orderByWorkDay")
+    @Operation(summary = "근무일수 적은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
     public AdResponse orderByWorkDay(@RequestBody Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByWorkDay(paging);
-        return adResponse;
+        return formMailAdService.orderByWorkDay(paging);
     }
 
     // 잡사이트용 급여 높은 순으로 광고 조회
     @PostMapping("/orderByMaxPay")
+    @Operation(summary = "급여 높은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
     public AdResponse orderByMaxPay(@RequestBody Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByMaxPay(paging);
-        return adResponse;
+        return formMailAdService.orderByMaxPay(paging);
     }
 
     // 잡사이트용 근무시간 짧은 순으로 광고 조회
     @PostMapping("/orderByWorkTime")
+    @Operation(summary = "근무시간 짧은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
     public AdResponse orderByWorkTime(@RequestBody Paging paging) throws Exception {
         AdResponse adResponse = new AdResponse();
         adResponse = formMailAdService.orderByWorkTime(paging);
@@ -244,14 +229,14 @@ public class formMail_adController {
 
     // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
     @PostMapping("/findCompanyAndUser")
+    @Operation(summary = "광고 고유id 일치하는 고객사 조회 -> 찾은 cid로 user 정보까지 조회", description="필수 값 : aid")
     public AdResponse findCompanyAndUser(@RequestBody fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.findCompanyAndUser(ad);
-        return adResponse;
+        return formMailAdService.findCompanyAndUser(ad);
     }
 
     // get 테스트용 -> 삭제 예정
     @GetMapping("/jobSiteListTest")
+    @Operation(summary = "테스트용", description="")
     public AdResponse jobSiteListTest() throws Exception {
         log.info("jobSiteListTest 컨트롤러 들어옴");
         return formMailAdService.jobSiteListTest();

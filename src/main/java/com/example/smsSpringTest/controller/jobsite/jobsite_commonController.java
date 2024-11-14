@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
 import com.example.smsSpringTest.service.jobsite.jobsite_commonService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class jobsite_commonController {
 
     // 쿠키 만료시간 보내주기
     @GetMapping("/exper_cookie")
+    @Operation(summary = "쿠키 만료 시간 조회", description="쿠키 남은 유효 시간을 보내줍니다.")
     public AccessResponse experCookie() throws Exception {
         return jobsiteCommonService.experCookie();
     }
@@ -38,12 +40,14 @@ public class jobsite_commonController {
 
     // access 토큰 재발급 및 쿠키 재발급
     @GetMapping("/reissu/AccessToken")
+    @Operation(summary = "Access Token 재발급 및 쿠키 재발급", description="토큰과 쿠키를 재발급합니다.")
     public ApiResponse reissuAccessToken() throws Exception {
         return jobsiteCommonService.reissuAccessToken();
     }
 
     // 지원자 등록하기 (회원 , 비회원 둘다 가능)
     @PostMapping("/addApply")
+    @Operation(summary = "지원자 등록", description="신규 지원자를 등록합니다.")
     public ApiResponse addApply(@RequestBody Apply apply) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = formMailApplyService.addApply(apply);
