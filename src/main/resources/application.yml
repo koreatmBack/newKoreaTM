@@ -39,6 +39,21 @@ spring:
   redis:
     host: localhost
     port: 6379
+  mail:
+    host: smtp.mail.nate.com
+    port: 587
+    username: ${EMAIL_NAME}
+    password: ${EMAIL_PWD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writerimeout: 10000
 mybatis:
   type-aliases-package: com.example.smsSpringTest.model.*
   configuration:

@@ -96,6 +96,13 @@ dependencies {
 
 	//webflux 24-11-11 추가
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('test') {

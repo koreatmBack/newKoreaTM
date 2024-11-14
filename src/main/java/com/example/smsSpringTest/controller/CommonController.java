@@ -1,8 +1,11 @@
 package com.example.smsSpringTest.controller;
 
+import com.example.smsSpringTest.model.EmailMessage;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.NaverMapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.service.CommonService;
+import com.example.smsSpringTest.service.EmailService;
 import com.example.smsSpringTest.service.NaverMapService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -26,6 +30,8 @@ public class CommonController {
     private final CommonService commonService;
 
     private final NaverMapService naverMapService;
+
+    private final EmailService emailService;
 
     private final ObjectMapper objectMapper;
 
@@ -45,10 +51,18 @@ public class CommonController {
         return "Client IP: " + clientIp;
     }
 
+    // 주소로 위도 경도 찾기
     @GetMapping("/get/coordinates")
     public NaverMapResponse getCoordinates(@RequestParam String address) {
         return naverMapService.getCoordinates(address);
     }
+
+    // 이메일 전송
+    @PostMapping("/send/email")
+    public ApiResponse sendEmail(@RequestBody EmailMessage emailMessage) throws MessagingException {
+        return emailService.sendEmail(emailMessage);
+    }
+
 
 //    @GetMapping("/get/coordinates")
 //    public Mono<String> getCoordinates(@RequestParam String address) {
