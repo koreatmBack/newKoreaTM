@@ -51,9 +51,11 @@ spring:
             enable: true
             required: true
           auth: true
-          connectiontimeout: 100000
-          timeout: 100000
-          writerimeout: 100000
+          ssl:
+            enable: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writerimeout: 10000
 mybatis:
   type-aliases-package: com.example.smsSpringTest.model.*
   configuration:
