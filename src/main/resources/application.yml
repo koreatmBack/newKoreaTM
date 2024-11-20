@@ -46,6 +46,7 @@ spring:
     password: ${EMAIL_PWD}
     properties:
       mail:
+        protocol: smtps
         smtp:
           starttls:
             enable: true
@@ -53,11 +54,10 @@ spring:
           auth: true
           ssl:
             enable: true
-            trust: smtp.nate.com
+            trust: smtp.mail.nate.com
           connectiontimeout: 10000
           timeout: 10000
           writerimeout: 10000
-
 mybatis:
   type-aliases-package: com.example.smsSpringTest.model.*
   configuration:
