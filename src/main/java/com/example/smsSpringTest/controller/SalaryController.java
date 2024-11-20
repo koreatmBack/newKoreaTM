@@ -23,9 +23,17 @@ public class SalaryController {
 
     private final SalaryService salaryService;
 
+    // 급여 계산기
     @PostMapping("")
     public SalaryResponse salaryCalculation(@RequestBody Salary salary) throws Exception {
         return salaryService.salaryCalculation(salary);
     }
+
+    // 주휴수당 계산기
+    @PostMapping("/weekHoliday")
+    public SalaryResponse weekHolidayPayCalculation(@RequestBody Salary salary) throws Exception {
+        return salaryService.weekHolidayPayCalculation(salary);
+    }
+
 
 }

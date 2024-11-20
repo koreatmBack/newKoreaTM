@@ -23,5 +23,6 @@ public class SalaryResponse extends ApiResponse{
     private int yearSalary; // 연봉
     private int weekHolidayPay; // 주휴 수당
     private int totalSalary; // 최종 급여 금액
+    private int overtimePay; // 연장 수당
 
 }
