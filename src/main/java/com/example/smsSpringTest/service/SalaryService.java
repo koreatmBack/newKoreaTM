@@ -34,6 +34,7 @@ public class SalaryService {
         String type1 = salary.getType1();
         String type2 = salary.getType2();
         String tax = salary.getTax();   // 세금
+        String weekHolidayPayChk = salary.getWeekHolidayPayChk(); // 주휴수당 체크
         String probationPeriod = salary.getProbationPeriod(); // 수습 체크
         double overtime = salary.getOvertime(); // 연장 근무 시간
         double hourSalary = salary.getHourSalary(); // 시급
@@ -44,7 +45,7 @@ public class SalaryService {
         double weekSalary; // 주급
         double monthSalary; // 월급
         double yearSalary; // 연봉
-        double weekHolidayPay; // 주휴 수당
+        double weekHolidayPay = 0; // 주휴 수당
         double totalSalary = 0; // 최종 급여 금액
 
         try {
@@ -62,13 +63,14 @@ public class SalaryService {
                         // 만약 수습 적용이면 10% 차감
                         dailySalary *= 0.9;
                     }
-                    Math.round(totalSalary = dailySalary);
+                    totalSalary = Math.round(dailySalary);
                     salaryResponse.setDailySalary((int) Math.round(dailySalary));
                 } else if (type2.equals("주급")) {
                     // 주급 계산
                     weekSalary = Math.round(hourSalary * workTime * weekWorkDay); // 예상 주급
-
-                    weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                    if ("포함".equals(weekHolidayPayChk)) {
+                        weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                    }
 
                     // 연장 수당
                     overtime *= hourSalary * 1.5;
@@ -88,6 +90,7 @@ public class SalaryService {
                         weekHolidayPay *= 0.9;
                         overtime *= 0.9;
                     }
+
                     totalSalary = Math.round(weekSalary + weekHolidayPay + overtime);
                     salaryResponse.setWeekSalary((int) Math.round(weekSalary));
                     salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
@@ -95,15 +98,15 @@ public class SalaryService {
                 } else if (type2.equals("월급")) {
                     // 월급 계산
                     weekSalary = Math.round(hourSalary * workTime * weekWorkDay); // 예상 주급
-                    weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+//                    weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                    if ("포함".equals(weekHolidayPayChk)) {
+                        weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                    }
 
-                    log.info(" 예상 주급 = " + weekSalary);
-                    log.info(" 예상 주휴수당 = " + weekHolidayPay);
+
                     monthSalary = Math.round(weekSalary * M_CAL); // 예상 월급
-                    log.info(" 예상 월급 = " + monthSalary);
-                    weekHolidayPay = Math.round(weekHolidayPay * M_CAL); // 예상 주휴수당
 
-                    log.info(" 예상 주휴수당2 = " + weekHolidayPay);
+                    weekHolidayPay = Math.round(weekHolidayPay * M_CAL); // 예상 주휴수당
 
                     // 연장 수당
                     overtime *= hourSalary * 1.5;
@@ -123,6 +126,9 @@ public class SalaryService {
                         weekHolidayPay *= 0.9;
                         overtime *= 0.9;
                     }
+                    log.info(" 예상 월급 = " + monthSalary);
+                    log.info(" 예상 주휴수당 = " + weekHolidayPay);
+                    log.info(" 예상 연장 수당 = " + overtime);
                     totalSalary = Math.round(monthSalary + weekHolidayPay + overtime);
                     salaryResponse.setMonthSalary((int) Math.round(monthSalary));
                     salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
@@ -130,8 +136,10 @@ public class SalaryService {
                 } else if (type2.equals("연봉")) {
                     // 연봉 계산
                     weekSalary = Math.round(hourSalary * workTime * weekWorkDay); // 예상 주급
-                    weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
-
+//                    weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                    if ("포함".equals(weekHolidayPayChk)) {
+                        weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                    }
                     log.info(" 예상 주급 = " + weekSalary);
                     log.info(" 예상 주휴수당 = " + weekHolidayPay);
                     yearSalary = Math.round(weekSalary * Y_CAL * 12); // 예상 월급
@@ -163,8 +171,10 @@ public class SalaryService {
                 dailySalary = salary.getDailySalary(); // 일급을 클라이언트로부터 받음
                 hourSalary = Math.round(dailySalary / workTime);  // 주휴수당 계산할때도 사용하기 위함
                 weekSalary = Math.round(dailySalary * weekWorkDay); // 예상 주급
-                weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
-
+//                weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                if ("포함".equals(weekHolidayPayChk)) {
+                    weekHolidayPay = weekHolidayPayCal(workTime, weekWorkDay, hourSalary); // 예상 주휴수당
+                }
                 if(type2.equals("시급")){
                     // 일급으로 시급 구하기
                     if("9.4%".equals(tax)){

@@ -57,7 +57,7 @@ public class CommonController {
         return naverMapService.getCoordinates(address);
     }
 
-    // 이메일 전송
+    // 이메일 전송 , 이메일 인증시 사용
     @PostMapping("/send/email")
     public ApiResponse sendEmail(@RequestBody EmailMessage emailMessage) throws MessagingException {
         return emailService.sendEmail(emailMessage);

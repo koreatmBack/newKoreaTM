@@ -22,6 +22,7 @@ public class Salary {
     private String type1;
     private String type2;
     private String tax; // 세금 미적용, 9.4%, 3.3%
+    private String weekHolidayPayChk; // 주휴수당 체크
     private String probationPeriod; // 수습 체크
     private double overtime; // 연장 근무 시간
     private double hourSalary; // 시급
