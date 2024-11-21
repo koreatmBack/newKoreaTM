@@ -198,7 +198,7 @@ public class jobsite_userController {
         return jobsiteUserService.facebookLogin(code);
     }
 
-    // 로그인 회원 google 소셜 로그인 연동
+    // 로그인 회원 facebook 소셜 로그인 연동
     @GetMapping("/facebook/integ")
     @Operation(summary = "페이스북 소셜 로그인", description="이미 등록된 회원 -> 페이스북 소셜 로그인 전환시")
     public ApiResponse userIntegFacebook(@RequestParam String code) throws Exception {

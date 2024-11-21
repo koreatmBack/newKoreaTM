@@ -868,7 +868,7 @@ public class jobsite_userService {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
 //        String redirectUrl = "http://localhost:8080/v1/jobsite/user/kakao/integ";
-        String redirectUrl = "https://koti-job.kro.kr/v1/jobsite/user/kakao/integ";
+        String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/kakao/integ";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1195,7 +1195,7 @@ public class jobsite_userService {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
 //        String redirectUrl = "http://localhost:8080/v1/jobsite/user/naver/integ";
-        String redirectUrl = "https://koti-job.kro.kr/v1/jobsite/user/naver/integ";
+        String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/naver/integ";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1529,7 +1529,7 @@ public class jobsite_userService {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
 //        String redirectUrl = "http://localhost:8080/v1/jobsite/user/google/integ";
-        String redirectUrl = "https://koti-job.kro.kr/v1/jobsite/user/google/integ";
+        String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/google/integ";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1651,7 +1651,6 @@ public class jobsite_userService {
         int result = jobUserMapper.dupSocialIdCheck(facebookSocialId);
 
         if(result == 0) {
-//            socialUser.setSocialType("naver");
             socialResponse.setSocialId(facebookSocialId);
             socialResponse.setSocialType("facebook");
 //            socialResponse.setSocialUser(socialUser);
@@ -1847,7 +1846,7 @@ public class jobsite_userService {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-        String redirectUrl = "http://localhost:8080/v1/jobsite/user/facebook/integ";
+        String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/facebook/integ";
 
 
         try {
