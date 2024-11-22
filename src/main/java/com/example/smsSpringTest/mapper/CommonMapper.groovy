@@ -229,5 +229,9 @@ interface CommonMapper {
     """)
     UserProfile getFrontUserProfile(@Param("userId") String userId)
 
-
+    // 이메일 인증번호 테이블 전체 비우기 (자정에 실행시킬 예정)
+    @Delete("""
+        DELETE FROM jobsite_email_code
+    """)
+    int deleteAllEmailCode()
 }

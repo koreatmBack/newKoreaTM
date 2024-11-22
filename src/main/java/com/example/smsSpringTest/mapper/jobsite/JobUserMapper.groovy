@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.mapper.jobsite
 
 import com.example.smsSpringTest.model.Paging
-import com.example.smsSpringTest.model.jobsite.CertSMS
+import com.example.smsSpringTest.model.jobsite.Cert
 import com.example.smsSpringTest.model.jobsite.JobsiteUser
 import com.example.smsSpringTest.model.jobsite.Social
 import org.apache.ibatis.annotations.*
@@ -9,15 +9,16 @@ import org.apache.ibatis.annotations.*
 @Mapper
 interface JobUserMapper {
 
-    // 본인인증 코드 저장할때 이미 인증 받았으면 해당 row에 인증 번호 덮어 씌우기
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 본인인증 (문자) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    // 문자 본인인증 코드 저장할때 이미 인증 받았으면 해당 row에 인증 번호 덮어 씌우기
     @Update("""
         UPDATE jobsite_sms_code
         SET sms_code = #{cert.smsCode}
         WHERE phone = #{cert.phone} 
     """)
-    int dupSmsCode(@Param("cert") CertSMS cert);
+    int dupSmsCode(@Param("cert") Cert cert);
 
-    // 본인인증 일치하는지 찾기
+    // 문자 본인인증 일치하는지 찾기
     @Select("""
         SELECT count(*)
         FROM jobsite_sms_code
@@ -25,15 +26,56 @@ interface JobUserMapper {
         AND phone = #{cert.phone}
         AND sms_code = #{cert.smsCode}
     """)
-    int certUser(@Param("cert") CertSMS cert);
+    int certUser(@Param("cert") Cert cert);
 
-    // 본인인증 성공시 테이블에서 해당 row 삭제
+    // 문자 본인인증 성공시 테이블에서 해당 row 삭제
     @Delete("""
         DELETE FROM jobsite_sms_code
         WHERE phone = #{cert.phone}
     """)
-    int deleteSmsCode(@Param("cert") CertSMS cert);
+    int deleteSmsCode(@Param("cert") Cert cert);
 
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 본인인증 (이메일) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 이메일 인증번호 저장
+    @Insert("""
+        INSERT INTO jobsite_email_code(
+            email
+            , email_code
+        ) VALUES (
+            #{cert.email}
+            , #{cert.emailCode}
+        )
+    """)
+    int insertEmailCode(@Param("cert") Cert cert)
+
+    // 이메일 본인인증 코드 저장할 때 이미 인증 받았으면 해당 row에 인증 번호 덮어 씌우기
+    // 이메일 인증번호 재요청시
+    @Update("""
+        UPDATE jobsite_email_code
+        SET email_code = #{cert.emailCode}
+        WHERE email = #{cert.email}
+    """)
+    int dupEmailCode(@Param("cert") Cert cert)
+
+    // 이메일 본인인증 일치하는지 찾기
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_email_code
+        WHERE email = #{cert.email}
+        AND email_code = #{cert.emailCode}
+    """)
+    int certUserEmail(@Param("cert") Cert cert)
+
+    // 문자 본인인증 성공시 테이블에서 해당 row 삭제
+    @Delete("""
+        DELETE FROM jobsite_email_code
+        WHERE email = #{cert.email}
+    """)
+    int deleteEmailCode(@Param("cert") Cert cert)
+
+
+    // 회원 가입
     @Insert("""
         INSERT INTO jobsite_user(
             user_id
@@ -48,6 +90,7 @@ interface JobUserMapper {
             , photo
             , marketing
             , address_detail
+            , email
         ) VALUES (
             #{user.userId}
             , #{user.userPwd}
@@ -61,6 +104,7 @@ interface JobUserMapper {
             , #{user.photo}
             , #{user.marketing}
             , #{user.addressDetail}
+            , #{user.email}
         )
     """)
     int jobSignUp(@Param("user") JobsiteUser user);
@@ -81,6 +125,14 @@ interface JobUserMapper {
     """)
     int checkId(@Param("userId") String userId)
 
+    // email 중복 체크하기( 별도의 api )
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user
+        WHERE email = #{email}
+    """)
+    int checkEmail(@Param("email") String email)
+
     // 암호화된 비밀번호 반환 ( 로그인시 비밀번호 체크용 )
     @Select("""
         SELECT user_pwd
@@ -99,8 +151,7 @@ interface JobUserMapper {
     """)
     JobsiteUser findOneJobLoginUser(@Param("userId") String userId)
 
-    // id찾기용
-    // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인
+    // 연락처로 id 찾기용
     @Select("""
         SELECT user_id
         , created_at
@@ -109,7 +160,24 @@ interface JobUserMapper {
     """)
     JobsiteUser findJobUserId(@Param("phone") String phone)
 
-    // 비밀번호 찾기용
+    // 이메일로 id 찾기용
+    @Select("""
+        SELECT user_id
+        , created_at
+        FROM jobsite_user
+        WHERE email = #{email}
+    """)
+    JobsiteUser findJobUserIdFromEmail(@Param("email") String email)
+
+    // 이메일로 비밀번호 찾기 (email)
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user
+        WHERE email = #{user.email}
+    """)
+    int findJobUserPwdFromEmail(@Param("user") JobsiteUser user)
+
+    // 문자로 비밀번호 찾기용
     // userId, userName, phone 일치하는지
     @Select("""
         SELECT count(*)
@@ -154,6 +222,7 @@ interface JobUserMapper {
            <if test="user.addressDetail != null"> address_detail = #{user.addressDetail},</if>
            <if test="user.favorite != null"> favorite = #{user.favorite},</if>
            <if test="user.clipping != null"> clipping = #{user.clipping},</if>
+           <if test="user.email != null"> email = #{user.email},</if>
       </set>
         WHERE user_id = #{user.userId}  
 </script>        
@@ -165,6 +234,7 @@ interface JobUserMapper {
         SELECT user_id
         , user_name
         , phone
+        , email
         , address
         , sido
         , sigungu
@@ -225,6 +295,7 @@ interface JobUserMapper {
         SELECT user_id
         , user_name
         , phone
+        , email
         , address
         , sido
         , sigungu

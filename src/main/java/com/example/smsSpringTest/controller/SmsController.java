@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.SmsForm;
-import com.example.smsSpringTest.model.jobsite.CertSMS;
+import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SmsResponse;
 import com.example.smsSpringTest.service.SmsService;
@@ -64,7 +64,7 @@ public class SmsController {
 
     // 잡사이트용 본인인증 (문자 전송)
     @PostMapping("/cert/sms")
-    public ApiResponse certificateSMS(@RequestBody CertSMS certSMS) throws IOException {
-        return smsService.certificateSMS(certSMS);
+    public ApiResponse certificateSMS(@RequestBody Cert cert) throws IOException {
+        return smsService.certificateSMS(cert);
     }
 }

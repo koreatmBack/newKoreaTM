@@ -5,7 +5,7 @@ import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
-import com.example.smsSpringTest.model.jobsite.CertSMS;
+import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
 import com.example.smsSpringTest.model.jobsite.Social;
 import com.example.smsSpringTest.model.jobsite.SocialUser;
@@ -91,17 +91,17 @@ public class jobsite_userService {
     @Value("${facebook.redirect-uri}")
     private String facebookRedirectUri;
 
-    // 본인인증 코드 일치하는지 확인하기
-    public ApiResponse cert(CertSMS certSMS) throws Exception {
+    // 본인인증 문자 코드 일치하는지 확인하기
+    public ApiResponse cert(Cert cert) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            int certUser = jobUserMapper.certUser(certSMS);
+            int certUser = jobUserMapper.certUser(cert);
             if(certUser == 1) {
                 // 인증 코드 일치
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("본인인증 성공");
-                jobUserMapper.deleteSmsCode(certSMS);
+                jobUserMapper.deleteSmsCode(cert);
             } else {
                 apiResponse.setCode("E004");
                 apiResponse.setMessage("본인인증 실패 , 인증 번호를 다시 요청해주세요.");
@@ -115,7 +115,32 @@ public class jobsite_userService {
         return apiResponse;
     }
 
-    // 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
+    // 본인인증 이메일 코드 일치하는지 확인하기
+    public ApiResponse certEmail(Cert cert) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            int certEmail = jobUserMapper.certUserEmail(cert);
+            if(certEmail == 1) {
+                // 인증 코드 일치
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("본인인증 성공");
+                jobUserMapper.deleteEmailCode(cert);
+            } else {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("본인인증 실패 , 인증 번호를 다시 요청해주세요.");
+            }
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("이메일, 본인인증 코드 다시 입력");
+            log.info(e.getMessage());
+        }
+
+        return apiResponse;
+    }
+
+
+    // 문자 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
     public JobUserResponse findJobUserId(JobsiteUser user) throws Exception {
         JobUserResponse jobUserResponse = new JobUserResponse();
 
@@ -140,18 +165,44 @@ public class jobsite_userService {
         return jobUserResponse;
     }
 
-    // 본인 인증 후 회원가입
+
+    // 이메일 본인 인증 후 넘겨받은 이메일 주소로 id, 가입일 찾기
+    public JobUserResponse findJobUserIdFromEmail(JobsiteUser user) throws Exception {
+        JobUserResponse jobUserResponse = new JobUserResponse();
+
+        try {
+            String findJobUserId = jobUserMapper.findJobUserIdFromEmail(user.getEmail()).getUserId();
+            LocalDate findJobUserCreate = jobUserMapper.findJobUserIdFromEmail(user.getEmail()).getCreatedAt();
+            if(!StringUtils.hasText(findJobUserId)){
+                jobUserResponse.setCode("E003");
+                jobUserResponse.setMessage("Id 찾기 실패");
+            } else {
+                jobUserResponse.setUserId(findJobUserId);
+                jobUserResponse.setCreatedAt(findJobUserCreate);
+                jobUserResponse.setCode("C000");
+                jobUserResponse.setMessage("Id 찾기 성공");
+            }
+        } catch (Exception e) {
+            jobUserResponse.setCode("E001");
+            jobUserResponse.setMessage("Error !!!");
+        }
+
+        return jobUserResponse;
+    }
+
+
+    // 문자 본인 인증 후 회원가입
     public ApiResponse jobSignUp(JobsiteUser user) throws Exception{
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            int dupFormMailIdCheck = jobUserMapper.dupFormMailIdCheck(user.getUserId());
-            if(dupFormMailIdCheck != 0){
-                // 폼메일에 같은 id가 있으면
-                apiResponse.setCode("E004");
-                apiResponse.setMessage("폼메일에서 사용중인 id입니다. 다른 id를 입력해주세요");
-                return apiResponse;
-            }
+//            int dupFormMailIdCheck = jobUserMapper.dupFormMailIdCheck(user.getUserId());
+//            if(dupFormMailIdCheck != 0){
+//                // 폼메일에 같은 id가 있으면
+//                apiResponse.setCode("E004");
+//                apiResponse.setMessage("폼메일에서 사용중인 id입니다. 다른 id를 입력해주세요");
+//                return apiResponse;
+//            }
             user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
             int result = jobUserMapper.jobSignUp(user);
 
@@ -487,6 +538,25 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+    // 회원가입시 email 중복 비동기로 중복 체크 확인하는 API
+    public ApiResponse checkEmail(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int checkEmail = jobUserMapper.checkEmail(user.getEmail());
+            if(checkEmail == 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("사용 가능한 email입니다.");
+            } else {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("이미 사용중인 email입니다.");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("ERROR!!!");
+        }
+        return apiResponse;
+    }
+
     // 회원 id 일치할때 즐겨찾기 삭제
     public ApiResponse deleteFavorite(JobsiteUser user) throws Exception {
 
@@ -572,7 +642,26 @@ public class jobsite_userService {
         return jobUserResponse;
     }
 
+    // 이메일로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (필수 : email)
+    public ApiResponse findJobUserPwdFromEmail(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
 
+        try {
+            int findJobUserPwdFromEmail = jobUserMapper.findJobUserPwdFromEmail(user);
+            if(findJobUserPwdFromEmail == 0) {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("등록된 Id가 없습니다.");
+            } else {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("등록된 Id가 존재합니다.");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error !!!");
+        }
+
+        return apiResponse;
+    }
 
 
     // 비밀번호 찾기 -> 재생성하게.

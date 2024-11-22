@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.SmsForm
-import com.example.smsSpringTest.model.jobsite.CertSMS
+import com.example.smsSpringTest.model.jobsite.Cert
 import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
@@ -38,7 +38,7 @@ interface SmsMapper {
             , #{cert.smsCode}
         )
     """)
-    int addCertSMS(@Param("cert") CertSMS cert)
+    int addCertSMS(@Param("cert") Cert cert)
 
     // 본인인증용 db 모두 삭제 ( 자정에 실행할 예정 )
     @Delete("""

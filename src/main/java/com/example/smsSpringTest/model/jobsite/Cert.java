@@ -14,8 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CertSMS {
+public class Cert {
     private String userName;
     private String phone;
     private String smsCode;
+    private String email;
+    private String emailCode;
 }

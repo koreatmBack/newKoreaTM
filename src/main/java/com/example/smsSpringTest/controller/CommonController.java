@@ -112,6 +112,7 @@ public class CommonController {
 //                });
 //    }
 
+    // 2024-11-22 현재 사용 x , 현재는 위도 경도 찾는 API만 사용
     @GetMapping("/search")
     public String searchStations(@RequestParam double latitude, @RequestParam double longitude) {
         // 서비스에서 API 호출 후 결과 반환

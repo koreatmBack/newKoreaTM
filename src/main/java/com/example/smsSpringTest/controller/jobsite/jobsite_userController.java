@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.controller.jobsite;
 
 import com.example.smsSpringTest.model.Paging;
-import com.example.smsSpringTest.model.jobsite.CertSMS;
+import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
@@ -26,18 +26,32 @@ public class jobsite_userController {
     private final jobsite_userService jobsiteUserService;
 
 
-    // 본인인증 코드 일치하는지 확인
+    // 문자 본인인증 코드 일치하는지 확인
     @PostMapping("/cert")
-    @Operation(summary = "본인인증 코드 확인", description="본인인증 코드가 일치하는지 확인합니다.")
-    public ApiResponse cert(@RequestBody CertSMS certSMS) throws Exception{
-        return jobsiteUserService.cert(certSMS);
+    @Operation(summary = "문자 본인인증 코드 확인", description="문자 본인인증 코드가 일치하는지 확인합니다.")
+    public ApiResponse cert(@RequestBody Cert cert) throws Exception{
+        return jobsiteUserService.cert(cert);
     }
 
-    // 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
+    // 이메일 본인인증 코드 일치하는지 확인
+    @PostMapping("/cert/email")
+    @Operation(summary = "이메일 본인인증 코드 확인", description="이메일 본인인증 코드가 일치하는지 확인합니다.")
+    public ApiResponse certEmail(@RequestBody Cert cert) throws Exception {
+        return jobsiteUserService.certEmail(cert);
+    }
+
+    // 연락처 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
     @PostMapping("/find/id")
     @Operation(summary = "Id, 가입일을 조회합니다.", description="본인인증 성공 후 넘겨받은 연락처로 id, 가입일 조회합니다.")
     public JobUserResponse findJobUserId(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.findJobUserId(user);
+    }
+
+    // 이메일 본인 인증 후 넘겨받은 이메일로 Id, 가입일 찾기
+    @PostMapping("/find/id/fromEmail")
+    @Operation(summary = "Id, 가입일을 조회합니다.", description="본인인증 성공 후 넘겨받은 이메일로 id, 가입일 조회합니다.")
+    public JobUserResponse findJobUserIdFromEmail(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findJobUserIdFromEmail(user);
     }
 
     // 연락처로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone 필요)
@@ -46,6 +60,14 @@ public class jobsite_userController {
     public ApiResponse findJobUserPwd(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.findJobUserPwd(user);
     }
+
+    // 이메일로 비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행 API (email)
+    @PostMapping("/find/pwd/fromEmail")
+    @Operation(summary = "비밀번호 찾기 눌렀을 때 계정이 존재하는지 확인", description="비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행하는 API로 email 필수값")
+    public ApiResponse findJobUserPwdFromEmail(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findJobUserPwdFromEmail(user);
+    }
+
 
     // 본인인증 성공시 새로운 비밀번호 입력 받은 후 DB에 암호화하여 저장
     @PutMapping("/update/pwd")
@@ -98,10 +120,18 @@ public class jobsite_userController {
 
     // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인 API
     @PostMapping("/check/id")
-    @Operation(summary = "회원 가입시 id 중복 체크", description="id 입력칸 옆에 중복 확인 API")
+    @Operation(summary = "회원 가입시 id 중복 체크", description="비동기로 id 중복 확인 API")
     public ApiResponse checkId(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.checkId(user);
     }
+
+    // 회원가입시 email 중복 확인하는 API
+    @PostMapping("/check/email")
+    @Operation(summary = "회원 가입시 email 중복 체크", description="비동기로 email 중복 확인 API")
+    public ApiResponse checkEmail(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.checkEmail(user);
+    }
+
 
     // 회원 id 일치할때 즐겨찾기 삭제
     @PutMapping("/delete/favorite")

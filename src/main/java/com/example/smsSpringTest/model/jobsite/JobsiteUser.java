@@ -54,4 +54,6 @@ public class JobsiteUser {
 
     private LocalDate createdAt; // 가입일
 
+    private String email;
+
 }

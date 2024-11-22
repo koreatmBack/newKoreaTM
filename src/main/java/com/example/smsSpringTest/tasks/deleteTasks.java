@@ -58,10 +58,16 @@ public class deleteTasks {
         }
     }
 
-    // 본인인증 테이블 비우기
+    // 문자 본인인증 테이블 비우기
     @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
     public void deleteAllSMSCode() throws Exception {
         smsMapper.deleteAllSMSCode();
+    }
+
+    // 이메일 본인인증 테이블 비우기
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
+    public void deleteAllEmailCode() throws Exception {
+        commonMapper.deleteAllEmailCode();
     }
 
 

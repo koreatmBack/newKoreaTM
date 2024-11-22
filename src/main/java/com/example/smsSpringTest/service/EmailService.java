@@ -1,6 +1,8 @@
 package com.example.smsSpringTest.service;
 
+import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.EmailMessage;
+import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
+    private final JobUserMapper jobUserMapper;
 
 
     // 이메일 전송
@@ -46,8 +49,13 @@ public class EmailService {
             mimeMessageHelper.setText(setContext(certNumber, "email"), true); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
+            Cert cert = new Cert();
+            cert.setEmail(emailMessage.getTo());
+            cert.setEmailCode(certNumber);
+
             apiResponse.setCode("C000");
             apiResponse.setMessage("메일 전송 성공");
+            jobUserMapper.insertEmailCode(cert);
         } catch (MessagingException e) {
             log.info(e.getMessage());
             apiResponse.setCode("E001");
@@ -56,6 +64,9 @@ public class EmailService {
 
         return apiResponse;
     }
+
+
+
 
     // thymeleaf를 통한 html 적용
     public String setContext(String code, String type) {

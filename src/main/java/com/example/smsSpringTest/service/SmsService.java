@@ -3,7 +3,7 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.mapper.SmsMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.SmsForm;
-import com.example.smsSpringTest.model.jobsite.CertSMS;
+import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SmsResponse;
 import lombok.RequiredArgsConstructor;
@@ -337,10 +337,10 @@ public class SmsService {
 
 
     // 잡사이트용 본인인증 (문자 전송)
-    public ApiResponse certificateSMS(CertSMS certSMS) throws IOException {
+    public ApiResponse certificateSMS(Cert cert) throws IOException {
 
         ApiResponse apiResponse = new ApiResponse();
-            if(certSMS.getPhone() == null || certSMS.getUserName() == null) {
+            if(cert.getPhone() == null || cert.getUserName() == null) {
                 apiResponse.setCode("E004");
                 apiResponse.setMessage("이름과 연락처를 다시 입력해주세요.");
                 return apiResponse;
@@ -417,7 +417,7 @@ public class SmsService {
                 String user_id = base64Encode(smsId); // SMS아이디
                 String secure = base64Encode(secureKey);//인증키
                 String msg = base64Encode(originMsg);
-                String rPhone = base64Encode(certSMS.getPhone());
+                String rPhone = base64Encode(cert.getPhone());
                 String sPhone1 = base64Encode(originSphone1);
                 String sPhone2 = base64Encode(originSphone2);
 
@@ -530,11 +530,11 @@ public class SmsService {
                     apiResponse.setCode("C000");
                     apiResponse.setMessage("문자 전송 성공 !! 남은 잔여 문자 " + Count + "건 남았습니다.");
 
-                    certSMS.setSmsCode(randomNumber);
-                    int dupSmsCode = jobUserMapper.dupSmsCode(certSMS);
+                    cert.setSmsCode(randomNumber);
+                    int dupSmsCode = jobUserMapper.dupSmsCode(cert);
                     if(dupSmsCode == 0){
                         // 이미 저장된 값 없으면 새로 등록
-                        int addCertSMS = smsMapper.addCertSMS(certSMS);
+                        int addCertSMS = smsMapper.addCertSMS(cert);
                         if(addCertSMS == 1){
                             log.info("SMS CODE 새로 등록 성공");
                         } else {
