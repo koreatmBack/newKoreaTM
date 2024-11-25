@@ -109,6 +109,12 @@ public class jobsite_userController {
         return jobsiteUserService.jobResign(user);
     }
 
+    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
+    @PutMapping("/change/pwd")
+    public ApiResponse changePwd(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.changePwd(user);
+    }
+
     // jobsite 회원 정보 수정
     @PutMapping("/update")
     @Operation(summary = "회원 정보 수정", description="")

@@ -56,4 +56,6 @@ public class JobsiteUser {
 
     private String email;
 
+    private String userNewPwd; // 새로운 비밀번호 (비밀번호 변경용)
+
 }

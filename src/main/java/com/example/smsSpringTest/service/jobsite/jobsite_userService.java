@@ -622,6 +622,47 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
+    public ApiResponse changePwd(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            // 기존 비밀번호 일치하는지 체크
+            // 입력 받은 비밀번호
+            String userPwd = user.getUserPwd();
+
+            // 암호화된 비밀번호 체크
+            String dupPwd = jobUserMapper.dupPwd(user);
+
+            // 비밀번호 일치하는지 검증
+            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+
+            if(isMatchPwd) {
+                // 비밀번호 일치하면
+
+                // 입력받은 새로운 비밀번호
+                String newPwd = user.getUserNewPwd();
+                user.setUserPwd(passwordEncoder.encode(newPwd));
+                int changePwd = jobUserMapper.changePwd(user);
+                if(changePwd == 1) {
+                    apiResponse.setCode("C000");
+                    apiResponse.setMessage(" 비밀번호 변경 성공 ");
+                } else {
+                    apiResponse.setCode("C003");
+                    apiResponse.setMessage(" 비밀번호 변경 실패 ");
+                }
+            } else {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage(" 비밀번호 변경 실패 , 정보 불일치");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("ERROR!!!");
+        }
+
+        return apiResponse;
+    }
+
     // 회원 id 일치할때 즐겨찾기 삭제
     public ApiResponse deleteFavorite(JobsiteUser user) throws Exception {
 

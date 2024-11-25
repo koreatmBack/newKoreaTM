@@ -224,8 +224,15 @@ interface JobUserMapper {
         <if test="user.email != null"> AND email = #{user.email} </if>
 </script>        
     """)
-    int updateNewPwd(@Param("user") JobsiteUser user);
+    int updateNewPwd(@Param("user") JobsiteUser user)
 
+    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
+    @Update("""
+        UPDATE jobsite_user
+        SET user_pwd = #{user.userPwd}
+        WHERE user_id = #{user.userId}
+    """)
+    int changePwd(@Param("user") JobsiteUser user)
 
     // 이름 반환
     @Select("""
