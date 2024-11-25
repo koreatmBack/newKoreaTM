@@ -471,19 +471,27 @@ public class jobsite_userService {
         JobUserResponse jobUserResponse = new JobUserResponse();
 
         try {
-            // 비밀번호 수정할 값이 있으면, 비밀번호 암호화
-            if(user.getUserPwd() != null) {
-//                String newPwd = passwordEncoder.encode(user.getUserPwd());
-                user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+            String userPwd = user.getUserPwd();
+
+            // 암호화된 비밀번호 체크
+            String dupPwd = jobUserMapper.dupPwd(user);
+
+            // 비밀번호 일치하는지 검증
+            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+            if(!isMatchPwd){
+                jobUserResponse.setCode("C003");
+                jobUserResponse.setMessage("비밀번호가 일치하지 않습니다.");
+                return jobUserResponse;
             }
+
             int jobUserUpdate = jobUserMapper.jobUserUpdate(user);
             if(jobUserUpdate == 1) {
                 jobUserResponse.setUser(jobUserMapper.findOneJobUser(user.getUserId()));
                 jobUserResponse.setCode("C000");
                 jobUserResponse.setMessage("회원 정보 수정 완료");
             } else {
-                jobUserResponse.setCode("E002");
-                jobUserResponse.setMessage("변경할 정보를 입력하세요");
+                jobUserResponse.setCode("C003");
+                jobUserResponse.setMessage("비밀번호가 일치하지 않습니다.");
             }
         } catch (Exception e){
             jobUserResponse.setCode("E001");

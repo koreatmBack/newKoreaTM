@@ -242,12 +242,11 @@ interface JobUserMapper {
     """)
     String userName(@Param("userId") String userId)
 
-    // 잡사이트 회원 정보 수정
+    // 잡사이트 회원 정보 수정 , 비밀번호는 여기서 변경 불가
     @Update("""
 <script>
         UPDATE jobsite_user
       <set>
-           <if test="user.userPwd != null"> user_pwd = #{user.userPwd},</if>
            <if test="user.userName !=null"> user_name = #{user.userName},</if>
            <if test="user.phone != null"> phone = #{user.phone},</if>
            <if test="user.address != null"> address = #{user.address} ,</if>
