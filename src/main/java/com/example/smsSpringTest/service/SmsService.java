@@ -411,7 +411,7 @@ public class SmsService {
                 in.close();
 
                 log.info("문자 테스트 1차 성공");
-
+                cert.setPhone(cert.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
                 String origin_sms_url = "https://sslsms.cafe24.com/sms_sender.php"; // 인코딩 전 cafe24 제공 url
                 String sms_url = base64Encode("https://sslsms.cafe24.com/sms_sender.php"); // SMS 전송요청 URL
                 String user_id = base64Encode(smsId); // SMS아이디

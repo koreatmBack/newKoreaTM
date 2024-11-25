@@ -94,7 +94,7 @@ public class jobsite_userService {
     // 본인인증 문자 코드 일치하는지 확인하기
     public ApiResponse cert(Cert cert) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
-
+        cert.setPhone(cert.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
         try {
             int certUser = jobUserMapper.certUser(cert);
             if(certUser == 1) {
@@ -103,7 +103,7 @@ public class jobsite_userService {
                 apiResponse.setMessage("본인인증 성공");
                 jobUserMapper.deleteSmsCode(cert);
             } else {
-                apiResponse.setCode("E004");
+                apiResponse.setCode("C003");
                 apiResponse.setMessage("본인인증 실패 , 인증 번호를 다시 요청해주세요.");
             }
         } catch (Exception e) {
