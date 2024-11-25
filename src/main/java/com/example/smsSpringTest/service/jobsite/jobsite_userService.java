@@ -139,15 +139,43 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+    // 아이디 찾기 눌렀을때 가입된 아이디인지 확인하기 (userName, phone or email 필수)
+    public ApiResponse findJobUserIdBeforeCert(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
 
-    // 문자 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
+        try {
+            if(StringUtils.hasText(user.getPhone())){
+                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
+                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+            }
+            int findUserId = jobUserMapper.findJobUserIdBeforeCert(user);
+            if(findUserId != 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("가입된 정보가 있습니다.");
+            } else {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("가입된 정보가 없습니다.");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error !!! ");
+        }
+
+        return apiResponse;
+    }
+
+
+    // 문자 or 이메일 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
     public JobUserResponse findJobUserId(JobsiteUser user) throws Exception {
         JobUserResponse jobUserResponse = new JobUserResponse();
 
         try {
-
-            String findJobUserId = jobUserMapper.findJobUserId(user.getPhone()).getUserId();
-            LocalDate findJobUserCreate = jobUserMapper.findJobUserId(user.getPhone()).getCreatedAt();
+            if(StringUtils.hasText(user.getPhone())){
+                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
+                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+            }
+            String findJobUserId = jobUserMapper.findJobUserId(user).getUserId();
+            LocalDate findJobUserCreate = jobUserMapper.findJobUserId(user).getCreatedAt();
             if(!StringUtils.hasText(findJobUserId)){
                 jobUserResponse.setCode("E003");
                 jobUserResponse.setMessage("Id 찾기 실패");
@@ -166,29 +194,29 @@ public class jobsite_userService {
     }
 
 
-    // 이메일 본인 인증 후 넘겨받은 이메일 주소로 id, 가입일 찾기
-    public JobUserResponse findJobUserIdFromEmail(JobsiteUser user) throws Exception {
-        JobUserResponse jobUserResponse = new JobUserResponse();
-
-        try {
-            String findJobUserId = jobUserMapper.findJobUserIdFromEmail(user.getEmail()).getUserId();
-            LocalDate findJobUserCreate = jobUserMapper.findJobUserIdFromEmail(user.getEmail()).getCreatedAt();
-            if(!StringUtils.hasText(findJobUserId)){
-                jobUserResponse.setCode("E003");
-                jobUserResponse.setMessage("Id 찾기 실패");
-            } else {
-                jobUserResponse.setUserId(findJobUserId);
-                jobUserResponse.setCreatedAt(findJobUserCreate);
-                jobUserResponse.setCode("C000");
-                jobUserResponse.setMessage("Id 찾기 성공");
-            }
-        } catch (Exception e) {
-            jobUserResponse.setCode("E001");
-            jobUserResponse.setMessage("Error !!!");
-        }
-
-        return jobUserResponse;
-    }
+//    // 이메일 본인 인증 후 넘겨받은 이메일 주소로 id, 가입일 찾기
+//    public JobUserResponse findJobUserIdFromEmail(JobsiteUser user) throws Exception {
+//        JobUserResponse jobUserResponse = new JobUserResponse();
+//
+//        try {
+//            String findJobUserId = jobUserMapper.findJobUserIdFromEmail(user.getEmail()).getUserId();
+//            LocalDate findJobUserCreate = jobUserMapper.findJobUserIdFromEmail(user.getEmail()).getCreatedAt();
+//            if(!StringUtils.hasText(findJobUserId)){
+//                jobUserResponse.setCode("E003");
+//                jobUserResponse.setMessage("Id 찾기 실패");
+//            } else {
+//                jobUserResponse.setUserId(findJobUserId);
+//                jobUserResponse.setCreatedAt(findJobUserCreate);
+//                jobUserResponse.setCode("C000");
+//                jobUserResponse.setMessage("Id 찾기 성공");
+//            }
+//        } catch (Exception e) {
+//            jobUserResponse.setCode("E001");
+//            jobUserResponse.setMessage("Error !!!");
+//        }
+//
+//        return jobUserResponse;
+//    }
 
 
     // 문자 본인 인증 후 회원가입
@@ -406,6 +434,7 @@ public class jobsite_userService {
             //AccessToken에서 authentication 가져오기
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             user.setUserId(authentication.getName());
+            log.info("로그아웃할 id = " + user.getUserId());
 
             for(Cookie cookie : cookies){
                 if(accessToken.equals(cookie.getValue())){
@@ -419,6 +448,7 @@ public class jobsite_userService {
 
             // db속 refresh token 가져오기
             RefToken refDB = jobsiteCommonService.getUserRefToken(user.getUserId());
+            log.info("refDb = " + refDB);
             if(refDB.getRefreshToken() != null) {
                 // refresh 토큰 삭제
                 commonMapper.deleteUserToken(authentication.getName());
@@ -512,7 +542,42 @@ public class jobsite_userService {
         return jobUserResponse;
     }
 
-    // 회원가입시 id 중복 확인 버튼 클릭시 중복 확인 API
+    // 회원 탈퇴하기
+    public ApiResponse jobResign(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+//            String userId = user.getUserId();
+
+            // 입력 받은 비밀번호
+            String userPwd = user.getUserPwd();
+
+            // 암호화된 비밀번호 체크
+            String dupPwd = jobUserMapper.dupPwd(user);
+
+            // 비밀번호 일치하는지 검증
+            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+
+            if(isMatchPwd) {
+                // 회원 탈퇴하기
+                jobUserMapper.resignUser(user);
+                apiResponse.setCode("C000");
+                apiResponse.setMessage(" 회원 탈퇴 성공 ");
+            } else {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage(" 회원 탈퇴 실패 , 정보 불일치");
+            }
+
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error!!! ");
+            log.info(e.getMessage());
+        }
+
+        return apiResponse;
+    }
+
+    // 회원가입시 id 중복 확인 버튼 비동기로 확인 API
     public ApiResponse checkId(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
@@ -538,7 +603,7 @@ public class jobsite_userService {
         return apiResponse;
     }
 
-    // 회원가입시 email 중복 비동기로 중복 체크 확인하는 API
+    // 회원가입시 비동기로 email 중복 체크 확인하는 API
     public ApiResponse checkEmail(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {
@@ -642,35 +707,39 @@ public class jobsite_userService {
         return jobUserResponse;
     }
 
-    // 이메일로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (필수 : email)
-    public ApiResponse findJobUserPwdFromEmail(JobsiteUser user) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-
-        try {
-            int findJobUserPwdFromEmail = jobUserMapper.findJobUserPwdFromEmail(user);
-            if(findJobUserPwdFromEmail == 0) {
-                apiResponse.setCode("C003");
-                apiResponse.setMessage("등록된 Id가 없습니다.");
-            } else {
-                apiResponse.setCode("C000");
-                apiResponse.setMessage("등록된 Id가 존재합니다.");
-            }
-        } catch (Exception e) {
-            apiResponse.setCode("E001");
-            apiResponse.setMessage("Error !!!");
-        }
-
-        return apiResponse;
-    }
+//    // 이메일로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (필수 : email)
+//    public ApiResponse findJobUserPwdFromEmail(JobsiteUser user) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//
+//        try {
+//            int findJobUserPwdFromEmail = jobUserMapper.findJobUserPwdFromEmail(user);
+//            if(findJobUserPwdFromEmail == 0) {
+//                apiResponse.setCode("C003");
+//                apiResponse.setMessage("등록된 Id가 없습니다.");
+//            } else {
+//                apiResponse.setCode("C000");
+//                apiResponse.setMessage("등록된 Id가 존재합니다.");
+//            }
+//        } catch (Exception e) {
+//            apiResponse.setCode("E001");
+//            apiResponse.setMessage("Error !!!");
+//        }
+//
+//        return apiResponse;
+//    }
 
 
     // 비밀번호 찾기 -> 재생성하게.
 
-    // 연락처로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone 필요)
+    // 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone or email 필요)
     public ApiResponse findJobUserPwd(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            if(StringUtils.hasText(user.getPhone())){
+                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
+                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+            }
             int findJobUserPwd = jobUserMapper.findJobUserPwd(user);
             if(findJobUserPwd == 0) {
                 apiResponse.setCode("E002");
@@ -693,6 +762,12 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            if(user.getPhone() == null && user.getEmail() == null){
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("Error !!!");
+                return apiResponse;
+            }
+
             user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
             int updateNewPwd = jobUserMapper.updateNewPwd(user);
             if(updateNewPwd == 1) {

@@ -141,6 +141,13 @@ interface JobUserMapper {
     """)
     String dupPwd(@Param("user") JobsiteUser user);
 
+    // 회원 탈퇴하기
+    @Delete("""
+        DELETE FROM jobsite_user
+        WHERE user_id = #{user.userId}
+    """)
+    int resignUser(@Param("user") JobsiteUser user);
+
     // 회원 한명(id, 이름, 연락처) 반환
     @Select("""
         SELECT user_id
@@ -151,50 +158,74 @@ interface JobUserMapper {
     """)
     JobsiteUser findOneJobLoginUser(@Param("userId") String userId)
 
-    // 연락처로 id 찾기용
+    // 아이디 찾기 눌렀을때 가입된 아이디인지 확인하기 (userName, phone or email 필수)
     @Select("""
-        SELECT user_id
-        , created_at
-        FROM jobsite_user
-        WHERE phone = #{phone}
-    """)
-    JobsiteUser findJobUserId(@Param("phone") String phone)
-
-    // 이메일로 id 찾기용
-    @Select("""
-        SELECT user_id
-        , created_at
-        FROM jobsite_user
-        WHERE email = #{email}
-    """)
-    JobsiteUser findJobUserIdFromEmail(@Param("email") String email)
-
-    // 이메일로 비밀번호 찾기 (email)
-    @Select("""
+<script>
         SELECT count(*)
         FROM jobsite_user
-        WHERE email = #{user.email}
+        WHERE user_name = #{user.userName}
+        <if test="user.phone != null"> AND phone = #{user.phone} </if>
+        <if test="user.email != null"> AND email = #{user.email} </if>
+</script>        
     """)
-    int findJobUserPwdFromEmail(@Param("user") JobsiteUser user)
+    int findJobUserIdBeforeCert(@Param("user") JobsiteUser user)
 
-    // 문자로 비밀번호 찾기용
-    // userId, userName, phone 일치하는지
+    // 이름,연락처 or 이름 ,이메일 로 id 찾기용
     @Select("""
+<script>
+        SELECT user_id
+        , created_at
+        FROM jobsite_user
+        WHERE user_name = #{user.userName}
+        <if test="user.phone != null"> AND phone = #{user.phone} </if>
+        <if test="user.email != null"> AND email = #{user.email} </if>
+</script>        
+    """)
+    JobsiteUser findJobUserId(@Param("user") JobsiteUser user)
+
+//    // 이메일로 id 찾기용
+//    @Select("""
+//        SELECT user_id
+//        , created_at
+//        FROM jobsite_user
+//        WHERE email = #{email}
+//    """)
+//    JobsiteUser findJobUserIdFromEmail(@Param("email") String email)
+
+//    // 이메일로 비밀번호 찾기 (email)
+//    @Select("""
+//        SELECT count(*)
+//        FROM jobsite_user
+//        WHERE email = #{user.email}
+//    """)
+//    int findJobUserPwdFromEmail(@Param("user") JobsiteUser user)
+
+    // 이메일,문자로 비밀번호 찾기용
+    // userId, userName, phone or email 일치하는지
+    @Select("""
+<script>
         SELECT count(*)
         FROM jobsite_user
         WHERE user_id = #{user.userId}
         AND user_name = #{user.userName}
-        AND phone = #{user.phone}
+        <if test="user.phone != null"> AND phone = #{user.phone} </if>
+        <if test="user.email != null"> AND email = #{user.email} </if>
+</script>        
     """)
     int findJobUserPwd(@Param("user") JobsiteUser user);
 
-    // 비밀번호 업데이트
+    // 연락처 or 이메일로 비밀번호 업데이트
     @Update("""
+<script>
         UPDATE jobsite_user
         SET user_pwd = #{user.userPwd}
-        WHERE phone = #{user.phone}
+        WHERE user_name = #{user.userName}
+        <if test="user.phone != null"> AND phone = #{user.phone}</if>
+        <if test="user.email != null"> AND email = #{user.email} </if>
+</script>        
     """)
     int updateNewPwd(@Param("user") JobsiteUser user);
+
 
     // 이름 반환
     @Select("""

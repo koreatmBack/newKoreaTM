@@ -40,33 +40,39 @@ public class jobsite_userController {
         return jobsiteUserService.certEmail(cert);
     }
 
-    // 연락처 본인 인증 후 넘겨받은 연락처로 Id, 가입일 찾기
+//    // 연락처 본인 인증 후 넘겨받은 이름과 연락처로 Id, 가입일 찾기
+//    @PostMapping("/find/id")
+//    @Operation(summary = "Id, 가입일을 조회합니다.", description="본인인증 성공 후 넘겨받은 연락처로 id, 가입일 조회합니다.")
+//    public JobUserResponse findJobUserIdFromPhone(@RequestBody JobsiteUser user) throws Exception {
+//        return jobsiteUserService.findJobUserIdFromPhone(user);
+//    }
+
+    // 본인 인증 후 넘겨받은 이름과 이메일 or 연락처로 Id, 가입일 찾기
     @PostMapping("/find/id")
-    @Operation(summary = "Id, 가입일을 조회합니다.", description="본인인증 성공 후 넘겨받은 연락처로 id, 가입일 조회합니다.")
+    @Operation(summary = "Id, 가입일을 조회합니다.", description="본인인증 성공 후 넘겨받은 이메일로 id, 가입일 조회합니다.")
     public JobUserResponse findJobUserId(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.findJobUserId(user);
     }
 
-    // 이메일 본인 인증 후 넘겨받은 이메일로 Id, 가입일 찾기
-    @PostMapping("/find/id/fromEmail")
-    @Operation(summary = "Id, 가입일을 조회합니다.", description="본인인증 성공 후 넘겨받은 이메일로 id, 가입일 조회합니다.")
-    public JobUserResponse findJobUserIdFromEmail(@RequestBody JobsiteUser user) throws Exception {
-        return jobsiteUserService.findJobUserIdFromEmail(user);
+    // 아이디 찾기 눌렀을때 가입된 아이디인지 확인하기 (userName, phone or email 필수)
+    @PostMapping("/find/id/before/cert")
+    public ApiResponse findJobUserIdBeforeCert(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findJobUserIdBeforeCert(user);
     }
 
-    // 연락처로 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone 필요)
+    // 비밀번호 찾기 눌렀을때 본인인증 보내기 전 실행 API (userId, userName, phone or email 필요)
     @PostMapping("/find/pwd")
     @Operation(summary = "비밀번호 찾기 눌렀을 때 계정이 존재하는지 확인", description="비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행하는 API로 userId, userName, phone 필수값")
     public ApiResponse findJobUserPwd(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.findJobUserPwd(user);
     }
 
-    // 이메일로 비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행 API (email)
-    @PostMapping("/find/pwd/fromEmail")
-    @Operation(summary = "비밀번호 찾기 눌렀을 때 계정이 존재하는지 확인", description="비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행하는 API로 email 필수값")
-    public ApiResponse findJobUserPwdFromEmail(@RequestBody JobsiteUser user) throws Exception {
-        return jobsiteUserService.findJobUserPwdFromEmail(user);
-    }
+//    // 이메일로 비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행 API (email)
+//    @PostMapping("/find/pwd/fromEmail")
+//    @Operation(summary = "아이디 찾기 or 비밀번호 찾기 눌렀을 때 계정이 존재하는지 확인", description="아이디 찾기 or 비밀번호 찾기 눌렀을 때 본인인증 보내기 전 실행하는 API로 userName, email 필수값")
+//    public ApiResponse findJobUserPwdFromEmail(@RequestBody JobsiteUser user) throws Exception {
+//        return jobsiteUserService.findJobUserPwdFromEmail(user);
+//    }
 
 
     // 본인인증 성공시 새로운 비밀번호 입력 받은 후 DB에 암호화하여 저장
@@ -95,6 +101,12 @@ public class jobsite_userController {
     @Operation(summary = "회원 로그아웃", description="")
     public ApiResponse jobLogout() throws Exception {
         return jobsiteUserService.jobLogout();
+    }
+
+    // jobsite 회원 탈퇴 ( userId, userPwd 일치해야함 )
+    @DeleteMapping("/resign")
+    public ApiResponse jobResign(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.jobResign(user);
     }
 
     // jobsite 회원 정보 수정
