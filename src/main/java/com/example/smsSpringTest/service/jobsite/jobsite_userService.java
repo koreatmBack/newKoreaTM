@@ -144,10 +144,10 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            if(StringUtils.hasText(user.getPhone())){
-                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
-                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
-            }
+//            if(StringUtils.hasText(user.getPhone())){
+//                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
+//                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+//            }
             int findUserId = jobUserMapper.findJobUserIdBeforeCert(user);
             if(findUserId != 0) {
                 apiResponse.setCode("C000");
@@ -170,10 +170,10 @@ public class jobsite_userService {
         JobUserResponse jobUserResponse = new JobUserResponse();
 
         try {
-            if(StringUtils.hasText(user.getPhone())){
-                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
-                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
-            }
+//            if(StringUtils.hasText(user.getPhone())){
+//                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
+//                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+//            }
             String findJobUserId = jobUserMapper.findJobUserId(user).getUserId();
             LocalDate findJobUserCreate = jobUserMapper.findJobUserId(user).getCreatedAt();
             if(!StringUtils.hasText(findJobUserId)){
@@ -471,6 +471,7 @@ public class jobsite_userService {
         JobUserResponse jobUserResponse = new JobUserResponse();
 
         try {
+
             String userPwd = user.getUserPwd();
 
             // 암호화된 비밀번호 체크
@@ -785,10 +786,10 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            if(StringUtils.hasText(user.getPhone())){
-                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
-                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
-            }
+//            if(StringUtils.hasText(user.getPhone())){
+//                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
+//                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+//            }
             int findJobUserPwd = jobUserMapper.findJobUserPwd(user);
             if(findJobUserPwd == 0) {
                 apiResponse.setCode("E002");
