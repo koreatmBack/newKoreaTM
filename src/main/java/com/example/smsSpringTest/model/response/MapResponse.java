@@ -1,7 +1,10 @@
 package com.example.smsSpringTest.model.response;
 
+import com.example.smsSpringTest.model.MapVO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * author : 신기훈
@@ -15,7 +18,9 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NaverMapResponse extends ApiResponse{
-    private String x;
-    private String y;
+public class MapResponse extends ApiResponse{
+    private String x;   // 경도 longitude
+    private String y;   // 위도 latitutde
+    private List<MapVO> mapInfoList;
+    private String university;  // 대학교
 }

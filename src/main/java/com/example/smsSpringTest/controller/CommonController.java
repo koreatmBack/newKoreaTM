@@ -2,11 +2,11 @@ package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.EmailMessage;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.NaverMapResponse;
+import com.example.smsSpringTest.model.response.MapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.service.CommonService;
 import com.example.smsSpringTest.service.EmailService;
-import com.example.smsSpringTest.service.NaverMapService;
+import com.example.smsSpringTest.service.MapService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class CommonController {
 
     private final CommonService commonService;
 
-    private final NaverMapService naverMapService;
+    private final MapService mapService;
 
     private final EmailService emailService;
 
@@ -53,8 +53,8 @@ public class CommonController {
 
     // 주소로 위도 경도 찾기
     @GetMapping("/get/coordinates")
-    public NaverMapResponse getCoordinates(@RequestParam String address) {
-        return naverMapService.getCoordinates(address);
+    public MapResponse getCoordinates(@RequestParam String address) {
+        return mapService.getCoordinates(address);
     }
 
     // 이메일 전송 , 이메일 인증시 사용
@@ -112,14 +112,13 @@ public class CommonController {
 //                });
 //    }
 
-    // 2024-11-22 현재 사용 x , 현재는 위도 경도 찾는 API만 사용
-    @GetMapping("/search")
-    public String searchStations(@RequestParam double latitude, @RequestParam double longitude) {
-        // 서비스에서 API 호출 후 결과 반환
-        log.info("controller : latitud = " + latitude + " longitude = " + longitude);
-//        return naverMapService.searchNearbyStations(latitude, longitude);
-        return naverMapService.searchNearbyStations(latitude, longitude);
+
+    // 카카오 API로 지하철역 찾고 역과 고객사의 거리 구하기
+    @GetMapping("/find/subway")
+    public MapResponse findSubways(@RequestParam double y, @RequestParam double x) throws Exception{
+        return mapService.findNearbySubwayStations(y, x);
     }
+
 
 }
 
