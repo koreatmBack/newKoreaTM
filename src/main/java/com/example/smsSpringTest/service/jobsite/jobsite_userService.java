@@ -894,10 +894,10 @@ public class jobsite_userService {
             socialResponse.setSocialType("kakao");
 //            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
-            socialResponse.setMessage("최초 로그인 1회 한정 본인 인증이 필요합니다.");
+            socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
         } else {
 
-            String userId = jobUserMapper.kakaoUserId(socialUser.getId());
+            String userId = jobUserMapper.socialUserId(socialUser.getId());
 
             try {
 
@@ -1220,10 +1220,10 @@ public class jobsite_userService {
             socialResponse.setSocialType("naver");
 //            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
-            socialResponse.setMessage("최초 로그인 1회 한정 본인 인증이 필요합니다.");
+            socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
         } else {
 
-            String userId = jobUserMapper.kakaoUserId(naverSocialId);
+            String userId = jobUserMapper.socialUserId(naverSocialId);
 
             try {
 
@@ -1339,7 +1339,7 @@ public class jobsite_userService {
         return socialResponse;
     }
 
-    // NAVER API 호출해서 카카오계정(정보) 가져오기
+    // NAVER API 호출해서 네이버 계정(정보) 가져오기
     @Transactional
     private SocialUser getNaverUserDetail(String accessToken) throws Exception {
 
@@ -1551,10 +1551,10 @@ public class jobsite_userService {
             socialResponse.setSocialType("google");
 //            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
-            socialResponse.setMessage("최초 로그인 1회 한정 본인 인증이 필요합니다.");
+            socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
         } else {
 
-            String userId = jobUserMapper.kakaoUserId(googleSocialId);
+            String userId = jobUserMapper.socialUserId(googleSocialId);
 
             try {
 
@@ -1869,10 +1869,10 @@ public class jobsite_userService {
             socialResponse.setSocialType("facebook");
 //            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
-            socialResponse.setMessage("최초 로그인 1회 한정 본인 인증이 필요합니다.");
+            socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
         } else {
 
-            String userId = jobUserMapper.kakaoUserId(facebookSocialId);
+            String userId = jobUserMapper.socialUserId(facebookSocialId);
 
             try {
 

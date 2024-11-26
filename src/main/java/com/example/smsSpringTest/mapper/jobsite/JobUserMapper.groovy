@@ -153,6 +153,7 @@ interface JobUserMapper {
         SELECT user_id
         , user_name
         , phone
+        , email
         FROM jobsite_user
         WHERE user_id = #{userId}
     """)
@@ -370,7 +371,7 @@ interface JobUserMapper {
           FROM jobsite_user_social
          WHERE social_id = #{id}
     """)
-    String kakaoUserId(@Param("id") String id)
+    String socialUserId(@Param("id") String id)
 
     // 프로모션을 통한 소셜 회원가입
     @Insert("""
