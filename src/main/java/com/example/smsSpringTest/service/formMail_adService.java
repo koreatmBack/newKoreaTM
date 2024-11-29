@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -138,9 +140,35 @@ public class formMail_adService {
     // 광고 수정
     public ApiResponse updateAd(fmAd ad) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
-
         try {
+             List<fmAd> findOneAd = adMapper.findOneAd(ad);
+
+            if(ad.getStartDate() != null && ad.getEndDate() != null){
+                // 만약 둘 다 바꿀경우
+                Integer newTotalDate = holidayMapper.onlyTotalDay(ad);
+                log.info(String.valueOf(newTotalDate));
+                adMapper.addTotalDay(newTotalDate, ad.getAid());
+            } else if (ad.getStartDate() != null || ad.getEndDate() != null) {
+                // 만약 start_date 혹은 end_date를 수정하면 평일 광고 일수도 수정해야지
+                if(ad.getStartDate() != null){
+                    // 만약 startDate를 수정한다면
+                    LocalDate newStartDate = ad.getStartDate();
+                    LocalDate originEndDate = findOneAd.get(0).getEndDate();
+                    Integer newTotalDate = holidayMapper.newTotalDay(newStartDate, originEndDate);
+                    adMapper.addTotalDay(newTotalDate, ad.getAid());
+                    log.info(String.valueOf(newTotalDate));
+                } else if(ad.getEndDate() != null){
+                    // 만약 endDate를 수정한다면
+                    LocalDate originStartDate = findOneAd.get(0).getStartDate();
+                    LocalDate newEndDate = ad.getEndDate();
+                    Integer newTotalDate = holidayMapper.newTotalDay(originStartDate, newEndDate);
+                    adMapper.addTotalDay(newTotalDate, ad.getAid());
+                    log.info(String.valueOf(newTotalDate));
+                }
+
+            }
             int updateAd = adMapper.updateAd(ad);
+            log.info("updateAd = " + updateAd);
             if(updateAd == 1){
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("광고 업데이트 성공");
@@ -564,6 +592,39 @@ public class formMail_adService {
             adResponse.setMessage("ERROR");
             log.info(e.getMessage());
         }
+        return adResponse;
+    }
+
+// 11-29 ~
+    // 일단 정렬 , 등록일 조건 없이 시/도, 시,군,구 / 동,읍,면에 대해서만
+    public AdResponse selectByRegions(AdRequest ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        log.info(String.valueOf(ad));
+        try {
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+//            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+            ad.setOffset(offset);
+
+//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+            log.info("page = " + page + " size = " + size + " offset = " + offset);
+            adResponse.setJobSiteList(adMapper.selectByRegions(ad));
+
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+//                adResponse.setTotalPages(totalCount);
+                adResponse.setCode("C000");
+                adResponse.setMessage("지역 선택 조회 성공");
+            } else {
+                adResponse.setCode("E004");
+                adResponse.setMessage("지역 선택 조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+            log.info(e.getMessage());
+        }
+
         return adResponse;
     }
 

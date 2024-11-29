@@ -43,6 +43,7 @@ interface AdMapper {
             , grade
             , sido
             , sigungu
+            , dong_eub_myun
             , hashtag
         ) VALUES (
             #{ad.aid},
@@ -80,6 +81,7 @@ interface AdMapper {
             , #{ad.grade}
             , #{ad.sido}
             , #{ad.sigungu}
+            , #{ad.dongEubMyun}
             , #{ad.hashtag}
         )
 </script>        
@@ -210,7 +212,17 @@ interface AdMapper {
         </if>         
         <if test="ad.grade != null">
             grade = #{ad.grade},
-        </if>     
+        </if>
+        <if test="ad.sido != null">
+            sido = #{ad.sido},
+        </if>
+        <if test="ad.sigungu != null">
+            sigungu = #{ad.sigungu},
+        </if>        
+        <if test="ad.dongEubMyun != null">
+            dong_eub_myun = #{ad.dongEubMyun},
+        </if>
+
      </set>
         WHERE aid = #{ad.aid}
     </script>
@@ -291,7 +303,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<JobSite> allJobsiteList(@Param("paging") Paging paging)
@@ -300,7 +312,7 @@ interface AdMapper {
     @Select("""
         SELECT count(*)
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
     """)
     int allJobsiteListCount()
 
@@ -309,8 +321,8 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
+        WHERE CURDATE() BETWEEN start_date AND end_date
         AND title LIKE CONCAT('%', #{ad.title}, '%')
-        AND end_date >= CURDATE()
     """)
     List<JobSite> searchTitleJobsite(@Param("ad") fmAd ad)
 
@@ -318,7 +330,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
         AND aid = #{ad.aid}
     """)
     List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
@@ -327,7 +339,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
         ORDER BY created_at DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
@@ -337,7 +349,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
         ORDER BY CAST(max_pay AS UNSIGNED) DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
@@ -347,7 +359,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
         ORDER BY (LENGTH(work_day) - LENGTH(REPLACE(work_day, ',', '')) + 1) ASC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
@@ -357,11 +369,46 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE end_date >= CURDATE()
+        WHERE CURDATE() BETWEEN start_date AND end_date
         ORDER BY work_time ASC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<JobSite> orderByWorkTime(@Param("paging") Paging paging)
+
+
+    // 2024-11-29 잡사이트용 조건, 정렬  / 추후 수정 필요하지만 일단 틀 만들어놓기
+    // 기본적으로 페이징 처리와 end_date >= CURDATE() 필수 -> 종료기간 끝난거 제외하기 위해
+
+    // 생각해보니 start_date 와 end_date 사이여야 할 거 같은데, 위에 전부 수정해야하나?
+
+    // 일단 정렬 , 등록일 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+    @Select("""
+    <script>
+        SELECT *
+        FROM formmail_ad
+        WHERE CURDATE() BETWEEN start_date AND end_date
+        <if test="ad.regions != null and ad.regions.size() > 0">
+            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+                (sido = #{region.sido} AND sigungu = #{region.sigungu} 
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun = #{region.dongEubMyun})
+                </if>
+            </foreach>
+        </if>
+        LIMIT #{ad.size}
+        OFFSET #{ad.offset}
+    </script>
+    """)
+    List<JobSite> selectByRegions(@Param("ad") AdRequest ad)
+
+
+
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 
     //-------------------------------------

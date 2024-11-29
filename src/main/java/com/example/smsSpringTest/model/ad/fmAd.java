@@ -92,6 +92,8 @@ public class fmAd {
 
     private String sigungu;
 
+    private String dongEubMyun; // 동/읍/면
+
     private String hashtag;
 
     private Integer grade;

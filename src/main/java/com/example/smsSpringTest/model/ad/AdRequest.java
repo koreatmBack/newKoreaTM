@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * author : 신기훈
@@ -82,6 +83,8 @@ public class AdRequest {
 
     private String sigungu;
 
+    private String dongEubMyun;
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
 
@@ -89,4 +92,6 @@ public class AdRequest {
     private int size;
 
     private int offset;
+
+    private List<RegionRequest> regions;
 }

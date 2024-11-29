@@ -56,7 +56,6 @@ public class formMail_adController {
 
     // 광고 업데이트
     @PutMapping("/updateAd")
-
     public ApiResponse updateAd(@RequestBody fmAd ad) throws Exception {
         return formMailAdService.updateAd(ad);
     }
@@ -223,6 +222,12 @@ public class formMail_adController {
         AdResponse adResponse = new AdResponse();
         adResponse = formMailAdService.orderByWorkTime(paging);
         return adResponse;
+    }
+
+    // 11-29 ~
+    @PostMapping("/selectByRegions")
+    public AdResponse selectByRegions(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.selectByRegions(ad);
     }
 
     // -------------------------

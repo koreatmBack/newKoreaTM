@@ -36,9 +36,9 @@ interface HolidayMapper {
     """)
     int addWeekend(@Param("locdate") LocalDate localDate)
 
-    // 평일 일수 계산하는법( 시작일 제외 )
+    // 평일 일수 계산하는법( 시작일 포함 )
     @Select("""
-    SELECT DATEDIFF(#{ad.endDate}, #{ad.startDate})
+    SELECT DATEDIFF(#{ad.endDate}, #{ad.startDate}) +1
     - (SELECT COUNT(*) FROM formmail_holiday fh
        WHERE fh.holiday_date BETWEEN #{ad.startDate} AND #{ad.endDate}) 
     FROM formmail_ad fa
@@ -47,12 +47,21 @@ interface HolidayMapper {
     int totalDay(@Param("ad") fmAd ad, @Param("serialNumber") String serialNumber)
 
 
-    // 평일 일수 계산하는법 (시리얼 넘버 필요 x , 시작일 제외)
+    // 평일 일수 계산하는법 (시리얼 넘버 필요 x , 시작일 포함)
     @Select("""
-    SELECT DATEDIFF(#{ad.endDate}, #{ad.startDate})
+    SELECT DATEDIFF(#{ad.endDate}, #{ad.startDate}) +1
     - (SELECT COUNT(*) FROM formmail_holiday fh
        WHERE fh.holiday_date BETWEEN #{ad.startDate} AND #{ad.endDate}) AS total_days
     """)
     Integer onlyTotalDay(@Param("ad") fmAd ad)
+
+    // 광고 수정할때 평일 일수 다시 계산하기 위한 매퍼
+    // 평일 일수 계산하는법 (시작일, 종료일)
+    @Select("""
+    SELECT DATEDIFF(#{endDate}, #{startDate}) +1
+    - (SELECT COUNT(*) FROM formmail_holiday fh
+       WHERE fh.holiday_date BETWEEN #{startDate} AND #{endDate}) AS total_days
+    """)
+    Integer newTotalDay(@Param("startDate") LocalDate startDate , @Param("endDate") LocalDate endDate)
 
 }
