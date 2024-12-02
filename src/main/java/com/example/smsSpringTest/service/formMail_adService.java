@@ -629,6 +629,77 @@ public class formMail_adService {
     }
 
 
+    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+    // 정렬 조건 추가
+    public AdResponse selectByRegionsSort(AdRequest ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+//            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+            ad.setOffset(offset);
+
+//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+            log.info("page = " + page + " size = " + size + " offset = " + offset);
+
+//            if("오늘 등록".equals(ad.getRegisterType())){
+//
+//            } else if("3일이내 등록".equals(ad.getRegisterType())){
+//
+//            } else if("7일이내 등록".equals(ad.getRegisterType())){
+//
+//            }
+
+            if("최신등록순".equals(ad.getSortType())){
+                ad.setSortType("최신등록순");
+            } else if("시급높은순".equals(ad.getSortType())) {
+                ad.setSalaryType("시급");
+                ad.setSortType("salary");
+                // 샐러리 타입 (시급, 주급, 일급 ,월급, 연봉)
+                // 샐러리 타입 조건으로 주고, salary DESC; 하면 될듯?
+            } else if("주급높은순".equals(ad.getSortType())){
+                ad.setSalaryType("주급");
+                ad.setSortType("salary");
+            } else if("일급높은순".equals(ad.getSortType())){
+                ad.setSalaryType("일급");
+                ad.setSortType("salary");
+            } else if("월급높은순".equals(ad.getSortType())){
+                ad.setSalaryType("월급");
+                ad.setSortType("salary");
+            } else if("연봉높은순".equals(ad.getSortType())){
+                ad.setSalaryType("연봉");
+                ad.setSortType("salary");
+            }
+            adResponse.setJobSiteList(adMapper.selectByRegionsSort(ad));
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+//                adResponse.setTotalPages(totalCount);
+                adResponse.setCode("C000");
+                adResponse.setMessage("조회 성공");
+            } else {
+                adResponse.setCode("E004");
+                adResponse.setMessage("조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+            log.info(e.getMessage());
+        }
+
+        return adResponse;
+    }
+
+
+
+
+
+
+
+
+
+
+
 // ------------------ 광고 테이블 끝 -----------------
 
 

@@ -225,9 +225,18 @@ public class formMail_adController {
     }
 
     // 11-29 ~
+
+    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
     @PostMapping("/selectByRegions")
     public AdResponse selectByRegions(@RequestBody AdRequest ad) throws Exception {
         return formMailAdService.selectByRegions(ad);
+    }
+
+    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+    // 정렬 조건 추가
+    @PostMapping("/selectByRegions/sort")
+    public AdResponse selectByRegionsSort(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.selectByRegionsSort(ad);
     }
 
     // -------------------------

@@ -93,5 +93,13 @@ public class AdRequest {
 
     private int offset;
 
-    private List<RegionRequest> regions;
+    private List<RegionRequest> regions; // 지역 검색용 List
+
+    private String registerType; // 조회시 등록 조건용
+
+    private String sortType; // 조회시 정렬 조건용
+
+    private String salary; // 급여
+
+    private String salaryType; // 급여 형태(시급, 주급, 일급, 월급, 연봉)
 }

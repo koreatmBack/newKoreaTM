@@ -45,6 +45,10 @@ public class JobSite {
 
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate startDate;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate endDate;
 
     private String createdAt;
@@ -63,4 +67,7 @@ public class JobSite {
 
     private int offset;
 
+    private String salary; // 급여
+
+    private String salaryType; // 급여 형태(시급, 주급, 일급, 월급, 연봉)
 }

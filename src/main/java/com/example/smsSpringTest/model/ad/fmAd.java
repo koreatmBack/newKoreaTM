@@ -97,4 +97,8 @@ public class fmAd {
     private String hashtag;
 
     private Integer grade;
+
+    private String salary; // 급여
+
+    private String salaryType; // 급여 형태(시급, 주급, 일급, 월급, 연봉)
 }

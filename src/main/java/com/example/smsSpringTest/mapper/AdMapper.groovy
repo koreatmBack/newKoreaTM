@@ -381,7 +381,7 @@ interface AdMapper {
 
     // 생각해보니 start_date 와 end_date 사이여야 할 거 같은데, 위에 전부 수정해야하나?
 
-    // 일단 정렬 , 등록일 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+    // 일단 정렬 , 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
     @Select("""
     <script>
         SELECT *
@@ -405,7 +405,67 @@ interface AdMapper {
     """)
     List<JobSite> selectByRegions(@Param("ad") AdRequest ad)
 
+    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+    // 정렬 조건 추가
+    @Select("""
+    <script>
+        SELECT *
+        FROM formmail_ad
+        WHERE 
+        <if test="ad.registerType != null">
+            <choose>
+                <when test="ad.registerType == '오늘 등록'">
+                    end_date >= CURDATE() AND start_date = CURDATE()
+                </when>
+                <when test="ad.registerType == '3일이내 등록'">
+                    end_date >= CURDATE()
+           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -3 DAY) AND CURDATE() 
+                </when>                 
+                <when test="ad.registerType == '7일이내 등록'">
+                    end_date >= CURDATE()
+           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -7 DAY) AND CURDATE()
+                </when>                              
 
+            </choose>
+        </if>
+        <if test="ad.registerType == null">
+            CURDATE() BETWEEN start_date AND end_date
+        </if>
+        
+        <if test="ad.regions != null and ad.regions.size() > 0">
+            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+                (sido = #{region.sido} 
+                
+                <if test="region.sigungu != null">
+                AND sigungu = #{region.sigungu} 
+                </if>
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun = #{region.dongEubMyun})
+                </if>
+            </foreach>
+        </if>
+        <if test="ad.salaryType != null">
+         AND salary_type = #{ad.salaryType}        
+        </if>
+        <if test="ad.sortType != null">
+            <choose>
+                <when test="ad.sortType == '최신등록순'">
+                    ORDER BY created_at DESC
+                </when>
+                <otherwise>
+                    ORDER BY salary DESC
+                </otherwise>
+            </choose>
+        </if>
+        LIMIT #{ad.size}
+        OFFSET #{ad.offset}
+    </script>
+    """)
+    List<JobSite> selectByRegionsSort(@Param("ad") AdRequest ad)
 
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
