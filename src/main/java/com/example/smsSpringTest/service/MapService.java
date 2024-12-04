@@ -254,8 +254,6 @@ public class MapService {
             log.info(String.format("Place: %s, Longitude: %s, Latitude: %s, durationTime: %s ,Distance: %dm",
                     placeName, subwayX, subwayY, newDurationTime ,distance));
 
-//            distance /= 80;
-//            String newDistance = String.valueOf(distance);
             double result = (double) distance / 1000;
             String KmDistance = String.valueOf(Math.round((result * 10)) / 10.0);
             mapInfoList.add(new MapVO(subwayX , subwayY, "", placeName, "걸어서 "+ newDurationTime+"분" , KmDistance+"km"));
