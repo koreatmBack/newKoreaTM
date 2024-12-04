@@ -229,13 +229,11 @@ public class MapService {
             }
 
         }
-
         List<MapVO> mapInfoList = new ArrayList<>();
         log.info(documents.toString());
         // 지하철역 결과 처리
         for (JsonElement element : documents) {
             JsonObject document = element.getAsJsonObject();
-
             // 필요한 데이터 추출
             String placeName = document.get("place_name").getAsString();
             String subwayY = String.valueOf(document.get("x").getAsDouble()); // 위도
