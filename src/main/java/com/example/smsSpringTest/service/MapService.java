@@ -166,6 +166,7 @@ public class MapService {
         }
         return mapResponse;
     }
+
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
     @Value("${kakao.client-id}")
