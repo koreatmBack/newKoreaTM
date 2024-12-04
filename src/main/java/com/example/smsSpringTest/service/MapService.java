@@ -177,7 +177,7 @@ public class MapService {
         MapResponse mapResponse = new MapResponse();
     try{
 
-        String schoolURL = String.format("https://dapi.kakao.com/v2/local/search/category.json?category_group_code=SC4&x=%f&y=%f&radius=15000",
+        String schoolURL = String.format("https://dapi.kakao.com/v2/local/search/category.json?category_group_code=SC4&x=%f&y=%f&radius=3000",
                 y, x);
         String url = String.format("https://dapi.kakao.com/v2/local/search/category.json?category_group_code=SW8&x=%f&y=%f&radius=1500"
                 , y, x);
@@ -244,18 +244,24 @@ public class MapService {
             String placeName = document.get("place_name").getAsString();
             String subwayY = String.valueOf(document.get("x").getAsDouble()); // 위도
             String subwayX = String.valueOf(document.get("y").getAsDouble());  // 경도
-            int distance = Integer.parseInt(document.get("distance").getAsString()); // 거리
+            int distance = Integer.parseInt(document.get("distance").getAsString()); // 거리 km
+//            int durationTime = Integer.parseInt(document.get("distance").getAsString()); // 걸리는 시간
+            int durationTime = distance; // 걸리는 시간
 
-            log.info(String.format("Place: %s, Longitude: %s, Latitude: %s, Distance: %dm",
-                    placeName, subwayX, subwayY, distance));
+            durationTime /= 80;
+            String newDurationTime = String.valueOf(durationTime);
 
-            distance /= 80;
-            String newDistance = String.valueOf(distance);
+            log.info(String.format("Place: %s, Longitude: %s, Latitude: %s, durationTime: %s ,Distance: %dm",
+                    placeName, subwayX, subwayY, newDurationTime ,distance));
+
+//            distance /= 80;
+//            String newDistance = String.valueOf(distance);
             // 데이터 출력
 //            log.info(String.format("Place: %s, Longitude: %.6f, Latitude: %.6f, Distance: %sm",
 //                    placeName, y, x, distance));
-
-            mapInfoList.add(new MapVO(subwayX , subwayY, "", placeName, "걸어서 "+ newDistance+"분"));
+            double result = (double) distance / 1000;
+            String KmDistance = String.valueOf(Math.round((result * 10)) / 10.0);
+            mapInfoList.add(new MapVO(subwayX , subwayY, "", placeName, "걸어서 "+ newDurationTime+"분" , KmDistance+"km"));
         }
         mapResponse.setUniversity(university);
         mapResponse.setMapInfoList(mapInfoList);

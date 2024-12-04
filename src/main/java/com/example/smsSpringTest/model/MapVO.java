@@ -24,5 +24,8 @@ public class MapVO extends ApiResponse {
     private String y; // 위도, latitude  ex : 127.0831787
     private String university; // 대학교
     private String subway; // 지하철역
-    private String distance;
+    private String durationTime; // 걸리는 시간
+    private String distance; // 거리
+
+
 }
