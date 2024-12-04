@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
-class SmsSpringTestApplicationTests {
+class JobsiteApplicationTests {
 
 	@Test
 	void contextLoads() {
