@@ -65,32 +65,6 @@ public class MapService {
     }
 
 
-
-    // 주소로 받아올때. ex : 서울 광진구 자양로 95
-//    public Mono<String> getCoordinates(String address) {
-//        return this.mapWebClient.get()
-//                .uri("/map-geocode/v2/geocode?query={address}", address)
-//                .retrieve()
-//                .bodyToMono(String.class);
-//    }
-
-//    public Mono<String> searchNearbyStations(double latitude, double longitude) {
-//        String query = "지하철";
-//        String url = String.format("/v1/search/local.json?query=%s&coordinate=%f,%f&radius=1000", "지하철역", latitude, longitude);
-//        log.info("Request URL: " + url);
-//        return this.searchWebClient.get()
-//                .uri(uriBuilder -> uriBuilder.path("/v1/search/local.json")
-////                .uri(uriBuilder -> uriBuilder.path("/map-geocode/v2/geocode")
-//                        .queryParam("query", query)
-//                        .queryParam("coordinate", latitude + "," + longitude)
-//                        .queryParam("radius", 5000) // 반경 5km 내에서 검색
-//                        .queryParam("display", 10)
-//                        .build())
-//                .retrieve()
-//                .bodyToMono(String.class);
-//    }
-
-
     // 위도 경도 찾는 메서드
     public MapResponse getCoordinates(String address) {
         MapResponse mapResponse = new MapResponse();
