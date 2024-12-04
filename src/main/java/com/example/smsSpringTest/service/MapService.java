@@ -256,9 +256,6 @@ public class MapService {
 
 //            distance /= 80;
 //            String newDistance = String.valueOf(distance);
-            // 데이터 출력
-//            log.info(String.format("Place: %s, Longitude: %.6f, Latitude: %.6f, Distance: %sm",
-//                    placeName, y, x, distance));
             double result = (double) distance / 1000;
             String KmDistance = String.valueOf(Math.round((result * 10)) / 10.0);
             mapInfoList.add(new MapVO(subwayX , subwayY, "", placeName, "걸어서 "+ newDurationTime+"분" , KmDistance+"km"));
