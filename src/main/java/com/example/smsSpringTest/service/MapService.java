@@ -227,10 +227,6 @@ public class MapService {
             if(StringUtils.hasText(university)){
                 break;
             }
-//            System.out.println("Category Name: " + doc.get("category_name").getAsString());
-//            System.out.println("Distance: " + doc.get("distance").getAsString() + " meters");
-//            System.out.println("Coordinates: (" + doc.get("x").getAsString() + ", " + doc.get("y").getAsString() + ")");
-//            System.out.println();
 
         }
 
