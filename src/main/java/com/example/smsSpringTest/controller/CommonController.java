@@ -63,60 +63,22 @@ public class CommonController {
         return emailService.sendEmail(emailMessage);
     }
 
-
-//    @GetMapping("/get/coordinates")
-//    public Mono<String> getCoordinates(@RequestParam String address) {
-//        return naverMapService.getCoordinates(address);
-//    }
-
-//    @GetMapping("/nearby-stations")
-//    public Mono<String> getNearbyStations(@RequestParam double latitude, @RequestParam double longitude) {
-//       log.info("Latitude: " + latitude + ", Longitude: " + longitude);
-//        return naverMapService.searchNearbyStations(latitude, longitude)
-//                .map(response -> {
-//                    try {
-//                        // JSON 응답을 파싱하여 역 이름, 거리, 도보 시간 계산
-//                        JsonNode jsonResponse = objectMapper.readTree(response);
-////                        JsonNode stationsArray = jsonResponse.get("items");
-//                        JsonNode stationsArray = jsonResponse.path("items");
-//                        List<JsonNode> resultArray = new ArrayList<>();
-//                        log.info("jsonResponse = " + jsonResponse);
-//                        log.info("stationarray = " + stationsArray);
-//                        // 역 정보 파싱 및 처리
-//                        for (JsonNode station : stationsArray) {
-//                            String stationName = station.get("title").asText();
-//                            double stationLat = station.get("mapy").asDouble();
-//                            double stationLon = station.get("mapx").asDouble();
-//
-//                            // 거리 및 도보 시간 계산
-//                            double distance = DistanceCalculator.calculateDistance(latitude, longitude, stationLat, stationLon);
-//                            String walkingTime = DistanceCalculator.getWalkingTime(distance);
-//
-//                            // 결과 저장
-//                            JsonNode stationInfo = objectMapper.createObjectNode()
-//                                    .put("name", stationName)
-//                                    .put("distance", String.format("%.0f m", distance))
-//                                    .put("walkingTime", walkingTime);
-//
-//                            resultArray.add(stationInfo);
-//                        }
-//
-//                        // 최종 결과를 JSON 문자열로 변환
-//                        JsonNode result = objectMapper.createObjectNode().set("stations", objectMapper.valueToTree(resultArray));
-//
-//                        return result.toString();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        return "{}"; // 예외가 발생하면 빈 JSON 객체 반환
-//                    }
-//                });
-//    }
-
-
     // 카카오 API로 지하철역 찾고 역과 고객사의 거리 구하기
     @GetMapping("/find/subway")
     public MapResponse findSubways(@RequestParam double y, @RequestParam double x) throws Exception{
         return mapService.findNearbySubwayStations(y, x);
+    }
+
+    @PostMapping("/change/url/short")
+    public MapResponse generateShortenUrl(@RequestBody String originalUrl) throws Exception {
+        return commonService.generateShortenUrl(originalUrl);
+    }
+
+    // 단축 URL을 통해 리다이렉트 처리
+    @GetMapping("/change/url/original")
+    public MapResponse redirect(@RequestBody String shortPath) throws Exception {
+
+        return commonService.getOriginalUrlByShortUrl(shortPath);
     }
 
 

@@ -23,7 +23,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -206,29 +209,47 @@ public class MapService {
         }
         List<MapVO> mapInfoList = new ArrayList<>();
         log.info(documents.toString());
+
+        // 중복 제거를 위한 임시 Map (placeName을 키로 사용)
+        LinkedHashMap<String, MapVO> uniqueMap = new LinkedHashMap<>();
+
         // 지하철역 결과 처리
         for (JsonElement element : documents) {
             JsonObject document = element.getAsJsonObject();
             // 필요한 데이터 추출
-            String placeName = document.get("place_name").getAsString();
+            String fullPlaceName = document.get("place_name").getAsString(); // 전체 이름 (예: 군자역 7호선)
+            String stationName = fullPlaceName.split(" ")[0]; // 역 이름만 추출 (예: 군자역)
             String subwayY = String.valueOf(document.get("x").getAsDouble()); // 위도
-            String subwayX = String.valueOf(document.get("y").getAsDouble());  // 경도
-            int distance = Integer.parseInt(document.get("distance").getAsString()); // 거리 km
-//            int durationTime = Integer.parseInt(document.get("distance").getAsString()); // 걸리는 시간
-            int durationTime = distance; // 걸리는 시간
+            String subwayX = String.valueOf(document.get("y").getAsDouble()); // 경도
+            int  distance = Integer.parseInt(document.get("distance").getAsString()); // 거리 (m)
+            int durationTime = distance / 65; // 걸리는 시간 (분 단위로 변환)
 
-            durationTime /= 80;
             String newDurationTime = String.valueOf(durationTime);
 
             log.info(String.format("Place: %s, Longitude: %s, Latitude: %s, durationTime: %s ,Distance: %dm",
-                    placeName, subwayX, subwayY, newDurationTime ,distance));
+                    fullPlaceName, subwayX, subwayY, newDurationTime ,distance));
 
             double result = (double) distance / 1000;
-            String KmDistance = String.valueOf(Math.round((result * 10)) / 10.0);
-            mapInfoList.add(new MapVO(subwayX , subwayY, "", placeName, "걸어서 "+ newDurationTime+"분" , KmDistance+"km"));
+            String KmDistance = String.format("%.1f", result); // 소수점 1자리까지 유지
+
+            MapVO mapVO = new MapVO(subwayX, subwayY, "", fullPlaceName, "걸어서 " + newDurationTime + "분", KmDistance + "km");
+
+            // 중복 제거: 역 이름(stationName)을 기준으로 중복 제거
+            uniqueMap.putIfAbsent(stationName, mapVO);
+
         }
+
+        // 중복 제거된 리스트를 가져옴
+        List<MapVO> uniqueMapInfoList = new ArrayList<>(uniqueMap.values());
+
+        // 거리(distance)가 작은 순서대로 정렬 후 상위 3개만 선택
+        List<MapVO> sortedMapInfoList = uniqueMapInfoList.stream()
+                .sorted(Comparator.comparingDouble(vo -> Double.parseDouble(vo.getDistance().replace("km", "").trim())))
+                .limit(3)
+                .collect(Collectors.toList());
+        log.info("sortedMap = " + sortedMapInfoList);
         mapResponse.setUniversity(university);
-        mapResponse.setMapInfoList(mapInfoList);
+        mapResponse.setMapInfoList(sortedMapInfoList);
         mapResponse.setCode("C000");
         mapResponse.setMessage("성공");
     } catch (Exception e) {

@@ -1,8 +1,11 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.config.S3Uploader;
+import com.example.smsSpringTest.mapper.ChangeUrlMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
+import com.example.smsSpringTest.model.response.MapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
+import com.example.smsSpringTest.util.Base62;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -84,6 +87,45 @@ public class CommonService {
         return ip;
     }
 
+    private final Base62 base62;
+    private final ChangeUrlMapper changeUrlMapper;
 
+    // url 단축
+    public MapResponse generateShortenUrl(String originalUrl) throws Exception {
+        MapResponse mapResponse = new MapResponse();
+
+        try {
+
+            String shortURL = base62.generateShortUrl(originalUrl);
+            // 4글자로 자르기 (만약 길이가 4자 이상이면)
+            if (shortURL.length() > 4) {
+                shortURL = shortURL.substring(0, 4);  // 첫 4글자만 사용
+            }
+            log.info("original = " + originalUrl);
+            log.info("shortURL = " + shortURL);
+            mapResponse.setX(shortURL);
+            mapResponse.setCode("C000");
+            int changeUrl = changeUrlMapper.changeUrl(originalUrl, shortURL);
+
+        } catch (Exception e) {
+
+        }
+
+        return mapResponse;
+    }
+
+    public MapResponse getOriginalUrlByShortUrl(String shortenUrl) {
+        MapResponse mapResponse = new MapResponse();
+        try {
+
+            String originalUrl = changeUrlMapper.originalUrl(shortenUrl);
+            mapResponse.setX(originalUrl);
+            mapResponse.setCode("C000");
+        } catch (Exception e) {
+
+        }
+
+        return mapResponse;
+    }
 
 }
