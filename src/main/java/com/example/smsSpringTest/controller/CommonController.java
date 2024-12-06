@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.EmailMessage;
+import com.example.smsSpringTest.model.UrlShorten;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.MapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
@@ -70,15 +71,15 @@ public class CommonController {
     }
 
     @PostMapping("/change/url/short")
-    public MapResponse generateShortenUrl(@RequestBody String originalUrl) throws Exception {
-        return commonService.generateShortenUrl(originalUrl);
+    public MapResponse generateShortenUrl(@RequestBody UrlShorten url) throws Exception {
+        return commonService.generateShortenUrl(url);
     }
 
     // 단축 URL을 통해 리다이렉트 처리
     @GetMapping("/change/url/original")
-    public MapResponse redirect(@RequestBody String shortPath) throws Exception {
+    public MapResponse redirect(@RequestBody UrlShorten url) throws Exception {
 
-        return commonService.getOriginalUrlByShortUrl(shortPath);
+        return commonService.getOriginalUrlByShortUrl(url);
     }
 
 

@@ -3,6 +3,7 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.config.S3Uploader;
 import com.example.smsSpringTest.mapper.ChangeUrlMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
+import com.example.smsSpringTest.model.UrlShorten;
 import com.example.smsSpringTest.model.response.MapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.util.Base62;
@@ -91,11 +92,11 @@ public class CommonService {
     private final ChangeUrlMapper changeUrlMapper;
 
     // url 단축
-    public MapResponse generateShortenUrl(String originalUrl) throws Exception {
+    public MapResponse generateShortenUrl(UrlShorten url) throws Exception {
         MapResponse mapResponse = new MapResponse();
 
         try {
-
+            String originalUrl = url.getOriginalUrl();
             String shortURL = base62.generateShortUrl(originalUrl);
             // 4글자로 자르기 (만약 길이가 4자 이상이면)
             if (shortURL.length() > 4) {
@@ -114,11 +115,11 @@ public class CommonService {
         return mapResponse;
     }
 
-    public MapResponse getOriginalUrlByShortUrl(String shortenUrl) {
+    public MapResponse getOriginalUrlByShortUrl(UrlShorten url) {
         MapResponse mapResponse = new MapResponse();
         try {
 
-            String originalUrl = changeUrlMapper.originalUrl(shortenUrl);
+            String originalUrl = changeUrlMapper.originalUrl(url.getShortUrl());
             mapResponse.setX(originalUrl);
             mapResponse.setCode("C000");
         } catch (Exception e) {
