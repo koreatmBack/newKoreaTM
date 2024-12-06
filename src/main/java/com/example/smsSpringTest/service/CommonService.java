@@ -104,14 +104,21 @@ public class CommonService {
             }
             log.info("original = " + originalUrl);
             log.info("shortURL = " + shortURL);
-            urlResponse.setShortUrl(shortURL);
-            urlResponse.setCode("C000");
-            urlResponse.setMessage("변환 성공");
+
             int changeUrl = changeUrlMapper.changeUrl(originalUrl, shortURL);
+            if(changeUrl == 0) {
+                urlResponse.setCode("C003");
+                urlResponse.setMessage("변환 실패");
+             } else {
+                urlResponse.setCode("C000");
+                urlResponse.setMessage("변환 성공");
+                urlResponse.setShortUrl(shortURL);
+            }
 
         } catch (Exception e) {
             urlResponse.setCode("E001");
             urlResponse.setMessage("변환 실패");
+            log.info(e.getMessage());
         }
 
         return urlResponse;
@@ -120,14 +127,16 @@ public class CommonService {
     public UrlResponse getOriginalUrlByShortUrl(UrlShorten url) {
         UrlResponse urlResponse = new UrlResponse();
         try {
-
+            log.info("short url = " + url.getShortUrl());
             String originalUrl = changeUrlMapper.originalUrl(url.getShortUrl());
+            log.info("originalUrl = " + originalUrl);
             urlResponse.setOriginalUrl(originalUrl);
             urlResponse.setCode("C000");
             urlResponse.setMessage("변환 성공");
         } catch (Exception e) {
             urlResponse.setCode("E001");
             urlResponse.setMessage("변환 실패");
+            log.info(e.getMessage());
         }
 
         return urlResponse;
