@@ -321,7 +321,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/v1/common/upload/photo", "/api/v1/common/upload/photo"
                 // swagger
                 , "/swagger-ui/**", "/v3/**", "/swagger-resources/**"
-
+                // url 전환
+                , "/api/v1/common/change/url/short", "/v1/common/change/url/short"
+                ,  "/api/v1/common/change/url/original", "/v1/common/change/url/original"
         };
 
         for (String allowedURI : allowedURIs) {
