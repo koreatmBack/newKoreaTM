@@ -4,8 +4,8 @@ import com.example.smsSpringTest.config.S3Uploader;
 import com.example.smsSpringTest.mapper.ChangeUrlMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.model.UrlShorten;
-import com.example.smsSpringTest.model.response.MapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
+import com.example.smsSpringTest.model.response.UrlResponse;
 import com.example.smsSpringTest.util.Base62;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,8 +92,8 @@ public class CommonService {
     private final ChangeUrlMapper changeUrlMapper;
 
     // url 단축
-    public MapResponse generateShortenUrl(UrlShorten url) throws Exception {
-        MapResponse mapResponse = new MapResponse();
+    public UrlResponse generateShortenUrl(UrlShorten url) throws Exception {
+        UrlResponse urlResponse = new UrlResponse();
 
         try {
             String originalUrl = url.getOriginalUrl();
@@ -104,29 +104,33 @@ public class CommonService {
             }
             log.info("original = " + originalUrl);
             log.info("shortURL = " + shortURL);
-            mapResponse.setX(shortURL);
-            mapResponse.setCode("C000");
+            urlResponse.setShortUrl(shortURL);
+            urlResponse.setCode("C000");
+            urlResponse.setMessage("변환 성공");
             int changeUrl = changeUrlMapper.changeUrl(originalUrl, shortURL);
 
         } catch (Exception e) {
-
+            urlResponse.setCode("E001");
+            urlResponse.setMessage("변환 실패");
         }
 
-        return mapResponse;
+        return urlResponse;
     }
 
-    public MapResponse getOriginalUrlByShortUrl(UrlShorten url) {
-        MapResponse mapResponse = new MapResponse();
+    public UrlResponse getOriginalUrlByShortUrl(UrlShorten url) {
+        UrlResponse urlResponse = new UrlResponse();
         try {
 
             String originalUrl = changeUrlMapper.originalUrl(url.getShortUrl());
-            mapResponse.setX(originalUrl);
-            mapResponse.setCode("C000");
+            urlResponse.setOriginalUrl(originalUrl);
+            urlResponse.setCode("C000");
+            urlResponse.setMessage("변환 성공");
         } catch (Exception e) {
-
+            urlResponse.setCode("E001");
+            urlResponse.setMessage("변환 실패");
         }
 
-        return mapResponse;
+        return urlResponse;
     }
 
 }
