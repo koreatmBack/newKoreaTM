@@ -1,9 +1,6 @@
 package com.example.smsSpringTest.model.response;
 
-import com.example.smsSpringTest.model.ad.AdRequest;
-import com.example.smsSpringTest.model.ad.JobSite;
-import com.example.smsSpringTest.model.ad.fmAd;
-import com.example.smsSpringTest.model.ad.fmAdImage;
+import com.example.smsSpringTest.model.ad.*;
 import com.example.smsSpringTest.model.findCompanyAndUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -29,6 +26,7 @@ public class AdResponse extends ApiResponse{
     private List<JobSite> jobSiteList;
     private List<findCompanyAndUser> findCompanyAndUserList;
     private List<fmAdImage> fmAdImageList;
+    private List<AdNearInfo> nearInfoList;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;

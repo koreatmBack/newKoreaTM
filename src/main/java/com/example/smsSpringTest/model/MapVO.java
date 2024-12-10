@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MapVO extends ApiResponse {
-    private String x;  // 경도 , longitude ex : 37.5361988
-    private String y; // 위도, latitude  ex : 127.0831787
+    private double x;  // 경도 , longitude ex : 37.5361988
+    private double y; // 위도, latitude  ex : 127.0831787
     private String university; // 대학교
     private String subway; // 지하철역
     private String durationTime; // 걸리는 시간

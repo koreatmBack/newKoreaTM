@@ -6,6 +6,7 @@ import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.HolidayMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
+import com.example.smsSpringTest.model.ad.AdNearInfo;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.formMail_file;
@@ -14,6 +15,7 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,7 @@ public class formMail_adService {
     private final CommonMapper commonMapper;
     private final HolidayMapper holidayMapper;
     private final S3Uploader s3Uploader;
+    private final MapService mapService;
 //    private final RedisTemplate<String, Object> redisTemplate;
 
     // 광고 등록
@@ -63,6 +66,20 @@ public class formMail_adService {
                 if(dupImgurl == 0){
                     int addUrl = commonMapper.addUrl(ad);
                 }
+
+                // getCoordinates로 위도 , 경도 구하고
+                // 주변 정보 찾는 api 실행하여야함
+                // 클라이언트에서 할 부분
+
+
+                // 선택한 정보들 담기
+                if(ad.getNearInfoList() != null) {
+                    for(AdNearInfo near : ad.getNearInfoList()) {
+                        near.setAid(ad.getAid());
+                        adMapper.addNearInfo(near);
+                    }
+                }
+
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("광고 등록 성공");
             } else {
@@ -89,6 +106,50 @@ public class formMail_adService {
             return null;
         }
     }
+
+    // 주변 역 담는 api 비동기로 실행시킬 것
+//    public ApiResponse chooseType(AdNearInfo near) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//
+//        try {
+//            // 디폴트 상태 N
+//            near.setStatus("N");
+//
+//            if("선택".equals(near.getType())){
+//                // 선택
+//
+//                // 값이 있는지 체크
+//                int dupChkNearInfo = adMapper.dupChkNearInfo(near);
+//                if(dupChkNearInfo == 0) {
+//                    // 값이 없으면 새로 추가
+//                    int addNearInfo = adMapper.addNearInfo(near);
+//                } else {
+//                    // 값이 있으면 수정
+//
+//                }
+//                apiResponse.setCode("C000");
+//                apiResponse.setMessage("선택");
+//            } else {
+//                // 선택해제
+//
+//                // 값이 있는지 체크
+//                int dupChkNearInfo = adMapper.dupChkNearInfo(near);
+//                if(dupChkNearInfo == 1) {
+//                    // 값이 있으면 값 삭제
+//                    int deleteOneNearInfo = adMapper.deleteOneNearInfo(near);
+//                }
+//                apiResponse.setCode("C000");
+//                apiResponse.setMessage("선택 해제");
+//            }
+//        } catch (Exception e) {
+//            apiResponse.setCode("E001");
+//            apiResponse.setMessage("Error!!!");
+//            log.info(e.getMessage());
+//        }
+//
+//        return apiResponse;
+//    }
+
 
     // 광고 조회
     public AdResponse fmAdList(AdRequest adRequest) throws Exception {
@@ -167,6 +228,50 @@ public class formMail_adService {
                 }
 
             }
+
+//            // 지역 수정하면
+//            if(ad.getAddress() != null){
+////                // 지역 정보 전체 삭제
+////                int deleteNearInfo = adMapper.deleteNearInfo(ad);
+////                List<Double> getCoordinate = mapService.addCoordinates(ad.getAddress());
+////                double x = getCoordinate.get(0);
+////                double y = getCoordinate.get(1);
+////                log.info("수정시 x = " + x + " y = " +  y);
+////                ad.setX(x);
+////                ad.setY(y);
+////
+////                // 주변 정보 저장하기
+////                String university = null;
+////                AdNearInfo adNearInfo = new AdNearInfo();
+////                adNearInfo.setAid(ad.getAid());
+////                List<MapVO> newNearInfo = mapService.findNearInfo(y, x);
+////                for(MapVO mapVO : newNearInfo) {
+////                    adNearInfo.setNearStation(mapVO.getSubway());
+////                    adNearInfo.setDistance(mapVO.getDistance());
+////                    adNearInfo.setDurationTime(mapVO.getDurationTime());
+////                    university = mapVO.getUniversity();
+////                    int addNearInfo = adMapper.addNearInfo(adNearInfo);
+////                }
+////                ad.setNearUniversity(university);
+//
+//
+//                // 지역 정보 전체 삭제
+//                int deleteNearInfo = adMapper.deleteNearInfo(ad);
+//
+//                // getCoordinates로 위도 , 경도 구하고
+//                // 주변 정보 찾는 api 실행하여야함
+//                // 클라이언트에서 할 부분
+//
+//
+//                // 선택한 정보들 담기
+//                if(ad.getNearInfoList() != null) {
+//                    for(AdNearInfo near : ad.getNearInfoList()) {
+//                        near.setAid(ad.getAid());
+//                        adMapper.addNearInfo(near);
+//                    }
+//                }
+//            }
+
             int updateAd = adMapper.updateAd(ad);
             log.info("updateAd = " + updateAd);
             if(updateAd == 1){
@@ -178,6 +283,27 @@ public class formMail_adService {
 //
 //                redisTemplate.delete(keys); // 전체 고객사 목록 캐시를 삭제
 //                log.info("Redis에서 광고 목록 캐시를 삭제했습니다.");
+
+                // 지역 수정하면
+//                if(ad.getAddress() != null){
+//                    // 지역 정보 전체 삭제
+//                    int deleteNearInfo = adMapper.deleteNearInfo(ad);
+
+                    // getCoordinates로 위도 , 경도 구하고
+                    // 주변 정보 찾는 api 실행하여야함
+                    // 클라이언트에서 할 부분
+
+                    if (ad.getNearInfoList() != null && !ad.getNearInfoList().isEmpty()) {
+                        // 기존 지역 정보 삭제
+                        int deleteCount = adMapper.deleteNearInfo(ad);
+
+                        // 새로운 지역 정보 삽입
+                        for (AdNearInfo near : ad.getNearInfoList()) {
+                            near.setAid(ad.getAid()); // aid 설정
+                            adMapper.addNearInfo(near);
+                        }
+                    }
+//                }
             } else {
                 apiResponse.setCode("E004");
                 apiResponse.setMessage("광고 업데이트 실패");
@@ -695,7 +821,27 @@ public class formMail_adService {
     }
 
 
+    // aid 일치하는 주변 역 정보들 추출
+    public AdResponse nearInfoList(AdNearInfo near) throws Exception {
+        AdResponse adResponse = new AdResponse();
 
+        try {
+         adResponse.setNearInfoList(adMapper.nearInfoList(near));
+         if(adResponse.getNearInfoList() != null && !adResponse.getNearInfoList().isEmpty()) {
+             // 값이 있다면
+             adResponse.setCode("C000");
+             adResponse.setMessage("주변 역 정보 조회 성공");
+         } else {
+             adResponse.setCode("C003");
+             adResponse.setMessage("주변 역 정보 조회 실패");
+         }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("Error!!!");
+        }
+
+        return adResponse;
+    }
 
 
 

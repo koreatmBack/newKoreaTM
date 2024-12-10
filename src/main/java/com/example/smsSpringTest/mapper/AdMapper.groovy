@@ -45,6 +45,20 @@ interface AdMapper {
             , sigungu
             , dong_eub_myun
             , hashtag
+            , job_type
+            , employment_type
+            , recruit_count
+            , work_period
+            , work_days
+            , gender
+            , age
+            , education
+            , pre_conditions
+            , etc_conditions
+            , apply_method
+            , near_university
+            , x
+            , y
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -83,6 +97,20 @@ interface AdMapper {
             , #{ad.sigungu}
             , #{ad.dongEubMyun}
             , #{ad.hashtag}
+            , #{ad.jobType}
+            , #{ad.employmentType}
+            , #{ad.recruitCount}
+            , #{ad.workPeriod}
+            , #{ad.workDays}
+            , #{ad.gender}
+            , #{ad.age}
+            , #{ad.education}
+            , #{ad.preConditions}
+            , #{ad.etcConditions}
+            , #{ad.applyMethod}
+            , #{ad.nearUniversity}
+            , #{ad.x}
+            , #{ad.y}
         )
 </script>        
     """)
@@ -221,8 +249,49 @@ interface AdMapper {
         </if>        
         <if test="ad.dongEubMyun != null">
             dong_eub_myun = #{ad.dongEubMyun},
+        </if>        
+        <if test="ad.jobType != null">
+            job_type = #{ad.jobType},
+        </if>        
+        <if test="ad.employmentType != null">
+            employment_type = #{ad.employmentType},
+        </if>        
+        <if test="ad.recruitCount != null">
+            recruit_count = #{ad.recruitCount},
+        </if>        
+        <if test="ad.workPeriod != null">
+            work_period = #{ad.workPeriod},
+        </if>        
+        <if test="ad.workDays != null">
+            work_days = #{ad.workDays},
+        </if>        
+        <if test="ad.gender != null">
+            gender = #{ad.gender},
+        </if>        
+        <if test="ad.age != null">
+            age = #{ad.age},
+        </if>        
+        <if test="ad.education != null">
+            education = #{ad.education},
+        </if>        
+        <if test="ad.preConditions != null">
+            pre_conditions = #{ad.preConditions},
+        </if>        
+        <if test="ad.etcConditions != null">
+            etc_conditions = #{ad.etcConditions},
+        </if>        
+        <if test="ad.applyMethod != null">
+            apply_method = #{ad.applyMethod},
+        </if>        
+        <if test="ad.nearUniversity != null">
+            near_university = #{ad.nearUniversity},
         </if>
-
+        <if test="ad.x != null">
+            x = #{ad.x},
+        </if>         
+        <if test="ad.y != null">
+            y = #{ad.y},
+        </if>
      </set>
         WHERE aid = #{ad.aid}
     </script>
@@ -575,5 +644,63 @@ interface AdMapper {
     """)
     List<JobSite> jobSiteListTest()
 
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡ 주변 지하철, 거리 등 정보 테이블 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 주변 정보 등록하기
+    @Insert("""
+        INSERT INTO formmail_ad_near(
+           aid
+           , near_station
+           , distance
+           , duration_time
+        ) VALUES (
+           #{near.aid}
+           ,#{near.nearStation}
+           ,#{near.distance}
+           ,#{near.durationTime}
+        )
+    """)
+    int addNearInfo(@Param("near") AdNearInfo near)
+
+
+    // 공고 수정시 aid 일치하는 것 전체 삭제
+    @Delete("""
+        DELETE FROM formmail_ad_near
+        WHERE aid = #{ad.aid}
+    """)
+    int deleteNearInfo(@Param("ad") fmAd ad)
+
+    // aid 일치하는 주변 역 정보들 추출
+    @Select("""
+        SELECT *
+        FROM formmail_ad_near
+        WHERE aid = #{near.aid}
+    """)
+    List<AdNearInfo> nearInfoList(@Param("near") AdNearInfo near)
+
+//    @Select("""
+//        SELECT count(*)
+//        FROM formmail_ad_near
+//        WHERE aid = #{near.aid}
+//        AND near_station = #{near.nearStation}
+//    """)
+//    int dupChkNearInfo(@Param("near") AdNearInfo near)
+//
+//    // 선택 해제시 aid, 지하철역 일치하는 것 삭제
+//    @Delete("""
+//        DELETE FROM formmail_ad_near
+//        WHERE aid = #{near.aid}
+//        AND near_station = #{near.nearStation}
+//    """)
+//    int deleteOneNearInfo(@Param("near") AdNearInfo near)
+
+//    // 등록 성공시 aid 일치하는 애들 전부 Y로 상태 변경
+//    @Update("""
+//        UPDATE formmail_ad_near
+//        SET status = 'Y'
+//        WHERE aid = #{ad.aid}
+//    """)
+//    int updateStatusY(@Param("near") fmAd ad)
 
 }

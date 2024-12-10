@@ -2,6 +2,7 @@ package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
+import com.example.smsSpringTest.model.ad.AdNearInfo;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.formMail_file;
@@ -239,6 +240,12 @@ public class formMail_adController {
         return formMailAdService.selectByRegionsSort(ad);
     }
 
+    // aid 일치하는 주변 역 정보 추출
+     @PostMapping("/find/nearInfo")
+     public AdResponse nearInfoList(@RequestBody AdNearInfo near) throws Exception {
+         return formMailAdService.nearInfoList(near);
+     }
+
     // -------------------------
 
     // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
@@ -256,4 +263,9 @@ public class formMail_adController {
         return formMailAdService.jobSiteListTest();
     }
 
+//    // 주변 역 담는 API, 비동기로 실행시킬 것 선택, 선택해제시
+//    @PostMapping("/choose/type")
+//    public ApiResponse chooseType(@RequestBody AdNearInfo near) throws Exception {
+//        return formMailAdService.chooseType(near);
+//    }
 }

@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * author : 신기훈
- * date : 2024-09-26
- * comment : 광고 vo
+ * date : 2024-12-10
+ * comment : 광고와 주변 역 정보들 담는 vo
  */
 
 @Data
@@ -24,41 +24,34 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class fmAd {
+public class AdAndNear {
 
     private String aid;
-
     private String cid;
 
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-@JsonSerialize(using = LocalDateSerializer.class)
-@JsonDeserialize(using = LocalDateDeserializer.class)
+    //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate startDate;
 
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-@JsonSerialize(using = LocalDateSerializer.class)
-@JsonDeserialize(using = LocalDateDeserializer.class)
+    //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate endDate;
 
-    private Integer extensionDay;
+    private int extensionDay;
 
     private int totalDay;
 
-    private String heaven;
-
-    private String albamon;
-
-    private String telejob;
-
-    private String adTypeM; // 유료 광고 타입 - 알바몬
-
-    private String adTypeH; // 유료 광고 타입 - 알바천국
-
+    //    private String heaven;
+//    private String albamon;
+//    private String telejob;
+//
+//    private String adTypeM;
+//    private String adTypeH;
     private String adImg; // 광고 이미지 url
 
     private String logoImg; // 로고 이미지 url
-
-    private String concept; // 컨셉
 
     private String userName; // 담당 관리자명
 
@@ -79,25 +72,32 @@ public class fmAd {
     private String maxPay;  // 월 최대 급여
 
     private String workDay; // 근무 요일
-    private String welfare; // 복지 혜택 (체크박스로 선택)
-
-    private String welfare2; // 기타 복지 혜택 (체크 박스에 없는 내용)
-
-    private String experience; // 경력 채용 여부
 
     private String adNum; // 광고 번호 4자리
 
     private String workTime; // 근무 시간
 
+    private int grade;
+
     private String sido;
 
     private String sigungu;
 
-    private String dongEubMyun; // 동/읍/면
+    private String dongEubMyun;
 
-    private String hashtag;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int page;
 
-    private Integer grade;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int size;
+
+    private int offset;
+
+    private List<RegionRequest> regions; // 지역 검색용 List
+
+    private String registerType; // 조회시 등록 조건용
+
+    private String sortType; // 조회시 정렬 조건용
 
     private String salary; // 급여
 
@@ -131,5 +131,6 @@ public class fmAd {
 
     private double y; // 위도
 
-    private List<AdNearInfo> nearInfoList; // 주변 정보들 담을 것
+
+
 }

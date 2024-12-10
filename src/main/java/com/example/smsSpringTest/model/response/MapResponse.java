@@ -19,8 +19,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MapResponse extends ApiResponse{
-    private String x;   // 경도 longitude
-    private String y;   // 위도 latitutde
+    private double x;   // 경도 longitude
+    private double y;   // 위도 latitutde
     private List<MapVO> mapInfoList;
     private String university;  // 대학교
 }

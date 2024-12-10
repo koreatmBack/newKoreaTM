@@ -102,4 +102,32 @@ public class AdRequest {
     private String salary; // 급여
 
     private String salaryType; // 급여 형태(시급, 주급, 일급, 월급, 연봉)
+
+    private String jobType; // 업직종
+
+    private String employmentType; // 고용형태
+
+    private String recruitCount; // 모집인원
+
+    private String workPeriod; // 근무기간
+
+    private String workDays; // 근무요일
+
+    private String gender; // 성별
+
+    private String age; // 나이
+
+    private String education; // 학력
+
+    private String preConditions; // 우대조건
+
+    private String etcConditions; // 기타조건
+
+    private String applyMethod; // 지원방법
+
+    private String nearUniversity; // 주변 대학교
+
+    private double x; // 경도
+
+    private double y; // 위도
 }
