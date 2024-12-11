@@ -366,6 +366,49 @@ interface AdMapper {
 </script>   
     """)
     List<fmAd> searchAddressAd(@Param("ad") fmAd ad)
+
+
+
+//    // 폼메일 관리자용 공고관리 -> 전체, 진행중, 대기중, 종료
+//    @Select("""
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE
+//
+//    """)
+
+
+
+//    // 검색 기능 -> 공고제목, 근무지명, 담당자명, 공고번호, 연락처 포함
+//    @Select("""
+//<script>
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE
+//       <if test="ad.status != '전체'">
+//        <choose>
+//         <when test="ad.status == '전체'">
+//
+//         </when>
+//         <when test="ad.status == '진행중'">
+//         </when>
+//         <when test="ad.status == '대기중'">
+//         </when>
+//         <when test="ad.status == '종료'">
+//         </when>
+//        </choose>
+//       </if>
+//
+//       <if test="ad.status == '전체'">
+//        <choose>
+//         <when>
+//
+//         </when>
+//        </choose>
+//       </if>
+//</script>
+//    """)
+
     // ---------------------------------------------
 
     // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
