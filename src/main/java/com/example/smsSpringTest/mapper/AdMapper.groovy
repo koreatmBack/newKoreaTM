@@ -474,7 +474,7 @@ interface AdMapper {
     """)
     List<JobSite> selectByRegions(@Param("ad") AdRequest ad)
 
-    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+    // 시/도, 시/군/구 , 동/읍/면
     // 정렬 조건 추가
     @Select("""
     <script>

@@ -799,7 +799,7 @@ public class formMail_adService {
                 ad.setSortType("salary");
             } else if("건별높은순".equals(ad.getSortType())){
                 // 나중에 건 별로 공고 등록 추가할 때 사용할 코드
-                ad.setSalary("건별");
+                ad.setSalaryType("건별");
                 ad.setSortType("salary");
             }
             adResponse.setJobSiteList(adMapper.selectByRegionsSort(ad));
