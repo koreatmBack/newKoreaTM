@@ -76,6 +76,7 @@ public class JobSite {
     private String maxPay;  // 월 최대 급여
 
     private String workDay; // 근무 요일
+
     private String welfare; // 복지 혜택 (체크박스로 선택)
 
     private String welfare2; // 기타 복지 혜택 (체크 박스에 없는 내용)
