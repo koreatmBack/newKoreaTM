@@ -91,6 +91,11 @@ interface JobUserMapper {
             , marketing
             , address_detail
             , email
+            , agree_over15
+            , agree_terms
+            , agree_privacy
+            , agree_sms_marketing
+            , agree_email_marketing
         ) VALUES (
             #{user.userId}
             , #{user.userPwd}
@@ -105,6 +110,11 @@ interface JobUserMapper {
             , #{user.marketing}
             , #{user.addressDetail}
             , #{user.email}
+            , #{user.agreeOver15}
+            , #{user.agreeTerms}
+            , #{user.agreePrivacy}
+            , #{user.agreeSmsMarketing}
+            , #{user.agreeEmailMarketing}
         )
     """)
     int jobSignUp(@Param("user") JobsiteUser user);
@@ -261,6 +271,13 @@ interface JobUserMapper {
            <if test="user.favorite != null"> favorite = #{user.favorite},</if>
            <if test="user.clipping != null"> clipping = #{user.clipping},</if>
            <if test="user.email != null"> email = #{user.email},</if>
+           <if test="user.agreeOver15 != null"> agree_over15 = #{user.agreeOver15},</if>
+           <if test="user.agreeTerms != null"> agree_terms = #{user.agreeTerms},</if>
+           <if test="user.agreePrivacy != null"> agree_privacy = #{user.agreePrivacy},</if>
+           <if test="user.agreeSmsMarketing != null"> agree_sms_marketing = #{user.agreeSmsMarketing},</if>
+           <if test="user.agreeEmailMarketing != null"> agree_email_marketing = #{user.agreeEmailMarketing},</if>
+           <if test="user.agreeDate != null"> agree_date = #{user.agreeDate},</if>
+           
       </set>
         WHERE user_id = #{user.userId}  
 </script>        

@@ -34,6 +34,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * author : 신기훈
@@ -483,6 +484,13 @@ public class jobsite_userService {
                 jobUserResponse.setCode("C003");
                 jobUserResponse.setMessage("비밀번호가 일치하지 않습니다.");
                 return jobUserResponse;
+            }
+
+            if(user.getAgreeOver15() != null || user.getAgreeTerms() != null || user.getAgreePrivacy() != null
+            || user.getAgreeSmsMarketing() != null || user.getAgreeEmailMarketing() != null){
+                // 약관 동의에 수정사항이 생기면 agreeDate 수정 일자로 변경
+                LocalDateTime now = LocalDateTime.now();
+                user.setAgreeDate(now);
             }
 
             int jobUserUpdate = jobUserMapper.jobUserUpdate(user);
