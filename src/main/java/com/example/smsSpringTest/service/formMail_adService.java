@@ -15,7 +15,6 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -477,6 +476,40 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // 관리자페이지 -> 공고관리 조건들
+    public AdResponse statusList(AdRequest ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = adMapper.statusListCount(ad); //전체 수
+            ad.setOffset(offset);
+
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+            adResponse.setFmAdList(adMapper.statusList(ad));
+            log.info(adMapper.statusList(ad).toString());
+            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
+                adResponse.setCode("C000");
+                adResponse.setMessage("조회 성공");
+            } else {
+                adResponse.setCode("C003");
+                adResponse.setMessage("조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+
+        return adResponse;
+    }
+
+
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 end ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 
@@ -588,7 +621,9 @@ public class formMail_adService {
 
             adResponse.setJobSiteList(adMapper.orderByCreated(paging));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setTotalPages(totalCount);
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("등록일 최신순으로 조회 성공");
             } else {
@@ -619,7 +654,9 @@ public class formMail_adService {
             adResponse.setJobSiteList(adMapper.orderByMaxPay(paging));
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setTotalPages(totalCount);
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("급여 높은 순으로 조회 성공");
             } else {
@@ -650,7 +687,9 @@ public class formMail_adService {
             adResponse.setJobSiteList(adMapper.orderByWorkDay(paging));
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setTotalPages(totalCount);
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("근무일수 적은순으로 조회 성공");
             } else {
@@ -681,7 +720,9 @@ public class formMail_adService {
             adResponse.setJobSiteList(adMapper.orderByWorkTime(paging));
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                adResponse.setTotalPages(totalCount);
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("근무시간 짧은 순으로 조회 성공");
             } else {
@@ -722,37 +763,37 @@ public class formMail_adService {
     }
 
 // 11-29 ~
-    // 일단 정렬 , 등록일 조건 없이 시/도, 시,군,구 / 동,읍,면에 대해서만
-    public AdResponse selectByRegions(AdRequest ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        log.info(String.valueOf(ad));
-        try {
-            int page = ad.getPage(); // 현재 페이지
-            int size = ad.getSize(); // 한 페이지에 표시할 수
-            int offset = (page - 1) * size; // 시작 위치
-//            int totalCount = adMapper.allJobsiteListCount(); //전체 수
-            ad.setOffset(offset);
-
-//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-            log.info("page = " + page + " size = " + size + " offset = " + offset);
-            adResponse.setJobSiteList(adMapper.selectByRegions(ad));
-
-            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-//                adResponse.setTotalPages(totalCount);
-                adResponse.setCode("C000");
-                adResponse.setMessage("지역 선택 조회 성공");
-            } else {
-                adResponse.setCode("E004");
-                adResponse.setMessage("지역 선택 조회 실패");
-            }
-        } catch (Exception e){
-            adResponse.setCode("E001");
-            adResponse.setMessage("ERROR");
-            log.info(e.getMessage());
-        }
-
-        return adResponse;
-    }
+//    // 일단 정렬 , 등록일 조건 없이 시/도, 시,군,구 / 동,읍,면에 대해서만
+//    public AdResponse selectByRegions(AdRequest ad) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//        log.info(String.valueOf(ad));
+//        try {
+//            int page = ad.getPage(); // 현재 페이지
+//            int size = ad.getSize(); // 한 페이지에 표시할 수
+//            int offset = (page - 1) * size; // 시작 위치
+////            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+//            ad.setOffset(offset);
+//
+////            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+//            log.info("page = " + page + " size = " + size + " offset = " + offset);
+//            adResponse.setJobSiteList(adMapper.selectByRegions(ad));
+//
+//            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+////                adResponse.setTotalPages(totalCount);
+//                adResponse.setCode("C000");
+//                adResponse.setMessage("지역 선택 조회 성공");
+//            } else {
+//                adResponse.setCode("E004");
+//                adResponse.setMessage("지역 선택 조회 실패");
+//            }
+//        } catch (Exception e){
+//            adResponse.setCode("E001");
+//            adResponse.setMessage("ERROR");
+//            log.info(e.getMessage());
+//        }
+//
+//        return adResponse;
+//    }
 
 
     // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
@@ -764,11 +805,11 @@ public class formMail_adService {
             int page = ad.getPage(); // 현재 페이지
             int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-//            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+            int totalCount = adMapper.selectByRegionsSortCount(ad); //전체 수
             ad.setOffset(offset);
 
-//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-            log.info("page = " + page + " size = " + size + " offset = " + offset);
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+//            log.info("page = " + page + " size = " + size + " offset = " + offset);
 
 //            if("오늘 등록".equals(ad.getRegisterType())){
 //
@@ -804,7 +845,9 @@ public class formMail_adService {
             }
             adResponse.setJobSiteList(adMapper.selectByRegionsSort(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-//                adResponse.setTotalPages(totalCount);
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("조회 성공");
             } else {

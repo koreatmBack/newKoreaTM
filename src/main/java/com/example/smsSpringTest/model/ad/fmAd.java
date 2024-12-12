@@ -132,4 +132,11 @@ public class fmAd {
     private double y; // 위도
 
     private List<AdNearInfo> nearInfoList; // 주변 정보들 담을 것
+
+    private String status; // 전체, 진행중, 대기, 종료
+
+    private String searchType; // 공고제목, 담당자명, 공고번호, 연락처
+
+    private String keyword; // 검색시 입력한 값
+
 }

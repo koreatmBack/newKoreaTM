@@ -369,17 +369,98 @@ interface AdMapper {
 
 
 
-//    // 폼메일 관리자용 공고관리 -> 전체, 진행중, 대기중, 종료
-//    @Select("""
-//        SELECT *
-//        FROM formmail_ad
-//        WHERE
-//
-//    """)
+    // 폼메일 관리자용 공고관리 -> 전체, 진행중, 대기중, 종료
+    // 검색 기능 클릭시 -> 공고제목, 근무지명, 담당자명, 공고번호, 연락처 포함
+    @Select("""
+    <script>
+        SELECT *
+        FROM formmail_ad fad
+        JOIN formmail_admin fadmin ON fad.user_name = fadmin.user_name
+        WHERE 1=1
+        <if test="ad.status != '전체'">
+            <choose>
+                <when test="ad.status == '진행중'">
+                    AND CURDATE() BETWEEN fad.start_date AND fad.end_date
+                </when>
+                <when test="ad.status == '대기중'">
+                    AND <![CDATA[CURDATE() < fad.start_date]]>
+                </when>
+                <when test="ad.status == '종료'">
+                    AND <![CDATA[CURDATE() > fad.end_date]]>
+                </when>
+            </choose>
+        </if>
+        
+        <if test="ad.searchType != null and ad.keyword != null">
+            <choose>
+                <when test="ad.searchType == '공고제목'">
+                    AND fad.title LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '근무회사명'">
+                    AND fad.company LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '담당자명'">
+                    AND fad.user_name LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '공고번호'">
+                    AND fad.ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '연락처'">
+                    AND fadmin.m_phone LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+            </choose>
+        </if>
+        LIMIT #{ad.size}
+        OFFSET #{ad.offset}
+    </script>
+    """)
+    List<fmAd> statusList(@Param("ad") AdRequest ad)
 
+    // 위 조건 개수
+    @Select("""
+    <script>
+        SELECT count(*)
+        FROM formmail_ad fad
+        JOIN formmail_admin fadmin ON fad.user_name = fadmin.user_name
+        WHERE 1=1
+        <if test="ad.status != '전체'">
+            <choose>
+                <when test="ad.status == '진행중'">
+                    AND CURDATE() BETWEEN fad.start_date AND fad.end_date
+                </when>
+                <when test="ad.status == '대기중'">
+                    AND <![CDATA[CURDATE() < fad.start_date]]>
+                </when>
+                <when test="ad.status == '종료'">
+                    AND <![CDATA[CURDATE() > fad.end_date]]>
+                </when>
+            </choose>
+        </if>
+        
+        <if test="ad.searchType != null and ad.keyword != null">
+            <choose>
+                <when test="ad.searchType == '공고제목'">
+                    AND fad.title LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '근무회사명'">
+                    AND fad.company LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '담당자명'">
+                    AND fad.user_name LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '공고번호'">
+                    AND fad.ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+                <when test="ad.searchType == '연락처'">
+                    AND fadmin.m_phone LIKE CONCAT('%', #{ad.keyword}, '%')
+                </when>
+            </choose>
+        </if>
+    </script>
+    """)
+    int statusListCount(@Param("ad") AdRequest ad)
 
-
-//    // 검색 기능 -> 공고제목, 근무지명, 담당자명, 공고번호, 연락처 포함
+//    // 검색 기능 클릭시 -> 공고제목, 근무지명, 담당자명, 공고번호, 연락처 포함
 //    @Select("""
 //<script>
 //        SELECT *
@@ -493,29 +574,29 @@ interface AdMapper {
 
     // 생각해보니 start_date 와 end_date 사이여야 할 거 같은데, 위에 전부 수정해야하나?
 
-    // 일단 정렬 , 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
-    @Select("""
-    <script>
-        SELECT *
-        FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
-        <if test="ad.regions != null and ad.regions.size() > 0">
-            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
-                (sido = #{region.sido} AND sigungu = #{region.sigungu} 
-                
-                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
-                 )
-                </if>
-                <if test="region.dongEubMyun != null">
-                AND dong_eub_myun = #{region.dongEubMyun})
-                </if>
-            </foreach>
-        </if>
-        LIMIT #{ad.size}
-        OFFSET #{ad.offset}
-    </script>
-    """)
-    List<JobSite> selectByRegions(@Param("ad") AdRequest ad)
+//    // 일단 정렬 , 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+//    @Select("""
+//    <script>
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE CURDATE() BETWEEN start_date AND end_date
+//        <if test="ad.regions != null and ad.regions.size() > 0">
+//            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+//                (sido = #{region.sido} AND sigungu = #{region.sigungu}
+//
+//                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+//                 )
+//                </if>
+//                <if test="region.dongEubMyun != null">
+//                AND dong_eub_myun = #{region.dongEubMyun})
+//                </if>
+//            </foreach>
+//        </if>
+//        LIMIT #{ad.size}
+//        OFFSET #{ad.offset}
+//    </script>
+//    """)
+//    List<JobSite> selectByRegions(@Param("ad") AdRequest ad)
 
     // 시/도, 시/군/구 , 동/읍/면
     // 정렬 조건 추가
@@ -579,6 +660,64 @@ interface AdMapper {
     """)
     List<JobSite> selectByRegionsSort(@Param("ad") AdRequest ad)
 
+    //위 조건 개수
+    @Select("""
+    <script>
+        SELECT count(*)
+        FROM formmail_ad
+        WHERE 
+        <if test="ad.registerType != null">
+            <choose>
+                <when test="ad.registerType == '오늘 등록'">
+                    end_date >= CURDATE() AND start_date = CURDATE()
+                </when>
+                <when test="ad.registerType == '3일이내 등록'">
+                    end_date >= CURDATE()
+           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -3 DAY) AND CURDATE() 
+                </when>                 
+                <when test="ad.registerType == '7일이내 등록'">
+                    end_date >= CURDATE()
+           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -7 DAY) AND CURDATE()
+                </when>                              
+
+            </choose>
+        </if>
+        <if test="ad.registerType == null">
+            CURDATE() BETWEEN start_date AND end_date
+        </if>
+        
+        <if test="ad.regions != null and ad.regions.size() > 0">
+            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+                (sido = #{region.sido} 
+                
+                <if test="region.sigungu != null">
+                AND sigungu = #{region.sigungu} 
+                </if>
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun = #{region.dongEubMyun})
+                </if>
+            </foreach>
+        </if>
+        <if test="ad.salaryType != null">
+         AND salary_type = #{ad.salaryType}        
+        </if>
+        <if test="ad.sortType != null">
+            <choose>
+                <when test="ad.sortType == '최신등록순'">
+                    ORDER BY created_at DESC
+                </when>
+                <otherwise>
+                    ORDER BY salary DESC
+                </otherwise>
+            </choose>
+        </if>
+    </script>
+    """)
+    int selectByRegionsSortCount(@Param("ad") AdRequest ad)
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 

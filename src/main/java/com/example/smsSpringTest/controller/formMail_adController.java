@@ -167,8 +167,14 @@ public class formMail_adController {
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
     @Operation(summary = "sido, sigungu 일치하는 광고 조회", description="sido는 필수, sigungu는 필수 아님")
     @PostMapping("/searchAddressAd")
-    public AdResponse searchAddressAd(fmAd ad) throws Exception{
+    public AdResponse searchAddressAd(@RequestBody fmAd ad) throws Exception{
         return formMailAdService.searchAddressAd(ad);
+    }
+
+    // 관리자페이지 -> 공고관리 조건들
+    @PostMapping("/statusList")
+    public AdResponse statusList(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.statusList(ad);
     }
 
     // ---------------------------------------------------------
@@ -227,11 +233,11 @@ public class formMail_adController {
 
     // 11-29 ~
 
-    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
-    @PostMapping("/selectByRegions")
-    public AdResponse selectByRegions(@RequestBody AdRequest ad) throws Exception {
-        return formMailAdService.selectByRegions(ad);
-    }
+//    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
+//    @PostMapping("/selectByRegions")
+//    public AdResponse selectByRegions(@RequestBody AdRequest ad) throws Exception {
+//        return formMailAdService.selectByRegions(ad);
+//    }
 
     // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
     // 정렬 조건 추가
