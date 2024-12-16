@@ -59,6 +59,8 @@ interface AdMapper {
             , near_university
             , x
             , y
+            , salary
+            , salary_type
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -111,6 +113,8 @@ interface AdMapper {
             , #{ad.nearUniversity}
             , #{ad.x}
             , #{ad.y}
+            , #{ad.salary}
+            , #{ad.salaryType}
         )
 </script>        
     """)
@@ -509,6 +513,14 @@ interface AdMapper {
     """)
     int allJobsiteListCount()
 
+    // 잡사이트용 grade에 따른 공고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE CURDATE() BETWEEN start_date AND end_date
+        AND grade = #{ad.grade}
+    """)
+    List<JobSite> searchGradeJobsite(@Param("ad") fmAd ad)
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""

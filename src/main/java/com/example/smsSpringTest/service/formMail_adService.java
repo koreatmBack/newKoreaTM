@@ -564,6 +564,25 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // 잡사이트용 grade에 따른 공고 조회 ( 종료기간 끝난것 조회 x )
+    public AdResponse searchGradeJobsite(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setJobSiteList(adMapper.searchGradeJobsite(ad));
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                adResponse.setCode("C000");
+                adResponse.setMessage("유료 잡사이트 목록 조회 성공");
+            } else {
+                adResponse.setCode("E004");
+                adResponse.setMessage("유료 잡사이트 목록 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     public AdResponse searchTitleJobsite(fmAd ad) throws Exception {

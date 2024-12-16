@@ -188,6 +188,13 @@ public class formMail_adController {
     }
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
+    @PostMapping("/searchGradeList")
+    @Operation(summary = "grade(플래티넘, 골드, 라이트) 유료 광고 조회", description="필수 값 : grade")
+    public AdResponse searchGradeList(@RequestBody fmAd ad) throws Exception {
+        return formMailAdService.searchGradeJobsite(ad);
+    }
+
+    // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/searchTitleList")
     @Operation(summary = "검색한 단어가 제목에 포함된 광고 조회", description="필수 값 : title")
     public AdResponse searchTitleList(@RequestBody fmAd ad) throws Exception {
