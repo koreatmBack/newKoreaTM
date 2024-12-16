@@ -559,31 +559,56 @@ public class jobsite_userService {
         return jobUserResponse;
     }
 
-    // 회원 탈퇴하기
+//    // 회원 탈퇴하기
+//    // 비밀번호 일치할때. 12-16 우선 비밀번호 입력 없음. 아래 코드는 현재 사용 x
+//    public ApiResponse jobResign(JobsiteUser user) throws Exception {
+//        ApiResponse apiResponse = new ApiResponse();
+//
+//        try {
+////            String userId = user.getUserId();
+//
+//            // 입력 받은 비밀번호
+//            String userPwd = user.getUserPwd();
+//
+//            // 암호화된 비밀번호 체크
+//            String dupPwd = jobUserMapper.dupPwd(user);
+//
+//            // 비밀번호 일치하는지 검증
+//            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+//
+//            if(isMatchPwd) {
+//                // 회원 탈퇴하기
+//                jobUserMapper.resignUser(user);
+//                apiResponse.setCode("C000");
+//                apiResponse.setMessage(" 회원 탈퇴 성공 ");
+//            } else {
+//                apiResponse.setCode("C003");
+//                apiResponse.setMessage(" 회원 탈퇴 실패 , 정보 불일치");
+//            }
+//
+//        } catch (Exception e) {
+//            apiResponse.setCode("E001");
+//            apiResponse.setMessage(" Error!!! ");
+//            log.info(e.getMessage());
+//        }
+//
+//        return apiResponse;
+//    }
+
+    // 회원 탈퇴하기 (비밀번호 입력 x )
     public ApiResponse jobResign(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-//            String userId = user.getUserId();
-
-            // 입력 받은 비밀번호
-            String userPwd = user.getUserPwd();
-
-            // 암호화된 비밀번호 체크
-            String dupPwd = jobUserMapper.dupPwd(user);
-
-            // 비밀번호 일치하는지 검증
-            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
-
-            if(isMatchPwd) {
                 // 회원 탈퇴하기
-                jobUserMapper.resignUser(user);
-                apiResponse.setCode("C000");
-                apiResponse.setMessage(" 회원 탈퇴 성공 ");
-            } else {
-                apiResponse.setCode("C003");
-                apiResponse.setMessage(" 회원 탈퇴 실패 , 정보 불일치");
-            }
+                int resign = jobUserMapper.resignUser(user);
+                if(resign == 1) {
+                    apiResponse.setCode("C000");
+                    apiResponse.setMessage(" 회원 탈퇴 성공 ");
+                } else {
+                    apiResponse.setCode("C003");
+                    apiResponse.setMessage(" 회원 탈퇴 실패 ");
+                }
 
         } catch (Exception e) {
             apiResponse.setCode("E001");
