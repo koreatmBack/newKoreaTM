@@ -308,6 +308,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_ad/allJobsiteList", "/api/v1/formMail_ad/allJobsiteList",
                 "/v1/formMail_ad/findOneJobsite", "/api/v1/formMail_ad/findOneJobsite",
                 "/v1/formMail_ad/searchTitleList", "/api/v1/formMail_ad/searchTitleList",
+                "/v1/formMail_ad/searchGradeList", "/api/v1/formMail_ad/searchGradeList",
                 "/v1/formMail_ad/orderByCreated", "/api/v1/formMail_ad/orderByCreated",
                 "/v1/formMail_ad/orderByWorkDay", "/api/v1/formMail_ad/orderByWorkDay",
                 "/v1/formMail_ad/orderByMaxPay", "/api/v1/formMail_ad/orderByMaxPay",
@@ -324,6 +325,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 // url 전환
                 , "/api/v1/common/change/url/short", "/v1/common/change/url/short"
                 ,  "/api/v1/common/change/url/original", "/v1/common/change/url/original"
+                // 공지사항
+                , "/api/v1/notice/find/one", "/v1/notice/find/one"
+                , "/api/v1/notice/find/allList", "/v1/notice/find/allList"
         };
 
         for (String allowedURI : allowedURIs) {
