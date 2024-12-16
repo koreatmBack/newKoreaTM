@@ -43,7 +43,7 @@ public class EmailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(emailMessage.getTo()); // 메일 수신자
-            mimeMessageHelper.setFrom("skh9805@naver.com");
+            mimeMessageHelper.setFrom("korea-tm@naver.com");
 //            mimeMessageHelper.setFrom("koreatm264@nate.com");
             mimeMessageHelper.setSubject(emailMessage.getSubject()); // 메일 제목
             mimeMessageHelper.setText(setContext(certNumber, "email"), true); // 메일 본문 내용, HTML 여부
