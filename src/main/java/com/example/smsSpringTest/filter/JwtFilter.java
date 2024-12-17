@@ -328,6 +328,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // 공지사항
                 , "/api/v1/notice/find/one", "/v1/notice/find/one"
                 , "/api/v1/notice/find/allList", "/v1/notice/find/allList"
+                ,"/api/v1/common/send/email" , "/v1/common/send/email"
         };
 
         for (String allowedURI : allowedURIs) {
