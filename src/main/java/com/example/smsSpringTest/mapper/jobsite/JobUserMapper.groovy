@@ -410,7 +410,7 @@ interface JobUserMapper {
     """)
     int addSocialData(@Param("social") Social social)
 
-    // 비밀번호 변경시 naver 소셜 회원가입한 유저인지 체크
+    // 비밀번호 변경시 소셜 회원가입한 유저인지 체크
     @Select("""
         SELECT count(*)
         FROM jobsite_user_social

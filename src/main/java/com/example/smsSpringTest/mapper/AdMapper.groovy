@@ -513,14 +513,24 @@ interface AdMapper {
     """)
     int allJobsiteListCount()
 
-    // 잡사이트용 grade에 따른 공고 조회 ( 종료기간 끝난것 조회 x )
+    // 잡사이트용 grade에 따른 유료 공고 조회 ( 페이징 처리, 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
         FROM formmail_ad
         WHERE CURDATE() BETWEEN start_date AND end_date
         AND grade = #{ad.grade}
+        LIMIT #{ad.size} OFFSET #{ad.offset}
     """)
-    List<JobSite> searchGradeJobsite(@Param("ad") fmAd ad)
+    List<JobSite> searchGradeJobsite(@Param("ad") AdRequest ad)
+
+    // 잡사이트용 grade에 따른 유료 공고 수 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT count(*)
+        FROM formmail_ad
+        WHERE CURDATE() BETWEEN start_date AND end_date
+        AND grade = #{ad.grade}
+    """)
+    int searchGradeJobsiteCount(@Param("ad") fmAd ad)
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""

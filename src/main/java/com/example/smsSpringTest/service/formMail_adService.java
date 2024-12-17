@@ -565,12 +565,22 @@ public class formMail_adService {
     }
 
     // 잡사이트용 grade에 따른 공고 조회 ( 종료기간 끝난것 조회 x )
-    public AdResponse searchGradeJobsite(fmAd ad) throws Exception {
+    public AdResponse searchGradeJobsite(AdRequest ad) throws Exception {
         AdResponse adResponse = new AdResponse();
 
         try {
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+            ad.setOffset(offset);
+
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
             adResponse.setJobSiteList(adMapper.searchGradeJobsite(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("유료 잡사이트 목록 조회 성공");
             } else {
