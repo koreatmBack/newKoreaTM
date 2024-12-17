@@ -680,6 +680,17 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+
+            // 네이버 회원인지 체크
+            int chckNaverUser = jobUserMapper.chckNaverUser(user.getUserId());
+
+            if(chckNaverUser == 1) {
+                // 네이버로 회원가입한 유저라면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("네이버로 회원가입한 유저는 네이버에서 비밀번호 변경하세요");
+                return apiResponse;
+            }
+
             // 기존 비밀번호 일치하는지 체크
             // 입력 받은 비밀번호
             String userPwd = user.getUserPwd();
