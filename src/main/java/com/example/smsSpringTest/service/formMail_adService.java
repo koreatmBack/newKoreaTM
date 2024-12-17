@@ -572,7 +572,7 @@ public class formMail_adService {
             int page = ad.getPage(); // 현재 페이지
             int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+            int totalCount = adMapper.searchGradeJobsiteCount(ad); //전체 수
             ad.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);

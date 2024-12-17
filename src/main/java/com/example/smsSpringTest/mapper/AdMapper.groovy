@@ -530,7 +530,7 @@ interface AdMapper {
         WHERE CURDATE() BETWEEN start_date AND end_date
         AND grade = #{ad.grade}
     """)
-    int searchGradeJobsiteCount(@Param("ad") fmAd ad)
+    int searchGradeJobsiteCount(@Param("ad") AdRequest ad)
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
