@@ -675,21 +675,35 @@ public class jobsite_userService {
         return apiResponse;
     }
 
-    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
-    public ApiResponse changePwd(JobsiteUser user) throws Exception {
+    // 비밀번호 변경창 누를때, 비동기로 먼저 naver 로그인인지 체크할 API
+    public ApiResponse checkNaverUser(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-
             // 네이버 회원인지 체크
-            int chckNaverUser = jobUserMapper.chckNaverUser(user.getUserId());
+            int chckNaverUser = jobUserMapper.checkNaverUser(user.getUserId());
 
             if(chckNaverUser == 1) {
                 // 네이버로 회원가입한 유저라면
                 apiResponse.setCode("E001");
                 apiResponse.setMessage("네이버로 회원가입한 유저는 네이버에서 비밀번호 변경하세요");
-                return apiResponse;
+            } else {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("변경 가능");
             }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("ERROR!!!");
+        }
+
+        return apiResponse;
+    }
+
+    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
+    public ApiResponse changePwd(JobsiteUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
 
             // 기존 비밀번호 일치하는지 체크
             // 입력 받은 비밀번호

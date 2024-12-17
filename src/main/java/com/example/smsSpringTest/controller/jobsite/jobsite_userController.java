@@ -109,6 +109,12 @@ public class jobsite_userController {
         return jobsiteUserService.jobResign(user);
     }
 
+    // 비밀번호 변경창 누를때, 비동기로 먼저 naver 로그인인지 체크할 API
+    @PostMapping("/check/naver")
+    public ApiResponse checkNaverUser(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.checkNaverUser(user);
+    }
+
     // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
     @PutMapping("/change/pwd")
     public ApiResponse changePwd(@RequestBody JobsiteUser user) throws Exception {

@@ -417,5 +417,5 @@ interface JobUserMapper {
         WHERE user_id = #{userId}
         AND social_type = 'naver'
     """)
-    int chckNaverUser(@Param("userId") String userId)
+    int checkNaverUser(@Param("userId") String userId)
 }
