@@ -681,7 +681,7 @@ public class jobsite_userService {
     }
 
     // 비밀번호 변경창 누를때, 비동기로 먼저 소셜 로그인인지 체크할 API
-    public ApiResponse checkNaverUser(JobsiteUser user) throws Exception {
+    public ApiResponse checkSocialUser(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
@@ -691,7 +691,7 @@ public class jobsite_userService {
             if(checkSocialUser == 1) {
                 // 소셜로 회원가입한 유저라면
                 apiResponse.setCode("E001");
-                apiResponse.setMessage("네이버로 회원가입한 유저는 네이버에서 비밀번호 변경하세요");
+                apiResponse.setMessage("소셜로 회원가입한 유저는 접근 불가");
             } else {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("변경 가능");
