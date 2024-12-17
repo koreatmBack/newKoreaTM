@@ -35,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * author : 신기훈
@@ -232,7 +233,17 @@ public class jobsite_userService {
 //                apiResponse.setMessage("폼메일에서 사용중인 id입니다. 다른 id를 입력해주세요");
 //                return apiResponse;
 //            }
-            user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+            String userPwd = null;
+
+                //만약 소셜 로그인일때 타입이 네이버면
+                if(StringUtils.hasText(user.getSocialId()) && user.getSocialType().equals("naver")){
+                    String serialNumber = UUID.randomUUID().toString();
+                    userPwd = serialNumber;
+                } else {
+                    userPwd = user.getUserPwd();
+                }
+
+            user.setUserPwd(passwordEncoder.encode(userPwd));
             int result = jobUserMapper.jobSignUp(user);
 
             if (result == 1) {
