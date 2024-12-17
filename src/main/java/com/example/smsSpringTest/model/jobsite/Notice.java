@@ -33,5 +33,6 @@ public class Notice {
 
     private int offset;
 
+    private int viewCount;
 
 }

@@ -86,6 +86,14 @@ public class NoticeService {
 //            findNotice.setContent(formattedContent);
 //            log.info("나중 find = " + findNotice.getContent());
 
+            // 공지사항이면 조회수 1 증가
+            if(noticeMapper.findOneNotice(notice).getType().equals("B01")){
+                int viewCount = noticeMapper.findOneNotice(notice).getViewCount();
+                viewCount ++;
+                notice.setViewCount(viewCount);
+                noticeMapper.increaseViewCount(notice);
+            }
+
             noticeResponse.setFindOneNotice(noticeMapper.findOneNotice(notice));
             if(noticeResponse.getFindOneNotice() != null){
                 noticeResponse.setCode("C000");

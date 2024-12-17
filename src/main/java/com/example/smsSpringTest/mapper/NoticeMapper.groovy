@@ -13,6 +13,7 @@ interface NoticeMapper {
 
     // 공지사항, FAQ 등록
     @Insert("""
+<script>
         INSERT INTO formmail_notice(
             title
             , content
@@ -22,6 +23,7 @@ interface NoticeMapper {
             , #{notice.content}
             , #{notice.type}
         )
+</script>        
     """)
     int insertNotice(@Param("notice") Notice notice)
 
@@ -89,4 +91,11 @@ interface NoticeMapper {
     """)
     int deleteNotice(@Param("notice") Notice notice)
 
+    // 조회수 1 증가
+    @Update("""
+        UPDATE formmail_notice
+        SET view_count = #{notice.viewCount}
+        WHERE num = #{notice.num}
+    """)
+    int increaseViewCount(@Param("notice") Notice notice)
 }
