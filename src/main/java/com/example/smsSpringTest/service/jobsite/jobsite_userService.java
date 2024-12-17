@@ -234,16 +234,20 @@ public class jobsite_userService {
 //                apiResponse.setMessage("폼메일에서 사용중인 id입니다. 다른 id를 입력해주세요");
 //                return apiResponse;
 //            }
+            String userId = null;
             String userPwd = null;
 
-                //만약 소셜 로그인일때 타입이 네이버면
-                if(StringUtils.hasText(user.getSocialId()) && user.getSocialType().equals("naver")){
+                //만약 소셜 로그인이면
+                if(StringUtils.hasText(user.getSocialId())){
+                    userId = user.getSocialId();
                     String serialNumber = UUID.randomUUID().toString();
                     userPwd = serialNumber;
                 } else {
+                    // 일반 회원가입이라면
+                    userId = user.getUserId();
                     userPwd = user.getUserPwd();
                 }
-
+            user.setUserId(userId);
             user.setUserPwd(passwordEncoder.encode(userPwd));
             int result = jobUserMapper.jobSignUp(user);
 
@@ -252,7 +256,7 @@ public class jobsite_userService {
                 if(StringUtils.hasText(user.getSocialId())){
                     // 만약 소셜 고유id가 있으면
                     Social social = new Social();
-                    social.setUserId(user.getUserId());
+                    social.setUserId(user.getSocialId());
                     social.setSocialId(user.getSocialId());
                     social.setSocialType(user.getSocialType());
                     jobUserMapper.addSocialData(social);
@@ -676,16 +680,16 @@ public class jobsite_userService {
         return apiResponse;
     }
 
-    // 비밀번호 변경창 누를때, 비동기로 먼저 naver 로그인인지 체크할 API
+    // 비밀번호 변경창 누를때, 비동기로 먼저 소셜 로그인인지 체크할 API
     public ApiResponse checkNaverUser(JobsiteUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
             // 네이버 회원인지 체크
-            int chckNaverUser = jobUserMapper.checkNaverUser(user.getUserId());
+            int checkSocialUser = jobUserMapper.checkSocialUser(user.getUserId());
 
-            if(chckNaverUser == 1) {
-                // 네이버로 회원가입한 유저라면
+            if(checkSocialUser == 1) {
+                // 소셜로 회원가입한 유저라면
                 apiResponse.setCode("E001");
                 apiResponse.setMessage("네이버로 회원가입한 유저는 네이버에서 비밀번호 변경하세요");
             } else {
@@ -1253,7 +1257,7 @@ public class jobsite_userService {
             String sb = "grant_type=authorization_code" +
                     "&client_id=" + naverClientId +
                     "&client_secret=" + naverClientSecret +
-                    "&redirect_uri=" + "https://d1hw28kg3ibv9b.cloudfront.net" +
+                    "&redirect_uri=" + naverRedirectUri +
                     "&code=" + code;
 
             bw.write(sb);

@@ -415,7 +415,6 @@ interface JobUserMapper {
         SELECT count(*)
         FROM jobsite_user_social
         WHERE user_id = #{userId}
-        AND social_type = 'naver'
     """)
-    int checkNaverUser(@Param("userId") String userId)
+    int checkSocialUser(@Param("userId") String userId)
 }
