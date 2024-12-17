@@ -1253,7 +1253,7 @@ public class jobsite_userService {
             String sb = "grant_type=authorization_code" +
                     "&client_id=" + naverClientId +
                     "&client_secret=" + naverClientSecret +
-                    "&redirect_uri=" + "https://d1hw28kg3ibv9b.cloudfront.net/signup" +
+                    "&redirect_uri=" + naverRedirectUri +
                     "&code=" + code;
 
             bw.write(sb);
