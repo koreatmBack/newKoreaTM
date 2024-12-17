@@ -1410,7 +1410,7 @@ public class jobsite_userService {
                 log.info(e.getMessage());
             }
         }
-
+        response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net");
         return socialResponse;
     }
 
