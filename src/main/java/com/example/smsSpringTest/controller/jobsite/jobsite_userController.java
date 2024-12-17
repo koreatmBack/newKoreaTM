@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * author : 신기훈
  * date : 2024-10-29
@@ -213,11 +211,11 @@ public class jobsite_userController {
     // NAVER 소셜 로그인
     @GetMapping("/login/naver")
     @Operation(summary = "네이버 소셜 로그인", description="")
-    public SocialResponse naverLogin(@RequestParam String code, HttpServletResponse response) throws Exception{
+    public SocialResponse naverLogin(@RequestParam String code) throws Exception{
 //        SocialResponse socialResponse = new SocialResponse();
         log.info("code = " + code);
 
-        return jobsiteUserService.naverLogin(code, response);
+        return jobsiteUserService.naverLogin(code);
     }
 
     // 로그인 회원 naver 소셜 로그인 연동
