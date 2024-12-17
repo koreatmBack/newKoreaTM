@@ -1234,7 +1234,7 @@ public class jobsite_userService {
     // NAVER 로그인
 
     @Transactional
-    public SocialResponse naverLogin(String code) throws Exception {
+    public SocialResponse naverLogin(String code, HttpServletResponse response) throws Exception {
 
         SocialResponse socialResponse = new SocialResponse();
 
@@ -1290,6 +1290,9 @@ public class jobsite_userService {
 //            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
+
+            // 회원가입 페이지로 리다이렉트
+            response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/signup");
         } else {
 
             String userId = jobUserMapper.socialUserId(naverSocialId);
@@ -1398,6 +1401,8 @@ public class jobsite_userService {
                     socialResponse.setCode("E001");
                     socialResponse.setMessage("최종적으로 Access Token이 없습니다.");
                 }
+                // 메인 페이지로 리다이렉트
+                response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/");
             } catch (BadCredentialsException e) {
                 socialResponse.setCode("E003");
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
