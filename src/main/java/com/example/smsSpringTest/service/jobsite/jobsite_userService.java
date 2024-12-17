@@ -1253,7 +1253,7 @@ public class jobsite_userService {
             String sb = "grant_type=authorization_code" +
                     "&client_id=" + naverClientId +
                     "&client_secret=" + naverClientSecret +
-                    "&redirect_uri=" + naverRedirectUri +
+                    "&redirect_uri=" + "https://d1hw28kg3ibv9b.cloudfront.net" +
                     "&code=" + code;
 
             bw.write(sb);
@@ -1410,7 +1410,7 @@ public class jobsite_userService {
                 log.info(e.getMessage());
             }
         }
-        response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net");
+
         return socialResponse;
     }
 
