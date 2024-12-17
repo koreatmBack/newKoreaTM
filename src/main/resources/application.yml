@@ -94,7 +94,8 @@ kakao:
 naver:
   client-id: ${NAVER_CLIENT_ID}
   client-secret: ${NAVER_CLIENT_SECRET}
-  redirect-uri: https://cafecon.co.kr/v1/jobsite/user/login/naver
+#  redirect-uri: https://cafecon.co.kr/v1/jobsite/user/login/naver
+  redirect-uri: https://d1hw28kg3ibv9b.cloudfront.net/v1/jobsite/user/login/naver
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/naver
   map:
    client-id: ${NAVER_MAP_CLIENT_ID}
