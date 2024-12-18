@@ -1417,7 +1417,6 @@ public class jobsite_userService {
                     Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                     log.info("********** 나 쿠키 생성 했음 ********");
                     response.addCookie(cookie);
-//                    response.setHeader("Set-Cookie", "accesstoken=" + cookie + "; Path=/; HttpOnly; Secure; SameSite=None;");
                     response.sendRedirect("https://cafecon.co.kr/v1/jobsite/user/login/naver?userId=" +
                             URLEncoder.encode(userId, "UTF-8") + "&code=C000");
                     return null;
@@ -1428,7 +1427,7 @@ public class jobsite_userService {
                 }
                 // 메인 페이지로 리다이렉트
 //                response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/");
-//                response.sendRedirect("http://d1hw28kg3ibv9b.cloudfront.net/");
+//
 //                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
 //                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
 //                return null;
