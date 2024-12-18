@@ -1431,7 +1431,7 @@ public class jobsite_userService {
             }
 
         }
-
+        return null;
     }
 
     // NAVER API 호출해서 네이버 계정(정보) 가져오기
