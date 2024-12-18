@@ -1381,7 +1381,7 @@ public class jobsite_userService {
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                         accessTokenExpiration/1000 + "초 남았습니다.");
-                                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                                response.sendRedirect("https://cafecon.co.kr/naver-login?userId=" +
                                         URLEncoder.encode(userId, "UTF-8") + "&code=C000");
                                 return null;
 //                                return socialResponse;
@@ -1415,8 +1415,9 @@ public class jobsite_userService {
                     socialResponse.setCode("C000");
                     socialResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
                     Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+                    log.info("********** 나 쿠키 생성 했음 ********");
                     response.addCookie(cookie);
-                    response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                    response.sendRedirect("https://cafecon.co.kr/naver-login?userId=" +
                             URLEncoder.encode(userId, "UTF-8") + "&code=C000");
                     return null;
                 } else {
