@@ -1303,10 +1303,12 @@ public class jobsite_userService {
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
 
             // 회원가입 페이지로 리다이렉트
-            response.sendRedirect("http://localhost:5173/naver-login?socialId=" +
+            response.sendRedirect("https://cafecon.co.kr/naver-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
                     "&socialType=" + socialResponse.getSocialType()
                     + "&code="+code);
+
+            return null;
 //            response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/signup");
         } else {
 
@@ -1418,6 +1420,7 @@ public class jobsite_userService {
                 }
                 // 메인 페이지로 리다이렉트
 //                response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/");
+//                response.sendRedirect("http://d1hw28kg3ibv9b.cloudfront.net/");
             } catch (BadCredentialsException e) {
                 socialResponse.setCode("E003");
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
