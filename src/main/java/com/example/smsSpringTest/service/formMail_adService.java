@@ -838,15 +838,6 @@ public class formMail_adService {
             ad.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-//            log.info("page = " + page + " size = " + size + " offset = " + offset);
-
-//            if("오늘 등록".equals(ad.getRegisterType())){
-//
-//            } else if("3일이내 등록".equals(ad.getRegisterType())){
-//
-//            } else if("7일이내 등록".equals(ad.getRegisterType())){
-//
-//            }
 
             if("최신등록순".equals(ad.getSortType())){
                 ad.setSortType("최신등록순");
@@ -891,6 +882,63 @@ public class formMail_adService {
 
         return adResponse;
     }
+
+//    // 잡사이트용 급구 공고 (마감기한 3일이하로 남은 애들)
+//    public AdResponse hurriedAdList(AdRequest ad) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//
+//        try {
+//            int page = ad.getPage(); // 현재 페이지
+//            int size = ad.getSize(); // 한 페이지에 표시할 수
+//            int offset = (page - 1) * size; // 시작 위치
+//            int totalCount = adMapper.hurriedAdListCount(ad); //전체 수
+//            ad.setOffset(offset);
+//
+//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+//
+//            if("최신등록순".equals(ad.getSortType())){
+//                ad.setSortType("최신등록순");
+//            } else if("시급높은순".equals(ad.getSortType())) {
+//                ad.setSalaryType("시급");
+//                ad.setSortType("salary");
+//                // 샐러리 타입 (시급, 주급, 일급 ,월급, 연봉)
+//                // 샐러리 타입 조건으로 주고, salary DESC; 하면 될듯?
+//            } else if("주급높은순".equals(ad.getSortType())){
+//                ad.setSalaryType("주급");
+//                ad.setSortType("salary");
+//            } else if("일급높은순".equals(ad.getSortType())){
+//                ad.setSalaryType("일급");
+//                ad.setSortType("salary");
+//            } else if("월급높은순".equals(ad.getSortType())){
+//                ad.setSalaryType("월급");
+//                ad.setSortType("salary");
+//            } else if("연봉높은순".equals(ad.getSortType())){
+//                ad.setSalaryType("연봉");
+//                ad.setSortType("salary");
+//            } else if("건별높은순".equals(ad.getSortType())){
+//                // 나중에 건 별로 공고 등록 추가할 때 사용할 코드
+//                ad.setSalaryType("건별");
+//                ad.setSortType("salary");
+//            }
+//            adResponse.setJobSiteList(adMapper.hurriedAdList(ad));
+//            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+//                int totalPages = (int) Math.ceil((double) totalCount / size);
+//                log.info("totalPages = " + totalPages);
+//                adResponse.setTotalPages(totalPages);
+//                adResponse.setCode("C000");
+//                adResponse.setMessage("조회 성공");
+//            } else {
+//                adResponse.setCode("E004");
+//                adResponse.setMessage("조회 실패");
+//            }
+//        } catch (Exception e){
+//            adResponse.setCode("E001");
+//            adResponse.setMessage("ERROR");
+//            log.info(e.getMessage());
+//        }
+//
+//        return adResponse;
+//    }
 
 
     // aid 일치하는 주변 역 정보들 추출

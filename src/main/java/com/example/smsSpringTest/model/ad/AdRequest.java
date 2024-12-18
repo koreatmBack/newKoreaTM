@@ -136,4 +136,6 @@ public class AdRequest {
     private String searchType; // 공고제목, 담당자명, 공고번호, 연락처
 
     private String keyword; // 검색시 입력한 값
+
+    private String adType; // 공고 타입 ( 급구, 단기, 채용 )
 }

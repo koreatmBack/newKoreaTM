@@ -626,7 +626,16 @@ interface AdMapper {
     <script>
         SELECT *
         FROM formmail_ad
-        WHERE 
+        WHERE
+        <if test="ad.adType == '단기'">
+         work_period IN ("1일", "1주일이하", "1주일~1개월") AND
+        </if>
+        <if test="ad.adType == '급구'"> 
+         end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND
+        </if>
+        <if test="ad.adType == '추천'">
+         grade = '1' AND
+        </if> 
         <if test="ad.registerType != null">
             <choose>
                 <when test="ad.registerType == '오늘 등록'">
@@ -687,7 +696,16 @@ interface AdMapper {
     <script>
         SELECT count(*)
         FROM formmail_ad
-        WHERE 
+        WHERE
+        <if test="ad.adType == '단기'">
+         work_period IN ("1일", "1주일이하", "1주일~1개월") AND
+        </if>
+        <if test="ad.adType == '급구'"> 
+         end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND
+        </if>
+        <if test="ad.adType == '추천'">
+         grade = '1' AND
+        </if> 
         <if test="ad.registerType != null">
             <choose>
                 <when test="ad.registerType == '오늘 등록'">
@@ -740,6 +758,152 @@ interface AdMapper {
     </script>
     """)
     int selectByRegionsSortCount(@Param("ad") AdRequest ad)
+
+
+//    // 잡사이트용 급구 공고 ( 마감 기한이 3일밖에 남지 않은 공고들 )
+//    @Select("""
+//    <script>
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE
+//        <if test="ad.adType == '단기'">
+//         work_period IN ("1일", "1주일이하", "1주일~1개월") AND
+//        </if>
+//        <if test="ad.adType == '급구'">
+//         end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND
+//        </if>
+//        <if test="ad.adType == '추천'">
+//         grade = '1' AND
+//        </if>
+//        <if test="ad.registerType != null">
+//            <choose>
+//                <when test="ad.registerType == '오늘 등록'">
+//                    end_date >= CURDATE() AND start_date = CURDATE()
+//                </when>
+//                <when test="ad.registerType == '3일이내 등록'">
+//                    end_date >= CURDATE()
+//           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -3 DAY) AND CURDATE()
+//                </when>
+//                <when test="ad.registerType == '7일이내 등록'">
+//                    end_date >= CURDATE()
+//           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -7 DAY) AND CURDATE()
+//                </when>
+//
+//            </choose>
+//        </if>
+//        <if test="ad.registerType == null">
+//            CURDATE() BETWEEN start_date AND end_date
+//        </if>
+//
+//        <if test="ad.regions != null and ad.regions.size() > 0">
+//            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+//                (sido = #{region.sido}
+//
+//                <if test="region.sigungu != null">
+//                AND sigungu = #{region.sigungu}
+//                </if>
+//
+//                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+//                 )
+//                </if>
+//                <if test="region.dongEubMyun != null">
+//                AND dong_eub_myun = #{region.dongEubMyun})
+//                </if>
+//            </foreach>
+//        </if>
+//        <if test="ad.salaryType != null">
+//         AND salary_type = #{ad.salaryType}
+//        </if>
+//        <if test="ad.sortType != null">
+//            <choose>
+//                <when test="ad.sortType == '최신등록순'">
+//                    ORDER BY created_at DESC
+//                </when>
+//                <otherwise>
+//                    ORDER BY salary DESC
+//                </otherwise>
+//            </choose>
+//        </if>
+//        LIMIT #{ad.size}
+//        OFFSET #{ad.offset}
+//    </script>
+//    """)
+//    List<JobSite> hurriedAdList(@Param("ad") AdRequest ad)
+
+//    // 잡사이트용 급구 공고 개수( 마감 기한이 3일밖에 남지 않은 공고들 )
+//    @Select("""
+//    <script>
+//        SELECT count(*)
+//        FROM formmail_ad
+//        WHERE
+//        <if test="ad.adType == '단기'">
+//         work_period IN ("1일", "1주일이하", "1주일~1개월") AND
+//        </if>
+//        <if test="ad.adType == '급구'">
+//         end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND
+//        </if>
+//        <if test="ad.adType == '추천'">
+//         grade = '1' AND
+//        </if>
+//        <if test="ad.registerType != null">
+//            <choose>
+//                <when test="ad.registerType == '오늘 등록'">
+//                    end_date >= CURDATE() AND start_date = CURDATE()
+//                </when>
+//                <when test="ad.registerType == '3일이내 등록'">
+//                    end_date >= CURDATE()
+//           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -3 DAY) AND CURDATE()
+//                </when>
+//                <when test="ad.registerType == '7일이내 등록'">
+//                    end_date >= CURDATE()
+//           AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -7 DAY) AND CURDATE()
+//                </when>
+//
+//            </choose>
+//        </if>
+//        <if test="ad.registerType == null">
+//            CURDATE() BETWEEN start_date AND end_date
+//        </if>
+//
+//        <if test="ad.regions != null and ad.regions.size() > 0">
+//            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+//                (sido = #{region.sido}
+//
+//                <if test="region.sigungu != null">
+//                AND sigungu = #{region.sigungu}
+//                </if>
+//
+//                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+//                 )
+//                </if>
+//                <if test="region.dongEubMyun != null">
+//                AND dong_eub_myun = #{region.dongEubMyun})
+//                </if>
+//            </foreach>
+//        </if>
+//        <if test="ad.salaryType != null">
+//         AND salary_type = #{ad.salaryType}
+//        </if>
+//        <if test="ad.sortType != null">
+//            <choose>
+//                <when test="ad.sortType == '최신등록순'">
+//                    ORDER BY created_at DESC
+//                </when>
+//                <otherwise>
+//                    ORDER BY salary DESC
+//                </otherwise>
+//            </choose>
+//        </if>
+//        LIMIT #{ad.size}
+//        OFFSET #{ad.offset}
+//    </script>
+//    """)
+//    int hurriedAdListCount(@Param("ad") AdRequest ad)
+
+
+
+
+
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 

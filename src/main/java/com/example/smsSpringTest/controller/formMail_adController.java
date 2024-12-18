@@ -253,6 +253,12 @@ public class formMail_adController {
         return formMailAdService.selectByRegionsSort(ad);
     }
 
+//    // 잡사이트용 급구 공고 (마감기한 3일이하로 남은 애들)
+//    @PostMapping("/hurriedAdList")
+//    public AdResponse hurriedAdList(@RequestBody AdRequest ad) throws Exception {
+//        return formMailAdService.hurriedAdList(ad);
+//    }
+
     // aid 일치하는 주변 역 정보 추출
      @PostMapping("/find/nearInfo")
      public AdResponse nearInfoList(@RequestBody AdNearInfo near) throws Exception {
