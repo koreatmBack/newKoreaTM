@@ -1417,7 +1417,7 @@ public class jobsite_userService {
                     Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                     log.info("********** 나 쿠키 생성 했음 ********");
                     response.addCookie(cookie);
-                    response.setHeader("Set-Cookie", "accesstoken=" + cookie + "; Path=/; HttpOnly; Secure; SameSite=None;");
+//                    response.setHeader("Set-Cookie", "accesstoken=" + cookie + "; Path=/; HttpOnly; Secure; SameSite=None;");
                     response.sendRedirect("https://cafecon.co.kr/v1/jobsite/user/login/naver?userId=" +
                             URLEncoder.encode(userId, "UTF-8") + "&code=C000");
                     return null;
