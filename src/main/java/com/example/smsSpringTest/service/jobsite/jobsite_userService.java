@@ -1381,7 +1381,10 @@ public class jobsite_userService {
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                         accessTokenExpiration/1000 + "초 남았습니다.");
-                                return socialResponse;
+                                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+                                return null;
+//                                return socialResponse;
                             }
                         }
 
