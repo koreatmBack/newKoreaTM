@@ -1308,7 +1308,7 @@ public class jobsite_userService {
                     "&socialType=" + socialResponse.getSocialType()
                     + "&code="+code);
 
-//            return null;
+            return null;
 //            response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/signup");
         } else {
 
