@@ -973,7 +973,8 @@ public class jobsite_userService {
             // 회원가입 페이지로 리다이렉트
             response.sendRedirect("http://localhost:5173/kakao-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
-                    "&socialType=" + socialResponse.getSocialType());
+                    "&socialType=" + socialResponse.getSocialType()
+                    + "&code="+code);
         } else {
 
             String userId = jobUserMapper.socialUserId(socialUser.getId());
@@ -1302,7 +1303,7 @@ public class jobsite_userService {
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
 
             // 회원가입 페이지로 리다이렉트
-            response.sendRedirect("https://cafecon.co.kr/naver-login?socialId=" +
+            response.sendRedirect("http://localhost:5173/naver-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
                     "&socialType=" + socialResponse.getSocialType()
                     + "&code="+code);
@@ -1641,7 +1642,8 @@ public class jobsite_userService {
             // 회원가입 페이지로 리다이렉트
             response.sendRedirect("http://localhost:5173/google-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
-                    "&socialType=" + socialResponse.getSocialType());
+                    "&socialType=" + socialResponse.getSocialType()
+                    + "&code="+code);
         } else {
 
             String userId = jobUserMapper.socialUserId(googleSocialId);
@@ -1963,7 +1965,8 @@ public class jobsite_userService {
             // 회원가입 페이지로 리다이렉트
             response.sendRedirect("http://localhost:5173/facebook-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
-                    "&socialType=" + socialResponse.getSocialType());
+                    "&socialType=" + socialResponse.getSocialType()
+                    + "&code="+code);
         } else {
 
             String userId = jobUserMapper.socialUserId(facebookSocialId);
