@@ -1305,8 +1305,8 @@ public class jobsite_userService {
             // 회원가입 페이지로 리다이렉트
             response.sendRedirect("http://localhost:5173/naver-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
-                    "&socialType=" + socialResponse.getSocialType()
-                    + "&code="+code);
+                    "&socialType=" + socialResponse.getSocialType());
+
 
             return null;
 //            response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/signup");
@@ -1421,6 +1421,8 @@ public class jobsite_userService {
                 // 메인 페이지로 리다이렉트
 //                response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/");
 //                response.sendRedirect("http://d1hw28kg3ibv9b.cloudfront.net/");
+                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
             } catch (BadCredentialsException e) {
                 socialResponse.setCode("E003");
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
