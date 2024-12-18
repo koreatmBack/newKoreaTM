@@ -1429,10 +1429,9 @@ public class jobsite_userService {
             }
             response.sendRedirect("http://localhost:5173/naver-login?userId=" +
                     URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-
+            return null;
         }
 
-        return socialResponse;
     }
 
     // NAVER API 호출해서 네이버 계정(정보) 가져오기
