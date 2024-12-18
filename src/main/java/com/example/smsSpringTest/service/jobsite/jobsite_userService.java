@@ -1358,7 +1358,7 @@ public class jobsite_userService {
                         // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
                         // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
                         Cookie cookies[] = request.getCookies();
-
+                        log.info("현재 쿠키 = " + cookies.toString());
                         // 만약 쿠키가 있다면
                         if(cookies != null) {
                             String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
@@ -1427,9 +1427,9 @@ public class jobsite_userService {
                 // 메인 페이지로 리다이렉트
 //                response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/");
 //                response.sendRedirect("http://d1hw28kg3ibv9b.cloudfront.net/");
-                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-                return null;
+//                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+//                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+//                return null;
             } catch (BadCredentialsException e) {
                 socialResponse.setCode("E003");
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
