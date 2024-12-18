@@ -29,18 +29,39 @@ interface NoticeMapper {
 
     // 공지사항 or FAQ 전체 조회
     @Select("""
+<script>
         SELECT *
         FROM formmail_notice
         WHERE type = #{notice.type}
+        <if test="notice.keyword != null">
+           AND title LIKE CONCAT('%', #{notice.keyword}, '%')
+        </if>
         LIMIT #{notice.size} OFFSET #{notice.offset}
+</script>    
     """)
     List<Notice> noticeList(@Param("notice") Notice notice)
 
+//    // 공지사항 or FAQ 검색하기
+//    @Select("""
+//        SELECT *
+//        FROM formmail_notice
+//        WHERE type = #{notice.type}
+//        AND title LIKE CONCAT('%', #{ad.keyword}, '%')
+//        LIMIT #{notice.size} OFFSET #{notice.offset}
+//    """)
+//    List<Notice> searchNoticeList(@Param("notice") Notice notice)
+
     // 공지사항 or FAQ 전체 수
     @Select("""
+<script>
         SELECT count(*)
         FROM formmail_notice
         WHERE type = #{notice.type}
+        <if test="notice.keyword != null">
+           AND title LIKE CONCAT('%', #{notice.keyword}, '%')
+        </if>
+        LIMIT #{notice.size} OFFSET #{notice.offset}
+</script>   
     """)
     int countAll(@Param("notice") Notice notice)
 

@@ -70,9 +70,11 @@ public class NoticeService {
         } catch (Exception e) {
                 noticeResponse.setCode("E001");
                 noticeResponse.setMessage("Error!!!");
+                log.info(e.getMessage());
         }
         return noticeResponse;
     }
+
 
     // 원하는 공지사항 or FAQ 조회
     public NoticeResponse findOneNotice(Notice notice) throws Exception {

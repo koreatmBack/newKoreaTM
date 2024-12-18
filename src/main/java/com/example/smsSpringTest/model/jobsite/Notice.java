@@ -33,6 +33,8 @@ public class Notice {
 
     private int offset;
 
-    private int viewCount;
+    private int viewCount; // 조회수
+
+    private String keyword; // 검색시 입력한 값
 
 }
