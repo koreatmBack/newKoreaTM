@@ -1417,9 +1417,7 @@ public class jobsite_userService {
                     Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                     log.info("********** 나 쿠키 생성 했음 ********");
                     response.addCookie(cookie);
-                    response.sendRedirect("https://cafecon.co.kr/v1/jobsite/user/login/naver?userId=" +
-                            URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-                    return null;
+
                 } else {
                     // 최종적으로 access 토큰이 없을때
                     socialResponse.setCode("E001");
@@ -1436,9 +1434,11 @@ public class jobsite_userService {
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
                 log.info(e.getMessage());
             }
-
+            response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                    URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+            return null;
         }
-        return null;
+//        return null;
     }
 
     // NAVER API 호출해서 네이버 계정(정보) 가져오기
