@@ -185,6 +185,10 @@ public class jobsite_userController {
         return jobsiteUserService.findClipping(user);
     }
 
+// ------------------------------------------------------
+
+    // 소셜 로그인 성공시
+
 
     // -- kakao 로그인
     @GetMapping("/login/kakao")
