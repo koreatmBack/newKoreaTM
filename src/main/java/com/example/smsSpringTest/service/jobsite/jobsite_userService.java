@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -1297,6 +1298,9 @@ public class jobsite_userService {
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
 
             // 회원가입 페이지로 리다이렉트
+            response.sendRedirect("http://localhost:5173/signup?socialId=" +
+                    URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
+                    "&socialType=" + socialResponse.getSocialType());
 //            response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/signup");
         } else {
 
