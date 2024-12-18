@@ -1302,9 +1302,10 @@ public class jobsite_userService {
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
 
             // 회원가입 페이지로 리다이렉트
-            response.sendRedirect("http://localhost:5173/naver-login?socialId=" +
+            response.sendRedirect("https://cafecon.co.kr/naver-login?socialId=" +
                     URLEncoder.encode(socialResponse.getSocialId(), "UTF-8") +
-                    "&socialType=" + socialResponse.getSocialType());
+                    "&socialType=" + socialResponse.getSocialType()
+                    + "&code="+code);
 //            response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/signup");
         } else {
 
