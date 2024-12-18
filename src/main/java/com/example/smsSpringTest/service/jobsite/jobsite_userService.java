@@ -1421,13 +1421,15 @@ public class jobsite_userService {
                 // 메인 페이지로 리다이렉트
 //                response.sendRedirect("https://d1hw28kg3ibv9b.cloudfront.net/");
 //                response.sendRedirect("http://d1hw28kg3ibv9b.cloudfront.net/");
-                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+
             } catch (BadCredentialsException e) {
                 socialResponse.setCode("E003");
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
                 log.info(e.getMessage());
             }
+            response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                    URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+
         }
 
         return socialResponse;
