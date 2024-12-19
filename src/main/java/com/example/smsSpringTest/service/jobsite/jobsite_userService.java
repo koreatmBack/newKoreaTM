@@ -401,6 +401,9 @@ public class jobsite_userService {
                         jobUserResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
                         Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                         response.addCookie(cookie);
+
+                        response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                                URLEncoder.encode(userId, "UTF-8") + "&code=C000");
                     } else {
                         // 최종적으로 access 토큰이 없을때
                         jobUserResponse.setCode("E001");
