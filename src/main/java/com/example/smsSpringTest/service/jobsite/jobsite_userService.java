@@ -1441,6 +1441,8 @@ public class jobsite_userService {
         } else {
 
             String userId = jobUserMapper.socialUserId(naverSocialId);
+            response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                    URLEncoder.encode(userId, "UTF-8") + "&code=C000");
 
             try {
 
