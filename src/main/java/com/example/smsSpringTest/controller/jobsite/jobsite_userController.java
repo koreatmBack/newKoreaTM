@@ -187,13 +187,13 @@ public class jobsite_userController {
 
 // ------------------------------------------------------
 
-    // 소셜 로그인 성공시
-    // user객체 반환 , 쿠키 생성
-    @GetMapping("/login/social/success")
-    public SocialResponse socialSuccess(@RequestParam String userId) throws Exception {
-        log.info("소셜 성공시 컨트롤러 호출됨 ? ");
-        return jobsiteUserService.socialSuccess(userId);
-    }
+//    // 소셜 로그인 성공시
+//    // user객체 반환 , 쿠키 생성
+//    @GetMapping("/login/social/success")
+//    public SocialResponse socialSuccess(@RequestParam String userId) throws Exception {
+//        log.info("소셜 성공시 컨트롤러 호출됨 ? ");
+//        return jobsiteUserService.socialSuccess(userId);
+//    }
 
     // -- kakao 로그인
     @GetMapping("/login/kakao")

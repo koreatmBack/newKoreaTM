@@ -73,7 +73,7 @@ public class SocialController {
         StringBuffer url = new StringBuffer();
         url.append("https://nid.naver.com/oauth2.0/authorize?");
         url.append("client_id="+naverClientId);
-        url.append("&redirect_uri="+"http://localhost:5173/naver-login");
+        url.append("&redirect_uri="+ naverRedirectUri);
         url.append("&response_type=code");
         return "redirect:"+url.toString();
     }
