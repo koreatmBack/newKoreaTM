@@ -1313,6 +1313,9 @@ public class jobsite_userService {
                                 log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
                                 socialResponse.setCode("C001");
                                 String userName = jobUserMapper.userName(userId);
+                                JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                                user2.setRole("user");
+                                socialResponse.setUser(user2);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                         accessTokenExpiration/1000 + "초 남았습니다.");
 //                                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
