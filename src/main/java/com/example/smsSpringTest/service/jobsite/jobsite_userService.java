@@ -1559,7 +1559,7 @@ public class jobsite_userService {
                 socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
                 log.info(e.getMessage());
             }
-            response.sendRedirect("https://cafecon.co.kr/login/social/success?userId=" +
+            response.sendRedirect("https://cafecon.co.kr/v1/jobsite/user/login/social/success?userId=" +
                     URLEncoder.encode(userId, "UTF-8") + "&code=C000");
             return null;
         }
