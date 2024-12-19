@@ -191,6 +191,7 @@ public class jobsite_userController {
     // user객체 반환 , 쿠키 생성
     @GetMapping("/login/social/success")
     public SocialResponse socialSuccess(@RequestParam String userId) throws Exception {
+        log.info("소셜 성공시 컨트롤러 호출됨 ? ");
         return jobsiteUserService.socialSuccess(userId);
     }
 

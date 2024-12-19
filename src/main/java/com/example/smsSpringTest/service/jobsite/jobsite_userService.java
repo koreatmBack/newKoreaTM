@@ -1246,7 +1246,7 @@ public class jobsite_userService {
     // 소셜 로그인 성공시
     public SocialResponse socialSuccess(String userId) throws Exception {
         SocialResponse socialResponse = new SocialResponse();
-
+        log.info("소셜 성공시 서비스 호출됨?");
         try {
             int dupSocialUserIdCheck = jobUserMapper.dupSocialUserIdCheck(userId);
             if(dupSocialUserIdCheck == 1) {
@@ -1315,10 +1315,10 @@ public class jobsite_userService {
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                         accessTokenExpiration/1000 + "초 남았습니다.");
-                                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-                                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-                                return null;
-//                                return socialResponse;
+//                                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+//                                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+//                                return null;
+                                return socialResponse;
                             }
                         }
 
