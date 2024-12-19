@@ -75,7 +75,7 @@ public class AdRequest {
 
     private String adNum; // 광고 번호 4자리
 
-    private String workTime; // 근무 시간
+//    private String workTime; // 근무 시간
 
     private int grade;
 
@@ -138,4 +138,11 @@ public class AdRequest {
     private String keyword; // 검색시 입력한 값
 
     private String adType; // 공고 타입 ( 급구, 단기, 채용 )
+
+    // 12 - 19 ~
+    private String managerName; //담당자 이름
+
+    private String managerEmail;    // 담당자 이메일
+
+    private String managerPhone;    // 담당자 메인 연락처
 }

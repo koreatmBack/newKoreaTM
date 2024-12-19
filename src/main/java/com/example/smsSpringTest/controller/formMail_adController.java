@@ -229,14 +229,14 @@ public class formMail_adController {
         return formMailAdService.orderByMaxPay(paging);
     }
 
-    // 잡사이트용 근무시간 짧은 순으로 광고 조회
-    @PostMapping("/orderByWorkTime")
-    @Operation(summary = "근무시간 짧은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
-    public AdResponse orderByWorkTime(@RequestBody Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        adResponse = formMailAdService.orderByWorkTime(paging);
-        return adResponse;
-    }
+//    // 잡사이트용 근무시간 짧은 순으로 광고 조회
+//    @PostMapping("/orderByWorkTime")
+//    @Operation(summary = "근무시간 짧은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
+//    public AdResponse orderByWorkTime(@RequestBody Paging paging) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//        adResponse = formMailAdService.orderByWorkTime(paging);
+//        return adResponse;
+//    }
 
     // 11-29 ~
 

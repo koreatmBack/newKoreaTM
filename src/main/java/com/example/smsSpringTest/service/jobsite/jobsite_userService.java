@@ -5,11 +5,9 @@ import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
-import com.example.smsSpringTest.model.jobsite.Cert;
-import com.example.smsSpringTest.model.jobsite.JobsiteUser;
-import com.example.smsSpringTest.model.jobsite.Social;
-import com.example.smsSpringTest.model.jobsite.SocialUser;
+import com.example.smsSpringTest.model.jobsite.*;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.jobsite.BookMarkResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
 import com.example.smsSpringTest.model.response.jobsite.SocialResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
@@ -56,7 +54,6 @@ public class jobsite_userService {
     private final JwtTokenProvider jwtTokenProvider;
     private final HttpServletResponse response;
     private final HttpServletRequest request;
-
 
     @Value("${kakao.client-id}")
     private String kakaoClientId;
@@ -2333,4 +2330,108 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 스크랩, 좋아요 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 스크랩 or 좋아요 추가
+    public ApiResponse addBookmark(BookMark mark) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            // 이미 있는지 ?
+            int dupBookmarkCheck = jobUserMapper.dupBookmarkCheck(mark);
+            if(dupBookmarkCheck == 1) {
+                // 이미 있으면 추가 x
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("이미 등록됨");
+                return apiResponse;
+            }
+            int addBookmark = jobUserMapper.addBookmark(mark);
+            if(addBookmark == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("추가 성공");
+            } else {
+                apiResponse.setCode("E003");
+                apiResponse.setMessage("추가 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
+
+    // userId , type 일치할 때 스크랩 or 좋아요 전체 조회
+    public BookMarkResponse bookMarkList(BookMark mark) throws Exception {
+        BookMarkResponse bookMarkResponse = new BookMarkResponse();
+
+        try {
+            int page = mark.getPage(); // 현재 페이지
+            int size = mark.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = jobUserMapper.bookMarkListCount(mark); //전체 수
+            mark.setOffset(offset);
+
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+
+            bookMarkResponse.setBookMarkList(jobUserMapper.bookMarkList(mark));
+            if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                bookMarkResponse.setTotalPages(totalPages);
+                bookMarkResponse.setCode("C000");
+                bookMarkResponse.setMessage("조회 성공");
+            } else {
+                bookMarkResponse.setCode("E003");
+                bookMarkResponse.setMessage("조회 실패");
+            }
+        } catch (Exception e) {
+            bookMarkResponse.setCode("E001");
+            bookMarkResponse.setMessage(" Error!!! ");
+        }
+
+        return bookMarkResponse;
+    }
+
+    // userId, type, aid 일치할 때 하나 삭제하기
+    public ApiResponse deleteOneBookmark(BookMark mark) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+
+            int deleteOne = jobUserMapper.deleteOne(mark);
+            if(deleteOne == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("하나 삭제 완료");
+            } else {
+                apiResponse.setCode("E003");
+                apiResponse.setMessage("하나 삭제 실패");
+            }
+        } catch (Exception e) {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage(" Error !!! ");
+        }
+
+        return apiResponse;
+    }
+
+    // userId, type, aid 일치할 때 전체 삭제하기
+    public ApiResponse deleteAllBookmark(BookMark mark) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            int deleteAll = jobUserMapper.deleteAll(mark);
+            if(deleteAll == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("전체 삭제 완료");
+            } else {
+                apiResponse.setCode("E003");
+                apiResponse.setMessage("전체 삭제 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error !!! ");
+        }
+
+        return apiResponse;
+    }
 }

@@ -734,37 +734,37 @@ public class formMail_adService {
     }
 
 
-    // 잡사이트용 근무시간 짧은 순으로 광고 조회
-    public AdResponse orderByWorkTime(Paging paging) throws Exception {
-        AdResponse adResponse = new AdResponse();
-
-        try {
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
-            int offset = (page - 1) * size; // 시작 위치
-            int totalCount = adMapper.allJobsiteListCount(); //전체 수
-            paging.setOffset(offset);
-
-            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-            adResponse.setJobSiteList(adMapper.orderByWorkTime(paging));
-
-            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-                int totalPages = (int) Math.ceil((double) totalCount / size);
-                log.info("totalPages = " + totalPages);
-                adResponse.setTotalPages(totalPages);
-                adResponse.setCode("C000");
-                adResponse.setMessage("근무시간 짧은 순으로 조회 성공");
-            } else {
-                adResponse.setCode("E004");
-                adResponse.setMessage("근무시간 짧은 순으로 조회 실패");
-            }
-        } catch (Exception e) {
-            adResponse.setCode("E001");
-            adResponse.setMessage("ERROR");
-        }
-
-        return adResponse;
-    }
+//    // 잡사이트용 근무시간 짧은 순으로 광고 조회
+//    public AdResponse orderByWorkTime(Paging paging) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//
+//        try {
+//            int page = paging.getPage(); // 현재 페이지
+//            int size = paging.getSize(); // 한 페이지에 표시할 수
+//            int offset = (page - 1) * size; // 시작 위치
+//            int totalCount = adMapper.allJobsiteListCount(); //전체 수
+//            paging.setOffset(offset);
+//
+//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+//            adResponse.setJobSiteList(adMapper.orderByWorkTime(paging));
+//
+//            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
+//                int totalPages = (int) Math.ceil((double) totalCount / size);
+//                log.info("totalPages = " + totalPages);
+//                adResponse.setTotalPages(totalPages);
+//                adResponse.setCode("C000");
+//                adResponse.setMessage("근무시간 짧은 순으로 조회 성공");
+//            } else {
+//                adResponse.setCode("E004");
+//                adResponse.setMessage("근무시간 짧은 순으로 조회 실패");
+//            }
+//        } catch (Exception e) {
+//            adResponse.setCode("E001");
+//            adResponse.setMessage("ERROR");
+//        }
+//
+//        return adResponse;
+//    }
 
 
     // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환

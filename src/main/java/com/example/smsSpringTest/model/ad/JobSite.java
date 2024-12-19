@@ -85,7 +85,7 @@ public class JobSite {
 
     private String adNum; // 광고 번호 4자리
 
-    private String workTime; // 근무 시간
+//    private String workTime; // 근무 시간
 
     private int grade;
 
@@ -136,4 +136,11 @@ public class JobSite {
     private double x; // 경도
 
     private double y; // 위도
+
+    // 12 - 19 ~
+    private String managerName; //담당자 이름
+
+    private String managerEmail;    // 담당자 이메일
+
+    private String managerPhone;    // 담당자 메인 연락처
 }

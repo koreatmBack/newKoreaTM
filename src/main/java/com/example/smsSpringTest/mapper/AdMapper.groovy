@@ -39,7 +39,6 @@ interface AdMapper {
             , welfare2
             , experience
             , ad_num
-            , work_time
             , grade
             , sido
             , sigungu
@@ -93,7 +92,6 @@ interface AdMapper {
             , #{ad.welfare2}
             , #{ad.experience}
             , #{ad.adNum}
-            , #{ad.workTime}
             , #{ad.grade}
             , #{ad.sido}
             , #{ad.sigungu}
@@ -236,9 +234,6 @@ interface AdMapper {
         <if test="ad.adNum != null">
             ad_num = #{ad.adNum},
         </if>           
-        <if test="ad.workTime != null">
-            work_time = #{ad.workTime},
-        </if>
         <if test="ad.hashtag != null">
             hashtag = #{ad.hashtag},
         </if>         
@@ -580,15 +575,15 @@ interface AdMapper {
     """)
     List<JobSite> orderByWorkDay(@Param("paging") Paging paging)
 
-    // 잡 사이트용 근무시간 짧은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
-    @Select("""
-        SELECT *
-        FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
-        ORDER BY work_time ASC
-        LIMIT #{paging.size} OFFSET #{paging.offset}
-    """)
-    List<JobSite> orderByWorkTime(@Param("paging") Paging paging)
+//    // 잡 사이트용 근무시간 짧은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
+//    @Select("""
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE CURDATE() BETWEEN start_date AND end_date
+//        ORDER BY work_time ASC
+//        LIMIT #{paging.size} OFFSET #{paging.offset}
+//    """)
+//    List<JobSite> orderByWorkTime(@Param("paging") Paging paging)
 
 
     // 2024-11-29 잡사이트용 조건, 정렬  / 추후 수정 필요하지만 일단 틀 만들어놓기

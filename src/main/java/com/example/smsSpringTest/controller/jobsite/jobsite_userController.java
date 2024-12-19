@@ -1,9 +1,11 @@
 package com.example.smsSpringTest.controller.jobsite;
 
 import com.example.smsSpringTest.model.Paging;
+import com.example.smsSpringTest.model.jobsite.BookMark;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.jobsite.BookMarkResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
 import com.example.smsSpringTest.model.response.jobsite.SocialResponse;
 import com.example.smsSpringTest.service.jobsite.jobsite_userService;
@@ -267,5 +269,31 @@ public class jobsite_userController {
     public ApiResponse userIntegFacebook(@RequestParam String code) throws Exception {
 
         return jobsiteUserService.userIntegFacebook(code);
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 스크랩, 좋아요 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 스크랩 or 좋아요 추가
+    @PostMapping("/add/bookmark")
+    public ApiResponse addBookmark(@RequestBody BookMark mark) throws Exception {
+        return jobsiteUserService.addBookmark(mark);
+    }
+
+    // userId , type 일치할 때 스크랩 or 좋아요 전체 조회
+    @PostMapping("/find/bookmarkList")
+    public BookMarkResponse bookMarkList(@RequestBody BookMark mark) throws Exception {
+        return jobsiteUserService.bookMarkList(mark);
+    }
+
+    // userId, type, aid 일치할 때 하나 삭제하기
+    @DeleteMapping("/delete/bookmark/one")
+    public ApiResponse deleteOneBookmark(@RequestBody BookMark mark) throws Exception {
+        return jobsiteUserService.deleteOneBookmark(mark);
+    }
+
+    // userId, type, aid 일치할 때 하나 삭제하기
+    @DeleteMapping("/delete/bookmark/all")
+    public ApiResponse deleteAllBookmark(@RequestBody BookMark mark) throws Exception {
+        return jobsiteUserService.deleteAllBookmark(mark);
     }
 }

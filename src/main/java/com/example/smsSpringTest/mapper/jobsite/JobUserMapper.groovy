@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.mapper.jobsite
 
 import com.example.smsSpringTest.model.Paging
+import com.example.smsSpringTest.model.jobsite.BookMark
 import com.example.smsSpringTest.model.jobsite.Cert
 import com.example.smsSpringTest.model.jobsite.JobsiteUser
 import com.example.smsSpringTest.model.jobsite.Social
@@ -417,4 +418,67 @@ interface JobUserMapper {
         WHERE user_id = #{userId}
     """)
     int checkSocialUser(@Param("userId") String userId)
+
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 스크랩, 좋아요 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 스크랩 or 좋아요 추가
+    @Insert("""
+        INSERT INTO jobsite_bookmark(
+            user_id
+            , aid
+            , type
+        ) VALUES (
+            #{mark.userId}
+            , #{mark.aid}
+            , #{mark.type}
+        )
+    """)
+    int addBookmark(@Param("mark") BookMark mark)
+
+    // userId , type 일치할 때 스크랩 or 좋아요 전체 조회 (페이징 처리)
+    @Select("""
+        SELECT *
+        FROM jobsite_bookmark
+        WHERE user_id = #{mark.userId} 
+        AND type = #{mark.type}
+        LIMIT #{mark.size} OFFSET #{mark.offset}
+    """)
+    List<BookMark> bookMarkList(@Param("mark") BookMark mark)
+
+    // userId , type 일치할 때 스크랩 or 좋아요 전체 조회 수
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_bookmark
+        WHERE user_id = #{mark.userId} 
+        AND type = #{mark.type}
+    """)
+    int bookMarkListCount(@Param("mark") BookMark mark)
+
+    // userId, type, aid 일치하는게 있는지, 있으면 저장 x
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_bookmark
+        WHERE user_id = #{mark.userId}
+        AND type = #{mark.type}
+        ANd aid = #{mark.aid}
+    """)
+    int dupBookmarkCheck(@Param("mark") BookMark mark)
+
+    // userId, type, aid 일치할 때 하나 삭제하기
+    @Delete("""
+        DELETE FROM jobsite_bookmark
+        WHERE user_id = #{mark.userId}
+        AND type = #{mark.type}
+        ANd aid = #{mark.aid}
+    """)
+    int deleteOne(@Param("mark") BookMark mark)
+
+    // userId, type, aid 일치할 때 전체 삭제하기
+    @Delete("""
+        DELETE FROM jobsite_bookmark
+        WHERE user_id = #{mark.userId}
+        AND type = #{mark.type}
+    """)
+    int deleteAll(@Param("mark") BookMark mark)
 }
