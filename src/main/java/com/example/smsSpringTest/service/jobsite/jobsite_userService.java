@@ -401,7 +401,9 @@ public class jobsite_userService {
                         jobUserResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
                         Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                         response.addCookie(cookie);
-
+                        response.sendRedirect("http://localhost:5173/naver-login?userId=" +
+                                URLEncoder.encode(userId, "UTF-8") + "&code=C000");
+                        return null;
                     } else {
                         // 최종적으로 access 토큰이 없을때
                         jobUserResponse.setCode("E001");
@@ -417,9 +419,7 @@ public class jobsite_userService {
                 jobUserResponse.setCode("E005");
                 jobUserResponse.setMessage("로그인 실패, 로그인 정보가 일치하지 않습니다.");
             }
-            response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-                    URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-            return null;
+
         } catch (Exception e) {
             log.info("로그인 중 예외 발생: {}", e.getMessage(), e);
             jobUserResponse.setCode("E001");
