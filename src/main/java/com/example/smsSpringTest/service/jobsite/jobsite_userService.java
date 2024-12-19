@@ -425,7 +425,8 @@ public class jobsite_userService {
             jobUserResponse.setCode("E001");
             jobUserResponse.setMessage("ERROR!!!");
         }
-        return jobUserResponse;
+        return null;
+//        return jobUserResponse;
     }
 
     // 잡사이트 로그아웃 -> 로그아웃시 리프레쉬 토큰, 해당 쿠키도 삭제
