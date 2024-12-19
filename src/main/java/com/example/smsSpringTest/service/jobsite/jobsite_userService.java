@@ -1385,7 +1385,7 @@ public class jobsite_userService {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-
+        String redirectUri = URLEncoder.encode("http://localhost:5173/naver-login", "UTF-8");
         try {
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true); // 데이터 기록 알려주기
@@ -1395,7 +1395,7 @@ public class jobsite_userService {
                     "&client_id=" + naverClientId +
                     "&client_secret=" + naverClientSecret +
 //                    "&redirect_uri=" + naverRedirectUri +
-                    "&redirect_uri=" + "http://localhost:5173/naver-login" +
+                    "&redirect_uri=" + redirectUri +
                     "&code=" + code;
 
             bw.write(sb);
