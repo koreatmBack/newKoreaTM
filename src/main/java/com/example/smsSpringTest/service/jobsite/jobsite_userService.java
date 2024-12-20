@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -1383,7 +1384,9 @@ public class jobsite_userService {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-//        String redirectUri = URLEncoder.encode("http://localhost:5173/naver-login", "UTF-8");
+//        String redirectUri = URLEncoder.encode("https://d1hw28kg3ibv9b.cloudfront.net/naver-login", "UTF-8");
+        String redirectUri = URLEncoder.encode("https://d1hw28kg3ibv9b.cloudfront.net/", "UTF-8");
+
         try {
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true); // 데이터 기록 알려주기
@@ -1392,8 +1395,8 @@ public class jobsite_userService {
             String sb = "grant_type=authorization_code" +
                     "&client_id=" + naverClientId +
                     "&client_secret=" + naverClientSecret +
-                    "&redirect_uri=" + naverRedirectUri +
-//                    "&redirect_uri=" + redirectUri +
+//                    "&redirect_uri=" + naverRedirectUri +
+                    "&redirect_uri=" + redirectUri +
                     "&code=" + code;
 
             bw.write(sb);
