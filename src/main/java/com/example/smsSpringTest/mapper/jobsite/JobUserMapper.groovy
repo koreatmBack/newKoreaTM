@@ -15,7 +15,7 @@ interface JobUserMapper {
     @Update("""
         UPDATE jobsite_sms_code
         SET sms_code = #{cert.smsCode},
-            userName = #{cert.userName}
+            user_name = #{cert.userName}
         WHERE phone = #{cert.phone} 
     """)
     int dupSmsCode(@Param("cert") Cert cert);
