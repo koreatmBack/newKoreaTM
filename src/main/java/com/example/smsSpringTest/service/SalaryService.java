@@ -479,20 +479,23 @@ public class SalaryService {
 
             double weekHolidaySalary = (weekWorkTime / 40) * 8 * hourSalary ;
             log.info("weekHolidaySalary = " + weekHolidaySalary);
-            // 1. 소수점 이하 값 추출
-            int intValue = (int) Math.round(weekHolidaySalary); // 소수점 버리고 정수만
+            int intValue = (int) Math.round(weekHolidaySalary);
             log.info("intValue = " + intValue);
-            // 2. 일의 자리 추출
-            int lastDigit = intValue % 10;
-            log.info("lastDigit = " + lastDigit);
-            // 2. 일의 자리 기준 올림 또는 내림 처리
-            if(lastDigit > 5) {
-                // 일의 자리가 5 이상이면 내림
-                salaryResponse.setWeekHolidayPay((intValue / 10) * 10);
-            } else {
-                // 일의 자리가 5 미만이면 올림
-                salaryResponse.setWeekHolidayPay(((intValue / 10) +1) * 10);
-            }
+//            // 1. 소수점 이하 값 추출
+//            int intValue = (int) Math.round(weekHolidaySalary); // 소수점 버리고 정수만
+//            log.info("intValue = " + intValue);
+//            // 2. 일의 자리 추출
+//            int lastDigit = intValue % 10;
+//            log.info("lastDigit = " + lastDigit);
+//            // 2. 일의 자리 기준 올림 또는 내림 처리
+//            if(lastDigit > 5) {
+//                // 일의 자리가 5 이상이면 내림
+//                salaryResponse.setWeekHolidayPay((intValue / 10) * 10);
+//            } else {
+//                // 일의 자리가 5 미만이면 올림
+//                salaryResponse.setWeekHolidayPay(((intValue / 10) +1) * 10);
+//            }
+                salaryResponse.setWeekHolidayPay(intValue);
                 salaryResponse.setCode("C000");
                 salaryResponse.setMessage("주휴 수당 계산 성공");
 
