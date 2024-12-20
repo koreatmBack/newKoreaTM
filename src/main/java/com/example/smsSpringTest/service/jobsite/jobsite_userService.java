@@ -1484,7 +1484,7 @@ public class jobsite_userService {
                         // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
                         // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
                         Cookie cookies[] = request.getCookies();
-                        log.info("현재 쿠키 = " + cookies.toString());
+//                        log.info("현재 쿠키 = " + cookies.toString());
                         // 만약 쿠키가 있다면
                         if(cookies != null) {
                             String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
@@ -1548,6 +1548,7 @@ public class jobsite_userService {
                     // 최종적으로 access 토큰이 없을때
                     socialResponse.setCode("E001");
                     socialResponse.setMessage("최종적으로 Access Token이 없습니다.");
+                    log.info("ACCESS TOKEN 없음!!!!!!!!!!!!!!!");
                 }
             } catch (BadCredentialsException e) {
                 socialResponse.setCode("E003");
