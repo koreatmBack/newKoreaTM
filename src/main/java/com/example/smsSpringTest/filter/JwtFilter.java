@@ -302,8 +302,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_common/join", "/api/v1/formMail_common/join",
                 "/v1/jobsite/user/join", "/api/v1/jobsite/user/join",
                 "/v1/jobsite/user/login/**", "/api/v1/jobsite/user/login/**",
+                "/v1/jobsite/user/cert", "/api/v1/jobsite/user/cert",
                 "/v1/jobsite/user/cert/email", "/api/v1/jobsite/user/cert/email",
                 "/v1/jobsite/user/check/id", "/api/v1/jobsite/user/check/id",
+                "/v1/jobsite/user/check/email", "/api/v1/jobsite/user/check/email",
                 // 잡사이트 조회용
                 "/v1/formMail_ad/allJobsiteList", "/api/v1/formMail_ad/allJobsiteList",
                 "/v1/formMail_ad/findOneJobsite", "/api/v1/formMail_ad/findOneJobsite",
@@ -334,7 +336,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/calculate/salary", "/v1/calculate/salary"
                 , "/api/v1/calculate/salary/weekHoliday", "/v1/calculate/salary/weekHoliday"
                 //
-                
+
         };
 
         for (String allowedURI : allowedURIs) {

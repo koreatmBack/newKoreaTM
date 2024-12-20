@@ -478,7 +478,7 @@ public class SalaryService {
             }
 
             double weekHolidaySalary = (weekWorkTime / 40) * 8 * hourSalary ;
-
+            log.info("weekHolidaySalary = " + weekHolidaySalary);
             // 1. 소수점 이하 값 추출
             int intValue = (int) Math.round(weekHolidaySalary); // 소수점 버리고 정수만
             log.info("intValue = " + intValue);
