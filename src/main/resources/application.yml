@@ -88,7 +88,8 @@ jwt:
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
   client-secret: ${KAKAO_CLIENT_SECRET}
-  redirect-uri: http://localhost:5173/kakao-login
+#  redirect-uri: http://localhost:5173/kakao-login
+  redirect-uri: https://d1hw28kg3ibv9b.cloudfront.net/kakao-login
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/kakao
 
 naver:
@@ -107,13 +108,15 @@ naver:
 google:
   client-id: ${GOOGLE_CLIENT_ID}
   client-secret: ${GOOGLE_CLIENT_SECRET}
-  redirect-uri: http://localhost:5173/google-login
+#  redirect-uri: http://localhost:5173/google-login
+  redirect-uri: https://d1hw28kg3ibv9b.cloudfront.net/google-login
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/google
 
 facebook:
   client-id: ${FACEBOOK_CLIENT_ID}
   client-secret: ${FACEBOOK_CLIENT_SECRET}
-  redirect-uri: http://localhost:5173/facebook-login
+#  redirect-uri: http://localhost:5173/facebook-login
+  redirect-uri: https://d1hw28kg3ibv9b.cloudfront.net/facebook-login
 
 logging:
   level:
