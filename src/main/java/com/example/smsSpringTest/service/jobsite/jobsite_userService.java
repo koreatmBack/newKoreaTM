@@ -361,6 +361,11 @@ public class jobsite_userService {
                                     log.info("아직 유효한 cookie = " + accessToken);
                                     Long accessTokenExpiration = jwtTokenProvider.getExpiration(accessToken);
                                     log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+
+                                    JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                                    user2.setRole("user");
+                                    jobUserResponse.setUser(user2);
+
                                     jobUserResponse.setCode("C001");
                                     String userName = jobUserMapper.userName(userId);
                                     jobUserResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
@@ -1038,10 +1043,14 @@ public class jobsite_userService {
                                 log.info("아직 유효한 cookie = " + cookieToken);
                                 Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
                                 log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                                user2.setRole("user");
+                                socialResponse.setUser(user2);
                                 socialResponse.setCode("C001");
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                         accessTokenExpiration/1000 + "초 남았습니다.");
+
                                 return socialResponse;
                             }
                         }
@@ -1492,6 +1501,9 @@ public class jobsite_userService {
                                 log.info("아직 유효한 cookie = " + cookieToken);
                                 Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
                                 log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                                user2.setRole("user");
+                                socialResponse.setUser(user2);
                                 socialResponse.setCode("C001");
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
@@ -1822,6 +1834,9 @@ public class jobsite_userService {
                                 log.info("아직 유효한 cookie = " + cookieToken);
                                 Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
                                 log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                                user2.setRole("user");
+                                socialResponse.setUser(user2);
                                 socialResponse.setCode("C001");
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
@@ -2139,6 +2154,9 @@ public class jobsite_userService {
                                 log.info("아직 유효한 cookie = " + cookieToken);
                                 Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
                                 log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
+                                user2.setRole("user");
+                                socialResponse.setUser(user2);
                                 socialResponse.setCode("C001");
                                 String userName = jobUserMapper.userName(userId);
                                 socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
@@ -2391,6 +2409,39 @@ public class jobsite_userService {
 
         return bookMarkResponse;
     }
+
+    // userId , type 일치할 때 스크랩 or 좋아요 진행중인 공고 조회 (페이징 처리)
+    public BookMarkResponse progressBookMarkList(BookMark mark) throws Exception {
+        BookMarkResponse bookMarkResponse = new BookMarkResponse();
+
+        try {
+            int page = mark.getPage(); // 현재 페이지
+            int size = mark.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = jobUserMapper.progressBookMarkListCount(mark); //전체 수
+            mark.setOffset(offset);
+
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+
+            bookMarkResponse.setBookMarkList(jobUserMapper.progressBookMarkList(mark));
+            if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                bookMarkResponse.setTotalPages(totalPages);
+                bookMarkResponse.setCode("C000");
+                bookMarkResponse.setMessage("조회 성공");
+            } else {
+                bookMarkResponse.setCode("E003");
+                bookMarkResponse.setMessage("조회 실패");
+            }
+        } catch (Exception e) {
+            bookMarkResponse.setCode("E001");
+            bookMarkResponse.setMessage(" Error!!! ");
+        }
+
+        return bookMarkResponse;
+    }
+
 
     // userId, type, aid 일치할 때 하나 삭제하기
     public ApiResponse deleteOneBookmark(BookMark mark) throws Exception {

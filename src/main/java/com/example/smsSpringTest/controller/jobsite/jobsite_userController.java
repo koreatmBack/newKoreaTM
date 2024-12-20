@@ -285,6 +285,12 @@ public class jobsite_userController {
         return jobsiteUserService.bookMarkList(mark);
     }
 
+    // userId , type 일치할 때 스크랩 or 좋아요 진행중인 공고 조회
+    @PostMapping("/find/bookmarkList/progress")
+    public BookMarkResponse progressBookMarkList(@RequestBody BookMark mark) throws Exception {
+        return jobsiteUserService.progressBookMarkList(mark);
+    }
+
     // userId, type, aid 일치할 때 하나 삭제하기
     @DeleteMapping("/delete/bookmark/one")
     public ApiResponse deleteOneBookmark(@RequestBody BookMark mark) throws Exception {

@@ -140,9 +140,55 @@ public class AdRequest {
     private String adType; // 공고 타입 ( 급구, 단기, 채용 )
 
     // 12 - 19 ~
-    private String managerName; //담당자 이름
+    private String managerName; // 담당자 이름
 
     private String managerEmail;    // 담당자 이메일
 
     private String managerPhone;    // 담당자 메인 연락처
+
+    private String managerSubPhone; // 담당자 서브 연락처
+
+    private boolean probation;  // 기간협의
+
+    private boolean periodDiscussion; // 수습 기간
+
+    private boolean workDate;   // 근무요일 체크
+
+    private String workDateDetail; // 요일 참고
+
+    private boolean workTime; // 근무시간 체크
+
+    private String workTimeDetail; // 시간참고
+
+    private boolean ageType; // 연령조건
+
+    private String minAge; // 최소연령
+
+    private String maxAge; // 최고연령
+
+    private boolean endLimit; // 채용 마감 체크
+
+    private String applyUrl; // 지원 URL
+
+    private String zipCode; // 우편번호
+
+    private String addressDetail; // 상세주소(102동 403호 등)
+
+    private String adPosition; //
+
+    private String photoList;   // 사진목록
+
+    private String adLink; // 광고 이미지 링크
+
+    private String sido2; // 시 / 도 2
+
+    private String sigungu2; // 시 / 군 / 구 2
+
+    private String dongEubMyun2; // 동 / 읍 / 면 2
+
+    private String sido3; // 시 / 도 3
+
+    private String sigungu3; // 시 / 군 / 구 3
+
+    private String dongEubMyun3; // 동 / 읍 / 면 3
 }

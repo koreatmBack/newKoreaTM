@@ -455,6 +455,29 @@ interface JobUserMapper {
     """)
     int bookMarkListCount(@Param("mark") BookMark mark)
 
+    // userId , type 일치할 때 스크랩 or 좋아요 진행중인 공고 조회 (페이징 처리)
+    @Select("""
+        SELECT jb.*
+        FROM jobsite_bookmark jb
+        JOIN formmail_ad fa ON jb.aid = fa.aid
+        WHERE jb.user_id = #{mark.userId} 
+        AND jb.type = #{mark.type}
+        AND CURDATE() BETWEEN fa.start_date AND fa.end_date
+        LIMIT #{mark.size} OFFSET #{mark.offset}
+    """)
+    List<BookMark> progressBookMarkList(@Param("mark") BookMark mark)
+
+    // userId , type 일치할 때 스크랩 or 좋아요 진행중인 공고 조회 수
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_bookmark jb
+        JOIN formmail_ad fa ON jb.aid = fa.aid
+        WHERE jb.user_id = #{mark.userId} 
+        AND jb.type = #{mark.type}
+        AND CURDATE() BETWEEN fa.start_date AND fa.end_date
+    """)
+    int progressBookMarkListCount(@Param("mark") BookMark mark)
+
     // userId, type, aid 일치하는게 있는지, 있으면 저장 x
     @Select("""
         SELECT count(*)
