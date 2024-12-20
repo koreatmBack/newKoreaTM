@@ -302,7 +302,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_common/join", "/api/v1/formMail_common/join",
                 "/v1/jobsite/user/join", "/api/v1/jobsite/user/join",
                 "/v1/jobsite/user/login/**", "/api/v1/jobsite/user/login/**",
-                "/v1/jobsite/user/cert", "/api/v1/jobsite/user/cert",
+                "/v1/jobsite/user/cert/email", "/api/v1/jobsite/user/cert/email",
                 "/v1/jobsite/user/check/id", "/api/v1/jobsite/user/check/id",
                 // 잡사이트 조회용
                 "/v1/formMail_ad/allJobsiteList", "/api/v1/formMail_ad/allJobsiteList",
@@ -313,6 +313,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_ad/orderByWorkDay", "/api/v1/formMail_ad/orderByWorkDay",
                 "/v1/formMail_ad/orderByMaxPay", "/api/v1/formMail_ad/orderByMaxPay",
                 "/v1/formMail_ad/orderByWorkTime", "/api/v1/formMail_ad/orderByWorkTime",
+                "/api/v1/formMail_ad/selectByRegions/sort", "v1/formMail_ad/selectByRegions/sort",
+
                 // 잡사이트 지원자 등록
                 "/v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
                 // 소셜 로그인
@@ -329,6 +331,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/notice/find/one", "/v1/notice/find/one"
                 , "/api/v1/notice/find/allList", "/v1/notice/find/allList"
                 ,"/api/v1/common/send/email" , "/v1/common/send/email"
+                , "/api/v1/calculate/salary", "/v1/calculate/salary"
+                , "/api/v1/calculate/salary/weekHoliday", "/v1/calculate/salary/weekHoliday"
+                //
+                
         };
 
         for (String allowedURI : allowedURIs) {
