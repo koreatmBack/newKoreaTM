@@ -315,7 +315,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_ad/orderByWorkDay", "/api/v1/formMail_ad/orderByWorkDay",
                 "/v1/formMail_ad/orderByMaxPay", "/api/v1/formMail_ad/orderByMaxPay",
                 "/v1/formMail_ad/orderByWorkTime", "/api/v1/formMail_ad/orderByWorkTime",
-                "/api/v1/formMail_ad/selectByRegions/sort", "v1/formMail_ad/selectByRegions/sort",
+                "/api/v1/formMail_ad/selectByRegions/sort", "/v1/formMail_ad/selectByRegions/sort",
 
                 // 잡사이트 지원자 등록
                 "/v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
