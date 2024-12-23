@@ -178,7 +178,7 @@ public class fmAd {
 
     private String photoList;   // 사진목록
 
-    private String adLink; // 광고 이미지 링크
+    private boolean adLink; // 광고 이미지 링크
 
     private String sido2; // 시 / 도 2
 
