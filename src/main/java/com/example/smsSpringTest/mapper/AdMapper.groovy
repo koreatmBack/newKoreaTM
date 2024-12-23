@@ -1135,7 +1135,8 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_regions
-        WHERE sigungu = #{re.sigungu}
+        WHERE sido = #{re.sido} 
+        AND sigungu = #{re.sigungu}
     """)
     List<Regions> dongEubMyunList(@Param("re") Regions re)
 
