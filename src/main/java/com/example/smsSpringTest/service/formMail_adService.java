@@ -893,6 +893,27 @@ public class formMail_adService {
     public AdResponse sigunguList(Regions re) throws Exception {
         AdResponse adResponse = new AdResponse();
         adResponse.setRegionsList(adMapper.sigunguList(re));
+
+        List<Regions> sigunguList = adMapper.sigunguList(re);
+
+//        // 중복 제거된 리스트
+//        List<Regions> uniqueRegionsList = new ArrayList<>();
+//        for (Regions r : sigunguList) {
+//            boolean exists = false;
+//            for (Regions ur : uniqueRegionsList) {
+//                if (ur.getSido().equals(r.getSido()) && ur.getSigungu().equals(r.getSigungu())) {
+//                    exists = true; // 이미 리스트에 존재
+//                    break;
+//                }
+//            }
+//            if (!exists) {
+//                uniqueRegionsList.add(r); // 중복이 없으면 추가
+//            }
+//        }
+//
+//        // 결과 출력
+//        log.info("중복처리 list = " + uniqueRegionsList.toString());
+
         try {
             if(adResponse.getRegionsList() != null && !adResponse.getRegionsList().isEmpty()){
                 adResponse.setCode("C000");
