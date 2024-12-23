@@ -192,5 +192,7 @@ public class fmAd {
 
     private String dongEubMyun3; // 동 / 읍 / 면 3
 
+    private boolean focus; // 유료광고2
+
 
 }

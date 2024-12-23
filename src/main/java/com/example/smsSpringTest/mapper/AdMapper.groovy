@@ -60,6 +60,33 @@ interface AdMapper {
             , y
             , salary
             , salary_type
+            , manager_name
+            , manager_email
+            , manager_phone
+            , manager_sub_phone
+            , probation
+            , period_discussion
+            , work_date
+            , work_date_detail
+            , work_time
+            , work_time_detail
+            , age_type
+            , min_age
+            , max_age
+            , end_limit
+            , apply_url
+            , zip_code
+            , address_detail
+            , ad_position
+            , photo_list
+            , ad_link
+            , sido2
+            , sigungu2
+            , dong_eub_myun2
+            , sido3
+            , sigungu3
+            , dong_eub_myun3
+            , focus
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -113,6 +140,33 @@ interface AdMapper {
             , #{ad.y}
             , #{ad.salary}
             , #{ad.salaryType}
+            , #{ad.managerName}
+            , #{ad.managerEmail}
+            , #{ad.managerPhone}
+            , #{ad.managerSubPhone}
+            , #{ad.probation}
+            , #{ad.periodDiscussion}
+            , #{ad.workDate}
+            , #{ad.workDateDetail}
+            , #{ad.workTime}
+            , #{ad.workTimeDetail}
+            , #{ad.ageType}
+            , #{ad.minAge}
+            , #{ad.maxAge}
+            , #{ad.endLimit}
+            , #{ad.applyUrl}
+            , #{ad.zipCode}
+            , #{ad.addressDetail}
+            , #{ad.adPosition}
+            , #{ad.photoList}
+            , #{ad.adLink}
+            , #{ad.sido2}
+            , #{ad.sigungu2}
+            , #{ad.dongEubMyun2}
+            , #{ad.sido3}
+            , #{ad.sigungu3}
+            , #{ad.dongEubMyun3}
+            , #{ad.focus}
         )
 </script>        
     """)
