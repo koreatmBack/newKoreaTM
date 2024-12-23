@@ -496,18 +496,37 @@ public class jobsite_userService {
 
         try {
 
-            String userPwd = user.getUserPwd();
+            // 소셜 로그인인지 체크하기
+            int checkSocialUser = jobUserMapper.checkSocialUser(user.getUserId());
 
-            // 암호화된 비밀번호 체크
-            String dupPwd = jobUserMapper.dupPwd(user);
+            if(checkSocialUser == 0) {
+                // 일반 회원가입 유저라면
+                String userPwd = user.getUserPwd();
 
-            // 비밀번호 일치하는지 검증
-            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
-            if(!isMatchPwd){
-                jobUserResponse.setCode("C003");
-                jobUserResponse.setMessage("비밀번호가 일치하지 않습니다.");
-                return jobUserResponse;
+                // 암호화된 비밀번호 체크
+                String dupPwd = jobUserMapper.dupPwd(user);
+
+                // 비밀번호 일치하는지 검증
+                boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+                if(!isMatchPwd){
+                    jobUserResponse.setCode("C003");
+                    jobUserResponse.setMessage("비밀번호가 일치하지 않습니다.");
+                    return jobUserResponse;
+                }
             }
+
+//            String userPwd = user.getUserPwd();
+//
+//            // 암호화된 비밀번호 체크
+//            String dupPwd = jobUserMapper.dupPwd(user);
+//
+//            // 비밀번호 일치하는지 검증
+//            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+//            if(!isMatchPwd){
+//                jobUserResponse.setCode("C003");
+//                jobUserResponse.setMessage("비밀번호가 일치하지 않습니다.");
+//                return jobUserResponse;
+//            }
 
             if(user.getAgreeOver15() != null || user.getAgreeTerms() != null || user.getAgreePrivacy() != null
             || user.getAgreeSmsMarketing() != null || user.getAgreeEmailMarketing() != null){
