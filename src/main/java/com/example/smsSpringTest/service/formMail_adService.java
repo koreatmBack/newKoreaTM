@@ -867,6 +867,11 @@ public class formMail_adService {
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
+
+                // 총 개수
+                int total = adResponse.getJobSiteList().size();
+                log.info("총 개수 = " + total);
+                adResponse.setTotalCount(total);
                 adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("조회 성공");
