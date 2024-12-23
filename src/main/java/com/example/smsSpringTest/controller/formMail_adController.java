@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Paging;
+import com.example.smsSpringTest.model.Regions;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdNearInfo;
 import com.example.smsSpringTest.model.ad.AdRequest;
@@ -175,6 +176,18 @@ public class formMail_adController {
     @PostMapping("/statusList")
     public AdResponse statusList(@RequestBody AdRequest ad) throws Exception {
         return formMailAdService.statusList(ad);
+    }
+
+    // 시도 -> 시,군,구 목록 조회
+    @PostMapping("/sigunguList")
+    public AdResponse sigunguList(@RequestBody Regions re) throws Exception {
+        return formMailAdService.sigunguList(re);
+    }
+
+    // 시,군,구 -> 동,읍,면 목록 조회
+    @PostMapping("/dongEubMyunList")
+    public AdResponse dongEubMyunList(@RequestBody Regions re) throws Exception {
+        return formMailAdService.dongEubMyunList(re);
     }
 
     // ---------------------------------------------------------

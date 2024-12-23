@@ -5,6 +5,7 @@ import com.example.smsSpringTest.mapper.AdMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.HolidayMapper;
 import com.example.smsSpringTest.model.Paging;
+import com.example.smsSpringTest.model.Regions;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdNearInfo;
 import com.example.smsSpringTest.model.ad.AdRequest;
@@ -883,6 +884,47 @@ public class formMail_adService {
             adResponse.setCode("E001");
             adResponse.setMessage("ERROR");
             log.info(e.getMessage());
+        }
+
+        return adResponse;
+    }
+
+    // 시도 -> 시,군,구 목록 조회
+    public AdResponse sigunguList(Regions re) throws Exception {
+        AdResponse adResponse = new AdResponse();
+        adResponse.setRegionsList(adMapper.sigunguList(re));
+        try {
+            if(adResponse.getRegionsList() != null && !adResponse.getRegionsList().isEmpty()){
+                adResponse.setCode("C000");
+                adResponse.setMessage("조회 성공");
+            } else {
+                adResponse.setCode("E004");
+                adResponse.setMessage("조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("Error!!!");
+        }
+
+        return adResponse;
+    }
+
+    // 시,군,구 -> 동,읍,면 목록 조회
+    public AdResponse dongEubMyunList(Regions re) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        adResponse.setRegionsList(adMapper.dongEubMyunList(re));
+        try {
+            if(adResponse.getRegionsList() != null && !adResponse.getRegionsList().isEmpty()){
+                adResponse.setCode("C000");
+                adResponse.setMessage("조회 성공");
+            } else {
+                adResponse.setCode("E004");
+                adResponse.setMessage("조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("Error!!!");
         }
 
         return adResponse;

@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Paging
+import com.example.smsSpringTest.model.Regions
 import com.example.smsSpringTest.model.ad.*
 import com.example.smsSpringTest.model.findCompanyAndUser
 import com.example.smsSpringTest.model.formMail_file
@@ -1119,5 +1120,23 @@ interface AdMapper {
 //        WHERE aid = #{ad.aid}
 //    """)
 //    int updateStatusY(@Param("near") fmAd ad)
+
+    // 시도 -> 시,군,구 목록 조회
+    @Select("""
+        SELECT *
+        FROM formmail_regions
+        WHERE sido = #{re.sido}
+    """)
+    List<Regions> sigunguList(@Param("re") Regions re)
+
+    // 시,군,구 -> 동,읍,면 목록 조회
+    @Select("""
+        SELECT *
+        FROM formmail_regions
+        WHERE sigungu = #{re.sigungu}
+    """)
+    List<Regions> dongEubMyunList(@Param("re") Regions re)
+
+
 
 }
