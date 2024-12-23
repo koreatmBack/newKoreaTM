@@ -1072,11 +1072,13 @@ interface AdMapper {
            , near_station
            , distance
            , duration_time
+           , line
         ) VALUES (
            #{near.aid}
            ,#{near.nearStation}
            ,#{near.distance}
            ,#{near.durationTime}
+           ,#{near.line}
         )
     """)
     int addNearInfo(@Param("near") AdNearInfo near)

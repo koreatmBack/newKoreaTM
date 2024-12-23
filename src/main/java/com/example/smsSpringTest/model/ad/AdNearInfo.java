@@ -23,6 +23,7 @@ public class AdNearInfo {
     private String nearStation;
     private String distance;
     private String durationTime;
+    private String line;
     private String status; // Y or N
 
     private String type; // 선택인지 선택해제인지

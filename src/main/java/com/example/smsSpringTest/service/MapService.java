@@ -294,7 +294,24 @@ public class MapService {
             JsonObject document = element.getAsJsonObject();
             // 필요한 데이터 추출
             String fullPlaceName = document.get("place_name").getAsString(); // 전체 이름 (예: 군자역 7호선)
-            String stationName = fullPlaceName.split(" ")[0]; // 역 이름만 추출 (예: 군자역)
+            // 역 이름과 노선 이름 분리
+            log.info("full = " + fullPlaceName);
+            String[] parts = fullPlaceName.split(" "); // 공백 기준으로 분리
+//                String stationName = fullPlaceName.split(" ")[0]; // 역 이름만 추출 (예: 군자역)
+            String stationName = parts[0]; // 역 이름만 추출 (예: 군자역)
+            // "호선" 또는 "선" 앞부분 추출
+            String line = "";
+            log.info("parts[1] = " + parts[1]);
+            if (parts.length > 1) { // 노선 이름이 있는 경우 처리
+                String rawLine = parts[1]; // 노선 이름 부분 (예: 경의중앙선, 2호선 등)
+                log.info("rawline = " + rawLine);
+                if (rawLine.contains("호선")) { // "숫자 + 호선" 패턴 확인
+                    line = rawLine.split("호선")[0].trim();
+                } else if (rawLine.contains("선")) { // "선" 포함된 경우
+                    line = rawLine.split("선")[0].trim();
+                }
+            }
+            log.info("line = " + line);
             double subwayY = document.get("x").getAsDouble(); // 위도
             double subwayX = document.get("y").getAsDouble(); // 경도
             int  distance = Integer.parseInt(document.get("distance").getAsString()); // 거리 (m)
@@ -308,7 +325,7 @@ public class MapService {
             double result = (double) distance / 1000;
             String KmDistance = String.format("%.1f", result); // 소수점 1자리까지 유지
 
-            MapVO mapVO = new MapVO(subwayX, subwayY, "", fullPlaceName, "걸어서 " + newDurationTime + "분", KmDistance + "km");
+            MapVO mapVO = new MapVO(subwayX, subwayY, "", stationName, "걸어서 " + newDurationTime + "분", KmDistance + "km", line);
 
             // 중복 제거: 역 이름(stationName)을 기준으로 중복 제거
             uniqueMap.putIfAbsent(stationName, mapVO);
@@ -412,7 +429,24 @@ public class MapService {
                 JsonObject document = element.getAsJsonObject();
                 // 필요한 데이터 추출
                 String fullPlaceName = document.get("place_name").getAsString(); // 전체 이름 (예: 군자역 7호선)
-                String stationName = fullPlaceName.split(" ")[0]; // 역 이름만 추출 (예: 군자역)
+                // 역 이름과 노선 이름 분리
+                log.info("full = " + fullPlaceName);
+                String[] parts = fullPlaceName.split(" "); // 공백 기준으로 분리
+//                String stationName = fullPlaceName.split(" ")[0]; // 역 이름만 추출 (예: 군자역)
+                String stationName = parts[0]; // 역 이름만 추출 (예: 군자역)
+                // "호선" 또는 "선" 앞부분 추출
+                String line = "";
+                log.info("parts = " + parts.toString());
+                if (parts.length > 1) { // 노선 이름이 있는 경우 처리
+                    String rawLine = parts[1]; // 노선 이름 부분 (예: 경의중앙선, 2호선 등)
+                    log.info("rawline = " + rawLine);
+                    if (rawLine.contains("호선")) { // "숫자 + 호선" 패턴 확인
+                        line = fullPlaceName.split("호선")[0].trim();
+                    } else if (rawLine.contains("선")) { // "선" 포함된 경우
+                        line = fullPlaceName.split("선")[0].trim();
+                    }
+                }
+                log.info("line = " + line);
                 double subwayY = document.get("x").getAsDouble(); // 위도
                 double subwayX = document.get("y").getAsDouble(); // 경도
                 int distance = Integer.parseInt(document.get("distance").getAsString()); // 거리 (m)
@@ -426,7 +460,7 @@ public class MapService {
                 double result = (double) distance / 1000;
                 String KmDistance = String.format("%.1f", result); // 소수점 1자리까지 유지
 
-                MapVO mapVO = new MapVO(subwayX, subwayY, "", fullPlaceName, "걸어서 " + newDurationTime + "분", KmDistance + "km");
+                MapVO mapVO = new MapVO(subwayX, subwayY, "", fullPlaceName, "걸어서 " + newDurationTime + "분", KmDistance + "km", line);
 
                 // 중복 제거: 역 이름(stationName)을 기준으로 중복 제거
                 uniqueMap.putIfAbsent(stationName, mapVO);

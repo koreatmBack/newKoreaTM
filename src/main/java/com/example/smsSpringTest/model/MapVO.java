@@ -26,6 +26,7 @@ public class MapVO extends ApiResponse {
     private String subway; // 지하철역
     private String durationTime; // 걸리는 시간
     private String distance; // 거리
+    private String line; // 호선 or 선
 
 
 }
