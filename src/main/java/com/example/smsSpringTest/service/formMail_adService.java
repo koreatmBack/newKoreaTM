@@ -835,13 +835,10 @@ public class formMail_adService {
             int page = ad.getPage(); // 현재 페이지
             int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = adMapper.selectByRegionsSortCount(ad); //전체 수
-            ad.setOffset(offset);
 
-            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
 
-            if("최신등록순".equals(ad.getSortType())){
-                ad.setSortType("최신등록순");
+            if("최근등록순".equals(ad.getSortType())){
+                ad.setSortType("최근등록순");
             } else if("시급높은순".equals(ad.getSortType())) {
                 ad.setSalaryType("시급");
                 ad.setSortType("salary");
@@ -864,15 +861,21 @@ public class formMail_adService {
                 ad.setSalaryType("건별");
                 ad.setSortType("salary");
             }
+
+            int totalCount = adMapper.selectByRegionsSortCount(ad); //전체 수
+            ad.setOffset(offset);
+
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+
             adResponse.setJobSiteList(adMapper.selectByRegionsSort(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
 
                 // 총 개수
-                int total = adResponse.getJobSiteList().size();
-                log.info("총 개수 = " + total);
-                adResponse.setTotalCount(total);
+//                int total = adResponse.getJobSiteList().size();
+                log.info("총 개수 = " + totalCount);
+                adResponse.setTotalCount(totalCount);
                 adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("조회 성공");
