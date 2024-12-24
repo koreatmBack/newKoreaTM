@@ -306,8 +306,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/jobsite/user/cert/email", "/api/v1/jobsite/user/cert/email",
                 "/v1/jobsite/user/check/id", "/api/v1/jobsite/user/check/id",
                 "/v1/jobsite/user/check/email", "/api/v1/jobsite/user/check/email",
-                "/v1/jobsite/user/find/pw", "/api/v1/jobsite/user/find/pw",
-                "/v1/jobsite/user/find/id", "/api/v1/jobsite/user/find/id",
+                "/v1/jobsite/user/find/pwd", "/api/v1/jobsite/user/find/pwd",
+                "/v1/jobsite/user/find/id/**", "/api/v1/jobsite/user/find/id/**",
+                "v1/jobsite/user/update/pwd", "/api/v1/jobsite/user/update/pwd",
                 // 잡사이트 조회용
                 "/v1/formMail_ad/allJobsiteList", "/api/v1/formMail_ad/allJobsiteList",
                 "/v1/formMail_ad/findOneJobsite", "/api/v1/formMail_ad/findOneJobsite",
