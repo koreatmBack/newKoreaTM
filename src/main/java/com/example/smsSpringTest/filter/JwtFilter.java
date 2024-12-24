@@ -324,7 +324,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/v1/social/**", "/v1/jobsite/user/kakao/**"
                 , "/api/v1/social/**", "/api/v1/jobsite/user/kakao/**"
                 // 회원 사진 등록
-                , "/v1/common/upload/photo", "/api/v1/common/upload/photo"
+                , "/v1/common/upload/**", "/api/v1/common/upload/**"
                 // swagger
                 , "/swagger-ui/**", "/v3/**", "/swagger-resources/**"
                 // url 전환
