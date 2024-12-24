@@ -64,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             log.info("requestURI: {}", requestURI);
 
-            // 토큰 조회가 필요한 API 일때
+       // 토큰 조회가 필요한 API 일때
        if(!(isAllowedURI(requestURI))) {
            if(!StringUtils.hasText(cookieToken)){
                // 만약 쿠키가 없다면
@@ -306,6 +306,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/jobsite/user/cert/email", "/api/v1/jobsite/user/cert/email",
                 "/v1/jobsite/user/check/id", "/api/v1/jobsite/user/check/id",
                 "/v1/jobsite/user/check/email", "/api/v1/jobsite/user/check/email",
+                "/v1/jobsite/user/find/pw", "/api/v1/jobsite/user/find/pw",
+                "/v1/jobsite/user/find/id", "/api/v1/jobsite/user/find/id",
                 // 잡사이트 조회용
                 "/v1/formMail_ad/allJobsiteList", "/api/v1/formMail_ad/allJobsiteList",
                 "/v1/formMail_ad/findOneJobsite", "/api/v1/formMail_ad/findOneJobsite",
