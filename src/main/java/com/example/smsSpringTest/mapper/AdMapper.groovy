@@ -686,6 +686,9 @@ interface AdMapper {
         <if test="ad.adType == '추천'">
          grade = '1' AND
         </if> 
+        <if test="ad.keyword != null">
+          title LIKE CONCAT('%', #{ad.keyword}, '%') AND
+        </if> 
         <if test="ad.registerType != null">
             <choose>
                 <when test="ad.registerType == '오늘 등록'">
@@ -758,6 +761,9 @@ interface AdMapper {
         </if>
         <if test="ad.adType == '추천'">
          grade = '1' AND
+        </if>
+        <if test="ad.keyword != null">
+          title LIKE CONCAT('%', #{ad.keyword}, '%') AND
         </if> 
         <if test="ad.registerType != null">
             <choose>
@@ -781,6 +787,7 @@ interface AdMapper {
         
         <if test="ad.regions != null and ad.regions.size() > 0">
             <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+              <if test="region.sido != '전국'">
                 (sido = #{region.sido} 
                 
                 <if test="region.sigungu != null">
@@ -793,6 +800,8 @@ interface AdMapper {
                 <if test="region.dongEubMyun != null">
                 AND dong_eub_myun = #{region.dongEubMyun})
                 </if>
+              </if>
+              <if test="region.sido == '전국'"> 1=1 </if>  
             </foreach>
         </if>
         <if test="ad.salaryType != null">
