@@ -239,11 +239,13 @@ public class jobsite_userService {
                     userId = user.getSocialId();
                     String serialNumber = UUID.randomUUID().toString();
                     userPwd = serialNumber;
+                    log.info("임의 userPwd = " + userPwd);
                 } else {
                     // 일반 회원가입이라면
                     userId = user.getUserId();
                     userPwd = user.getUserPwd();
                 }
+
             user.setUserId(userId);
             user.setUserPwd(passwordEncoder.encode(userPwd));
             int result = jobUserMapper.jobSignUp(user);
