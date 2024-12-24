@@ -194,5 +194,9 @@ public class fmAd {
 
     private boolean focus; // 유료광고2
 
+    private LocalDate created; // 등록일
+
+    private LocalDate updated; // 수정일
+
 
 }

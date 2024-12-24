@@ -731,7 +731,7 @@ interface AdMapper {
         <if test="ad.sortType != null">
             <choose>
                 <when test="ad.sortType == '최신등록순'">
-                    ORDER BY created_at DESC
+                    ORDER BY updated DESC
                 </when>
                 <otherwise>
                     ORDER BY salary DESC
