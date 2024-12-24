@@ -325,7 +325,7 @@ public class MapService {
             double result = (double) distance / 1000;
             String KmDistance = String.format("%.1f", result); // 소수점 1자리까지 유지
 
-            MapVO mapVO = new MapVO(subwayX, subwayY, "", stationName, "걸어서 " + newDurationTime + "분", KmDistance + "km", line);
+            MapVO mapVO = new MapVO(subwayX, subwayY, "", stationName, "걸어서 " + newDurationTime + "분", KmDistance + "km", line, fullPlaceName);
 
             // 중복 제거: 역 이름(stationName)을 기준으로 중복 제거
             uniqueMap.putIfAbsent(stationName, mapVO);
@@ -460,7 +460,7 @@ public class MapService {
                 double result = (double) distance / 1000;
                 String KmDistance = String.format("%.1f", result); // 소수점 1자리까지 유지
 
-                MapVO mapVO = new MapVO(subwayX, subwayY, "", fullPlaceName, "걸어서 " + newDurationTime + "분", KmDistance + "km", line);
+                MapVO mapVO = new MapVO(subwayX, subwayY, "", fullPlaceName, "걸어서 " + newDurationTime + "분", KmDistance + "km", line , fullPlaceName);
 
                 // 중복 제거: 역 이름(stationName)을 기준으로 중복 제거
                 uniqueMap.putIfAbsent(stationName, mapVO);
