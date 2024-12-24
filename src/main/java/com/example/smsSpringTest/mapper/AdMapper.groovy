@@ -1128,6 +1128,7 @@ interface AdMapper {
         SELECT *
         FROM formmail_regions
         WHERE sido = #{re.sido}
+        ORDER BY sigungu ASC;
     """)
     List<Regions> sigunguList(@Param("re") Regions re)
 
@@ -1137,6 +1138,7 @@ interface AdMapper {
         FROM formmail_regions
         WHERE sido = #{re.sido} 
         AND sigungu = #{re.sigungu}
+        ORDER BY dong_eub_myun ASC;
     """)
     List<Regions> dongEubMyunList(@Param("re") Regions re)
 
