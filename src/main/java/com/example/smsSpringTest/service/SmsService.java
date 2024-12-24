@@ -362,7 +362,7 @@ public class SmsService {
             con.setRequestProperty("User-Agent", userAgent);
 
             String randomNumber = randomNumber();
-            String originMsg = String.format("[(주)코리아티엠] 인증번호 [%s]를 입력해주세요. 사칭/전화사기에 주의하세요.", randomNumber);
+            String originMsg = String.format("[(주)고알바] 인증번호 [%s]를 입력해주세요. 사칭/전화사기에 주의하세요.", randomNumber);
             String originSphone1 = "1644";
             String originSphone2 = "4223";
             log.info("rnd num = "+ randomNumber);
