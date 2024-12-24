@@ -708,6 +708,7 @@ interface AdMapper {
         
         <if test="ad.regions != null and ad.regions.size() > 0">
             <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+              <if test="region.sido != '전국'">
                 (sido = #{region.sido} 
                 
                 <if test="region.sigungu != null">
@@ -720,6 +721,8 @@ interface AdMapper {
                 <if test="region.dongEubMyun != null">
                 AND dong_eub_myun = #{region.dongEubMyun})
                 </if>
+              </if>
+              <if test="region.sido == '전국'"> 1=1 </if>  
             </foreach>
         </if>
         <if test="ad.salaryType != null">
