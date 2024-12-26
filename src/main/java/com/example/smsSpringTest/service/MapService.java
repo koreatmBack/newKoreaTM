@@ -56,7 +56,7 @@ public class MapService {
         subwayColors.put("신림","#6789CA");
         subwayColors.put("인천1","#7CA8D5");
         subwayColors.put("인천2","#ED8B00");
-        subwayColors.put("자기부상철도[운행중단]","#FFCD12");
+        subwayColors.put("자기부상철도","#FFCD12");
         subwayColors.put("공항철도","#0090D2");
         subwayColors.put("의정부경전철","#FDA600");
         subwayColors.put("에버라인","#509F22");
