@@ -1,16 +1,16 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
-import com.example.smsSpringTest.mapper.UserMapper;
+import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
-import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.response.AccessResponse;
+import com.example.smsSpringTest.model.response.AdminResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.RefResponse;
-import com.example.smsSpringTest.model.response.UserResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +41,7 @@ import java.time.LocalDate;
 public class formMail_adminService {
 
     private final CommonMapper commonMapper;
-    private final UserMapper userMapper;
+    private final AdminMapper adminMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final HttpServletResponse response;
@@ -53,21 +52,21 @@ public class formMail_adminService {
 
     // 회원 등록
     @Transactional
-    public ApiResponse signUp(UserProfile user) throws Exception {
-        log.info("USER = ? " + user);
+    public ApiResponse signUp(FormMailAdmin admin) throws Exception {
+        log.info("USER = ? " + admin);
         ApiResponse apiResponse = new ApiResponse();
 
         try{
             // id 중복체크 ( 값이 0 -> 중복 없음 )
-            int dupJobsiteIdCheck = userMapper.dupJobsiteIdCheck(user.getUserId());
+            int dupJobsiteIdCheck = adminMapper.dupJobsiteIdCheck(admin.getUserId());
             log.info("잡사이트id와 중복 값 = " + dupJobsiteIdCheck);
             if(dupJobsiteIdCheck == 0) {
                 // id 중복 없음
 
                 // 비밀번호 암호화
-                user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+                admin.setUserPwd(passwordEncoder.encode(admin.getUserPwd()));
 
-                int result = userMapper.signUp(user);
+                int result = adminMapper.signUp(admin);
 
                 if (result == 1) {
                     apiResponse.setCode("C000");
@@ -189,23 +188,23 @@ public class formMail_adminService {
 
     // jwt 로그인
     @Transactional
-    public UserResponse logIn(UserProfile user) throws Exception {
+    public AdminResponse logIn(UserProfile user) throws Exception {
 
-        UserResponse userResponse = new UserResponse();
+        AdminResponse adminResponse = new AdminResponse();
 
         try{
             String userId = user.getUserId();
 
             // 아이디 있는지 확인
-            int dupChkId = userMapper.userDuplicatedChkId(userId);
+            int dupChkId = adminMapper.userDuplicatedChkId(userId);
             if(dupChkId == 0){
                 // 등록된 아이디 없음
-                userResponse.setCode("E004");
-                userResponse.setMessage("등록된 id가 없습니다.");
+                adminResponse.setCode("E004");
+                adminResponse.setMessage("등록된 id가 없습니다.");
 
                 if(userId == null){
-                    userResponse.setCode("E004");
-                    userResponse.setMessage("ID를 입력해주세요.");
+                    adminResponse.setCode("E004");
+                    adminResponse.setMessage("ID를 입력해주세요.");
                 }
 
             } else {
@@ -215,7 +214,7 @@ public class formMail_adminService {
                 String userPwd = user.getUserPwd();
 
                 // 입력받은 ID로 PW 체크 ( 등록된 비밀번호 체크 )
-                String dupPw = userMapper.userPassword(userId);
+                String dupPw = adminMapper.userPassword(userId);
 
                 // 비밀번호 검증
                 boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPw);
@@ -296,27 +295,27 @@ public class formMail_adminService {
                     if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                         // 최종적으로 Access token이 있을때
 //                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
-                        FormMailAdmin user2 = userMapper.findOneUser(userId);
+                        FormMailAdmin user2 = adminMapper.findOneAdmin(userId);
                         if(user2.isAdmin()){
                             user2.setRole("admin");
                         } else {
                             user2.setRole("manager");
                         }
-                        userResponse.setFormMailAdmin(user2);
-                        String userName = userMapper.userName(userId);
-                        userResponse.setCode("C000");
-                        userResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
+                        adminResponse.setFormMailAdmin(user2);
+                        String userName = adminMapper.userName(userId);
+                        adminResponse.setCode("C000");
+                        adminResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
                         Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                         response.addCookie(cookie);
                     } else {
                         // 최종적으로 access 토큰이 없을때
-                        userResponse.setCode("E001");
-                        userResponse.setMessage("최종적으로 Access Token이 없습니다.");
+                        adminResponse.setCode("E001");
+                        adminResponse.setMessage("최종적으로 Access Token이 없습니다.");
                     }
 
                 } catch (BadCredentialsException e){
-                    userResponse.setCode("E003");
-                    userResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
+                    adminResponse.setCode("E003");
+                    adminResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
                 }
 //                    String userName = userMapper.userName(userId);
 //                    log.info("userId = " + userId);
@@ -329,19 +328,19 @@ public class formMail_adminService {
 
                 } else {
                     // 입력한 비밀번호와 등록된 비밀번호가 다를때
-                    userResponse.setCode("E005");
-                    userResponse.setMessage("로그인 실패, 비밀번호 다시 확인해주세요");
+                    adminResponse.setCode("E005");
+                    adminResponse.setMessage("로그인 실패, 비밀번호 다시 확인해주세요");
                 }
 
             }
 
         }catch (Exception e){
             log.error("로그인 중 예외 발생: {}", e.getMessage(), e);
-            userResponse.setCode("E001");
-            userResponse.setMessage("비밀번호를 입력해주세요.");
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("비밀번호를 입력해주세요.");
         }
 
-        return userResponse;
+        return adminResponse;
     }
 
     //jwt 로그아웃 -> 로그아웃시 리프레쉬 토큰, 해당 쿠키도 삭제
@@ -402,9 +401,9 @@ public class formMail_adminService {
 
 
     // 전체 회원 목록
-    public UserResponse userList(Paging paging) {
+    public AdminResponse adminList(Paging paging) {
 
-        UserResponse userResponse = new UserResponse();
+        AdminResponse adminResponse = new AdminResponse();
 
         // 캐시 키
         String cacheKey = "userList_" + paging.getPage() + "_" + paging.getSize();
@@ -420,114 +419,112 @@ public class formMail_adminService {
             int page = paging.getPage(); // 현재 페이지
             int size = paging.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = userMapper.getUserListCount();
+            int totalCount = adminMapper.getUserListCount();
 
             paging.setOffset(offset);
 
-            userResponse.setUserList(userMapper.userProfileList(paging));
-            log.info(userMapper.userProfileList(paging).toString());
+            adminResponse.setAdminList(adminMapper.adminProfileList(paging));
+            log.info(adminMapper.adminProfileList(paging).toString());
 
-            log.info("userResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
+            log.info("adminResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
 
-            if (userResponse.getUserList() != null && !userResponse.getUserList().isEmpty()) {
+            if (adminResponse.getAdminList() != null && !adminResponse.getAdminList().isEmpty()) {
                 // 비어있지 않을 때
                 int totalPages = (int) Math.ceil((double) totalCount / size);
-                log.info("userResponse :  totalPages = " + totalPages);
-                userResponse.setTotalPages(totalPages);
-                userResponse.setCode("C000");
-                userResponse.setMessage("회원 목록 조회 완료");
+                log.info("adminResponse :  totalPages = " + totalPages);
+                adminResponse.setTotalPages(totalPages);
+                adminResponse.setCode("C000");
+                adminResponse.setMessage("관리자 목록 조회 완료");
 
 //                // Redis에 데이터 저장
 //                redisTemplate.opsForValue().set(cacheKey, userResponse, cacheTime, TimeUnit.MILLISECONDS);
 //                log.info("회원 목록을 Redis에 캐싱했습니다.");
             } else {
                 // 비어있을 때
-                userResponse.setCode("E001");
-                userResponse.setMessage("조회된 계정이 없습니다.");
+                adminResponse.setCode("E001");
+                adminResponse.setMessage("조회된 계정이 없습니다.");
             }
 //        }
-        return userResponse;
+        return adminResponse;
     }
 
     // 회원 한명 정보 반환
-    public UserResponse findOneUser(FormMailAdmin user) throws Exception{
+    public AdminResponse findOneAdmin(FormMailAdmin admin) throws Exception{
 
-        UserResponse userResponse = new UserResponse();
-        log.info("회원 정보 : " + user);
+        AdminResponse adminResponse = new AdminResponse();
+        log.info("회원 정보 : " + admin);
         try {
-            String userId = user.getUserId();
-            userResponse.setFormMailAdmin(userMapper.findOneUser(userId));
-            userResponse.setCode("C000");
-            userResponse.setMessage("조회 성공");
+            String userId = admin.getUserId();
+            adminResponse.setFormMailAdmin(adminMapper.findOneAdmin(userId));
+            adminResponse.setCode("C000");
+            adminResponse.setMessage("조회 성공");
         } catch (Exception e) {
-            userResponse.setCode("E001");
-            userResponse.setMessage("다시 조회해주세요.");
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("다시 조회해주세요.");
         }
 
-        return userResponse;
+        return adminResponse;
     }
 
 
     // 회원 이름 검색시 해당 회원들 정보 반환
-    @PostMapping("/findUsers")
-    public UserResponse findUsers(String searchKeyword) throws Exception {
-        UserResponse userResponse = new UserResponse();
+    public AdminResponse findAdmins(FormMailAdmin admin) throws Exception {
+        AdminResponse adminResponse = new AdminResponse();
 
         try {
-            String userName = searchKeyword.toString();
+            String userName = admin.getKeyword();
             log.info("userName = " + userName);
 //            userResponse.setUserList(userMapper.findUsers(user));
-            userResponse.setUserList(userMapper.findUsers(userName));
-            log.info(userResponse.getUserList().toString());
-            if(!userResponse.getUserList().isEmpty()) {
-                userResponse.setCode("C000");
-                userResponse.setMessage("이름 검색 성공");
+            adminResponse.setAdminList(adminMapper.findAdmins(userName));
+            log.info(adminResponse.getAdminList().toString());
+            if(!adminResponse.getAdminList().isEmpty() && adminResponse.getAdminList() != null) {
+                adminResponse.setCode("C000");
+                adminResponse.setMessage("이름 검색 성공");
             } else {
-                userResponse.setCode("E004");
-                userResponse.setMessage("이름 검색 실패");
+                adminResponse.setCode("E004");
+                adminResponse.setMessage("이름 검색 실패");
             }
-
         } catch (Exception e) {
-            userResponse.setCode("E001");
-            userResponse.setMessage("에러");
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("에러");
             log.info(e.getMessage());
         }
 
-        return userResponse;
+        return adminResponse;
     }
 
 
     // 회원 정보 수정
-    public UserResponse updateUser(UserProfile user) throws Exception {
+    public AdminResponse updateAdmin(FormMailAdmin admin) throws Exception {
 
-        UserResponse userResponse = new UserResponse();
+        AdminResponse adminResponse = new AdminResponse();
 
         try {
-            log.info("서비스 유저 테스트 = "+String.valueOf(user));
-            String userId = user.getUserId();
+            log.info("서비스 유저 테스트 = "+String.valueOf(admin));
+            String userId = admin.getUserId();
             if(userId == null) {
                 // 아이디가 없을때
-                userResponse.setCode("E001");
-                userResponse.setMessage("아이디를 입력해주세요");
+                adminResponse.setCode("E001");
+                adminResponse.setMessage("아이디를 입력해주세요");
             } else {
                 // 아이디가 있을때
 
                 // 비밀번호가 null이 아니면 암호화
-                if (user.getUserPwd() != null) {
-                    String encodedPassword = passwordEncoder.encode(user.getUserPwd());
-                    user.setUserPwd(encodedPassword); // 암호화된 비밀번호로 설정
+                if (admin.getUserPwd() != null) {
+                    String encodedPassword = passwordEncoder.encode(admin.getUserPwd());
+                    admin.setUserPwd(encodedPassword); // 암호화된 비밀번호로 설정
                 }
 
                 // 0 = 업데이트 실패, 1 = 업데이트 성공
-             int updateUser = userMapper.updateUser(user);
+             int updateUser = adminMapper.updateAdmin(admin);
 
 
              if(updateUser == 0){
-                 userResponse.setCode("E003");
-                 userResponse.setMessage("유저 업데이트 실패");
+                 adminResponse.setCode("E003");
+                 adminResponse.setMessage("유저 업데이트 실패");
              } else {
-                 userResponse.setCode("C000");
-                 userResponse.setMessage("유저 업데이트 성공");
+                 adminResponse.setCode("C000");
+                 adminResponse.setMessage("유저 업데이트 성공");
 
                  String pattern = "userList_*"; // 패턴 정의
 //                 Set<String> keys = redisTemplate.keys(pattern); // 해당 패턴에 맞는 모든 키 가져오기
@@ -537,11 +534,11 @@ public class formMail_adminService {
 
             }
         } catch (Exception e) {
-            userResponse.setCode("E001");
-            userResponse.setMessage("ERROR!!!");
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("ERROR!!!");
         }
 
-        return userResponse;
+        return adminResponse;
     }
 
     // 업무용 연락처 등록
@@ -554,14 +551,14 @@ public class formMail_adminService {
             log.info("입력받은 연락처 = " + phoneNumber);
             if(isValidPhoneNumber(phoneNumber)){
                 // 형식이 일치하면
-                int validPhoneChk = userMapper.validPhoneChk(phoneNumber);
+                int validPhoneChk = adminMapper.validPhoneChk(phoneNumber);
                 if(validPhoneChk == 1){
                     // 연락처가 중복이면
                     apiResponse.setCode("E004");
                     apiResponse.setMessage("이미 등록된 연락처입니다.");
                 } else {
                     // 연락처가 중복 아닐때
-                    userMapper.addPhoneNum(phoneNumber);
+                    adminMapper.addPhoneNum(phoneNumber);
                     apiResponse.setCode("C000");
                     apiResponse.setMessage("연락처가 저장되었습니다.");
                 }
@@ -585,15 +582,15 @@ public class formMail_adminService {
     }
 
     // 업무용 연락처 모두 조회
-    public UserResponse allPhoneNumList(){
+    public AdminResponse allPhoneNumList(){
 
-        UserResponse userResponse = new UserResponse();
+        AdminResponse adminResponse = new AdminResponse();
 
-        userResponse.setPhoneNumList(userMapper.allPhoneNumList());
-        userResponse.setCode("C000");
-        userResponse.setMessage("조회 성공");
+        adminResponse.setPhoneNumList(adminMapper.allPhoneNumList());
+        adminResponse.setCode("C000");
+        adminResponse.setMessage("조회 성공");
 
-        return userResponse;
+        return adminResponse;
     }
 
     // 업무용 연락처 삭제
@@ -605,7 +602,7 @@ public class formMail_adminService {
                 apiResponse.setCode("E003");
                 apiResponse.setMessage("삭제할 연락처를 입력해주세요.");
             } else {
-                int delPhoneNum = userMapper.delPhoneNum(phoneNumber);
+                int delPhoneNum = adminMapper.delPhoneNum(phoneNumber);
                 if(delPhoneNum == 1){
                     apiResponse.setCode("C000");
                     apiResponse.setMessage("연락처가 삭제되었습니다.");
@@ -618,25 +615,25 @@ public class formMail_adminService {
     }
 
     // 입력받은 업무용 연락처로 회원 db에서 번호 일치하는 회원 이름, 포지션 찾기
-    public UserResponse findUserName(String phoneNumber) throws Exception {
-        UserResponse userResponse = new UserResponse();
+    public AdminResponse findUserName(String phoneNumber) throws Exception {
+        AdminResponse adminResponse = new AdminResponse();
         try{
             if(phoneNumber == null){
                 // 연락처 입력 못 받았을 때
-                userResponse.setCode("E002");
-                userResponse.setMessage("조회할 연락처를 입력해주세요.");
+                adminResponse.setCode("E002");
+                adminResponse.setMessage("조회할 연락처를 입력해주세요.");
             } else {
                 // 연락처 입력 받음
 
-                userResponse.setFindUserList(userMapper.findUserList(phoneNumber));
-                userResponse.setCode("C000");
-                userResponse.setMessage("조회 성공");
+                adminResponse.setFindUserList(adminMapper.findUserList(phoneNumber));
+                adminResponse.setCode("C000");
+                adminResponse.setMessage("조회 성공");
             }
         } catch (Exception e) {
-            userResponse.setCode("E001");
-            userResponse.setMessage("등록되지 않은 연락처입니다.");
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("등록되지 않은 연락처입니다.");
         }
-        return userResponse;
+        return adminResponse;
     }
 
     // 토큰 재발급 요청

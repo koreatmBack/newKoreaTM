@@ -8,8 +8,14 @@ import com.example.smsSpringTest.model.findUser
 import com.example.smsSpringTest.model.FormMailAdmin
 import org.apache.ibatis.annotations.*
 
+/*
+
+    ADMIN 용 mapper
+
+ */
+
 @Mapper
-interface UserMapper {
+interface AdminMapper {
 
     // 회원등록
     @Insert("""
@@ -23,19 +29,21 @@ interface UserMapper {
             , team
             , m_phone
             , r_phone
+            , email
         ) VALUES (
-            #{user.userId}
-            , #{user.userPwd}
-            , #{user.rName}
-            , #{user.userName}
-            , #{user.position}
-            , #{user.admin}
-            , #{user.team}
-            , #{user.mPhone}
-            , #{user.rPhone}
+            #{admin.userId}
+            , #{admin.userPwd}
+            , #{admin.rName}
+            , #{admin.userName}
+            , #{admin.position}
+            , #{admin.admin}
+            , #{admin.team}
+            , #{admin.mPhone}
+            , #{admin.rPhone}
+            , #{admin.email}
         )
     """)
-    int signUp(@Param("user") UserProfile user)
+    int signUp(@Param("admin") FormMailAdmin admin)
 
     // 아이디 중복처리
     @Select("""
@@ -90,10 +98,13 @@ interface UserMapper {
             , team
             , m_phone
             , r_phone
+            , email
+            , created
+            , updated
         FROM formmail_admin
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
-    List<UserProfile> userProfileList(@Param("paging") Paging paging)
+    List<FormMailAdmin> adminProfileList(@Param("paging") Paging paging)
 
     // 전체 회원 수
     @Select("""
@@ -115,25 +126,26 @@ interface UserMapper {
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
-    FormMailAdmin findOneUser(@Param("userId") String userId)
+    FormMailAdmin findOneAdmin(@Param("userId") String userId)
 
     // 회원 수정
     @Update("""
 <script>
         UPDATE formmail_admin
       <set>
-        <if test="user.userPwd != null"> user_pwd = #{user.userPwd},</if>
-        <if test="user.rName != null"> r_name = #{user.rName},</if>
-        <if test="user.userName != null"> user_name = #{user.userName},</if>
-        <if test="user.position != null"> position = #{user.position},</if>
-        <if test="user.team != null"> team = #{user.team},</if>
-        <if test="user.mPhone != null"> m_phone = #{user.mPhone},</if>
-        <if test="user.rPhone != null"> r_phone = #{user.rPhone},</if>
+        <if test="admin.userPwd != null"> user_pwd = #{admin.userPwd},</if>
+        <if test="admin.rName != null"> r_name = #{admin.rName},</if>
+        <if test="admin.userName != null"> user_name = #{admin.userName},</if>
+        <if test="admin.position != null"> position = #{admin.position},</if>
+        <if test="admin.team != null"> team = #{admin.team},</if>
+        <if test="admin.mPhone != null"> m_phone = #{admin.mPhone},</if>
+        <if test="admin.rPhone != null"> r_phone = #{admin.rPhone},</if>
+        <if test="admin.email != null"> email = #{admin.email},</if>
       </set>
         WHERE user_id = #{user.userId}
 </script>
     """)
-    int updateUser(@Param("user") UserProfile user)
+    int updateAdmin(@Param("user") FormMailAdmin admin)
 
     // id가 일치할때 그 회원의 모든 db값 반환
     @Select("""
@@ -169,11 +181,12 @@ interface UserMapper {
         , team
         , m_phone
         , r_phone
+        , email
     FROM formmail_admin
     WHERE user_name LIKE CONCAT('%', #{name}, '%')
     OR r_name LIKE CONCAT('%', #{name}, '%')
     """)
-    List<UserProfile> findUsers(@Param("name") String name)
+    List<FormMailAdmin> findAdmins(@Param("name") String name)
 
 
     // 업무용 연락처 등록

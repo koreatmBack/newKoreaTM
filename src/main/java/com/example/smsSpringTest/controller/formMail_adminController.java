@@ -1,21 +1,20 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
-import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.response.AccessResponse;
+import com.example.smsSpringTest.model.response.AdminResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.RefResponse;
-import com.example.smsSpringTest.model.response.UserResponse;
 import com.example.smsSpringTest.service.formMail_adminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 /**
  * author : 신기훈
@@ -33,13 +32,8 @@ public class formMail_adminController {
 
     // 회원 등록
     @PostMapping("/join")
-    public ApiResponse signUp(@Valid @RequestBody UserProfile user) throws Exception {
-
-        ApiResponse apiResponse = new ApiResponse();
-
-        apiResponse = formMailAdminService.signUp(user);
-
-        return apiResponse;
+    public ApiResponse signUp(@Valid @RequestBody FormMailAdmin admin) throws Exception {
+        return formMailAdminService.signUp(admin);
     }
 
     // 쿠키에 값 있으면 자동 로그인
@@ -53,14 +47,14 @@ public class formMail_adminController {
 
     // 회원 로그인
     @PostMapping("/login")
-    public UserResponse login(@RequestBody UserProfile user) throws Exception {
+    public AdminResponse login(@RequestBody UserProfile user) throws Exception {
 
-        UserResponse userResponse = new UserResponse();
+        AdminResponse adminResponse = new AdminResponse();
 
 //        log.info("controller 유저프로필 = " + user);
-        userResponse = formMailAdminService.logIn(user);
+        adminResponse = formMailAdminService.logIn(user);
 
-        return userResponse;
+        return adminResponse;
     }
 
 //    // 회원 로그아웃
@@ -91,44 +85,28 @@ public class formMail_adminController {
     }
 
     // 회원 목록
-    @PostMapping("/userList")
-    public UserResponse userList(@RequestBody Paging paging) throws Exception{
-
-        UserResponse userResponse = new UserResponse();
-
-        userResponse = formMailAdminService.userList(paging);
-
-        return userResponse;
+    @PostMapping("/adminList")
+    public AdminResponse adminList(@RequestBody Paging paging) throws Exception{
+        return formMailAdminService.adminList(paging);
     }
 
     // 회원 한명 정보 반환
-    @PostMapping("/findOneUser")
-    public UserResponse findOneUser(@RequestBody FormMailAdmin user) throws Exception{
-
-        UserResponse userResponse = new UserResponse();
-
-        userResponse = formMailAdminService.findOneUser(user);
-
-        return userResponse;
+    @PostMapping("/findOneAdmin")
+    public AdminResponse findOneAdmin(@RequestBody FormMailAdmin admin) throws Exception{
+        return formMailAdminService.findOneAdmin(admin);
     }
 
     // 회원 이름 검색시 해당 회원들 정보 반환
-    @PostMapping("/findUsers")
-    public UserResponse findUsers(@RequestBody Map<String, String> searchKeyword) throws Exception {
-        UserResponse userResponse = new UserResponse();
-        String userName = searchKeyword.get("searchKeyword");
-        userResponse = formMailAdminService.findUsers(userName);
-
-        return userResponse;
+    @PostMapping("/findAdmins")
+    public AdminResponse findAdmins(@RequestBody FormMailAdmin admin) throws Exception {
+        return formMailAdminService.findAdmins(admin);
     }
 
     // 회원 정보 수정
-    @PutMapping("/updateUser")
-    public UserResponse updateUser(@RequestBody UserProfile user) throws Exception{
+    @PutMapping("/updateAdmin")
+    public AdminResponse updateAdmin(@RequestBody FormMailAdmin admin) throws Exception{
 
-        UserResponse userResponse = new UserResponse();
-        userResponse = formMailAdminService.updateUser(user);
-        return userResponse;
+        return formMailAdminService.updateAdmin(admin);
     }
 
     // 업무용 연락처 추가 기능
@@ -146,12 +124,12 @@ public class formMail_adminController {
 
     // 업무용 연락처 모두 조회하기
     @GetMapping("/allPhoneNumList")
-    public UserResponse allPhoneNumList(){
-        UserResponse userResponse = new UserResponse();
+    public AdminResponse allPhoneNumList(){
+        AdminResponse adminResponse = new AdminResponse();
 
-        userResponse = formMailAdminService.allPhoneNumList();
+        adminResponse = formMailAdminService.allPhoneNumList();
 
-        return userResponse;
+        return adminResponse;
     }
 
     // 업무용 연락처 삭제하기
@@ -169,14 +147,14 @@ public class formMail_adminController {
 
     // 입력받은 업무용 연락처로 회원 db에서 번호 일치하는 회원 이름, 포지션 찾기
     @PostMapping("/findUserName")
-    public UserResponse findUserName(@RequestBody User user) throws Exception{
+    public AdminResponse findUserName(@RequestBody User user) throws Exception{
 
-        UserResponse userResponse = new UserResponse();
+        AdminResponse adminResponse = new AdminResponse();
         String phoneNumber = user.getMPhone();
 
-        userResponse = formMailAdminService.findUserName(phoneNumber);
+        adminResponse = formMailAdminService.findUserName(phoneNumber);
 
-        return userResponse;
+        return adminResponse;
     }
 
 }

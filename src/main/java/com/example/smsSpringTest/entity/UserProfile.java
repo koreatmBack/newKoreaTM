@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * author : 신기훈
  * date : 2024-09-20
- * comment : 회원 entity
+ * comment : ADMIN entity
  */
 
 @Data

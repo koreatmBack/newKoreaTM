@@ -22,12 +22,13 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponse extends ApiResponse{
+public class AdminResponse extends ApiResponse{
 
     private UserProfile userProfile;
     private FormMailAdmin formMailAdmin;
     private User user;
     private List<UserProfile> userList;
+    private List<FormMailAdmin> adminList;
     private String position;
     private String rName;
     private String userName;

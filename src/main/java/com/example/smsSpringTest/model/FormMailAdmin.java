@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 /**
  * author : 신기훈
  * date : 2024-10-30
@@ -34,5 +36,10 @@ public class FormMailAdmin {
     private String mPhone;
     @JsonProperty("rPhone")
     private String rPhone;
+    private String email;
+    private LocalDate created;  // 등록일
+    private LocalDate updated;  // 수정일
     private String role;
+
+    private String keyword; //  검색시
 }
