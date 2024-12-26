@@ -123,6 +123,7 @@ interface AdminMapper {
             , team
             , m_phone
             , r_phone
+            , email
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
