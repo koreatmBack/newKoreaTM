@@ -171,6 +171,29 @@ interface JobUserMapper {
     """)
     JobsiteUser findOneJobLoginUser(@Param("userId") String userId)
 
+    // 아이디 찾기 눌렀을때 소셜 계정인지 확인하기 (userName, phone or email 필수)
+    @Select("""
+<script>
+        SELECT user_id
+        FROM jobsite_user
+        WHERE user_name = #{user.userName}
+        <if test="user.phone != null"> AND phone = #{user.phone} </if>
+        <if test="user.email != null"> AND email = #{user.email} </if>
+</script>        
+    """)
+    String socialIdCheckBeforeCert(@Param("user") JobsiteUser user)
+
+    // 아이디 찾기 눌렀을때 소셜 계정인지 확인하기 2단계 (userName, phone or email 필수)
+    @Select("""
+<script>
+        SELECT social_type
+        FROM jobsite_user_social
+        WHERE user_id = #{userId}
+</script>        
+    """)
+    String socialType(@Param("userId") String userId)
+
+
     // 아이디 찾기 눌렀을때 가입된 아이디인지 확인하기 (userName, phone or email 필수)
     @Select("""
 <script>
@@ -337,7 +360,7 @@ interface JobUserMapper {
         FROM jobsite_user
         WHERE user_id = #{user.userId}
     """)
-    String findClipping(@Param("user") JobsiteUser user)
+    String findScrape(@Param("user") JobsiteUser user)
 
 
     // 회원 전체 수 조회
@@ -498,11 +521,12 @@ interface JobUserMapper {
     """)
     int deleteOne(@Param("mark") BookMark mark)
 
-    // userId, type, aid 일치할 때 전체 삭제하기
+    // userId, type, aid 일치할 때 북마크 전체 삭제하기
     @Delete("""
         DELETE FROM jobsite_bookmark
         WHERE user_id = #{mark.userId}
         AND type = #{mark.type}
     """)
     int deleteAll(@Param("mark") BookMark mark)
+
 }

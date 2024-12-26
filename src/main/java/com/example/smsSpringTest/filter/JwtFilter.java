@@ -339,7 +339,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/api/v1/common/send/email" , "/v1/common/send/email"
                 , "/api/v1/calculate/salary", "/v1/calculate/salary"
                 , "/api/v1/calculate/salary/weekHoliday", "/v1/calculate/salary/weekHoliday"
-                //
+                , "/api/v1/jobsite/user/dup/bookmark/check" , "/v1/jobsite/user/dup/bookmark/check"
 
         };
 

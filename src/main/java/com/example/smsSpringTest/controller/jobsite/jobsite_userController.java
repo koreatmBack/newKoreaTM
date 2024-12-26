@@ -181,10 +181,10 @@ public class jobsite_userController {
     }
 
     // 회원 id 일치할때 스크랩 목록 조회
-    @PostMapping("/find/clipping")
+    @PostMapping("/find/scrape")
     @Operation(summary = "스크랩 목록 조회", description="필수 값 : userId 일치")
-    public JobUserResponse findClipping(@RequestBody JobsiteUser user) throws Exception {
-        return jobsiteUserService.findClipping(user);
+    public JobUserResponse findScrape(@RequestBody JobsiteUser user) throws Exception {
+        return jobsiteUserService.findScrape(user);
     }
 
 // ------------------------------------------------------
@@ -272,6 +272,12 @@ public class jobsite_userController {
     }
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 스크랩, 좋아요 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 스크랩 or 좋아요 추가시 이미 등록된 것이 있는지 체크하는 API
+    @PostMapping("/dup/bookmark/check")
+    public ApiResponse dupBookmarkCheck(@RequestBody BookMark mark) throws Exception {
+        return jobsiteUserService.dupBookmarkCheck(mark);
+    }
 
     // 스크랩 or 좋아요 추가
     @PostMapping("/add/bookmark")

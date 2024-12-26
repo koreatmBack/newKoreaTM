@@ -148,8 +148,29 @@ public class jobsite_userService {
 //                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
 //                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
 //            }
+
             int findUserId = jobUserMapper.findJobUserIdBeforeCert(user);
             if(findUserId != 0) {
+                // 소셜 id면 , id 찾기 결과 = 소셜 로그인으로 확인.반환하기
+                String userId = jobUserMapper.socialIdCheckBeforeCert(user);
+                String type = null;
+                type = jobUserMapper.socialType(userId);
+                if(StringUtils.hasText(type)){
+                    // type 값이 있으면 소셜 로그인임.
+                    if(type.equals("naver")){
+                        type = "네이버";
+                    } else if(type.equals("kakao")){
+                        type = "카카오";
+                    } else if(type.equals("google")) {
+                        type = "구글";
+                    } else if(type.equals("facebook")) {
+                        type = "페이스북";
+                    }
+                    apiResponse.setCode("C005");
+                    apiResponse.setMessage(type +" 소셜 가입 유저입니다.");
+                  return apiResponse;
+                }
+
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("가입된 정보가 있습니다.");
             } else {
@@ -159,6 +180,7 @@ public class jobsite_userService {
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage(" Error !!! ");
+            log.info(e.getMessage());
         }
 
         return apiResponse;
@@ -840,15 +862,15 @@ public class jobsite_userService {
 
 
     // 회원 id 일치할때 스크랩 반환
-    public JobUserResponse findClipping(JobsiteUser user) throws Exception {
+    public JobUserResponse findScrape(JobsiteUser user) throws Exception {
         JobUserResponse jobUserResponse = new JobUserResponse();
         try {
-            String findFavorite = jobUserMapper.findClipping(user);
-            if(!StringUtils.hasText(findFavorite)){
+            String findScrape = jobUserMapper.findScrape(user);
+            if(!StringUtils.hasText(findScrape)){
                 jobUserResponse.setCode("E003");
                 jobUserResponse.setMessage("스크랩 목록이 없습니다.");
             } else {
-                jobUserResponse.setClipping(findFavorite);
+                jobUserResponse.setClipping(findScrape);
                 jobUserResponse.setCode("C000");
                 jobUserResponse.setMessage("스크랩 목록 조회 성공");
             }
@@ -2373,6 +2395,27 @@ public class jobsite_userService {
     }
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 스크랩, 좋아요 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 스크랩 or 좋아요 추가시 이미 등록된 것이 있는지 체크하는 API
+    public ApiResponse dupBookmarkCheck(BookMark mark) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int dupBookmarkCheck = jobUserMapper.dupBookmarkCheck(mark);
+            if(dupBookmarkCheck == 0) {
+                // 북마크 목록에 없음
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("추가 가능합니다.");
+            } else {
+                // 이미 목록에 있음
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("이미 목록에 있습니다.");
+            }
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error!!! ");
+        }
+        return apiResponse;
+    }
 
     // 스크랩 or 좋아요 추가
     public ApiResponse addBookmark(BookMark mark) throws Exception {
