@@ -25,6 +25,7 @@ public class AdNearInfo {
     private String durationTime;
     private String line;
     private String status; // Y or N
+    private String subwayColor; // 지하철 호선 색
 
     private String type; // 선택인지 선택해제인지
 
