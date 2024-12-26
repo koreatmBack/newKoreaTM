@@ -219,6 +219,22 @@ interface JobUserMapper {
     """)
     JobsiteUser findJobUserId(@Param("user") JobsiteUser user)
 
+    // 이메일 중복일시, 인증 완료되면 이미 쓰고 있던 유저의 email null로 바꾸기.
+    @Update("""
+        UPDATE jobsite_user
+        SET email = null
+        WHERE user_id = #{userId}
+    """)
+    int updateEmailNull(@Param("userId") String userId)
+
+    // 이메일 이미 사용중이었는지 체킹하기
+    @Select("""
+        SELECT user_id
+        FROM jobsite_user
+        WHERE email = #{email}
+    """)
+    String dupEmailId(@Param("email") String email)
+
 //    // 이메일로 id 찾기용
 //    @Select("""
 //        SELECT user_id

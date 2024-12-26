@@ -270,6 +270,12 @@ public class jobsite_userService {
 
             user.setUserId(userId);
             user.setUserPwd(passwordEncoder.encode(userPwd));
+
+            // 만약 이메일이 db에 들어가있다면 해당 db의 이메일 날린 후
+            // 현재 가입한 유저의 이메일에 추가
+            String dupEmailId = jobUserMapper.dupEmailId(user.getEmail());
+            int updateEmailNull = jobUserMapper.updateEmailNull(dupEmailId);
+
             int result = jobUserMapper.jobSignUp(user);
 
             if (result == 1) {
