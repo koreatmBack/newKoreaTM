@@ -89,6 +89,8 @@ interface AdMapper {
             , dong_eub_myun3
             , focus
             , detail_content
+            , phone_show
+            , sub_phone_show
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -170,6 +172,8 @@ interface AdMapper {
             , #{ad.dongEubMyun3}
             , #{ad.focus}
             , #{ad.detailContent}
+            , #{ad.phoneShow}
+            , #{ad.subPhoneShow}
         )
 </script>        
     """)

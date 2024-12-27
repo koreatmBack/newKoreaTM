@@ -52,7 +52,6 @@ public class formMail_adService {
             log.info("ad = " + ad);
             String serialNumber = UUID.randomUUID().toString().substring(0, 8);
             log.info("serialNumber = " + serialNumber);
-
             ad.setAid(serialNumber);
             int addAd = adMapper.addAd(ad);
             if(addAd == 1){

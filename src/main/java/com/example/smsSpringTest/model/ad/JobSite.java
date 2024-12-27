@@ -200,4 +200,8 @@ public class JobSite {
 
     private String detailContent; // 상세 내용
 
+    private boolean phoneShow; // 메인 폰 공개 or 비공개
+
+    private boolean subPhoneShow; // 메인 폰 공개 or 비공개
+
 }
