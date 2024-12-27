@@ -198,4 +198,6 @@ public class AdRequest {
 
     private LocalDate updated; // 수정일
 
+    private String detailContent; // 상세 내용
+
 }

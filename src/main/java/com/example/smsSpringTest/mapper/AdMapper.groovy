@@ -88,6 +88,7 @@ interface AdMapper {
             , sigungu3
             , dong_eub_myun3
             , focus
+            , detail_content
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -168,6 +169,7 @@ interface AdMapper {
             , #{ad.sigungu3}
             , #{ad.dongEubMyun3}
             , #{ad.focus}
+            , #{ad.detailContent}
         )
 </script>        
     """)
@@ -345,6 +347,9 @@ interface AdMapper {
         </if>         
         <if test="ad.y != null">
             y = #{ad.y},
+        </if>
+        <if test="ad.detailContent != null">
+            detail_content = #{ad.detailContent},
         </if>
      </set>
         WHERE aid = #{ad.aid}

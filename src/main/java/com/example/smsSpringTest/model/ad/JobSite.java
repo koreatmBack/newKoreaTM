@@ -198,4 +198,6 @@ public class JobSite {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime updated; // 수정일
 
+    private String detailContent; // 상세 내용
+
 }

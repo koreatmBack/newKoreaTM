@@ -81,7 +81,7 @@ public class formMail_adController {
 //        return s3UploadResponse;
 //    }
 
-    // S3에 이미지 업로드 (DB에는 저장 x) --> 파일 1개 ver.
+    // S3에 이미지 업로드 (DB에는 저장 x) --> 파일 1개 ver. // 12-27 사용 x
     @PostMapping("/S3Upload")
     @Operation(summary = "AWS S3에 이미지 업로드", description="db에는 저장 x , file , MultipartFile")
     public S3UploadResponse S3Upload(@RequestParam("file") MultipartFile multipartFile) throws Exception {
