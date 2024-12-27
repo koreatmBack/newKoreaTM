@@ -274,7 +274,9 @@ public class jobsite_userService {
             // 만약 이메일이 db에 들어가있다면 해당 db의 이메일 날린 후
             // 현재 가입한 유저의 이메일에 추가
             String dupEmailId = jobUserMapper.dupEmailId(user.getEmail());
+            log.info("dupEmailId = " + dupEmailId);
             int updateEmailNull = jobUserMapper.updateEmailNull(dupEmailId);
+            log.info("updateEmailNull = " + updateEmailNull);
 
             int result = jobUserMapper.jobSignUp(user);
 
