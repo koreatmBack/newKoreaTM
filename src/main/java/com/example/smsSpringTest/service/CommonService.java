@@ -3,7 +3,9 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.config.S3Uploader;
 import com.example.smsSpringTest.mapper.ChangeUrlMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
+import com.example.smsSpringTest.model.S3Upload;
 import com.example.smsSpringTest.model.UrlShorten;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.model.response.UrlResponse;
 import com.example.smsSpringTest.util.Base62;
@@ -55,6 +57,22 @@ public class CommonService {
         return s3UploadResponse;
     }
 
+    // S3 파일 삭제 (12-27 추가. 이거 사용)
+    public ApiResponse S3DeleteFile(S3Upload s3URL) throws Exception{
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            String delUrl = s3URL.getUrl();
+            s3Uploader.deleteFile(delUrl);
+            log.info("service -> deleteFileKey = "+ delUrl);
+            apiResponse.setCode("C000");
+            apiResponse.setMessage("S3 파일 삭제 완료");
+        } catch(Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+
+        return apiResponse;
+    }
 
     // 파일 url 상대경로
     public static String formatImageUrl(String url) {

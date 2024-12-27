@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.EmailMessage;
+import com.example.smsSpringTest.model.S3Upload;
 import com.example.smsSpringTest.model.UrlShorten;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.MapResponse;
@@ -40,11 +41,12 @@ public class CommonController {
     // S3에 이미지 업로드 (DB에는 저장 x) --> 파일 1개 ver.
     @PostMapping("/upload/{folder}")
     public S3UploadResponse S3Upload(@PathVariable("folder") String folder, @RequestParam("file") MultipartFile multipartFile) throws Exception {
-        S3UploadResponse s3UploadResponse = new S3UploadResponse();
+        return commonService.S3Upload(multipartFile, folder);
+    }
 
-        s3UploadResponse = commonService.S3Upload(multipartFile, folder);
-
-        return s3UploadResponse;
+    @DeleteMapping("/delete/file")
+    public ApiResponse deleteS3File(@RequestBody S3Upload s3URL) throws Exception  {
+        return commonService.S3DeleteFile(s3URL);
     }
 
     @GetMapping("/ip")

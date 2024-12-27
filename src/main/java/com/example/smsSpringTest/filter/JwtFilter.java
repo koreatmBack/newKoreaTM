@@ -341,6 +341,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/calculate/salary/weekHoliday", "/v1/calculate/salary/weekHoliday"
                 , "/api/v1/jobsite/user/dup/bookmark/check" , "/v1/jobsite/user/dup/bookmark/check"
 
+                // 파일 삭제, 나중에 어드민만 허용으로 수정 ( 12 - 27)
+                , "/api/v1/common/delete/file" , "/v1/common/delete/file"
         };
 
         for (String allowedURI : allowedURIs) {
