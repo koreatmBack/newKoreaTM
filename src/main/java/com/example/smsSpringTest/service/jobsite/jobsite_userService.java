@@ -151,25 +151,25 @@ public class jobsite_userService {
 
             int findUserId = jobUserMapper.findJobUserIdBeforeCert(user);
             if(findUserId != 0) {
-                // 소셜 id면 , id 찾기 결과 = 소셜 로그인으로 확인.반환하기
-                String userId = jobUserMapper.socialIdCheckBeforeCert(user);
-                String type = null;
-                type = jobUserMapper.socialType(userId);
-                if(StringUtils.hasText(type)){
-                    // type 값이 있으면 소셜 로그인임.
-                    if(type.equals("naver")){
-                        type = "네이버";
-                    } else if(type.equals("kakao")){
-                        type = "카카오";
-                    } else if(type.equals("google")) {
-                        type = "구글";
-                    } else if(type.equals("facebook")) {
-                        type = "페이스북";
-                    }
-                    apiResponse.setCode("C005");
-                    apiResponse.setMessage(type +" 소셜 가입 유저입니다.");
-                  return apiResponse;
-                }
+//                // 소셜 id면 , id 찾기 결과 = 소셜 로그인으로 확인.반환하기
+//                String userId = jobUserMapper.socialIdCheckBeforeCert(user);
+//                String type = null;
+//                type = jobUserMapper.socialType(userId);
+//                if(StringUtils.hasText(type)){
+//                    // type 값이 있으면 소셜 로그인임.
+//                    if(type.equals("naver")){
+//                        type = "네이버";
+//                    } else if(type.equals("kakao")){
+//                        type = "카카오";
+//                    } else if(type.equals("google")) {
+//                        type = "구글";
+//                    } else if(type.equals("facebook")) {
+//                        type = "페이스북";
+//                    }
+//                    apiResponse.setCode("C005");
+//                    apiResponse.setMessage(type +" 소셜 가입 유저입니다.");
+//                  return apiResponse;
+//                }
 
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("가입된 정보가 있습니다.");
@@ -198,6 +198,23 @@ public class jobsite_userService {
 //            }
             String findJobUserId = jobUserMapper.findJobUserId(user).getUserId();
             LocalDate findJobUserCreate = jobUserMapper.findJobUserId(user).getCreatedAt();
+
+            // 소셜 id면 , id 찾기 결과 = 소셜 로그인으로 확인.반환하기
+            int dupSocialUserIdCheck = jobUserMapper.dupSocialUserIdCheck(findJobUserId);
+            String type = null;
+            type = jobUserMapper.socialType(findJobUserId);
+            if(dupSocialUserIdCheck != 0){
+                // 소셜 계정임
+                if(type.equals("naver")){
+                    findJobUserId = "네이버 소셜 가입 계정입니다.";
+                } else if(type.equals("kakao")){
+                    findJobUserId = "카카오 소셜 가입 계정입니다.";
+                } else if(type.equals("google")) {
+                    findJobUserId = "구글 소셜 가입 계정입니다.";
+                } else if(type.equals("facebook")) {
+                    findJobUserId = "페이스북 소셜 가입 계정입니다.";
+                }
+            }
             if(!StringUtils.hasText(findJobUserId)){
                 jobUserResponse.setCode("E003");
                 jobUserResponse.setMessage("Id 찾기 실패");
@@ -210,6 +227,7 @@ public class jobsite_userService {
         } catch (Exception e) {
                 jobUserResponse.setCode("E001");
                 jobUserResponse.setMessage("Error !!!");
+            log.info(e.getMessage());
         }
 
         return jobUserResponse;

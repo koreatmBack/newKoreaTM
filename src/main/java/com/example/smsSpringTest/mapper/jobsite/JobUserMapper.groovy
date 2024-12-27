@@ -171,17 +171,15 @@ interface JobUserMapper {
     """)
     JobsiteUser findOneJobLoginUser(@Param("userId") String userId)
 
-    // 아이디 찾기 눌렀을때 소셜 계정인지 확인하기 (userName, phone or email 필수)
+    // 아이디 찾기 눌렀을때 소셜 계정인지 확인하기
     @Select("""
 <script>
         SELECT user_id
-        FROM jobsite_user
-        WHERE user_name = #{user.userName}
-        <if test="user.phone != null"> AND phone = #{user.phone} </if>
-        <if test="user.email != null"> AND email = #{user.email} </if>
+        FROM jobsite_user_social
+        WHERE user_id = #{userId}
 </script>        
     """)
-    String socialIdCheckBeforeCert(@Param("user") JobsiteUser user)
+    String socialIdCheckBeforeCert(@Param("userId") String userId)
 
     // 아이디 찾기 눌렀을때 소셜 계정인지 확인하기 2단계 (userName, phone or email 필수)
     @Select("""
