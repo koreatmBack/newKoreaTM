@@ -91,6 +91,7 @@ interface AdMapper {
             , detail_content
             , phone_show
             , sub_phone_show
+            , detail_images
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -174,6 +175,7 @@ interface AdMapper {
             , #{ad.detailContent}
             , #{ad.phoneShow}
             , #{ad.subPhoneShow}
+            , #{ad.detailImages}
         )
 </script>        
     """)
@@ -373,8 +375,8 @@ interface AdMapper {
         <if test="ad.focus"> focus = #{ad.focus}, </if>
         <if test="ad.phoneShow"> phone_show = #{ad.phoneShow}, </if>
         <if test="ad.subPhoneShow"> sub_phone_show = #{ad.subPhoneShow}, </if>
-        <if test="ad.detailContent != null"> detail_content = #{ad.detailContent} </if>
-        
+        <if test="ad.detailContent != null"> detail_content = #{ad.detailContent}, </if>
+        <if test="ad.detailImages != null"> detail_images = #{ad.detailImages}, </if>
      </set>
         WHERE aid = #{ad.aid}
     </script>

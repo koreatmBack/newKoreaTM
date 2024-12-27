@@ -204,4 +204,6 @@ public class AdRequest {
 
     private boolean subPhoneShow; // 메인 폰 공개 or 비공개
 
+    private String detailImages;
+
 }
