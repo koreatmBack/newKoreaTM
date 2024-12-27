@@ -340,7 +340,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/calculate/salary", "/v1/calculate/salary"
                 , "/api/v1/calculate/salary/weekHoliday", "/v1/calculate/salary/weekHoliday"
                 , "/api/v1/jobsite/user/dup/bookmark/check" , "/v1/jobsite/user/dup/bookmark/check"
-
+                , "/api/v1/formMail_ad/find/nearInfo" , "/v1/formMail_ad/find/nearInfo"
                 // 파일 삭제, 나중에 어드민만 허용으로 수정 ( 12 - 27)
                 , "/api/v1/common/delete/file" , "/v1/common/delete/file"
         };
