@@ -202,7 +202,7 @@ public class AdRequest {
 
     private boolean phoneShow; // 메인 폰 공개 or 비공개
 
-    private boolean subPhoneShow; // 메인 폰 공개 or 비공개
+    private boolean subPhoneShow; // 서브 폰 공개 or 비공개
 
     private String detailImages;
 
