@@ -340,21 +340,41 @@ interface AdMapper {
         <if test="ad.etcConditions != null">
             etc_conditions = #{ad.etcConditions},
         </if>        
-        <if test="ad.applyMethod != null">
-            apply_method = #{ad.applyMethod},
-        </if>        
-        <if test="ad.nearUniversity != null">
-            near_university = #{ad.nearUniversity},
-        </if>
-        <if test="ad.x != null">
-            x = #{ad.x},
-        </if>         
-        <if test="ad.y != null">
-            y = #{ad.y},
-        </if>
-        <if test="ad.detailContent != null">
-            detail_content = #{ad.detailContent},
-        </if>
+        <if test="ad.applyMethod != null"> apply_method = #{ad.applyMethod}, </if>   
+        <if test="ad.nearUniversity != null"> near_university = #{ad.nearUniversity},</if>
+        <if test="ad.x != null"> x = #{ad.x}, </if>           
+        <if test="ad.y != null"> y = #{ad.y}, </if>
+        <if test="ad.managerName"> manager_name = #{ad.managerName}, </if>
+        <if test="ad.managerEmail"> manager_email = #{ad.managerEmail}, </if>
+        <if test="ad.managerPhone"> manager_phone = #{ad.managerPhone}, </if>
+        <if test="ad.managerSubPhone"> manager_sub_phone = #{ad.managerSubPhone}, </if>
+        <if test="ad.probation"> probation = #{ad.probation}, </if>
+        <if test="ad.periodDiscussion"> period_discussion = #{ad.periodDiscussion}, </if>
+        <if test="ad.workDate"> work_date = #{ad.workDate}, </if>
+        <if test="ad.workDateDetail"> work_date_detail = #{ad.workDateDetail}, </if>
+        <if test="ad.workTime"> work_time = #{ad.workTime}, </if>
+        <if test="ad.workTimeDetail"> work_time_detail = #{ad.workTimeDetail}, </if>
+        <if test="ad.ageType"> age_type = #{ad.ageType}, </if>
+        <if test="ad.minAge"> min_age = #{ad.minAge}, </if>
+        <if test="ad.maxAge"> max_age = #{ad.maxAge}, </if>
+        <if test="ad.endLimit"> end_limit = #{ad.endLimit}, </if>
+        <if test="ad.applyUrl"> apply_url = #{ad.applyUrl}, </if>
+        <if test="ad.zipCode"> zip_code = #{ad.zipCode}, </if>
+        <if test="ad.addressDetail"> address_detail = #{ad.addressDetail}, </if>
+        <if test="ad.adPosition"> ad_position = #{ad.adPosition}, </if>
+        <if test="ad.photoList"> photo_list = #{ad.photoList}, </if>
+        <if test="ad.adLink"> ad_link = #{ad.adLink}, </if>
+        <if test="ad.sido2"> sido2 = #{ad.sido2}, </if>
+        <if test="ad.sigungu2"> sigungu2 = #{ad.sigungu2}, </if>
+        <if test="ad.dongEubMyun2"> dong_eub_myun2 = #{ad.dongEubMyun2}, </if>
+        <if test="ad.sido3"> sido3 = #{ad.sido3}, </if>
+        <if test="ad.sigungu3"> sigungu3 = #{ad.sigungu3}, </if>
+        <if test="ad.dongEubMyun3"> dong_eub_myun3 = #{ad.dongEubMyun3}, </if>
+        <if test="ad.focus"> focus = #{ad.focus}, </if>
+        <if test="ad.phoneShow"> phone_show = #{ad.phoneShow}, </if>
+        <if test="ad.subPhoneShow"> sub_phone_show = #{ad.subPhoneShow}, </if>
+        <if test="ad.detailContent != null"> detail_content = #{ad.detailContent} </if>
+        
      </set>
         WHERE aid = #{ad.aid}
     </script>
