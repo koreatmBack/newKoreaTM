@@ -1583,6 +1583,7 @@ public class jobsite_userService {
                     // 토큰 재생성
                     token = jwtTokenProvider.socialGenerateToken(userId);
                     log.info("refToken이 null일때 token = " + token);
+                    log.info("refToken이 null일때 userId = " + userId);
                     refToken2.setUserId(userId);
                     refToken2.setGrantType(token.getGrantType());
                     refToken2.setRefreshToken(token.getRefreshToken());

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -56,10 +57,13 @@ public class formMail_adService {
             int addAd = adMapper.addAd(ad);
             if(addAd == 1){
 //                ad.setTotalDay(totalDay);
-                int totalDay = holidayMapper.totalDay(ad, serialNumber);
-                log.info("total Day = " + totalDay);
+                if(StringUtils.hasText(String.valueOf(ad.getEndDate())) && ad.getEndDate() != null){
+                    // end_date 값이 있을 때만 광고 일수 구하기
+                    int totalDay = holidayMapper.totalDay(ad, serialNumber);
+                    log.info("total Day = " + totalDay);
 
-                int addTotalDay = adMapper.addTotalDay(totalDay, serialNumber);
+                    int addTotalDay = adMapper.addTotalDay(totalDay, serialNumber);
+                }
 
                 // formmail_file에 url 등록 -> 광고 이미지에서 등록 실패시 삭제
                 int dupImgurl = adMapper.dupImgUrl(ad);
