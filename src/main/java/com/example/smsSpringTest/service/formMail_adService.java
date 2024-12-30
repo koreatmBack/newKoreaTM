@@ -6,10 +6,7 @@ import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.HolidayMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.Regions;
-import com.example.smsSpringTest.model.ad.AdImageRequest;
-import com.example.smsSpringTest.model.ad.AdNearInfo;
-import com.example.smsSpringTest.model.ad.AdRequest;
-import com.example.smsSpringTest.model.ad.fmAd;
+import com.example.smsSpringTest.model.ad.*;
 import com.example.smsSpringTest.model.formMail_file;
 import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
@@ -497,6 +494,7 @@ public class formMail_adService {
             if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
+                adResponse.setTotalCount(totalCount);
                 adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("조회 성공");
@@ -519,20 +517,21 @@ public class formMail_adService {
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 잡사이트용 start ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
-    public AdResponse allJobsiteList(Paging paging) throws Exception {
+    public AdResponse allJobsiteList(AdRequest ad) throws Exception {
         AdResponse adResponse = new AdResponse();
 
         try {
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
             int totalCount = adMapper.allJobsiteListCount(); //전체 수
-            paging.setOffset(offset);
+            ad.setOffset(offset);
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-            adResponse.setJobSiteList(adMapper.allJobsiteList(paging));
+            adResponse.setJobSiteList(adMapper.allJobsiteList(ad));
             if (adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
+                adResponse.setTotalCount(totalCount);
                 adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("광고 목록 전체 조회 성공");
@@ -639,20 +638,20 @@ public class formMail_adService {
     }
 
     // 잡사이트용 등록일순으로 광고 조회
-    public AdResponse orderByCreated(Paging paging) throws Exception {
+    public AdResponse orderByCreated(AdRequest ad) throws Exception {
         AdResponse adResponse = new AdResponse();
 
         try {
 
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
             int totalCount = adMapper.allJobsiteListCount(); //전체 수
-            paging.setOffset(offset);
+            ad.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
 
-            adResponse.setJobSiteList(adMapper.orderByCreated(paging));
+            adResponse.setJobSiteList(adMapper.orderByCreated(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
@@ -672,19 +671,19 @@ public class formMail_adService {
     }
 
     // 잡사이트용 급여 높은 순으로 광고 조회
-    public AdResponse orderByMaxPay(Paging paging) throws Exception {
+    public AdResponse orderByMaxPay(AdRequest ad) throws Exception {
         AdResponse adResponse = new AdResponse();
 
         try {
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
             int totalCount = adMapper.allJobsiteListCount(); //전체 수
-            paging.setOffset(offset);
+            ad.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
 
-            adResponse.setJobSiteList(adMapper.orderByMaxPay(paging));
+            adResponse.setJobSiteList(adMapper.orderByMaxPay(ad));
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
@@ -706,18 +705,18 @@ public class formMail_adService {
 
 
     // 잡사이트용 근무일수 적은순으로 광고 조회
-    public AdResponse orderByWorkDay(Paging paging) throws Exception {
+    public AdResponse orderByWorkDay(AdRequest ad) throws Exception {
         AdResponse adResponse = new AdResponse();
 
         try {
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int page = ad.getPage(); // 현재 페이지
+            int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
             int totalCount = adMapper.allJobsiteListCount(); //전체 수
-            paging.setOffset(offset);
+            ad.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-            adResponse.setJobSiteList(adMapper.orderByWorkDay(paging));
+            adResponse.setJobSiteList(adMapper.orderByWorkDay(ad));
 
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
@@ -871,9 +870,29 @@ public class formMail_adService {
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
 
             adResponse.setJobSiteList(adMapper.selectByRegionsSort(ad));
+
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
+
+                // 표시 지역은 가장 최상의 sido, sigungu로.
+                if(!ad.getRegions().isEmpty() && ad.getRegions() != null) {
+                    // 단, 지역이 있어야함.
+                    String sido = ad.getRegions().get(0).getSido();
+                    String sigungu = ad.getRegions().get(0).getSigungu();
+                    if(StringUtils.hasText(sido)) {
+                        // 시도, 시군구 명 둘 다 있으면
+                        List<JobSite> newJobsiteList = adMapper.selectByRegionsSort(ad);
+                        for(JobSite j : newJobsiteList) {
+                            j.setSido(sido);
+                            j.setSigungu(sigungu);
+                        }
+                        adResponse.setJobSiteList(newJobsiteList);
+                    }
+                }
+
+
+
 
                 // 총 개수
 //                int total = adResponse.getJobSiteList().size();

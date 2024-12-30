@@ -459,19 +459,19 @@ interface AdMapper {
     @Select("""
     <script>
         SELECT *
-        FROM formmail_ad fad
-        JOIN formmail_admin fadmin ON fad.user_name = fadmin.user_name
+        FROM formmail_ad
         WHERE 1=1
         <if test="ad.status != '전체'">
             <choose>
                 <when test="ad.status == '진행중'">
-                    AND CURDATE() BETWEEN fad.start_date AND fad.end_date
+                  AND <![CDATA[start_date <= CURDATE() AND 
+                         (end_date IS NULL OR end_date >= CURDATE())]]>
                 </when>
                 <when test="ad.status == '대기중'">
-                    AND <![CDATA[CURDATE() < fad.start_date]]>
+                    AND <![CDATA[CURDATE() < start_date]]>
                 </when>
                 <when test="ad.status == '종료'">
-                    AND <![CDATA[CURDATE() > fad.end_date]]>
+                    AND <![CDATA[CURDATE() > end_date]]>
                 </when>
             </choose>
         </if>
@@ -479,19 +479,19 @@ interface AdMapper {
         <if test="ad.searchType != null and ad.keyword != null">
             <choose>
                 <when test="ad.searchType == '공고제목'">
-                    AND fad.title LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND title LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '근무회사명'">
-                    AND fad.company LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND company LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '담당자명'">
-                    AND fad.user_name LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND manager_name LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '공고번호'">
-                    AND fad.ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '연락처'">
-                    AND fadmin.m_phone LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND manager_phone LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
             </choose>
         </if>
@@ -505,19 +505,19 @@ interface AdMapper {
     @Select("""
     <script>
         SELECT count(*)
-        FROM formmail_ad fad
-        JOIN formmail_admin fadmin ON fad.user_name = fadmin.user_name
+        FROM formmail_ad
         WHERE 1=1
         <if test="ad.status != '전체'">
             <choose>
                 <when test="ad.status == '진행중'">
-                    AND CURDATE() BETWEEN fad.start_date AND fad.end_date
+                  AND <![CDATA[start_date <= CURDATE() AND 
+                         (end_date IS NULL OR end_date >= CURDATE())]]>
                 </when>
                 <when test="ad.status == '대기중'">
-                    AND <![CDATA[CURDATE() < fad.start_date]]>
+                    AND <![CDATA[CURDATE() < start_date]]>
                 </when>
                 <when test="ad.status == '종료'">
-                    AND <![CDATA[CURDATE() > fad.end_date]]>
+                    AND <![CDATA[CURDATE() > end_date]]>
                 </when>
             </choose>
         </if>
@@ -525,19 +525,19 @@ interface AdMapper {
         <if test="ad.searchType != null and ad.keyword != null">
             <choose>
                 <when test="ad.searchType == '공고제목'">
-                    AND fad.title LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND title LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '근무회사명'">
-                    AND fad.company LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND company LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '담당자명'">
-                    AND fad.user_name LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND manager_name LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '공고번호'">
-                    AND fad.ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '연락처'">
-                    AND fadmin.m_phone LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND manager_phone LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
             </choose>
         </if>
@@ -581,16 +581,20 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
+        LIMIT #{ad.size} OFFSET #{ad.offset}     
     """)
-    List<JobSite> allJobsiteList(@Param("paging") Paging paging)
+    List<JobSite> allJobsiteList(@Param("ad") AdRequest ad)
 
     // 잡사이트용 광고 목록 전체 조회 수 (페이징 처리, 종료기간 끝난것 조회 x)
     @Select("""
         SELECT count(*)
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
     """)
     int allJobsiteListCount()
 
@@ -598,9 +602,11 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
         AND grade = #{ad.grade}
-        LIMIT #{ad.size} OFFSET #{ad.offset}
+        LIMIT #{ad.size} OFFSET #{ad.offset}  
     """)
     List<JobSite> searchGradeJobsite(@Param("ad") AdRequest ad)
 
@@ -608,7 +614,9 @@ interface AdMapper {
     @Select("""
         SELECT count(*)
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
         AND grade = #{ad.grade}
     """)
     int searchGradeJobsiteCount(@Param("ad") AdRequest ad)
@@ -617,8 +625,10 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
-        AND title LIKE CONCAT('%', #{ad.title}, '%')
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
+        AND title LIKE CONCAT('%', #{ad.title}, '%')     
     """)
     List<JobSite> searchTitleJobsite(@Param("ad") fmAd ad)
 
@@ -626,8 +636,10 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
-        AND aid = #{ad.aid}
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
+        AND aid = #{ad.aid}       
     """)
     List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
 
@@ -635,31 +647,37 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
         ORDER BY created_at DESC
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        LIMIT #{ad.size} OFFSET #{ad.offset}
     """)
-    List<JobSite> orderByCreated(@Param("paging") Paging paging)
+    List<JobSite> orderByCreated(@Param("ad") AdRequest ad)
 
     // 잡 사이트용 급여 높은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
         ORDER BY CAST(max_pay AS UNSIGNED) DESC
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        LIMIT #{ad.size} OFFSET #{ad.offset}     
     """)
-    List<JobSite> orderByMaxPay(@Param("paging") Paging paging)
+    List<JobSite> orderByMaxPay(@Param("ad") AdRequest ad)
 
     // 잡 사이트용 근무일수 적은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
         FROM formmail_ad
-        WHERE CURDATE() BETWEEN start_date AND end_date
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
         ORDER BY (LENGTH(work_day) - LENGTH(REPLACE(work_day, ',', '')) + 1) ASC
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        LIMIT #{ad.size} OFFSET #{ad.offset}    
     """)
-    List<JobSite> orderByWorkDay(@Param("paging") Paging paging)
+    List<JobSite> orderByWorkDay(@Param("ad") AdRequest ad)
 
 //    // 잡 사이트용 근무시간 짧은 순으로 광고 조회 ( 종료기간 끝난것 조회 x )
 //    @Select("""
@@ -723,26 +741,27 @@ interface AdMapper {
         <if test="ad.registerType != null">
             <choose>
                 <when test="ad.registerType == '오늘 등록'">
-                    end_date >= CURDATE() AND start_date = CURDATE()
+                    (end_date IS NULL OR end_date >= CURDATE()) AND start_date = CURDATE()
                 </when>
                 <when test="ad.registerType == '3일이내 등록'">
-                    end_date >= CURDATE()
+                    (end_date IS NULL OR end_date >= CURDATE())
            AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -3 DAY) AND CURDATE() 
                 </when>                 
                 <when test="ad.registerType == '7일이내 등록'">
-                    end_date >= CURDATE()
+                    (end_date IS NULL OR end_date >= CURDATE())
            AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -7 DAY) AND CURDATE()
                 </when>                              
 
             </choose>
         </if>
         <if test="ad.registerType == null">
-            CURDATE() BETWEEN start_date AND end_date
+                  <![CDATA[start_date <= CURDATE() AND 
+                         (end_date IS NULL OR end_date >= CURDATE())]]>
         </if>
-        
-        <if test="ad.regions != null and ad.regions.size() > 0">
-            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+                <if test="ad.regions != null and ad.regions.size() > 0">
+         <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
               <if test="region.sido != '전국'">
+              (
                 (sido = #{region.sido} 
                 
                 <if test="region.sigungu != null">
@@ -755,10 +774,42 @@ interface AdMapper {
                 <if test="region.dongEubMyun != null">
                 AND dong_eub_myun = #{region.dongEubMyun})
                 </if>
+                )
+                OR
+                (
+                 (sido2 = #{region.sido} 
+                
+                <if test="region.sigungu != null">
+                AND sigungu2 = #{region.sigungu} 
+                </if>
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun2 = #{region.dongEubMyun})
+                </if>
+                )
+                OR
+                (
+                (sido3 = #{region.sido} 
+                
+                <if test="region.sigungu != null">
+                AND sigungu3 = #{region.sigungu} 
+                </if>
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun3 = #{region.dongEubMyun})
+                </if>
+                )
               </if>
               <if test="region.sido == '전국'"> 1=1 </if>  
             </foreach>
         </if>
+
         <if test="ad.salaryType != null">
          AND salary_type = #{ad.salaryType}        
         </if>
@@ -799,26 +850,28 @@ interface AdMapper {
         <if test="ad.registerType != null">
             <choose>
                 <when test="ad.registerType == '오늘 등록'">
-                    end_date >= CURDATE() AND start_date = CURDATE()
+                    (end_date IS NULL OR end_date >= CURDATE()) AND start_date = CURDATE()
                 </when>
                 <when test="ad.registerType == '3일이내 등록'">
-                    end_date >= CURDATE()
+                    (end_date IS NULL OR end_date >= CURDATE())
            AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -3 DAY) AND CURDATE() 
                 </when>                 
                 <when test="ad.registerType == '7일이내 등록'">
-                    end_date >= CURDATE()
+                    (end_date IS NULL OR end_date >= CURDATE())
            AND start_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -7 DAY) AND CURDATE()
                 </when>                              
 
             </choose>
         </if>
         <if test="ad.registerType == null">
-            CURDATE() BETWEEN start_date AND end_date
+                            <![CDATA[start_date <= CURDATE() AND 
+                         (end_date IS NULL OR end_date >= CURDATE())]]>
         </if>
         
         <if test="ad.regions != null and ad.regions.size() > 0">
-            <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
+         <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
               <if test="region.sido != '전국'">
+              (
                 (sido = #{region.sido} 
                 
                 <if test="region.sigungu != null">
@@ -831,9 +884,41 @@ interface AdMapper {
                 <if test="region.dongEubMyun != null">
                 AND dong_eub_myun = #{region.dongEubMyun})
                 </if>
+                )
+                OR
+                (
+                 (sido2 = #{region.sido} 
+                
+                <if test="region.sigungu != null">
+                AND sigungu2 = #{region.sigungu} 
+                </if>
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun2 = #{region.dongEubMyun})
+                </if>
+                )
+                OR
+                (
+                (sido3 = #{region.sido} 
+                
+                <if test="region.sigungu != null">
+                AND sigungu3 = #{region.sigungu} 
+                </if>
+                
+                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
+                 )
+                </if>
+                <if test="region.dongEubMyun != null">
+                AND dong_eub_myun3 = #{region.dongEubMyun})
+                </if>
+                )
               </if>
               <if test="region.sido == '전국'"> 1=1 </if>  
             </foreach>
+
         </if>
         <if test="ad.salaryType != null">
          AND salary_type = #{ad.salaryType}        

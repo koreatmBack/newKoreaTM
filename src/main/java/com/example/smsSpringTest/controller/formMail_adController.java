@@ -196,8 +196,8 @@ public class formMail_adController {
     // 잡사이트용 광고 목록 전체 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/allJobsiteList")
     @Operation(summary = "광고 목록 전체 조회 (종료기간 끝난 것 조회 X)", description="페이징 처리, 필수 값 : page, size")
-    public AdResponse allJobsiteList(@RequestBody Paging paging) throws Exception {
-        return formMailAdService.allJobsiteList(paging);
+    public AdResponse allJobsiteList(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.allJobsiteList(ad);
     }
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
@@ -224,22 +224,22 @@ public class formMail_adController {
     // 잡사이트용 등록일순으로 광고 조회
     @PostMapping("/orderByCreated")
     @Operation(summary = "등록일 내림차순 광고 전체 조회", description="페이징 처리, 필수 값 : page, size")
-    public AdResponse orderByCreated(@RequestBody Paging paging) throws Exception {
-        return formMailAdService.orderByCreated(paging);
+    public AdResponse orderByCreated(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.orderByCreated(ad);
     }
 
     // 잡사이트용 근무일수 적은순으로 광고 조회
     @PostMapping("/orderByWorkDay")
     @Operation(summary = "근무일수 적은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
-    public AdResponse orderByWorkDay(@RequestBody Paging paging) throws Exception {
-        return formMailAdService.orderByWorkDay(paging);
+    public AdResponse orderByWorkDay(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.orderByWorkDay(ad);
     }
 
     // 잡사이트용 급여 높은 순으로 광고 조회
     @PostMapping("/orderByMaxPay")
     @Operation(summary = "급여 높은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
-    public AdResponse orderByMaxPay(@RequestBody Paging paging) throws Exception {
-        return formMailAdService.orderByMaxPay(paging);
+    public AdResponse orderByMaxPay(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.orderByMaxPay(ad);
     }
 
 //    // 잡사이트용 근무시간 짧은 순으로 광고 조회
