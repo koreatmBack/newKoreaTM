@@ -874,30 +874,95 @@ public class formMail_adService {
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
-
+                log.info("총 개수 = " + totalCount);
+                adResponse.setTotalCount(totalCount);
                 // 표시 지역은 가장 최상의 sido, sigungu로.
-                if(!ad.getRegions().isEmpty() && ad.getRegions() != null) {
-                    // 단, 지역이 있어야함.
-                    String sido = ad.getRegions().get(0).getSido();
-                    String sigungu = ad.getRegions().get(0).getSigungu();
-                    if(StringUtils.hasText(sido)) {
-                        // 시도, 시군구 명 둘 다 있으면
-                        List<JobSite> newJobsiteList = adMapper.selectByRegionsSort(ad);
+                if (ad.getRegions() == null) {
+                    log.info("ad.getRegions() is null");
+                } else if (ad.getRegions().isEmpty()) {
+                    log.info("ad.getRegions() is empty");
+                } else {
+                        log.info("지역 있음");
+                    for (RegionRequest r : ad.getRegions()) {
+                        log.info("RegionRequest sido: " + r.getSido() + ", sigungu: " + r.getSigungu());
+                    }
+                        List<JobSite> newJobsiteList = adResponse.getJobSiteList();
                         for(JobSite j : newJobsiteList) {
-                            j.setSido(sido);
-                            j.setSigungu(sigungu);
+                            log.info("j = "+j.toString());
+                            int count = 0;
+                                for(RegionRequest r : ad.getRegions()){
+                                    log.info("r = " + r.toString());
+                                    log.info("j.getSido() = " + j.getSido() + ", j.getSido2() = " + j.getSido2() + ", j.getSido3() = " + j.getSido3());
+                                    log.info("r.getSido() = " + r.getSido());
+
+                                    if(j.getSido().equals(r.getSido())){
+                                        log.info("첫단계 조건 만족");
+                                        if(!StringUtils.hasText(r.getSigungu()) && r.getSigungu() == null){
+                                            // 만약 값이 없으면 => 전체
+                                            j.setSido(r.getSido());
+                                            j.setSigungu("전체");
+                                            count ++;
+                                        } else {
+                                            // 만약 값이 있고 둘 다 일치하면
+                                            if(j.getSigungu().equals(r.getSigungu())){
+                                                log.info("둘다 일치하잖아.?");
+                                                j.setSido(r.getSido());
+                                                j.setSigungu(r.getSigungu());
+                                                count ++;
+                                            }
+                                        }
+                                        log.info("첫단계");
+                                    } else if(j.getSido2().equals(r.getSido()) && r.getSigungu() == null){
+                                        log.info("둘단계 조건 만족");
+                                        if(!StringUtils.hasText(r.getSigungu())){
+                                            // 만약 값이 없으면 => 전체
+                                            j.setSido(r.getSido());
+                                            j.setSigungu("전체");
+                                            count ++;
+                                        } else {
+
+                                            // 만약 값이 있고 둘 다 일치하면
+                                            if(j.getSigungu2().equals(r.getSigungu())){
+                                                j.setSido(r.getSido());
+                                                j.setSigungu(r.getSigungu());
+                                                count ++;
+                                            }
+                                        }
+                                        log.info("둘단계");
+                                    } else if(j.getSido3().equals(r.getSido())) {
+                                        log.info("셋단계 조건 만족");
+                                        if(!StringUtils.hasText(r.getSigungu())){
+                                            // 만약 값이 없으면 => 전체
+                                            j.setSido(r.getSido());
+                                            j.setSigungu("전체");
+                                            count ++;
+                                        } else {
+                                            // 만약 값이 있고 둘 다 일치하면
+                                            if(j.getSigungu3().equals(r.getSigungu())){
+                                                j.setSido(r.getSido());
+                                                j.setSigungu(r.getSigungu());
+                                                count ++;
+                                            }
+                                        }
+                                        log.info("셋단계");
+                                    } else {
+                                        log.info("sido 일치 xx");
+                                    }
+//                                    if(count == 1) {
+//                                        log.info("braek 체크");
+//                                        break;
+//                                    }
+                                }
                         }
                         adResponse.setJobSiteList(newJobsiteList);
-                    }
                 }
 
-
+                log.info("여기 안 넘어옴 ?");
 
 
                 // 총 개수
 //                int total = adResponse.getJobSiteList().size();
-                log.info("총 개수 = " + totalCount);
-                adResponse.setTotalCount(totalCount);
+
                 adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
                 adResponse.setMessage("조회 성공");
@@ -913,6 +978,47 @@ public class formMail_adService {
 
         return adResponse;
     }
+
+    private boolean updateJobSite(JobSite j, RegionRequest r) {
+        // 첫 번째 sido, sigungu 매칭
+        if (j.getSido().equals(r.getSido())) {
+            if (!StringUtils.hasText(r.getSigungu())) {
+                j.setSido(r.getSido());
+                j.setSigungu("전체");
+            } else if (j.getSigungu().equals(r.getSigungu())) {
+                j.setSido(r.getSido());
+                j.setSigungu(r.getSigungu());
+            }
+            return true;
+        }
+
+        // 두 번째 sido, sigungu 매칭
+        if (j.getSido2().equals(r.getSido())) {
+            if (!StringUtils.hasText(r.getSigungu())) {
+                j.setSido(r.getSido());
+                j.setSigungu("전체");
+            } else if (j.getSigungu2().equals(r.getSigungu())) {
+                j.setSido(r.getSido());
+                j.setSigungu(r.getSigungu());
+            }
+            return true;
+        }
+
+        // 세 번째 sido, sigungu 매칭
+        if (j.getSido3().equals(r.getSido())) {
+            if (!StringUtils.hasText(r.getSigungu())) {
+                j.setSido(r.getSido());
+                j.setSigungu("전체");
+            } else if (j.getSigungu3().equals(r.getSigungu())) {
+                j.setSido(r.getSido());
+                j.setSigungu(r.getSigungu());
+            }
+            return true;
+        }
+
+        return false; // 업데이트 실패
+    }
+
 
     // 시도 -> 시,군,구 목록 조회
     public AdResponse sigunguList(Regions re) throws Exception {
