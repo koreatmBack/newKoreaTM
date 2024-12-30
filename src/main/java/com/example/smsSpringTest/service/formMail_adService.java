@@ -883,20 +883,18 @@ public class formMail_adService {
                     log.info("ad.getRegions() is empty");
                 } else {
                         log.info("지역 있음");
-                    for (RegionRequest r : ad.getRegions()) {
-                        log.info("RegionRequest sido: " + r.getSido() + ", sigungu: " + r.getSigungu());
-                    }
                         List<JobSite> newJobsiteList = adResponse.getJobSiteList();
-                        for(JobSite j : newJobsiteList) {
-                            log.info("j = "+j.toString());
-                            int count = 0;
-                                for(RegionRequest r : ad.getRegions()){
-                                    log.info("r = " + r.toString());
-                                    log.info("j.getSido() = " + j.getSido() + ", j.getSido2() = " + j.getSido2() + ", j.getSido3() = " + j.getSido3());
-                                    log.info("r.getSido() = " + r.getSido());
+                    for(RegionRequest r : ad.getRegions()) {
 
-                                    if(j.getSido().equals(r.getSido())){
-                                        log.info("첫단계 조건 만족");
+                            int count = 0;
+                            for(JobSite j : newJobsiteList) {
+//                                log.info("j = "+j.toString());
+//                                    log.info("r = " + r.toString());
+//                                    log.info("j.getSido() = " + j.getSido() + ", j.getSido2() = " + j.getSido2() + ", j.getSido3() = " + j.getSido3());
+//                                    log.info("r.getSido() = " + r.getSido());
+
+                                    if(r.getSido().equals(j.getSido())){
+//                                        log.info("첫단계 조건 만족");
                                         if(!StringUtils.hasText(r.getSigungu()) && r.getSigungu() == null){
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
@@ -905,15 +903,16 @@ public class formMail_adService {
                                         } else {
                                             // 만약 값이 있고 둘 다 일치하면
                                             if(j.getSigungu().equals(r.getSigungu())){
-                                                log.info("둘다 일치하잖아.?");
+
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
                                                 count ++;
                                             }
                                         }
-                                        log.info("첫단계");
-                                    } else if(j.getSido2().equals(r.getSido()) && r.getSigungu() == null){
-                                        log.info("둘단계 조건 만족");
+//                                        log.info("첫단계");
+                                    }
+                                     if(r.getSido().equals(j.getSido2()) && r.getSigungu() == null){
+//                                        log.info("둘단계 조건 만족");
                                         if(!StringUtils.hasText(r.getSigungu())){
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
@@ -922,15 +921,16 @@ public class formMail_adService {
                                         } else {
 
                                             // 만약 값이 있고 둘 다 일치하면
-                                            if(j.getSigungu2().equals(r.getSigungu())){
+                                            if(r.getSigungu().equals(j.getSigungu2())){
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
                                                 count ++;
                                             }
                                         }
-                                        log.info("둘단계");
-                                    } else if(j.getSido3().equals(r.getSido())) {
-                                        log.info("셋단계 조건 만족");
+//                                        log.info("둘단계");
+                                    }
+                                     if(r.getSido().equals(j.getSido3())) {
+//                                        log.info("셋단계 조건 만족");
                                         if(!StringUtils.hasText(r.getSigungu())){
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
@@ -938,15 +938,13 @@ public class formMail_adService {
                                             count ++;
                                         } else {
                                             // 만약 값이 있고 둘 다 일치하면
-                                            if(j.getSigungu3().equals(r.getSigungu())){
+                                            if(r.getSigungu().equals(j.getSigungu3())){
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
                                                 count ++;
                                             }
                                         }
-                                        log.info("셋단계");
-                                    } else {
-                                        log.info("sido 일치 xx");
+//                                        log.info("셋단계");
                                     }
 //                                    if(count == 1) {
 //                                        log.info("braek 체크");
@@ -956,8 +954,6 @@ public class formMail_adService {
                         }
                         adResponse.setJobSiteList(newJobsiteList);
                 }
-
-                log.info("여기 안 넘어옴 ?");
 
 
                 // 총 개수
