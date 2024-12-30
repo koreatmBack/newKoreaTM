@@ -277,6 +277,10 @@ public class SalaryService {
                     } else if("3.3%".equals(tax)){
                         dailySalary *= tax3;
                     }
+                    if("적용".equals(probationPeriod)){
+                        // 만약 수습 적용이면 10% 차감
+                        dailySalary *= 0.9;
+                    }
                     totalSalary = Math.round(dailySalary);
                     salaryResponse.setDailySalary((int) Math.round(dailySalary));
                 } else if(type2.equals("월급")) {
