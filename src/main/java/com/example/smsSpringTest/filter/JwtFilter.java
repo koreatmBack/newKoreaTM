@@ -346,7 +346,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // 공고 등록, x,y값 찾기, subway찾기, 파일 업로드, 파일 삭제(나중에 다시 허용x 수정)
                 , "/api/v1/common/**" , "/v1/common/**"
                 , "/api/v1/formMail_ad/addAd", "/v1/formMail_ad/addAd"
-
+                , "/redirect/**", "/proxy/**"
         };
 
         for (String allowedURI : allowedURIs) {
