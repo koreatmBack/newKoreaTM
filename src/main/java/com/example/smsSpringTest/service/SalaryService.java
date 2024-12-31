@@ -329,18 +329,18 @@ public class SalaryService {
                     totalSalary = Math.round(hourSalary);
                     salaryResponse.setHourSalary(Math.round((int) hourSalary));
                 } else if(type2.equals("일급")) {
-                    monthSalary = Math.round(monthSalary / weekWorkDay / M_CAL);
+                    dailySalary = Math.round(monthSalary / weekWorkDay / M_CAL);
                     if("9.4%".equals(tax)){
-                        monthSalary *= tax9;
+                        dailySalary *= tax9;
                     } else if("3.3%".equals(tax)){
-                        monthSalary *= tax3;
+                        dailySalary *= tax3;
                     }
                     if("적용".equals(probationPeriod)){
                         // 만약 수습 적용이면 10% 차감
-                        monthSalary *= 0.9;
+                        dailySalary *= 0.9;
                     }
-                    totalSalary = Math.round(monthSalary);
-                    salaryResponse.setMonthSalary(Math.round((int) monthSalary));
+                    totalSalary = Math.round(dailySalary);
+                    salaryResponse.setDailySalary(Math.round((int) dailySalary));
                 } else if(type2.equals("주급")) {
                     weekSalary = Math.round(monthSalary / M_CAL);
                     if("9.4%".equals(tax)){
