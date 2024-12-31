@@ -22,6 +22,7 @@ public class Notice {
     private String title; // 글 제목
     private String content; // 글 내용
     private String type; // 글 타입 (B01 = 공지사항 , B02 = FAQ)
+    private String faqCategory; // faq 유형
     private LocalDateTime created; // 글 등록일
     private LocalDateTime updated; // 글 수정일
 

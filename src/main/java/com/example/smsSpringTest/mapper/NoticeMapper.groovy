@@ -18,10 +18,12 @@ interface NoticeMapper {
             title
             , content
             , type
+            , faq_category
         )VALUES(
             #{notice.title}
             , #{notice.content}
             , #{notice.type}
+            , #{notice.faqCategory}
         )
 </script>        
     """)
@@ -99,6 +101,7 @@ interface NoticeMapper {
          <if test="notice.title != null"> title = #{notice.title} </if>
          <if test="notice.content != null"> content = #{notice.content} </if>
          <if test="notice.type != null"> type = #{notice.type} </if>
+         <if test="notice.faqCategory != null"> faq_category = #{notice.faqCategory} </if>
         </set>
         WHERE num = #{notice.num}
 </script>        
