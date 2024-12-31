@@ -908,13 +908,14 @@ public class formMail_adService {
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
                                                 count ++;
+//                                                log.info("수정 1단계");
                                             }
                                         }
 //                                        log.info("첫단계");
                                     }
-                                     if(r.getSido().equals(j.getSido2()) && r.getSigungu() == null){
+                                     if(r.getSido().equals(j.getSido2())){
 //                                        log.info("둘단계 조건 만족");
-                                        if(!StringUtils.hasText(r.getSigungu())){
+                                        if(!StringUtils.hasText(r.getSigungu())  && r.getSigungu() == null){
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
                                             j.setSigungu("전체");
@@ -926,13 +927,14 @@ public class formMail_adService {
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
                                                 count ++;
+//                                                log.info("수정 2단계");
                                             }
                                         }
 //                                        log.info("둘단계");
                                     }
                                      if(r.getSido().equals(j.getSido3())) {
 //                                        log.info("셋단계 조건 만족");
-                                        if(!StringUtils.hasText(r.getSigungu())){
+                                        if(!StringUtils.hasText(r.getSigungu())  && r.getSigungu() == null){
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
                                             j.setSigungu("전체");
@@ -943,6 +945,7 @@ public class formMail_adService {
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
                                                 count ++;
+//                                                log.info("수정 3단계");
                                             }
                                         }
 //                                        log.info("셋단계");
