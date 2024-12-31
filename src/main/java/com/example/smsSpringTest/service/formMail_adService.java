@@ -900,6 +900,7 @@ public class formMail_adService {
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
                                             j.setSigungu("전체");
+                                            j.setDongEubMyun(null);
                                             count ++;
                                         } else {
                                             // 만약 값이 있고 둘 다 일치하면
@@ -907,6 +908,7 @@ public class formMail_adService {
 
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
+                                                j.setDongEubMyun(null);
                                                 count ++;
 //                                                log.info("수정 1단계");
                                             }
@@ -919,6 +921,7 @@ public class formMail_adService {
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
                                             j.setSigungu("전체");
+                                            j.setDongEubMyun(null);
                                             count ++;
                                         } else {
 
@@ -926,6 +929,7 @@ public class formMail_adService {
                                             if(r.getSigungu().equals(j.getSigungu2())){
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
+                                                j.setDongEubMyun(null);
                                                 count ++;
 //                                                log.info("수정 2단계");
                                             }
@@ -938,12 +942,14 @@ public class formMail_adService {
                                             // 만약 값이 없으면 => 전체
                                             j.setSido(r.getSido());
                                             j.setSigungu("전체");
+                                            j.setDongEubMyun(null);
                                             count ++;
                                         } else {
                                             // 만약 값이 있고 둘 다 일치하면
                                             if(r.getSigungu().equals(j.getSigungu3())){
                                                 j.setSido(r.getSido());
                                                 j.setSigungu(r.getSigungu());
+                                                j.setDongEubMyun(null);
                                                 count ++;
 //                                                log.info("수정 3단계");
                                             }
