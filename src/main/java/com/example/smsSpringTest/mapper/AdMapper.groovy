@@ -758,57 +758,37 @@ interface AdMapper {
                   <![CDATA[start_date <= CURDATE() AND 
                          (end_date IS NULL OR end_date >= CURDATE())]]>
         </if>
-                <if test="ad.regions != null and ad.regions.size() > 0">
-         <foreach item="region" index="index" collection="ad.regions" open="AND (" separator="OR" close=")">
-              <if test="region.sido != '전국'">
-              (
-                (sido = #{region.sido} 
-                
-                <if test="region.sigungu != null">
-                AND sigungu = #{region.sigungu} 
-                </if>
-                
-                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
-                 )
-                </if>
-                <if test="region.dongEubMyun != null">
-                AND dong_eub_myun = #{region.dongEubMyun})
-                </if>
-                )
+<if test="ad.regions != null and ad.regions.size() > 0">
+    AND (
+        <foreach item="region" index="index" collection="ad.regions" separator="OR">
+            (
+                (sido = #{region.sido}
+                 <if test="region.sigungu != null">
+                    AND sigungu = #{region.sigungu}
+                 </if>
+                 <if test="region.dongEubMyun != null and region.dongEubMyun != ''">
+                    AND dong_eub_myun = #{region.dongEubMyun}
+                 </if>)
                 OR
-                (
-                 (sido2 = #{region.sido} 
-                
-                <if test="region.sigungu != null">
-                AND sigungu2 = #{region.sigungu} 
-                </if>
-                
-                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
-                 )
-                </if>
-                <if test="region.dongEubMyun != null">
-                AND dong_eub_myun2 = #{region.dongEubMyun})
-                </if>
-                )
+                (sido2 = #{region.sido}
+                 <if test="region.sigungu != null">
+                    AND sigungu2 = #{region.sigungu}
+                 </if>
+                 <if test="region.dongEubMyun != null and region.dongEubMyun != ''">
+                    AND dong_eub_myun2 = #{region.dongEubMyun}
+                 </if>)
                 OR
-                (
-                (sido3 = #{region.sido} 
-                
-                <if test="region.sigungu != null">
-                AND sigungu3 = #{region.sigungu} 
-                </if>
-                
-                <if test="region.dongEubMyun == null or region.dongEubMyun == ''">
-                 )
-                </if>
-                <if test="region.dongEubMyun != null">
-                AND dong_eub_myun3 = #{region.dongEubMyun})
-                </if>
-                )
-              </if>
-              <if test="region.sido == '전국'"> 1=1 </if>  
-            </foreach>
-        </if>
+                (sido3 = #{region.sido}
+                 <if test="region.sigungu != null">
+                    AND sigungu3 = #{region.sigungu}
+                 </if>
+                 <if test="region.dongEubMyun != null and region.dongEubMyun != ''">
+                    AND dong_eub_myun3 = #{region.dongEubMyun}
+                 </if>)
+            )
+        </foreach>
+    )
+</if>
 
         <if test="ad.salaryType != null">
          AND salary_type = #{ad.salaryType}        

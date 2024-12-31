@@ -884,6 +884,7 @@ public class formMail_adService {
                 } else {
                         log.info("지역 있음");
                         List<JobSite> newJobsiteList = adResponse.getJobSiteList();
+                    log.info("jobsite = " + newJobsiteList);
                     for(RegionRequest r : ad.getRegions()) {
 
                             int count = 0;
