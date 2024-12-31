@@ -122,4 +122,24 @@ interface NoticeMapper {
         WHERE num = #{notice.num}
     """)
     int increaseViewCount(@Param("notice") Notice notice)
+
+    // FAQ 카테고리로 , 해당 FAQ 목록 반환
+    @Select("""
+        SELECT *
+        FROM formmail_notice
+        WHERE faq_category = #{notice.faqCategory}
+        AND type = 'B02'
+        LIMIT #{notice.size} OFFSET #{notice.offset}
+    """)
+    List<Notice> faqCategoryList(@Param("notice") Notice notice)
+
+    // FAQ 카테고리로 , 해당 FAQ 목록 반환 수
+    @Select("""
+        SELECT count(*)
+        FROM formmail_notice
+        WHERE faq_category = #{notice.faqCategory}
+        AND type = 'B02'
+    """)
+    int faqCategoryCount(@Param("notice") Notice notice)
+
 }

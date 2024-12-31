@@ -52,4 +52,10 @@ public class NoticeController {
         return noticeService.deleteNotice(notice);
     }
 
+    // FAQ 카테고리로 , 해당 FAQ 목록 반환
+    @PostMapping("/find/faq/category")
+    public NoticeResponse faqCategoryList(@RequestBody Notice notice) throws Exception {
+        return noticeService.faqCategoryList(notice);
+    }
+
 }

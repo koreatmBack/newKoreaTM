@@ -153,4 +153,37 @@ public class NoticeService {
         }
         return apiResponse;
     }
+
+    // FAQ 카테고리로 , 해당 FAQ 목록 반환
+    // 공지사항 or FAQ 전체 조회
+    public NoticeResponse faqCategoryList(Notice notice) throws Exception {
+        NoticeResponse noticeResponse = new NoticeResponse();
+
+        try {
+            int page = notice.getPage(); // 현재 페이지
+            int size = notice.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = noticeMapper.faqCategoryCount(notice); //전체 수
+            notice.setOffset(offset);
+
+            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+
+            noticeResponse.setNoticeList(noticeMapper.faqCategoryList(notice));
+            if(noticeResponse.getNoticeList() != null && !noticeResponse.getNoticeList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                log.info("totalPages = " + totalPages);
+                noticeResponse.setTotalPages(totalPages);
+                noticeResponse.setCode("C000");
+                noticeResponse.setMessage("전체 조회 성공");
+            } else {
+                noticeResponse.setCode("C003");
+                noticeResponse.setMessage("전체 조회 실패");
+            }
+        } catch (Exception e) {
+            noticeResponse.setCode("E001");
+            noticeResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return noticeResponse;
+    }
 }
