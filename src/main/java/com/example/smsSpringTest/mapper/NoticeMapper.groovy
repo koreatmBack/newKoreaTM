@@ -125,26 +125,30 @@ interface NoticeMapper {
 
     // FAQ 카테고리로 , 해당 FAQ 목록 반환
     @Select("""
+<script>
         SELECT *
         FROM formmail_notice
         WHERE faq_category = #{notice.faqCategory}
+        AND type = 'B02'
         <if test="notice.keyword != null">
            AND title LIKE CONCAT('%', #{notice.keyword}, '%')
         </if>
-        AND type = 'B02'
         LIMIT #{notice.size} OFFSET #{notice.offset}
+</script>        
     """)
     List<Notice> faqCategoryList(@Param("notice") Notice notice)
 
     // FAQ 카테고리로 , 해당 FAQ 목록 반환 수
     @Select("""
+<script>
         SELECT count(*)
         FROM formmail_notice
         WHERE faq_category = #{notice.faqCategory}
+        AND type = 'B02'
         <if test="notice.keyword != null">
            AND title LIKE CONCAT('%', #{notice.keyword}, '%')
         </if>
-        AND type = 'B02'
+</script>        
     """)
     int faqCategoryCount(@Param("notice") Notice notice)
 
