@@ -90,6 +90,7 @@ interface AdMapper {
             , phone_show
             , sub_phone_show
             , detail_images
+            , company_user_id
         ) VALUES (
             #{ad.aid},
         <if test="ad.cid != null and ad.cid != ''">
@@ -172,6 +173,7 @@ interface AdMapper {
             , #{ad.phoneShow}
             , #{ad.subPhoneShow}
             , #{ad.detailImages}
+            , #{ad.companyUserId}
         )
 </script>        
     """)
@@ -369,6 +371,7 @@ interface AdMapper {
         <if test="ad.subPhoneShow"> sub_phone_show = #{ad.subPhoneShow}, </if>
         <if test="ad.detailContent != null"> detail_content = #{ad.detailContent}, </if>
         <if test="ad.detailImages != null"> detail_images = #{ad.detailImages}, </if>
+        <if test="ad.companyUserId != null"> company_user_id = #{ad.companyUserId}, </if>
      </set>
         WHERE aid = #{ad.aid}
     </script>
@@ -536,6 +539,13 @@ interface AdMapper {
     </script>
     """)
     int statusListCount(@Param("ad") AdRequest ad)
+
+
+//    // 한번에 전체, 진행중, 대기중, 종료 공고 개수 반환하는 API
+//    @Select("""
+//
+//    """)
+
 
 //    // 검색 기능 클릭시 -> 공고제목, 근무지명, 담당자명, 공고번호, 연락처 포함
 //    @Select("""

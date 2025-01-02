@@ -8,6 +8,7 @@ import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.Regions;
 import com.example.smsSpringTest.model.ad.*;
 import com.example.smsSpringTest.model.formMail_file;
+import com.example.smsSpringTest.model.response.AdCountResponse;
 import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
@@ -555,6 +556,30 @@ public class formMail_adService {
             log.info(e.getMessage());
         }
         return apiResponse;
+    }
+
+    // 한번에 전체, 진행중, 대기중, 종료 공고 개수 반환하는 API
+    public AdCountResponse countAds() throws Exception {
+        AdCountResponse adCountResponse = new AdCountResponse();
+
+        try {
+            AdRequest ad = new AdRequest();
+            adCountResponse.setTotalAds(adMapper.statusListCount(ad));
+            ad.setStatus("진행중");
+            adCountResponse.setActiveAds(adMapper.statusListCount(ad));
+            ad.setStatus("대기중");
+            adCountResponse.setWaitAds(adMapper.statusListCount(ad));
+            ad.setStatus("종료");
+            adCountResponse.setCloseAds(adMapper.statusListCount(ad));
+
+            adCountResponse.setCode("C000");
+            adCountResponse.setMessage("개수 조회 성공");
+        } catch (Exception e) {
+            adCountResponse.setCode("E001");
+            adCountResponse.setMessage(" Error !!! ");
+        }
+
+        return adCountResponse;
     }
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 end ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ

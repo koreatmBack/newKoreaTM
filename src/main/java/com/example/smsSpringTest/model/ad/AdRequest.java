@@ -204,4 +204,6 @@ public class AdRequest {
 
     private String detailImages;
 
+    private String companyUserId; // 기업 회원 아이디
+
 }

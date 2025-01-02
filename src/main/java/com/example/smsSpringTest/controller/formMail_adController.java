@@ -7,6 +7,7 @@ import com.example.smsSpringTest.model.ad.AdNearInfo;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.formMail_file;
+import com.example.smsSpringTest.model.response.AdCountResponse;
 import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
@@ -201,6 +202,13 @@ public class formMail_adController {
     public ApiResponse updateGrade(@RequestBody fmAd ad) throws Exception {
         return formMailAdService.updateGrade(ad);
     }
+
+    // 한번에 전체, 진행중, 대기중, 종료 공고 개수 반환하는 API
+    @GetMapping("/count/ads")
+    public AdCountResponse countAds() throws Exception {
+        return formMailAdService.countAds();
+    }
+
     // ---------------------------------------------------------
 
 
