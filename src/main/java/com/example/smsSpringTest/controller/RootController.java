@@ -1,8 +1,8 @@
 package com.example.smsSpringTest.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@RequestMapping("/")
 public class RootController {
 
-    @GetMapping("/")
+    @GetMapping("/root")
     public ResponseEntity<String> handleRoot() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("404 Not Found");
+        return ResponseEntity.status(404).body("404 Not Found - Root Access Forbidden");
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +64,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
             log.info("requestURI: {}", requestURI);
+
+        if (requestURI.equals("/")) {
+            // `/` 경로로 요청이 들어오면 RootController의 `/` 매핑으로 포워드
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/root");
+            dispatcher.forward(request, response);
+            return;
+        }
 
        // 토큰 조회가 필요한 API 일때
        if(!(isAllowedURI(requestURI))) {
