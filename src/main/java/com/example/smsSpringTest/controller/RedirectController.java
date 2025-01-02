@@ -12,6 +12,11 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * author : 신기훈
+ * date : 2024-12-30
+ * comment : 혼합 컨텐츠(http -> https) 폼메일 이미지 url 변경 controller
+ */
 @RestController
 @RequestMapping("/redirect")
 public class RedirectController {

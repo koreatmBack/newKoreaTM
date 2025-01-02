@@ -213,11 +213,17 @@ public class formMail_adService {
                 // 만약 start_date 혹은 end_date를 수정하면 평일 광고 일수도 수정해야지
                 if(ad.getStartDate() != null){
                     // 만약 startDate를 수정한다면
-                    LocalDate newStartDate = ad.getStartDate();
-                    LocalDate originEndDate = findOneAd.get(0).getEndDate();
-                    Integer newTotalDate = holidayMapper.newTotalDay(newStartDate, originEndDate);
-                    adMapper.addTotalDay(newTotalDate, ad.getAid());
-                    log.info(String.valueOf(newTotalDate));
+                    if(findOneAd.get(0).getEndDate() != null) {
+                        // 상시모집이 아닐 때
+                        LocalDate newStartDate = ad.getStartDate();
+                        LocalDate originEndDate = findOneAd.get(0).getEndDate();
+                        Integer newTotalDate = holidayMapper.newTotalDay(newStartDate, originEndDate);
+                        adMapper.addTotalDay(newTotalDate, ad.getAid());
+                        log.info(String.valueOf(newTotalDate));
+                    } else {
+                        // 상시모집일 때
+                        adMapper.addTotalDay(0, ad.getAid());
+                    }
                 } else if(ad.getEndDate() != null){
                     // 만약 endDate를 수정한다면
                     LocalDate originStartDate = findOneAd.get(0).getStartDate();

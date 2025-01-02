@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * author : 신기훈
+ * date : 2024-12-30
+ * comment : 자체 프록시 controller
+ */
+
 @RestController
 @RequestMapping("/proxy")
 public class ProxyController {
