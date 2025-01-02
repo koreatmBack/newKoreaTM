@@ -517,6 +517,45 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // 마감 버튼 클릭시 마감 처리할 수 있는 API (오직 마감 기능만)
+    public ApiResponse updateAdClose(fmAd ad) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int updateAdClose = adMapper.updateAdClose(ad);
+            if(updateAdClose == 0) {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("마감처리 실패");
+            } else {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("마감처리 성공");
+            }
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error !!! ");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
+    }
+
+    // 유료상품 공고만 수정할 수 있는 API
+    public ApiResponse updateGrade(fmAd ad) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int updateGrade = adMapper.updateGrade(ad);
+            if(updateGrade == 0) {
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("유료 등급 변경 실패");
+            } else {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("유료 등급 변경 성공");
+            }
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error !!! ");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
+    }
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 폼메일용 end ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 

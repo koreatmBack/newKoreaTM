@@ -190,6 +190,17 @@ public class formMail_adController {
         return formMailAdService.dongEubMyunList(re);
     }
 
+    // 마감 버튼 클릭시 마감 처리할 수 있는 API (오직 마감 기능만)
+    @PutMapping("/update/close")
+    public ApiResponse updateAdClose(@RequestBody fmAd ad) throws Exception {
+        return formMailAdService.updateAdClose(ad);
+    }
+
+    // 유료상품 공고만 수정할 수 있는 API
+    @PutMapping("/update/grade")
+    public ApiResponse updateGrade(@RequestBody fmAd ad) throws Exception {
+        return formMailAdService.updateGrade(ad);
+    }
     // ---------------------------------------------------------
 
 

@@ -575,12 +575,21 @@ interface AdMapper {
 //</script>
 //    """)
 
-    // 공고 상태별로 수정할 수 있는 API
-
+    // 마감 버튼 클릭시 마감 처리할 수 있는 API (오직 마감 기능만)
+    @Update("""
+        UPDATE formmail_ad
+        SET end_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        WHERE aid = #{ad.aid}
+    """)
+    int updateAdClose(@Param("ad") fmAd ad)
 
     // 유료상품 공고만 수정할 수 있는 API
-
-
+    @Update("""
+        UPDATE formmail_ad
+        SET grade = #{ad.grade}
+        WHERE aid = #{ad.aid}
+    """)
+    int updateGrade(@Param("ad") fmAd ad)
 
     // ---------------------------------------------
 
