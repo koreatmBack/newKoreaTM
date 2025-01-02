@@ -128,6 +128,9 @@ interface NoticeMapper {
         SELECT *
         FROM formmail_notice
         WHERE faq_category = #{notice.faqCategory}
+        <if test="notice.keyword != null">
+           AND title LIKE CONCAT('%', #{notice.keyword}, '%')
+        </if>
         AND type = 'B02'
         LIMIT #{notice.size} OFFSET #{notice.offset}
     """)
@@ -138,6 +141,9 @@ interface NoticeMapper {
         SELECT count(*)
         FROM formmail_notice
         WHERE faq_category = #{notice.faqCategory}
+        <if test="notice.keyword != null">
+           AND title LIKE CONCAT('%', #{notice.keyword}, '%')
+        </if>
         AND type = 'B02'
     """)
     int faqCategoryCount(@Param("notice") Notice notice)
