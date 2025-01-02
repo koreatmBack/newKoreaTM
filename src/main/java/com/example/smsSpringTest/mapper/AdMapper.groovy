@@ -575,6 +575,13 @@ interface AdMapper {
 //</script>
 //    """)
 
+    // 공고 상태별로 수정할 수 있는 API
+
+
+    // 유료상품 공고만 수정할 수 있는 API
+
+
+
     // ---------------------------------------------
 
     // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
@@ -584,6 +591,7 @@ interface AdMapper {
         WHERE 
         start_date <= CURDATE()
         AND (end_date IS NULL OR end_date >= CURDATE())
+        ORDER BY updated DESC
         LIMIT #{ad.size} OFFSET #{ad.offset}     
     """)
     List<JobSite> allJobsiteList(@Param("ad") AdRequest ad)
