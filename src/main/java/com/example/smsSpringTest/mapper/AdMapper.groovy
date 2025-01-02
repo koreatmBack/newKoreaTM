@@ -662,6 +662,15 @@ interface AdMapper {
     """)
     List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
 
+    // 잡사이트용 aid 일치하는 광고 상세 조회 -> 지원 방법만 뽑기
+    // 이거 나중에 login한 유저만 접근 가능하게 막기 위해서임
+    @Select("""
+        SELECT apply_method
+        FROM formmail_ad
+        WHERE aid = #{ad.aid}   
+    """)
+    String applyMethod(@Param("ad") fmAd ad)
+
     // 잡 사이트용 등록순으로 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *

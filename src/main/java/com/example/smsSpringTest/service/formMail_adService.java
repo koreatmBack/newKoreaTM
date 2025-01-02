@@ -707,6 +707,28 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // 잡사이트용 aid 일치하는 광고 상세 조회 -> 지원 방법만 뽑기
+    // 이거 나중에 login한 유저만 접근 가능하게 막기 위해서임
+    public AdResponse findApplyMethod(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            String applyMethod = adMapper.applyMethod(ad);
+            if(StringUtils.hasText(applyMethod)){
+                adResponse.setApplyMethod(applyMethod);
+                adResponse.setCode("C000");
+                adResponse.setMessage("상세 공고 지원방법 조회 성공");
+            } else {
+                adResponse.setCode("C003");
+                adResponse.setMessage("상세 공고 지원방법 조회 실패");
+            }
+        } catch (Exception e) {
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
     // 잡사이트용 등록일순으로 광고 조회
     public AdResponse orderByCreated(AdRequest ad) throws Exception {
         AdResponse adResponse = new AdResponse();

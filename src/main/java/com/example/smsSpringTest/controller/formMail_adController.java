@@ -240,6 +240,13 @@ public class formMail_adController {
         return formMailAdService.findOneJobsite(ad);
     }
 
+    // 잡사이트용 aid 일치하는 광고 상세 조회 -> 지원 방법만 뽑기
+    // 이거 나중에 login한 유저만 접근 가능하게 막기 위해서임
+    @PostMapping("/find/applyMethod")
+    public AdResponse findApplyMethod(@RequestBody fmAd ad) throws Exception {
+        return formMailAdService.findApplyMethod(ad);
+    }
+
     // 잡사이트용 등록일순으로 광고 조회
     @PostMapping("/orderByCreated")
     @Operation(summary = "등록일 내림차순 광고 전체 조회", description="페이징 처리, 필수 값 : page, size")
