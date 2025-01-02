@@ -91,10 +91,13 @@ public class SalaryService {
                         overtime *= 0.9;
                     }
 
-                    totalSalary = Math.round(weekSalary + weekHolidayPay + overtime);
-                    salaryResponse.setWeekSalary((int) Math.round(weekSalary));
-                    salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
-                    salaryResponse.setOvertimePay((int) Math.round(overtime));
+                    weekSalary = Math.round(weekSalary);
+                    weekHolidayPay = Math.round(weekHolidayPay);
+                    overtime = Math.round(overtime);
+                    totalSalary = weekSalary + weekHolidayPay + overtime;
+                    salaryResponse.setWeekSalary((int) weekSalary);
+                    salaryResponse.setWeekHolidayPay((int) weekHolidayPay);
+                    salaryResponse.setOvertimePay((int) overtime);
                 } else if (type2.equals("월급")) {
                     // 월급 계산
                     weekSalary = Math.round(hourSalary * workTime * weekWorkDay); // 예상 주급
@@ -129,10 +132,13 @@ public class SalaryService {
                     log.info(" 예상 월급 = " + monthSalary);
                     log.info(" 예상 주휴수당 = " + weekHolidayPay);
                     log.info(" 예상 연장 수당 = " + overtime);
-                    totalSalary = Math.round(monthSalary + weekHolidayPay + overtime);
-                    salaryResponse.setMonthSalary((int) Math.round(monthSalary));
-                    salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
-                    salaryResponse.setOvertimePay((int) Math.round(overtime));
+                    monthSalary = Math.round(monthSalary);
+                    weekHolidayPay = Math.round(weekHolidayPay);
+                    overtime = Math.round(overtime);
+                    totalSalary = monthSalary + weekHolidayPay + overtime;
+                    salaryResponse.setMonthSalary((int) monthSalary);
+                    salaryResponse.setWeekHolidayPay((int) weekHolidayPay);
+                    salaryResponse.setOvertimePay((int) overtime);
                 } else if (type2.equals("연봉")) {
                     // 연봉 계산
                     weekSalary = Math.round(hourSalary * workTime * weekWorkDay); // 예상 주급
@@ -160,10 +166,12 @@ public class SalaryService {
                         yearSalary *= 0.9;
                         weekHolidayPay *= 0.9;
                     }
-                    totalSalary = Math.round(yearSalary + weekHolidayPay);
+                    yearSalary = Math.round(yearSalary);
+                    weekHolidayPay = Math.round(weekHolidayPay);
+                    totalSalary = yearSalary + weekHolidayPay;
                     log.info(" 최종 환산금액 = " + totalSalary);
-                    salaryResponse.setYearSalary((int) Math.round(yearSalary));
-                    salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
+                    salaryResponse.setYearSalary((int) yearSalary);
+                    salaryResponse.setWeekHolidayPay((int) weekHolidayPay);
                 }
 
                 // type1 = 시급 끝
@@ -207,9 +215,11 @@ public class SalaryService {
                         weekHolidayPay *= 0.9;
                     }
                     log.info("반올림 전 금액 : " + (weekSalary + weekHolidayPay));
-                    totalSalary = Math.round(weekSalary + weekHolidayPay);
-                    salaryResponse.setWeekSalary((int) Math.round(weekSalary));
-                    salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
+                    weekSalary = Math.round(weekSalary);
+                    weekHolidayPay = Math.round(weekHolidayPay);
+                    totalSalary = weekSalary + weekHolidayPay;
+                    salaryResponse.setWeekSalary((int) weekSalary);
+                    salaryResponse.setWeekHolidayPay((int) weekHolidayPay);
                 } else if(type2.equals("월급")){
                     monthSalary = Math.round(weekSalary * M_CAL); // 예상 월급
                     log.info(" 예상 월급 = " + monthSalary);
@@ -227,9 +237,11 @@ public class SalaryService {
                         monthSalary *= 0.9;
                         weekHolidayPay *= 0.9;
                     }
-                    totalSalary = Math.round(monthSalary + weekHolidayPay);
-                    salaryResponse.setMonthSalary((int) Math.round(monthSalary));
-                    salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
+                    monthSalary = Math.round(monthSalary);
+                    weekHolidayPay = Math.round(weekHolidayPay);
+                    totalSalary = monthSalary + weekHolidayPay;
+                    salaryResponse.setMonthSalary((int) monthSalary);
+                    salaryResponse.setWeekHolidayPay((int) weekHolidayPay);
                 } else if(type2.equals("연봉")){
                     yearSalary = Math.round(weekSalary * Y_CAL * 12); // 예상 연봉
                     log.info(" 예상 연봉 = " + yearSalary);
@@ -248,9 +260,11 @@ public class SalaryService {
                         yearSalary *= 0.9;
                         weekHolidayPay *= 0.9;
                     }
-                    totalSalary = Math.round(yearSalary + weekHolidayPay);
-                    salaryResponse.setYearSalary((int) Math.round(yearSalary));
-                    salaryResponse.setWeekHolidayPay((int) Math.round(weekHolidayPay));
+                    yearSalary = Math.round(yearSalary);
+                    weekHolidayPay = Math.round(weekHolidayPay);
+                    totalSalary = yearSalary + weekHolidayPay;
+                    salaryResponse.setYearSalary((int) yearSalary);
+                    salaryResponse.setWeekHolidayPay((int) weekHolidayPay);
                 }
                 // type1이 일급일때 계산 끝
 
