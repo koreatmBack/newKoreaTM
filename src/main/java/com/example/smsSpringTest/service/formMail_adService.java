@@ -441,26 +441,26 @@ public class formMail_adService {
         return adResponse;
     }
 
-    // 폼메일용 hashtag 일치하는 광고 조회
-    public AdResponse searchHashtagAd(fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-
-        try {
-            adResponse.setFmAdList(adMapper.searchHashtagAd(ad));
-            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
-                adResponse.setCode("C000");
-                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 성공");
-            } else {
-                adResponse.setCode("E004");
-                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 실패");
-            }
-        } catch (Exception e) {
-            adResponse.setCode("E001");
-            adResponse.setMessage("ERROR");
-        }
-
-        return adResponse;
-    }
+//    // 폼메일용 hashtag 일치하는 광고 조회
+//    public AdResponse searchHashtagAd(fmAd ad) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//
+//        try {
+//            adResponse.setFmAdList(adMapper.searchHashtagAd(ad));
+//            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
+//                adResponse.setCode("C000");
+//                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 성공");
+//            } else {
+//                adResponse.setCode("E004");
+//                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 실패");
+//            }
+//        } catch (Exception e) {
+//            adResponse.setCode("E001");
+//            adResponse.setMessage("ERROR");
+//        }
+//
+//        return adResponse;
+//    }
 
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
     public AdResponse searchAddressAd(fmAd ad) throws Exception{
@@ -537,7 +537,7 @@ public class formMail_adService {
         return apiResponse;
     }
 
-    // 유료상품 공고만 수정할 수 있는 API
+    // 유료상품 등급 수정 API
     public ApiResponse updateGrade(fmAd ad) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {

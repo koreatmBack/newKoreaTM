@@ -105,8 +105,6 @@ public class JobSite {
 
     private String dongEubMyun; // 동/읍/면
 
-    private String hashtag;
-
     private String salary; // 급여
 
     private String salaryType; // 급여 형태(시급, 주급, 일급, 월급, 연봉)
@@ -173,8 +171,6 @@ public class JobSite {
     private String zipCode; // 우편번호
 
     private String addressDetail; // 상세주소(102동 403호 등)
-
-    private String adPosition; //
 
     private String photoList;   // 사진목록
 

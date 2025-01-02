@@ -44,7 +44,6 @@ interface AdMapper {
             , sido
             , sigungu
             , dong_eub_myun
-            , hashtag
             , job_type
             , employment_type
             , recruit_count
@@ -78,7 +77,6 @@ interface AdMapper {
             , apply_url
             , zip_code
             , address_detail
-            , ad_position
             , photo_list
             , ad_link
             , sido2
@@ -128,7 +126,6 @@ interface AdMapper {
             , #{ad.sido}
             , #{ad.sigungu}
             , #{ad.dongEubMyun}
-            , #{ad.hashtag}
             , #{ad.jobType}
             , #{ad.employmentType}
             , #{ad.recruitCount}
@@ -162,7 +159,6 @@ interface AdMapper {
             , #{ad.applyUrl}
             , #{ad.zipCode}
             , #{ad.addressDetail}
-            , #{ad.adPosition}
             , #{ad.photoList}
             , #{ad.adLink}
             , #{ad.sido2}
@@ -296,10 +292,7 @@ interface AdMapper {
         </if>           
         <if test="ad.adNum != null">
             ad_num = #{ad.adNum},
-        </if>           
-        <if test="ad.hashtag != null">
-            hashtag = #{ad.hashtag},
-        </if>         
+        </if>               
         <if test="ad.grade != null">
             grade = #{ad.grade},
         </if>
@@ -363,7 +356,6 @@ interface AdMapper {
         <if test="ad.applyUrl"> apply_url = #{ad.applyUrl}, </if>
         <if test="ad.zipCode"> zip_code = #{ad.zipCode}, </if>
         <if test="ad.addressDetail"> address_detail = #{ad.addressDetail}, </if>
-        <if test="ad.adPosition"> ad_position = #{ad.adPosition}, </if>
         <if test="ad.photoList"> photo_list = #{ad.photoList}, </if>
         <if test="ad.adLink"> ad_link = #{ad.adLink}, </if>
         <if test="ad.sido2"> sido2 = #{ad.sido2}, </if>
@@ -430,13 +422,13 @@ interface AdMapper {
     """)
     List<fmAd> searchTitleAd(@Param("ad") fmAd ad)
 
-    // 폼메일용 hashtag( 배열 형식 ) 중 완전 일치하는 리스트 반환
-    @Select("""
-        SELECT *
-        FROM formmail_ad
-        WHERE FIND_IN_SET(#{ad.hashtag} , REPLACE(hashtag, ' ','')) > 0 ;
-    """)
-    List<fmAd> searchHashtagAd(@Param("ad") fmAd ad)
+//    // 폼메일용 hashtag( 배열 형식 ) 중 완전 일치하는 리스트 반환
+//    @Select("""
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE FIND_IN_SET(#{ad.hashtag} , REPLACE(hashtag, ' ','')) > 0 ;
+//    """)
+//    List<fmAd> searchHashtagAd(@Param("ad") fmAd ad)
 
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
     // 만약 sido, sigungu 같이 입력시 -> 2개 항목 다 완전 일치하는 것
@@ -583,7 +575,7 @@ interface AdMapper {
     """)
     int updateAdClose(@Param("ad") fmAd ad)
 
-    // 유료상품 공고만 수정할 수 있는 API
+    // 유료상품 등급 수정 API
     @Update("""
         UPDATE formmail_ad
         SET grade = #{ad.grade}

@@ -158,12 +158,12 @@ public class formMail_adController {
         return formMailAdService.searchTitleAd(ad);
     }
 
-    // 폼메일용 hashtag 일치하는 광고 조회
-    @PostMapping("/searchHashtagAd")
-    @Operation(summary = "해시태그 일치하는 광고 조회", description="필수 값 : hashtag")
-    public AdResponse searchHashtagAd(@RequestBody fmAd ad) throws Exception {
-        return formMailAdService.searchHashtagAd(ad);
-    }
+//    // 폼메일용 hashtag 일치하는 광고 조회
+//    @PostMapping("/searchHashtagAd")
+//    @Operation(summary = "해시태그 일치하는 광고 조회", description="필수 값 : hashtag")
+//    public AdResponse searchHashtagAd(@RequestBody fmAd ad) throws Exception {
+//        return formMailAdService.searchHashtagAd(ad);
+//    }
 
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
     @Operation(summary = "sido, sigungu 일치하는 광고 조회", description="sido는 필수, sigungu는 필수 아님")
@@ -196,7 +196,7 @@ public class formMail_adController {
         return formMailAdService.updateAdClose(ad);
     }
 
-    // 유료상품 공고만 수정할 수 있는 API
+    // 유료상품 등급 수정 API
     @PutMapping("/update/grade")
     public ApiResponse updateGrade(@RequestBody fmAd ad) throws Exception {
         return formMailAdService.updateGrade(ad);

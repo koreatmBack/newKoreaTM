@@ -174,8 +174,6 @@ public class AdRequest {
 
     private String addressDetail; // 상세주소(102동 403호 등)
 
-    private String adPosition; //
-
     private String photoList;   // 사진목록
 
     private boolean adLink; // 광고 이미지 링크

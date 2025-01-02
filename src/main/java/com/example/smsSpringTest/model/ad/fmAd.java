@@ -95,8 +95,6 @@ public class fmAd {
 
     private String dongEubMyun; // 동/읍/면
 
-    private String hashtag;
-
     private Integer grade;
 
     private String salary; // 급여
@@ -173,8 +171,6 @@ public class fmAd {
     private String zipCode; // 우편번호
 
     private String addressDetail; // 상세주소(102동 403호 등)
-
-    private String adPosition; //
 
     private String photoList;   // 사진목록
 
