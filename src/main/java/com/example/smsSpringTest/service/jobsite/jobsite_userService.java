@@ -2566,7 +2566,7 @@ public class jobsite_userService {
         return apiResponse;
     }
 
-    // userId, type, aid 일치할 때 전체 삭제하기
+    // userId, type 일치할 때 전체 삭제하기
     public ApiResponse deleteAllBookmark(BookMark mark) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
 

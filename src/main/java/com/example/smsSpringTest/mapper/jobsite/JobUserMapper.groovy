@@ -535,7 +535,7 @@ interface JobUserMapper {
     """)
     int deleteOne(@Param("mark") BookMark mark)
 
-    // userId, type, aid 일치할 때 북마크 전체 삭제하기
+    // userId, type 일치할 때 북마크 전체 삭제하기
     @Delete("""
         DELETE FROM jobsite_bookmark
         WHERE user_id = #{mark.userId}

@@ -334,8 +334,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/common/change/url/short", "/v1/common/change/url/short"
                 ,  "/api/v1/common/change/url/original", "/v1/common/change/url/original"
                 // 공지사항
-                , "/api/v1/notice/find/one", "/v1/notice/find/one"
-                , "/api/v1/notice/find/allList", "/v1/notice/find/allList"
+                , "/api/v1/notice/find/**", "/v1/notice/find/**"
                 ,"/api/v1/common/send/email" , "/v1/common/send/email"
                 , "/api/v1/calculate/salary", "/v1/calculate/salary"
                 , "/api/v1/calculate/salary/weekHoliday", "/v1/calculate/salary/weekHoliday"
