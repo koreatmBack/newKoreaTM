@@ -38,6 +38,7 @@ interface NoticeMapper {
         <if test="notice.keyword != null">
            AND title LIKE CONCAT('%', #{notice.keyword}, '%')
         </if>
+        ORDER BY updated DESC
         LIMIT #{notice.size} OFFSET #{notice.offset}
 </script>    
     """)
@@ -133,6 +134,7 @@ interface NoticeMapper {
         <if test="notice.keyword != null">
            AND title LIKE CONCAT('%', #{notice.keyword}, '%')
         </if>
+        ORDER BY updated DESC
         LIMIT #{notice.size} OFFSET #{notice.offset}
 </script>        
     """)
