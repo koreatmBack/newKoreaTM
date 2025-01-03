@@ -148,8 +148,11 @@ interface NoticeMapper {
 <script>
         SELECT count(*)
         FROM formmail_notice
-        WHERE faq_category = #{notice.faqCategory}
+        WHERE 1=1
         AND type = 'B02'
+        <if test="notice.faqCategory != null">
+        AND faq_category = #{notice.faqCategory}
+        </if>   
         <if test="notice.keyword != null">
            AND title LIKE CONCAT('%', #{notice.keyword}, '%')
         </if>
