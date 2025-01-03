@@ -130,10 +130,10 @@ interface NoticeMapper {
         SELECT *
         FROM formmail_notice
         WHERE 1=1
+        AND type = 'B02'
         <if test="notice.faqCategory != null">
         AND faq_category = #{notice.faqCategory}
         </if>    
-        AND type = 'B02'
         <if test="notice.keyword != null">
            AND title LIKE CONCAT('%', #{notice.keyword}, '%')
         </if>
