@@ -626,6 +626,7 @@ interface AdMapper {
         start_date <= CURDATE()
         AND (end_date IS NULL OR end_date >= CURDATE())
         AND grade = #{ad.grade}
+        ORDER BY updated DESC
         LIMIT #{ad.size} OFFSET #{ad.offset}  
     """)
     List<JobSite> searchGradeJobsite(@Param("ad") AdRequest ad)
@@ -679,7 +680,7 @@ interface AdMapper {
         WHERE 
         start_date <= CURDATE()
         AND (end_date IS NULL OR end_date >= CURDATE())
-        ORDER BY created_at DESC
+        ORDER BY created DESC
         LIMIT #{ad.size} OFFSET #{ad.offset}
     """)
     List<JobSite> orderByCreated(@Param("ad") AdRequest ad)
