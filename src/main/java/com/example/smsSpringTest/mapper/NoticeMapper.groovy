@@ -130,7 +130,7 @@ interface NoticeMapper {
         SELECT *
         FROM formmail_notice
         WHERE 1=1
-        <if test="notice.faqCategory != 전체">
+        <if test="notice.faqCategory != null">
         AND faq_category = #{notice.faqCategory}
         </if>    
         AND type = 'B02'
