@@ -589,6 +589,7 @@ interface AdMapper {
     @Update("""
         UPDATE formmail_ad
         SET grade = #{ad.grade}
+            ,focus = #{ad.focus}
         WHERE aid = #{ad.aid}
     """)
     int updateGrade(@Param("ad") fmAd ad)
