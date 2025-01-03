@@ -219,11 +219,16 @@ public class formMail_adController {
         return formMailAdService.allJobsiteList(ad);
     }
 
-    // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
+    // 잡사이트용 grade에 따른 공고 조회 ( 종료기간 끝난것 조회 x )
     @PostMapping("/searchGradeList")
     @Operation(summary = "grade(플래티넘, 골드, 라이트) 유료 광고 조회", description="필수 값 : grade")
     public AdResponse searchGradeList(@RequestBody AdRequest ad) throws Exception {
         return formMailAdService.searchGradeJobsite(ad);
+    }
+
+    @PostMapping("/searchFocusList")
+    public AdResponse searchFocusList(@RequestBody AdRequest ad) throws Exception {
+        return formMailAdService.searchFocusJobsite(ad);
     }
 
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )

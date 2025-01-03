@@ -329,6 +329,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/api/v1/formMail_ad/selectByRegions/sort", "/v1/formMail_ad/selectByRegions/sort",
                 "/api/v1/formMail_ad/sigunguList", "/v1/formMail_ad/sigunguList",
                 "/api/v1/formMail_ad/dongEubMyunList", "/v1/formMail_ad/dongEubMyunList",
+                "/api/v1/formMail_ad/searchFocusList", "/v1/formMail_ad/searchFocusList",
                 // 잡사이트 지원자 등록
                 "/v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
                 // 소셜 로그인
@@ -369,7 +370,8 @@ public class JwtFilter extends OncePerRequestFilter {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         String[] userEndpoints = {
                 "/v1/jobsite/**", "/api/v1/jobsite/**",
-                "/v1/formMail_ad/findCompanyAndUser","/api/v1/formMail_ad/findCompanyAndUser"
+                "/v1/formMail_ad/findCompanyAndUser","/api/v1/formMail_ad/findCompanyAndUser",
+                "/v1/formMail_ad/find/applyMethod","/api/v1/formMail_ad/find/applyMethod"
         };
 
         for (String userEndpoint : userEndpoints) {

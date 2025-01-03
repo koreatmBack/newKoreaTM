@@ -200,4 +200,6 @@ public class JobSite {
 
     private boolean subPhoneShow; // 메인 폰 공개 or 비공개
 
+    private boolean focus;
+
 }

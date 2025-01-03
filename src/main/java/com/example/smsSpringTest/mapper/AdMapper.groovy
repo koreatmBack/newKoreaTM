@@ -642,6 +642,31 @@ interface AdMapper {
     """)
     int searchGradeJobsiteCount(@Param("ad") AdRequest ad)
 
+    // 잡사이트용 포커스 공고 조회 ( 종료기간 끝난것 조회 x )
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
+        AND focus = 1
+        ORDER BY updated DESC
+        LIMIT #{ad.size} OFFSET #{ad.offset}  
+    """)
+    List<JobSite> searchFocusJobsite(@Param("ad") AdRequest ad)
+
+    // 잡사이트용 포커스 공고 조회 개수
+    @Select("""
+        SELECT count(*)
+        FROM formmail_ad
+        WHERE 
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
+        AND focus = 1
+        ORDER BY updated DESC
+    """)
+    int searchFocusJobsiteCount(@Param("ad") AdRequest ad)
+
     // 잡 사이트용 title이 포함된 광고 조회 ( 종료기간 끝난것 조회 x )
     @Select("""
         SELECT *
