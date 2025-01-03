@@ -3,7 +3,6 @@ package com.example.smsSpringTest.mapper
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.Regions
 import com.example.smsSpringTest.model.ad.*
-import com.example.smsSpringTest.model.findCompanyAndUser
 import com.example.smsSpringTest.model.formMail_file
 import org.apache.ibatis.annotations.*
 
@@ -15,7 +14,6 @@ interface AdMapper {
 <script>
         INSERT INTO formmail_ad(
             aid
-            , cid
             , start_date
             , end_date
             , heaven
@@ -92,14 +90,8 @@ interface AdMapper {
             , detail_images
             , company_user_id
         ) VALUES (
-            #{ad.aid},
-        <if test="ad.cid != null and ad.cid != ''">
-            #{ad.cid},
-        </if>        
-        <if test="ad.cid == null or ad.cid == ''">
-            NULL,
-        </if>
-             #{ad.startDate}
+            #{ad.aid}
+            , #{ad.startDate}
             , #{ad.endDate}
             , #{ad.heaven}
             , #{ad.albamon}
@@ -195,31 +187,28 @@ interface AdMapper {
     """)
     int addExtensionDay(@Param("extensionDay") int extensionDay, @Param("ad") fmAd ad)
 
-    // 해당 고객사 광고 조회
-    @Select("""
-        SELECT *
-        FROM formmail_ad
-        WHERE cid = #{adRequest.cid}
-        LIMIT #{adRequest.size} OFFSET #{adRequest.offset}
-    """)
-    List<AdRequest> findFmAdList(@Param("adRequest") AdRequest adRequest)
+//    // 해당 고객사 광고 조회
+//    @Select("""
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE cid = #{adRequest.cid}
+//        LIMIT #{adRequest.size} OFFSET #{adRequest.offset}
+//    """)
+//    List<AdRequest> findFmAdList(@Param("adRequest") AdRequest adRequest)
 
-    // 해당되는 고객사 광고 수
-    @Select("""
-        SELECT count(*)
-        FROM formmail_ad
-        WHERE cid = #{adRequest.cid}
-    """)
-    int getFmAdListCount(@Param("adRequest") AdRequest adRequest)
+//    // 해당되는 고객사 광고 수
+//    @Select("""
+//        SELECT count(*)
+//        FROM formmail_ad
+//        WHERE cid = #{adRequest.cid}
+//    """)
+//    int getFmAdListCount(@Param("adRequest") AdRequest adRequest)
 
     // 광고 수정 ( 광고 고유 id 일치해야 가능 )
     @Update("""
     <script>
         UPDATE formmail_ad
      <set>
-        <if test="ad.cid != null">
-            cid = #{ad.cid},
-        </if>
         <if test="ad.startDate != null">
             start_date = #{ad.startDate},
         </if>    
@@ -1126,30 +1115,30 @@ interface AdMapper {
 
     //-------------------------------------
 
-    // aid로 cid 찾기
-    @Select("""
-        SELECT cid
-        FROM formmail_ad
-        WHERE aid = #{ad.aid}
-    """)
-    String findCid(@Param("ad") fmAd ad)
+//    // aid로 cid 찾기
+//    @Select("""
+//        SELECT cid
+//        FROM formmail_ad
+//        WHERE aid = #{ad.aid}
+//    """)
+//    String findCid(@Param("ad") fmAd ad)
 
-    // aid 입력 후 찾은 cid로 고객사 정보와 유저 정보 찾기
-    @Select("""
-        SELECT
-        fc.company_name
-        , fc.company_branch
-        , fa.r_name
-        , fa.user_name
-        , fa.position
-        , fa.user_id
-        , fc.cid
-        FROM formmail_company fc
-        JOIN formmail_admin fa ON fc.mid = fa.user_id
-        WHERE fc.cid = #{cid}
-        LIMIT 1;
-    """)
-    List<findCompanyAndUser> findCompanyAndUser(@Param("cid") String cid)
+//    // aid 입력 후 찾은 cid로 고객사 정보와 유저 정보 찾기
+//    @Select("""
+//        SELECT
+//        fc.company_name
+//        , fc.company_branch
+//        , fa.r_name
+//        , fa.user_name
+//        , fa.position
+//        , fa.user_id
+//        , fc.cid
+//        FROM formmail_company fc
+//        JOIN formmail_admin fa ON fc.mid = fa.user_id
+//        WHERE fc.cid = #{cid}
+//        LIMIT 1;
+//    """)
+//    List<findCompanyAndUser> findCompanyAndUser(@Param("cid") String cid)
 
 
 // ------------------ 광고 테이블 끝 -----------------

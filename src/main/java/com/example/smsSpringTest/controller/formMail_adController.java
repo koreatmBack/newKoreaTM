@@ -50,12 +50,12 @@ public class formMail_adController {
 //        return adResponse;
 //    }
 
-    // 고객사(cid) 일치하는 광고 조회
-    @PostMapping("/fmAdList")
-    @Operation(summary = "고객사 일치하는 광고 조회", description="필수 값 : cid")
-    public AdResponse fmAdList(@RequestBody AdRequest adRequest) throws Exception {
-        return formMailAdService.fmAdList(adRequest);
-    }
+//    // 고객사(cid) 일치하는 광고 조회
+//    @PostMapping("/fmAdList")
+//    @Operation(summary = "고객사 일치하는 광고 조회", description="필수 값 : cid")
+//    public AdResponse fmAdList(@RequestBody AdRequest adRequest) throws Exception {
+//        return formMailAdService.fmAdList(adRequest);
+//    }
 
     // 광고 업데이트
     @PutMapping("/updateAd")
@@ -311,12 +311,12 @@ public class formMail_adController {
 
     // -------------------------
 
-    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
-    @PostMapping("/findCompanyAndUser")
-    @Operation(summary = "광고 고유id 일치하는 고객사 조회 -> 찾은 cid로 user 정보까지 조회", description="필수 값 : aid")
-    public AdResponse findCompanyAndUser(@RequestBody fmAd ad) throws Exception {
-        return formMailAdService.findCompanyAndUser(ad);
-    }
+//    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
+//    @PostMapping("/findCompanyAndUser")
+//    @Operation(summary = "광고 고유id 일치하는 고객사 조회 -> 찾은 cid로 user 정보까지 조회", description="필수 값 : aid")
+//    public AdResponse findCompanyAndUser(@RequestBody fmAd ad) throws Exception {
+//        return formMailAdService.findCompanyAndUser(ad);
+//    }
 
     // get 테스트용 -> 삭제 예정
     @GetMapping("/jobSiteListTest")

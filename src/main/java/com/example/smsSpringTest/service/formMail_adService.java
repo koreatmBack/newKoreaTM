@@ -152,52 +152,52 @@ public class formMail_adService {
 //    }
 
 
-    // 광고 조회
-    public AdResponse fmAdList(AdRequest adRequest) throws Exception {
-        AdResponse adResponse = new AdResponse();
-
-        try {
-
-            // 캐시 키
-            String cacheKey = "fmAdList_" + adRequest.getPage() + "_" + adRequest.getSize();
-            long cacheTime = 1000 * 60 * 60; // 만료시간 : 1시간
-
-//            // Redis에 데이터가 있는지 확인
-//            if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
-//                // Redis에서 데이터 가져오기
-//                adResponse = (AdResponse) redisTemplate.opsForValue().get(cacheKey);
-//                log.info("Redis에서 광고 목록을 조회했습니다.");
-//            } else {
-
-                int page = adRequest.getPage(); // 현재 페이지
-                int size = adRequest.getSize(); // 한 페이지에 표시할 수
-                int offset = (page - 1) * size; // 시작 위치
-                int totalCount = adMapper.getFmAdListCount(adRequest); //전체 수
-                adRequest.setOffset(offset);
-                log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-                adResponse.setFindFmAdList(adMapper.findFmAdList(adRequest));
-                if (adResponse.getFindFmAdList() != null && !adResponse.getFindFmAdList().isEmpty()) {
-                    int totalPages = (int) Math.ceil((double) totalCount / size);
-                    log.info("totalPages = " + totalPages);
-                    adResponse.setTotalPages(totalPages);
-                    adResponse.setCode("C000");
-                    adResponse.setMessage("광고 목록 조회 성공");
-
-//                    // Redis에 데이터 저장
-//                    redisTemplate.opsForValue().set(cacheKey, adResponse, cacheTime, TimeUnit.MILLISECONDS);
-//                    log.info("광고 목록을 Redis에 캐싱했습니다.");
-                } else {
-                    adResponse.setCode("E005");
-                    adResponse.setMessage("광고 조회 실패");
-                }
-//            }
-        } catch(Exception e){
-            adResponse.setCode("E001");
-            adResponse.setMessage("광고 조회 실패");
-            log.error("광고 목록 조회 중 오류 발생: ", e);
-        }
-        return adResponse;
-    }
+//    // 광고 조회
+//    public AdResponse fmAdList(AdRequest adRequest) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//
+//        try {
+//
+//            // 캐시 키
+//            String cacheKey = "fmAdList_" + adRequest.getPage() + "_" + adRequest.getSize();
+//            long cacheTime = 1000 * 60 * 60; // 만료시간 : 1시간
+//
+////            // Redis에 데이터가 있는지 확인
+////            if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
+////                // Redis에서 데이터 가져오기
+////                adResponse = (AdResponse) redisTemplate.opsForValue().get(cacheKey);
+////                log.info("Redis에서 광고 목록을 조회했습니다.");
+////            } else {
+//
+//                int page = adRequest.getPage(); // 현재 페이지
+//                int size = adRequest.getSize(); // 한 페이지에 표시할 수
+//                int offset = (page - 1) * size; // 시작 위치
+//                int totalCount = adMapper.getFmAdListCount(adRequest); //전체 수
+//                adRequest.setOffset(offset);
+//                log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+//                adResponse.setFindFmAdList(adMapper.findFmAdList(adRequest));
+//                if (adResponse.getFindFmAdList() != null && !adResponse.getFindFmAdList().isEmpty()) {
+//                    int totalPages = (int) Math.ceil((double) totalCount / size);
+//                    log.info("totalPages = " + totalPages);
+//                    adResponse.setTotalPages(totalPages);
+//                    adResponse.setCode("C000");
+//                    adResponse.setMessage("광고 목록 조회 성공");
+//
+////                    // Redis에 데이터 저장
+////                    redisTemplate.opsForValue().set(cacheKey, adResponse, cacheTime, TimeUnit.MILLISECONDS);
+////                    log.info("광고 목록을 Redis에 캐싱했습니다.");
+//                } else {
+//                    adResponse.setCode("E005");
+//                    adResponse.setMessage("광고 조회 실패");
+//                }
+////            }
+//        } catch(Exception e){
+//            adResponse.setCode("E001");
+//            adResponse.setMessage("광고 조회 실패");
+//            log.error("광고 목록 조회 중 오류 발생: ", e);
+//        }
+//        return adResponse;
+//    }
 
     // 광고 수정
     public ApiResponse updateAd(fmAd ad) throws Exception {
@@ -893,29 +893,29 @@ public class formMail_adService {
 //    }
 
 
-    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
-    public AdResponse findCompanyAndUser(fmAd ad) throws Exception {
-        AdResponse adResponse = new AdResponse();
-        try {
-
-            String cid = adMapper.findCid(ad);
-
-            adResponse.setFindCompanyAndUserList(adMapper.findCompanyAndUser(cid));
-            log.info(adMapper.findCompanyAndUser(cid).toString());
-            if(adResponse.getFindCompanyAndUserList() != null && !adResponse.getFindCompanyAndUserList().isEmpty()){
-                adResponse.setCode("C000");
-                adResponse.setMessage("조회 성공");
-            } else {
-                adResponse.setCode("E004");
-                adResponse.setMessage("조회 실패");
-            }
-        } catch (Exception e) {
-            adResponse.setCode("E001");
-            adResponse.setMessage("ERROR");
-            log.info(e.getMessage());
-        }
-        return adResponse;
-    }
+//    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
+//    public AdResponse findCompanyAndUser(fmAd ad) throws Exception {
+//        AdResponse adResponse = new AdResponse();
+//        try {
+//
+//            String cid = adMapper.findCid(ad);
+//
+//            adResponse.setFindCompanyAndUserList(adMapper.findCompanyAndUser(cid));
+//            log.info(adMapper.findCompanyAndUser(cid).toString());
+//            if(adResponse.getFindCompanyAndUserList() != null && !adResponse.getFindCompanyAndUserList().isEmpty()){
+//                adResponse.setCode("C000");
+//                adResponse.setMessage("조회 성공");
+//            } else {
+//                adResponse.setCode("E004");
+//                adResponse.setMessage("조회 실패");
+//            }
+//        } catch (Exception e) {
+//            adResponse.setCode("E001");
+//            adResponse.setMessage("ERROR");
+//            log.info(e.getMessage());
+//        }
+//        return adResponse;
+//    }
 
 // 11-29 ~
 //    // 일단 정렬 , 등록일 조건 없이 시/도, 시,군,구 / 동,읍,면에 대해서만
