@@ -174,10 +174,10 @@ public class NoticeService {
                 log.info("totalPages = " + totalPages);
                 noticeResponse.setTotalPages(totalPages);
                 noticeResponse.setCode("C000");
-                noticeResponse.setMessage("전체 조회 성공");
+                noticeResponse.setMessage("카테고리별 조회 성공");
             } else {
                 noticeResponse.setCode("C003");
-                noticeResponse.setMessage("전체 조회 실패");
+                noticeResponse.setMessage("카테고리별 조회 실패");
             }
         } catch (Exception e) {
             noticeResponse.setCode("E001");
