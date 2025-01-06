@@ -293,8 +293,15 @@ public class jobsite_userService {
             if (user.getAgreeOver15().equals("N") || user.getAgreeTerms().equals("N") ||
                     user.getAgreePrivacy().equals("N")) {
                 // 필수 셋 중 하나라도 N 이면
-                apiResponse.setCode("E003");
-                apiResponse.setMessage("회원 등록 실패 !!");
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("다시 입력해주세요.");
+                return apiResponse;
+            }
+
+            if(!StringUtils.hasText(user.getUserName())){
+                // 이름이 없다면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("다시 입력해주세요.");
                 return apiResponse;
             }
 
