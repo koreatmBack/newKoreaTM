@@ -63,6 +63,7 @@ public class formMail_adService {
                 }
 
                 // formmail_file에 url 등록 -> 광고 이미지에서 등록 실패시 삭제
+                // 기업회원용 (company_user_id)
                 int dupImgurl = adMapper.dupImgUrl(ad);
                 if(dupImgurl == 0){
                     int addUrl = commonMapper.addUrl(ad);

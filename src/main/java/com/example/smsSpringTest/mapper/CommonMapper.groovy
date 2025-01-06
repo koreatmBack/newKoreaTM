@@ -14,15 +14,16 @@ import org.apache.ibatis.annotations.Update
 interface CommonMapper {
 
     // url 저장 테이블에 입력한 상대경로 저장하기
+    // 기업회원용
     @Insert("""
     <script>
        INSERT INTO formmail_file(
-        aid,
+        company_user_id,
          <if test="adImage.adImg != null">ad_img,</if>
          <if test="adImage.logoImg != null">logo_img,</if>
          concept
        ) VALUES (
-        #{adImage.aid},
+        #{adImage.companyUserId},
          <if test="adImage.adImg != null">#{adImage.adImg},</if>
          <if test="adImage.logoImg != null">#{adImage.logoImg},</if>
          #{adImage.concept}
