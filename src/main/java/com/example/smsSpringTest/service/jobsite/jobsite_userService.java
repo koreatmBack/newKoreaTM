@@ -2529,6 +2529,7 @@ public class jobsite_userService {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
                 bookMarkResponse.setTotalPages(totalPages);
+                bookMarkResponse.setTotalCount(totalCount);
                 bookMarkResponse.setCode("C000");
                 bookMarkResponse.setMessage("조회 성공");
             } else {
@@ -2561,6 +2562,7 @@ public class jobsite_userService {
             if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
+                bookMarkResponse.setTotalCount(totalCount);
                 bookMarkResponse.setTotalPages(totalPages);
                 bookMarkResponse.setCode("C000");
                 bookMarkResponse.setMessage("조회 성공");
