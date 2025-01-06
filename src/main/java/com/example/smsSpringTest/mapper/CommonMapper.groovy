@@ -17,12 +17,12 @@ interface CommonMapper {
     @Insert("""
     <script>
        INSERT INTO formmail_file(
-        cid,
+        aid,
          <if test="adImage.adImg != null">ad_img,</if>
          <if test="adImage.logoImg != null">logo_img,</if>
          concept
        ) VALUES (
-        #{adImage.cid},
+        #{adImage.aid},
          <if test="adImage.adImg != null">#{adImage.adImg},</if>
          <if test="adImage.logoImg != null">#{adImage.logoImg},</if>
          #{adImage.concept}

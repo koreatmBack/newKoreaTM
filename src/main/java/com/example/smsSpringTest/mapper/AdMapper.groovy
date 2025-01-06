@@ -1213,6 +1213,7 @@ interface AdMapper {
         FROM formmail_file
         WHERE ad_img = #{adImage.adImg}
         OR logo_img = #{adImage.logoImg}
+        AND aid = #{adImage.aid}
     """)
     int dupImgUrl(@Param("adImage") fmAd adImage)
 
