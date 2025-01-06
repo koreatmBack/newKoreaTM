@@ -204,4 +204,5 @@ public class fmAd {
 
     private int num; // 광고 고유 번호
 
+    private int viewCount; // 조회수
 }

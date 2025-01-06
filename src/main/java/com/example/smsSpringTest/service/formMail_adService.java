@@ -12,13 +12,17 @@ import com.example.smsSpringTest.model.response.AdCountResponse;
 import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
+import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +42,8 @@ public class formMail_adService {
     private final CommonMapper commonMapper;
     private final HolidayMapper holidayMapper;
     private final S3Uploader s3Uploader;
+    private final HttpServletRequest request;
+    private final JwtTokenProvider jwtTokenProvider;
     private final MapService mapService;
 //    private final RedisTemplate<String, Object> redisTemplate;
 
@@ -517,6 +523,7 @@ public class formMail_adService {
             ad.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
+
             adResponse.setFmAdList(adMapper.statusList(ad));
             log.info(adMapper.statusList(ad).toString());
             if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
@@ -742,8 +749,64 @@ public class formMail_adService {
     // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
     public AdResponse findOneJobsite(fmAd ad) throws Exception {
         AdResponse adResponse = new AdResponse();
-
+        boolean hasError = false;
         try {
+            String aid = ad.getAid();
+
+            // 진행중인 공고인지 체크하기. 진행중이면 1, 아니면 0
+            int checkProgressAd = adMapper.checkProgressAd(ad);
+            log.info("진행중 체크 = " + checkProgressAd);
+            if(checkProgressAd == 0) {
+                // 대기중이거나 종료된 공고면
+
+                Cookie cookies[] = request.getCookies();
+                String accessToken = "";
+                if(cookies != null) {
+
+                    // 만약 쿠키가 있다면
+                    for (Cookie cookie : cookies) {
+                        if ("accesstoken".equals(cookie.getName())) {
+                            accessToken = cookie.getValue();
+                            break;
+                        }
+                    }
+                }
+                // 쿠키가 없을때
+                if(!StringUtils.hasText(accessToken)) {
+                    hasError = true;
+                } else {
+                    //쿠키 있으면
+                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+                    log.info("auth ROLE = " + authentication.getAuthorities());
+                    String authRole = authentication.getAuthorities().toString();
+                    if("[ROLE_USER]".equals(authRole)){
+                        // 만약 역할이 유저면
+                        hasError = true;
+                    }
+                }
+
+//                // 쿠키가 없거나 user 역할이면
+//                // 쿠키가 없을때
+//                if(!StringUtils.hasText(accessToken) || authRole.equals("ROLE_USER")) {
+//                    adResponse.setCode("E003");
+//                    adResponse.setMessage("마감된 공고입니다.");
+//                    return adResponse;
+//                }
+                if(hasError) {
+                    adResponse.setCode("E003");
+                    adResponse.setMessage("마감된 공고입니다.");
+                    return adResponse;
+                }
+            }
+
+            // 기존 조회수 갖고오기
+            int viewCount = adMapper.findOneJobsite(ad).get(0).getViewCount();
+            viewCount ++ ;
+            // 조회수 추가
+            ad.setViewCount(viewCount);
+            adMapper.updateViewCount(aid, viewCount);
+            // 조회수 추가 끝
+
             adResponse.setJobSiteList(adMapper.findOneJobsite(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
                 adResponse.setCode("C000");
@@ -755,6 +818,7 @@ public class formMail_adService {
         } catch (Exception e) {
             adResponse.setCode("E001");
             adResponse.setMessage("ERROR");
+            log.info(e.getMessage());
         }
         return adResponse;
     }

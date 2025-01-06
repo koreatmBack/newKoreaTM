@@ -675,16 +675,47 @@ interface AdMapper {
     """)
     List<JobSite> searchTitleJobsite(@Param("ad") fmAd ad)
 
+//    // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
+//    // 2025-01-06 광고 상세 조회시 종료 기간 끝난것도 포함하게 수정하였음( 관리자 용 )
+//    @Select("""
+//        SELECT *
+//        FROM formmail_ad
+//        WHERE
+//        start_date <= CURDATE()
+//        AND (end_date IS NULL OR end_date >= CURDATE())
+//        AND aid = #{ad.aid}
+//    """)
+//    List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
+
     // 잡사이트용 aid 일치하는 광고 상세 조회 ( 종료기간 끝난것 조회 x )
+    // 2025-01-06 광고 상세 조회시 종료 기간 끝난것도 포함하게 수정하였음( 관리자 용 )
     @Select("""
         SELECT *
         FROM formmail_ad
         WHERE 
-        start_date <= CURDATE()
-        AND (end_date IS NULL OR end_date >= CURDATE())
-        AND aid = #{ad.aid}       
+        aid = #{ad.aid}       
     """)
     List<JobSite> findOneJobsite(@Param("ad") fmAd ad)
+
+    // 광고 상세 조회시 종료기간 끝난 것인지 체크하기.
+    // 진행중인 공고면 1, 아니면 0  // start_date <= 오늘 날짜 <= 종료날짜 or 상시모집
+    @Select("""
+        SELECT count(*)
+        FROM formmail_ad
+        WHERE
+        start_date <= CURDATE()
+        AND (end_date IS NULL OR end_date >= CURDATE())
+        AND aid = #{ad.aid}
+    """)
+    int checkProgressAd(@Param("ad") fmAd ad)
+
+    // 공고 하나 조회시 조회수 1 증가
+    @Update("""
+        UPDATE formmail_ad
+        SET view_count = #{viewCount}
+        WHERE aid = #{aid}
+    """)
+    int updateViewCount(@Param("aid") String aid, @Param("viewCount") int viewCount)
 
     // 잡사이트용 aid 일치하는 광고 상세 조회 -> 지원 방법만 뽑기
     // 이거 나중에 login한 유저만 접근 가능하게 막기 위해서임
