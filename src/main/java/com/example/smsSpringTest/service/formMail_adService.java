@@ -15,13 +15,11 @@ import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
@@ -753,51 +751,51 @@ public class formMail_adService {
         try {
             String aid = ad.getAid();
 
-            // 진행중인 공고인지 체크하기. 진행중이면 1, 아니면 0
-            int checkProgressAd = adMapper.checkProgressAd(ad);
-            log.info("진행중 체크 = " + checkProgressAd);
-            if(checkProgressAd == 0) {
-                // 대기중이거나 종료된 공고면
-
-                Cookie cookies[] = request.getCookies();
-                String accessToken = "";
-                if(cookies != null) {
-
-                    // 만약 쿠키가 있다면
-                    for (Cookie cookie : cookies) {
-                        if ("accesstoken".equals(cookie.getName())) {
-                            accessToken = cookie.getValue();
-                            break;
-                        }
-                    }
-                }
-                // 쿠키가 없을때
-                if(!StringUtils.hasText(accessToken)) {
-                    hasError = true;
-                } else {
-                    //쿠키 있으면
-                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-                    log.info("auth ROLE = " + authentication.getAuthorities());
-                    String authRole = authentication.getAuthorities().toString();
-                    if("[ROLE_USER]".equals(authRole)){
-                        // 만약 역할이 유저면
-                        hasError = true;
-                    }
-                }
-
-//                // 쿠키가 없거나 user 역할이면
+//            // 진행중인 공고인지 체크하기. 진행중이면 1, 아니면 0
+//            int checkProgressAd = adMapper.checkProgressAd(ad);
+//            log.info("진행중 체크 = " + checkProgressAd);
+//            if(checkProgressAd == 0) {
+//                // 대기중이거나 종료된 공고면
+//
+//                Cookie cookies[] = request.getCookies();
+//                String accessToken = "";
+//                if(cookies != null) {
+//
+//                    // 만약 쿠키가 있다면
+//                    for (Cookie cookie : cookies) {
+//                        if ("accesstoken".equals(cookie.getName())) {
+//                            accessToken = cookie.getValue();
+//                            break;
+//                        }
+//                    }
+//                }
 //                // 쿠키가 없을때
-//                if(!StringUtils.hasText(accessToken) || authRole.equals("ROLE_USER")) {
+//                if(!StringUtils.hasText(accessToken)) {
+//                    hasError = true;
+//                } else {
+//                    //쿠키 있으면
+//                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+//                    log.info("auth ROLE = " + authentication.getAuthorities());
+//                    String authRole = authentication.getAuthorities().toString();
+//                    if("[ROLE_USER]".equals(authRole)){
+//                        // 만약 역할이 유저면
+//                        hasError = true;
+//                    }
+//                }
+//
+////                // 쿠키가 없거나 user 역할이면
+////                // 쿠키가 없을때
+////                if(!StringUtils.hasText(accessToken) || authRole.equals("ROLE_USER")) {
+////                    adResponse.setCode("E003");
+////                    adResponse.setMessage("마감된 공고입니다.");
+////                    return adResponse;
+////                }
+//                if(hasError) {
 //                    adResponse.setCode("E003");
 //                    adResponse.setMessage("마감된 공고입니다.");
 //                    return adResponse;
 //                }
-                if(hasError) {
-                    adResponse.setCode("E003");
-                    adResponse.setMessage("마감된 공고입니다.");
-                    return adResponse;
-                }
-            }
+//            }
 
             // 기존 조회수 갖고오기
             int viewCount = adMapper.findOneJobsite(ad).get(0).getViewCount();

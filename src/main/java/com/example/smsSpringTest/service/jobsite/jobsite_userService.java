@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.service.jobsite;
 
+import com.example.smsSpringTest.mapper.AdMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobCommonMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
@@ -33,6 +34,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -49,6 +52,7 @@ public class jobsite_userService {
     private final jobsite_commonService jobsiteCommonService;
     private final JobUserMapper jobUserMapper;
     private final JobCommonMapper commonMapper;
+    private final AdMapper adMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -2497,6 +2501,7 @@ public class jobsite_userService {
     }
 
     // userId , type 일치할 때 스크랩 or 좋아요 전체 조회
+    // 종료된것 제외
     public BookMarkResponse bookMarkList(BookMark mark) throws Exception {
         BookMarkResponse bookMarkResponse = new BookMarkResponse();
 
@@ -2509,7 +2514,17 @@ public class jobsite_userService {
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
 
-            bookMarkResponse.setBookMarkList(jobUserMapper.bookMarkList(mark));
+            List<BookMark> bookMarkList = jobUserMapper.bookMarkList(mark);
+            List<BookMark> prgoressBookMarkList = new ArrayList<>();
+            for(BookMark bm : bookMarkList) {
+                int checkProgressAd = adMapper.checkProgressAd(bm.getAid());
+                if(checkProgressAd == 1) {
+                    // 진행중이면
+                    prgoressBookMarkList.add(bm);
+                }
+            }
+            totalCount = prgoressBookMarkList.size();
+            bookMarkResponse.setBookMarkList(prgoressBookMarkList);
             if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
@@ -2523,6 +2538,7 @@ public class jobsite_userService {
         } catch (Exception e) {
             bookMarkResponse.setCode("E001");
             bookMarkResponse.setMessage(" Error!!! ");
+            log.info(e.getMessage());
         }
 
         return bookMarkResponse;

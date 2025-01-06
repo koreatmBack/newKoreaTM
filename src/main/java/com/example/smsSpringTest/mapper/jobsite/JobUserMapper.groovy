@@ -478,8 +478,8 @@ interface JobUserMapper {
     @Select("""
         SELECT *
         FROM jobsite_bookmark
-        WHERE user_id = #{mark.userId} 
-        AND type = #{mark.type}
+        WHERE type = #{mark.type}
+        AND user_id = #{mark.userId} 
         LIMIT #{mark.size} OFFSET #{mark.offset}
     """)
     List<BookMark> bookMarkList(@Param("mark") BookMark mark)
@@ -488,8 +488,8 @@ interface JobUserMapper {
     @Select("""
         SELECT count(*)
         FROM jobsite_bookmark
-        WHERE user_id = #{mark.userId} 
-        AND type = #{mark.type}
+        WHERE type = #{mark.type}
+        AND user_id = #{mark.userId} 
     """)
     int bookMarkListCount(@Param("mark") BookMark mark)
 
