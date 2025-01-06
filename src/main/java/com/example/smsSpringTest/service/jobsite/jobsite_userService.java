@@ -293,8 +293,8 @@ public class jobsite_userService {
             if (user.getAgreeOver15().equals("N") || user.getAgreeTerms().equals("N") ||
                     user.getAgreePrivacy().equals("N")) {
                 // 필수 셋 중 하나라도 N 이면
-                apiResponse.setCode("E001");
-                apiResponse.setMessage("다시 입력해주세요.");
+                apiResponse.setCode("E004");
+                apiResponse.setMessage("필수 동의 항목 체크해주세요.");
                 return apiResponse;
             }
 
