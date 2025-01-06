@@ -63,7 +63,7 @@ public class SmsService {
 
 
         SmsResponse smsResponse = new SmsResponse();
-        log.info("서비스 smsForm = " + smsForm);
+//        log.info("서비스 smsForm = " + smsForm);
         log.info("서비스 try 전 호출 됨");
         try{
 
@@ -82,7 +82,7 @@ public class SmsService {
 
             con.setRequestProperty("User-Agent", userAgent);
 
-            log.info("try 내부 = 수신번호 : " + smsForm.getRPhone());
+//            log.info("try 내부 = 수신번호 : " + smsForm.getRPhone());
 
 
             String postParams = "user_id="+base64Encode(smsId)
@@ -98,7 +98,7 @@ public class SmsService {
 
 //            log.info("포스트파람 = " + postParams);
 //           String postParams = new Gson().toJson(smsRequest);
-            log.info("포스트파람 = " + postParams);
+//            log.info("포스트파람 = " + postParams);
 
             if(isTest) {
 
@@ -246,7 +246,7 @@ public class SmsService {
 
                 //out.println(data);
 
-                log.info("data = " + data);
+//                log.info("data = " + data);
 
                 InetAddress addr = InetAddress.getByName(host);
                 Socket socket = new Socket(host, port);
@@ -279,8 +279,8 @@ public class SmsService {
                 String Count= ""; //잔여건수
                 if(rMsg.length>1) {Count= rMsg[1]; }
 
-                log.info("tmpMsg = " + tmpMsg);
-                log.info("rMsg = " + rMsg);
+//                log.info("tmpMsg = " + tmpMsg);
+//                log.info("rMsg = " + rMsg);
 
                 log.info("Result = " + Result);
                 log.info("잔여 문자 개수 : Count = " + Count);
@@ -365,7 +365,7 @@ public class SmsService {
             String originMsg = String.format("[(주)고알바] 인증번호 [%s]를 입력해주세요. 사칭/전화사기에 주의하세요.", randomNumber);
             String originSphone1 = "1644";
             String originSphone2 = "4223";
-            log.info("rnd num = "+ randomNumber);
+//            log.info("rnd num = "+ randomNumber);
             String postParams = "user_id="+base64Encode(smsId)
 
                     +"&secure="+base64Encode(secureKey)
@@ -375,7 +375,7 @@ public class SmsService {
 
                     +"&mode="+base64Encode("1")+"&smsType="+base64Encode("S"); // SMS/LMS 여부
 
-            log.info("포스트파람 = " + postParams);
+//            log.info("포스트파람 = " + postParams);
 
 
             //For POST only    - START
@@ -403,7 +403,7 @@ public class SmsService {
                 StringBuffer buf  = new StringBuffer();
 
                 while((inputLine=in.readLine())!=null){
-                    log.info("Response Line: " + inputLine);
+//                    log.info("Response Line: " + inputLine);
                     buf.append(inputLine);
 
                 }
@@ -425,17 +425,17 @@ public class SmsService {
 
                 String smsType = base64Encode("S");
 
-                log.info("origin_sms_url = " + origin_sms_url);
-                log.info("SMSurl = " + sms_url);
+//                log.info("origin_sms_url = " + origin_sms_url);
+//                log.info("SMSurl = " + sms_url);
 
 
                 String[] host_info = origin_sms_url.split("/");
 
-                log.info("host_info = " + host_info);
+//                log.info("host_info = " + host_info);
 
                 String host = host_info[2];
 
-                log.info("host = " + host);
+//                log.info("host = " + host);
 
                 String path = "/" + host_info[3];
                 int port = 80;
@@ -486,7 +486,7 @@ public class SmsService {
 
                 //out.println(data);
 
-                log.info("data = " + data);
+//                log.info("data = " + data);
 
                 InetAddress addr = InetAddress.getByName(host);
                 Socket socket = new Socket(host, port);
@@ -519,8 +519,8 @@ public class SmsService {
                 String Count= ""; //잔여건수
                 if(rMsg.length>1) {Count= rMsg[1]; }
 
-                log.info("tmpMsg = " + tmpMsg);
-                log.info("rMsg = " + rMsg);
+//                log.info("tmpMsg = " + tmpMsg);
+//                log.info("rMsg = " + rMsg);
 
                 log.info("Result = " + Result);
                 log.info("잔여 문자 개수 : Count = " + Count);

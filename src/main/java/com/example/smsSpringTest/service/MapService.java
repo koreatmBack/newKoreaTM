@@ -109,11 +109,11 @@ public class MapService {
     public MapResponse getCoordinates(String address) {
         MapResponse mapResponse = new MapResponse();
         try {
-            log.info("service : address = " + address);
+//            log.info("service : address = " + address);
             String query = URLEncoder.encode(address, "UTF-8");
             String urlString = String.format("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=%s", query);
 
-            log.info("URL = " + urlString);
+//            log.info("URL = " + urlString);
             // URL 객체 생성
             URL url = new URL(urlString);
             // HttpURLConnection 객체 생성
@@ -150,11 +150,11 @@ public class MapService {
             reader.close();
             connection.disconnect();
 
-            log.info(response.toString());
+//            log.info(response.toString());
 
             JsonObject keys = (JsonObject) JsonParser.parseString(response.toString());
 
-            log.info("keys addresses = " + keys.get("addresses").toString());
+//            log.info("keys addresses = " + keys.get("addresses").toString());
             JsonArray addresses = keys.getAsJsonArray("addresses");
 
             if (addresses.size() > 0) {
@@ -162,8 +162,8 @@ public class MapService {
                 double y = Double.parseDouble(firstAddress.get("x").getAsString());
                 double x = Double.parseDouble(firstAddress.get("y").getAsString());
 
-                log.info("x = " + x);
-                log.info("y = " + y);
+//                log.info("x = " + x);
+//                log.info("y = " + y);
                 mapResponse.setX(x);
                 mapResponse.setY(y);
                 mapResponse.setCode("C000");
@@ -187,11 +187,11 @@ public class MapService {
 
         List<Double> coordinate = null;
         try {
-            log.info("service : address = " + address);
+//            log.info("service : address = " + address);
             String query = URLEncoder.encode(address, "UTF-8");
             String urlString = String.format("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=%s", query);
 
-            log.info("URL = " + urlString);
+//            log.info("URL = " + urlString);
             // URL 객체 생성
             URL url = new URL(urlString);
             // HttpURLConnection 객체 생성
@@ -228,11 +228,11 @@ public class MapService {
             reader.close();
             connection.disconnect();
 
-            log.info(response.toString());
+//            log.info(response.toString());
 
             JsonObject keys = (JsonObject) JsonParser.parseString(response.toString());
 
-            log.info("keys addresses = " + keys.get("addresses").toString());
+//            log.info("keys addresses = " + keys.get("addresses").toString());
             JsonArray addresses = keys.getAsJsonArray("addresses");
 
             if (addresses.size() > 0) {
@@ -240,14 +240,14 @@ public class MapService {
                 double y = Double.parseDouble(firstAddress.get("x").getAsString());
                 double x = Double.parseDouble(String.valueOf(firstAddress.get("y")));
 
-                log.info("x = " + x);
-                log.info("y = " + y);
+//                log.info("x = " + x);
+//                log.info("y = " + y);
 
                 coordinate = new ArrayList<>();
                 coordinate.add(0, x);
                 coordinate.add(1, y);
 
-                log.info(coordinate.toString());
+//                log.info(coordinate.toString());
             }
 
         } catch (IOException e) {
@@ -285,13 +285,13 @@ public class MapService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         ResponseEntity<String> schoolResponse = restTemplate.exchange(schoolURL, HttpMethod.GET, entity, String.class);
 
-        log.info(response.toString());
+//        log.info(response.toString());
 
         // JSON 문자열로 가져오기
         String jsonResponse = response.getBody();
         String schoolJsonResponse = schoolResponse.getBody();
-        System.out.println("Response JSON: " + jsonResponse);
-        System.out.println("SCHOOL JSON: " + schoolJsonResponse);
+//        System.out.println("Response JSON: " + jsonResponse);
+//        System.out.println("SCHOOL JSON: " + schoolJsonResponse);
 
         // Gson 객체 생성
         Gson gson = new Gson();
@@ -315,18 +315,18 @@ public class MapService {
                 schoolDocumentsList.add(document);
             }
         }
-        System.out.println("SchoolDocumentsList:");
+//        System.out.println("SchoolDocumentsList:");
         String university = "";
         for (JsonObject doc : schoolDocumentsList) {
             university = doc.get("place_name").getAsString();
-            System.out.println("Place Name: " + doc.get("place_name").getAsString());
+//            System.out.println("Place Name: " + doc.get("place_name").getAsString());
             if(StringUtils.hasText(university)){
                 break;
             }
 
         }
         List<MapVO> mapInfoList = new ArrayList<>();
-        log.info(documents.toString());
+//        log.info(documents.toString());
 
         // 중복 제거를 위한 임시 Map (placeName을 키로 사용)
         LinkedHashMap<String, MapVO> uniqueMap = new LinkedHashMap<>();
@@ -337,13 +337,13 @@ public class MapService {
             // 필요한 데이터 추출
             String fullPlaceName = document.get("place_name").getAsString(); // 전체 이름 (예: 군자역 7호선)
             // 역 이름과 노선 이름 분리
-            log.info("full = " + fullPlaceName);
+//            log.info("full = " + fullPlaceName);
             String[] parts = fullPlaceName.split(" "); // 공백 기준으로 분리
 //                String stationName = fullPlaceName.split(" ")[0]; // 역 이름만 추출 (예: 군자역)
             String stationName = parts[0]; // 역 이름만 추출 (예: 군자역)
             // "호선" 또는 "선" 앞부분 추출
             String line = "";
-            log.info("parts[1] = " + parts[1]);
+//            log.info("parts[1] = " + parts[1]);
             if (parts.length > 1) { // 노선 이름이 있는 경우 처리
                 String rawLine = parts[1]; // 노선 이름 부분 (예: 경의중앙선, 2호선 등)
                 log.info("rawline = " + rawLine);
@@ -361,7 +361,7 @@ public class MapService {
                     line = rawLine;
                 }
             }
-            log.info("line = " + line);
+//            log.info("line = " + line);
             double subwayY = document.get("x").getAsDouble(); // 위도
             double subwayX = document.get("y").getAsDouble(); // 경도
             int  distance = Integer.parseInt(document.get("distance").getAsString()); // 거리 (m)
@@ -392,7 +392,7 @@ public class MapService {
                 .sorted(Comparator.comparingDouble(vo -> Double.parseDouble(vo.getDistance().replace("km", "").trim())))
                 .limit(3)
                 .collect(Collectors.toList());
-        log.info("sortedMap = " + sortedMapInfoList);
+//        log.info("sortedMap = " + sortedMapInfoList);
         mapResponse.setUniversity(university);
         mapResponse.setMapInfoList(sortedMapInfoList);
         mapResponse.setCode("C000");
