@@ -289,12 +289,22 @@ public class jobsite_userService {
             user.setUserId(userId);
             user.setUserPwd(passwordEncoder.encode(userPwd));
 
+            // 약관 필수 동의 안 하면
+            if (user.getAgreeOver15().equals("N") || user.getAgreeTerms().equals("N") ||
+                    user.getAgreePrivacy().equals("N")) {
+                // 필수 셋 중 하나라도 N 이면
+                apiResponse.setCode("E003");
+                apiResponse.setMessage("회원 등록 실패 !!");
+                return apiResponse;
+            }
+
             // 만약 이메일이 db에 들어가있다면 해당 db의 이메일 날린 후
             // 현재 가입한 유저의 이메일에 추가
             String dupEmailId = jobUserMapper.dupEmailId(user.getEmail());
             log.info("dupEmailId = " + dupEmailId);
             int updateEmailNull = jobUserMapper.updateEmailNull(dupEmailId);
             log.info("updateEmailNull = " + updateEmailNull);
+
 
             int result = jobUserMapper.jobSignUp(user);
 
