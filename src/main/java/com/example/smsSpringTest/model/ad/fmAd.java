@@ -202,4 +202,6 @@ public class fmAd {
 
     private String companyUserId; // 기업 회원 아이디
 
+    private int num; // 광고 고유 번호
+
 }

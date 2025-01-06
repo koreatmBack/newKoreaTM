@@ -202,4 +202,6 @@ public class JobSite {
 
     private boolean focus;
 
+    private int num; // 광고 고유 번호
+
 }

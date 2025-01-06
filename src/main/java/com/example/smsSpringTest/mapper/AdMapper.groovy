@@ -389,13 +389,21 @@ interface AdMapper {
     """)
     int allAdListCount()
 
-    // 폼메일용 adNum 일치하는 광고 목록 전체 조회 (페이징 처리)
+    // 폼메일용 adNum 일치하는 광고 목록 전체 조회
     @Select("""
         SELECT *
         FROM formmail_ad
         WHERE ad_num = #{ad.adNum}
     """)
     List<fmAd> searchAdNumList(@Param("ad") fmAd ad)
+
+    // 폼메일용 num 일치하는 광고 조회, 고유 번호임
+    @Select("""
+        SELECT *
+        FROM formmail_ad
+        WHERE num = #{ad.num}
+    """)
+    List<fmAd> searchOneAd(@Param('ad') fmAd ad)
 
 
     // 폼메일용 aid 일치하는 광고 상세 조회

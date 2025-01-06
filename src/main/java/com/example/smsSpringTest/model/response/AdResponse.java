@@ -30,6 +30,8 @@ public class AdResponse extends ApiResponse{
     private List<AdNearInfo> nearInfoList;
     private List<Regions> regionsList;
     private String applyMethod;
+    private fmAd oneAd;
+
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;

@@ -402,6 +402,26 @@ public class formMail_adService {
         return adResponse;
     }
 
+    // 폼메일용 num 일치하는 광고 조회, 고유 번호임
+    public AdResponse searchOneAd(fmAd ad) throws Exception {
+        AdResponse adResponse = new AdResponse();
+
+        try {
+            adResponse.setFmAdList(adMapper.searchOneAd(ad));
+            if (adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()) {
+                adResponse.setCode("C000");
+                adResponse.setMessage("고유 번호 일치하는 광고 조회 성공");
+            } else {
+                adResponse.setCode("E005");
+                adResponse.setMessage("고유 번호 일치하는 광고 조회 실패");
+            }
+        } catch (Exception e){
+            adResponse.setCode("E001");
+            adResponse.setMessage("ERROR");
+        }
+        return adResponse;
+    }
+
     // 폼메일용 aid 일치하는 광고 상세 조회
     public AdResponse findOneAd(fmAd ad) throws Exception {
         AdResponse adResponse = new AdResponse();
