@@ -480,7 +480,7 @@ interface AdMapper {
                     AND manager_name LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '공고번호'">
-                    AND ad_num LIKE CONCAT('%', #{ad.keyword}, '%')
+                    AND num LIKE CONCAT('%', #{ad.keyword}, '%')
                 </when>
                 <when test="ad.searchType == '연락처'">
                     AND manager_phone LIKE CONCAT('%', #{ad.keyword}, '%')
