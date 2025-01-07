@@ -850,6 +850,9 @@ public class jobsite_userService {
         return apiResponse;
     }
 
+    // 최근 열람 공고 조회하는 API
+//    public
+
     // 회원 id 일치할때 즐겨찾기 삭제
     public ApiResponse deleteFavorite(JobsiteUser user) throws Exception {
 

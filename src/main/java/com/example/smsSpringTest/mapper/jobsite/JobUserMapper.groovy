@@ -4,6 +4,7 @@ import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.jobsite.BookMark
 import com.example.smsSpringTest.model.jobsite.Cert
 import com.example.smsSpringTest.model.jobsite.JobsiteUser
+import com.example.smsSpringTest.model.jobsite.RecentView
 import com.example.smsSpringTest.model.jobsite.Social
 import org.apache.ibatis.annotations.*
 
@@ -563,4 +564,12 @@ interface JobUserMapper {
         AND user_id = #{userId}
     """)
     int dupRecent(@Param("aid") String aid, @Param("userId") String userId)
+
+    // 최근 열람 공고 조회
+    @Select("""
+        SELECT *
+        FROM jobsite_recent_view
+        WHERE user_id = #{userId}
+    """)
+    List<RecentView> recentViews(@Param("userId") String userId)
 }
