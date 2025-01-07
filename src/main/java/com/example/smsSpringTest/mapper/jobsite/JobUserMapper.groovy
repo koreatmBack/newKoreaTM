@@ -570,6 +570,7 @@ interface JobUserMapper {
         SELECT *
         FROM jobsite_recent_view
         WHERE user_id = #{userId}
+        ORDER BY created DESC;
     """)
     List<RecentView> recentViews(@Param("userId") String userId)
 }

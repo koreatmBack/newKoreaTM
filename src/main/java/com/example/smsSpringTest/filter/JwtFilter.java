@@ -372,7 +372,10 @@ public class JwtFilter extends OncePerRequestFilter {
         String[] userEndpoints = {
                 "/v1/jobsite/**", "/api/v1/jobsite/**",
                 "/v1/formMail_ad/findCompanyAndUser","/api/v1/formMail_ad/findCompanyAndUser",
-                "/v1/formMail_ad/find/applyMethod","/api/v1/formMail_ad/find/applyMethod"
+                "/v1/formMail_ad/find/applyMethod","/api/v1/formMail_ad/find/applyMethod",
+                "/v1/jobsite/common/reissu/AccessToken", "/api/v1/jobsite/common/reissu/AccessToken",
+                "/api/v1/jobsite/user/recent/views", "/v1/jobsite/user/recent/views"
+
         };
 
         for (String userEndpoint : userEndpoints) {

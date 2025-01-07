@@ -855,9 +855,22 @@ public class jobsite_userService {
         JobUserResponse userResponse = new JobUserResponse();
 
         try {
-            userResponse.setRecentViews(jobUserMapper.recentViews(rv.getUserId()));
+
+            List<RecentView> recentViews = jobUserMapper.recentViews(rv.getUserId());
+
+            // 진행중인 공고만 반환하기
+            List<RecentView> progressRecentViews = new ArrayList<>();
+            for(RecentView rec : recentViews) {
+                int checkProgressAd = adMapper.checkProgressAd(rec.getAid());
+                if(checkProgressAd == 1) {
+                    // 진행중이면
+                    progressRecentViews.add(rec);
+                }
+            }
+            userResponse.setRecentViews(progressRecentViews);
 
             if(!userResponse.getRecentViews().isEmpty() && userResponse.getRecentViews() != null){
+                userResponse.setTotalCount(progressRecentViews.size());
                 userResponse.setCode("C000");
                 userResponse.setMessage("최근 열람 공고 조회 성공");
             } else {

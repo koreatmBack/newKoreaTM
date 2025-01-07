@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecentView {
-    private int num;
     private String aid;
     private String userId;
 }
