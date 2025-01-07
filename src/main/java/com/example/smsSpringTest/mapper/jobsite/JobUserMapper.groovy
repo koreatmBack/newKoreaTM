@@ -543,4 +543,24 @@ interface JobUserMapper {
     """)
     int deleteAll(@Param("mark") BookMark mark)
 
+    // 최근 열람 공고 등록
+    @Insert("""
+        INSERT INTO jobsite_recent_view(
+            aid
+            , user_id
+        ) VALUES (
+            #{aid}
+            , #{userId}
+        )
+    """)
+    int addRecentView(@Param("aid") String aid, @Param("userId") String userId)
+
+    // 중복 등록하지 않게 이미 있는지 체크하기
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_recent_view
+        WHERE aid = #{aid}
+        AND user_id = #{userId}
+    """)
+    int dupRecent(@Param("aid") String aid, @Param("userId") String userId)
 }

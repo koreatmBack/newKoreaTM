@@ -4,6 +4,7 @@ import com.example.smsSpringTest.config.S3Uploader;
 import com.example.smsSpringTest.mapper.AdMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.HolidayMapper;
+import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.Regions;
 import com.example.smsSpringTest.model.ad.*;
@@ -15,11 +16,13 @@ import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +42,7 @@ public class formMail_adService {
     private final AdMapper adMapper;
     private final CommonMapper commonMapper;
     private final HolidayMapper holidayMapper;
+    private final JobUserMapper userMapper;
     private final S3Uploader s3Uploader;
     private final HttpServletRequest request;
     private final JwtTokenProvider jwtTokenProvider;
@@ -804,6 +808,38 @@ public class formMail_adService {
             ad.setViewCount(viewCount);
             adMapper.updateViewCount(aid, viewCount);
             // 조회수 추가 끝
+
+            // 최근 열람 공고 조회용
+
+            Cookie cookies[] = request.getCookies();
+            String accessToken = "";
+            if(cookies != null) {
+
+            // 만약 쿠키가 있다면
+               for (Cookie cookie : cookies) {
+                   if ("accesstoken".equals(cookie.getName())) {
+                         accessToken = cookie.getValue();
+                         break;
+                        }
+                    }
+               if(StringUtils.hasText(accessToken)){
+                   // 토큰이 있으면
+                   Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+                   log.info("id = " + authentication.getName());
+                   String userId = authentication.getName().toString();
+
+                   // 중복 체크
+                   int dupRecent = userMapper.dupRecent(aid, userId);
+                   if(dupRecent == 0) {
+                       // 중복이 아니면
+                       // 최근 열람 공고 테이블에 등록하기
+                       userMapper.addRecentView(aid, userId);
+                   }
+
+               }
+            }
+
+            // ㅡㅡㅡㅡㅡㅡㅡㅡ
 
             adResponse.setJobSiteList(adMapper.findOneJobsite(ad));
             if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){

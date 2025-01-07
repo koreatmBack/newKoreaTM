@@ -330,6 +330,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/api/v1/formMail_ad/sigunguList", "/v1/formMail_ad/sigunguList",
                 "/api/v1/formMail_ad/dongEubMyunList", "/v1/formMail_ad/dongEubMyunList",
                 "/api/v1/formMail_ad/searchFocusList", "/v1/formMail_ad/searchFocusList",
+                "/api/v1/jobsite/common/exper_cookie", "/v1/jobsite/common/exper_cookie",
                 // 잡사이트 지원자 등록
                 "/v1/jobsite/common/addApply", "/api/v1/jobsite/common/addApply"
                 // 소셜 로그인
