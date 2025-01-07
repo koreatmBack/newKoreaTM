@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.model.response.jobsite;
 
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
+import com.example.smsSpringTest.model.jobsite.RecentView;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -26,6 +27,7 @@ public class JobUserResponse extends ApiResponse {
     private String userId;
     private LocalDate createdAt;
     private List<JobsiteUser> jobsiteUserList;
+    private List<RecentView> recentViews;
 
     private String favorite; // 즐겨찾기
     private String clipping; // 스크랩

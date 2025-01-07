@@ -851,7 +851,27 @@ public class jobsite_userService {
     }
 
     // 최근 열람 공고 조회하는 API
-//    public
+    public JobUserResponse recentViews(RecentView rv) throws Exception {
+        JobUserResponse userResponse = new JobUserResponse();
+
+        try {
+            userResponse.setRecentViews(jobUserMapper.recentViews(rv.getUserId()));
+
+            if(!userResponse.getRecentViews().isEmpty() && userResponse.getRecentViews() != null){
+                userResponse.setCode("C000");
+                userResponse.setMessage("최근 열람 공고 조회 성공");
+            } else {
+                userResponse.setCode("E003");
+                userResponse.setMessage("최근 열람 공고 조회 실패");
+            }
+
+        } catch (Exception e) {
+            userResponse.setCode("E001");
+            userResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return userResponse;
+    }
 
     // 회원 id 일치할때 즐겨찾기 삭제
     public ApiResponse deleteFavorite(JobsiteUser user) throws Exception {

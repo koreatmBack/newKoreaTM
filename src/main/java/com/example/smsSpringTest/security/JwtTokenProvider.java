@@ -46,8 +46,9 @@ public class JwtTokenProvider {
 
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 30;  // 30일
 
+    private static final int COOKIE_EXPIRE_TIME = (int) (ACCESS_TOKEN_EXPIRE_TIME / 1000); // 1시간 (초)
+//    private static final long Cookie_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME / 1000;
 
-    private static final long Cookie_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME / 1000;
     private final Key key;
 
     // application.yml에서 secret 값 가져와서 key에 저장
@@ -377,7 +378,7 @@ public class JwtTokenProvider {
 //        cookie.setHttpOnly(false);  //httponly 옵션 설정
         cookie.setSecure(true); //https 옵션 설정
         cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
-        cookie.setMaxAge((int) Cookie_EXPIRE_TIME); //쿠키 만료시간 설정 - accesstoken과 일치하게
+        cookie.setMaxAge(COOKIE_EXPIRE_TIME); //쿠키 만료시간 설정 - accesstoken과 일치하게
         return cookie;
     }
 
