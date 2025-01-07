@@ -2607,7 +2607,7 @@ public class jobsite_userService {
 
         try {
             int deleteAll = jobUserMapper.deleteAll(mark);
-            if(deleteAll == 1) {
+            if(deleteAll > 0) {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("전체 삭제 완료");
             } else {
