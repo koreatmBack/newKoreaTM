@@ -49,6 +49,10 @@ public class JwtTokenProvider {
     private static final int COOKIE_EXPIRE_TIME = (int) (ACCESS_TOKEN_EXPIRE_TIME / 1000); // 1시간 (초)
 //    private static final long Cookie_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME / 1000;
 
+    // 관리자용 쿠키
+    private static final long ADMIN_ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;  // 1시간
+    private static final int ADMIN_COOKIE_EXPIRE_TIME = (int) (ADMIN_ACCESS_TOKEN_EXPIRE_TIME / 1000); // 1시간 (초)
+
     private final Key key;
 
     // application.yml에서 secret 값 가져와서 key에 저장
@@ -57,6 +61,75 @@ public class JwtTokenProvider {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 관리자용 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    // 객체 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
+    public Token AdminGenerateToken(Authentication authentication) throws Exception {
+
+        // 권한 가져오기
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        LocalDateTime now = LocalDateTime.now();
+        Date currentDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
+        // Access Toekn 생성 : 1시간
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", TYPE_ACCESS)
+                .setIssuedAt(currentDate)
+                .setExpiration(new Date(currentDate.getTime() + ADMIN_ACCESS_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        // Refresh Token 생성 : 30일
+        String refreshToken = Jwts.builder()
+                .claim("type", TYPE_REFRESH)
+                .setIssuedAt(currentDate)
+                .setExpiration(new Date(currentDate.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return Token.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpirationTime(ADMIN_ACCESS_TOKEN_EXPIRE_TIME)
+                .refreshToken(refreshToken)
+                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
+    // accessToken 생성
+    public Token AdminAccessToken(Authentication authentication) throws Exception {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        LocalDateTime now = LocalDateTime.now();
+        Date currentDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
+        // Access Toekn 생성
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", TYPE_ACCESS)
+                .setIssuedAt(currentDate)
+                .setExpiration(new Date(currentDate.getTime() + ADMIN_ACCESS_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return Token.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpirationTime(ADMIN_ACCESS_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 
     // 객체 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public Token generateToken(Authentication authentication) throws Exception {
@@ -379,6 +452,23 @@ public class JwtTokenProvider {
         cookie.setSecure(true); //https 옵션 설정
         cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
         cookie.setMaxAge(COOKIE_EXPIRE_TIME); //쿠키 만료시간 설정 - accesstoken과 일치하게
+        return cookie;
+    }
+
+    // 관리자용 쿠키 생성
+    public Cookie createCookieAdmin(String accesstoken) {
+//        String cookieName = "accesstoken_"+userId;
+        String cookieName = "accesstoken";
+        String cookieValue = accesstoken; // 쿠키벨류엔 글자제한이 있으므로, 벨류로 만들어담아준다.
+        log.info("cookieValue = " + cookieValue);
+        Cookie cookie = new Cookie(cookieName, cookieValue);
+        // 쿠키 속성 설정
+//        cookie.setPath("/");
+        cookie.setHttpOnly(true);  //httponly 옵션 설정
+//        cookie.setHttpOnly(false);  //httponly 옵션 설정
+        cookie.setSecure(true); //https 옵션 설정
+        cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
+        cookie.setMaxAge(ADMIN_COOKIE_EXPIRE_TIME); //쿠키 만료시간 설정 - accesstoken과 일치하게
         return cookie;
     }
 

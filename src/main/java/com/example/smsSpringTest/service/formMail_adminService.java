@@ -256,7 +256,7 @@ public class formMail_adminService {
                             commonMapper.deleteUserToken(userId);
 
                             // 토큰(access, refresh) 재생성
-                            token = jwtTokenProvider.generateToken(authentication);
+                            token = jwtTokenProvider.AdminGenerateToken(authentication);
                             log.info("만료되었을때 재생성한 토큰 = " + token);
                             refToken2.setUserId(userId);
                             refToken2.setGrantType(token.getGrantType());
@@ -265,7 +265,7 @@ public class formMail_adminService {
                         } else if (now.isAfter(parseUptDate.plusDays(28))) {
                             // 현재 날짜가, uptdate + 28일보다 이후일때
                             // 토큰 재생성
-                            token = jwtTokenProvider.generateToken(authentication);
+                            token = jwtTokenProvider.AdminGenerateToken(authentication);
                             log.info("After 28 -> token = " + token);
                             refToken2.setUserId(userId);
                             refToken2.setGrantType(token.getGrantType());
@@ -273,7 +273,7 @@ public class formMail_adminService {
                             commonMapper.updateUserToken(refToken2);
                         } else {
                             // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
-                            token = jwtTokenProvider.accessToken(authentication);
+                            token = jwtTokenProvider.AdminAccessToken(authentication);
                             log.info("아직 유효한 AccessToken = " + token);
                             Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
                             log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
@@ -282,7 +282,7 @@ public class formMail_adminService {
                         // refresh token이 null
 
                         // 토큰 재생성
-                        token = jwtTokenProvider.generateToken(authentication);
+                        token = jwtTokenProvider.AdminGenerateToken(authentication);
                         log.info("refToken이 null일때 token = " + token);
                         refToken2.setUserId(userId);
                         refToken2.setGrantType(token.getGrantType());
@@ -305,7 +305,10 @@ public class formMail_adminService {
                         String userName = adminMapper.userName(userId);
                         adminResponse.setCode("C000");
                         adminResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
-                        Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+//                        Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+
+                        // 관리자용 쿠키 생성하기
+                        Cookie cookie = jwtTokenProvider.createCookieAdmin(token.getAccessToken());
                         response.addCookie(cookie);
                     } else {
                         // 최종적으로 access 토큰이 없을때
@@ -664,7 +667,7 @@ public class formMail_adminService {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         Token token = jwtTokenProvider.accessToken(authentication);
 //                        response.setHeader(HttpHeaders.AUTHORIZATION, "bearer " + token.getAccessToken());
-                        Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+                        Cookie cookie = jwtTokenProvider.createCookieAdmin(token.getAccessToken());
                         response.addCookie(cookie);
 
                         log.info("새로 발급받은 access Token = " + token.getAccessToken());
@@ -709,7 +712,7 @@ public class formMail_adminService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Token token = jwtTokenProvider.accessToken(authentication);
 //                        response.setHeader(HttpHeaders.AUTHORIZATION, "bearer " + token.getAccessToken());
-            Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
+            Cookie cookie = jwtTokenProvider.createCookieAdmin(token.getAccessToken());
             response.addCookie(cookie);
 
             log.info("새로 발급받은 access Token = " + token.getAccessToken());
