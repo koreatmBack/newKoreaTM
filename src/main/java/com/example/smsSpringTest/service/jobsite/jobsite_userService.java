@@ -467,6 +467,7 @@ public class jobsite_userService {
 //                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
                         JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
                         user2.setRole("user");
+                        log.info("로그인 성공시 user = " + user2);
                         jobUserResponse.setUser(user2);
                         String userName = jobUserMapper.userName(userId);
                         jobUserResponse.setCode("C000");
@@ -480,6 +481,7 @@ public class jobsite_userService {
                         // 최종적으로 access 토큰이 없을때
                         jobUserResponse.setCode("E001");
                         jobUserResponse.setMessage("최종적으로 Access Token이 없습니다.");
+                        log.info("ACCESS TOKEN 없음");
                     }
                 } catch (BadCredentialsException e) {
                     jobUserResponse.setCode("E003");
