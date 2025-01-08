@@ -544,10 +544,18 @@ public class jobsite_userService {
             // db속 refresh token 가져오기
             RefToken refDB = jobsiteCommonService.getUserRefToken(user.getUserId());
             log.info("refDb = " + refDB);
+            log.info("refToken = " + refDB.getRefreshToken());
             if(refDB.getRefreshToken() != null) {
                 // refresh 토큰 삭제
-                commonMapper.deleteUserToken(authentication.getName());
-                log.info("refresh 토큰 삭제");
+                int deleteRefreshToken = commonMapper.deleteUserToken(user.getUserId());
+                if(deleteRefreshToken == 1) {
+                    log.info("refresh 토큰 삭제");
+
+                } else {
+                    log.info("refresh 토큰 삭제 x ");
+//                    apiResponse.setCode("C003");
+//                    apiResponse.setMessage("reftoken 삭제 안 되어서 로그아웃 실패");
+                }
                 apiResponse.setCode("C000");
                 String userName = jobUserMapper.userName(user.getUserId());
                 apiResponse.setMessage(userName + "님 로그아웃 되었습니다.");
