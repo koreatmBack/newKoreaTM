@@ -378,6 +378,7 @@ interface AdMapper {
     @Select("""
         SELECT *
         FROM formmail_ad
+        ORDER BY num DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<fmAd> allAdList(@Param("paging") Paging paging)
@@ -487,6 +488,7 @@ interface AdMapper {
                 </when>
             </choose>
         </if>
+        ORDER BY num DESC
         LIMIT #{ad.size}
         OFFSET #{ad.offset}
     </script>
