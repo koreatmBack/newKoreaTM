@@ -810,7 +810,7 @@ interface AdMapper {
         FROM formmail_ad
         WHERE
         <if test="ad.adType == '단기'">
-         work_period IN ("1일", "1주일이하", "1주일~1개월") AND
+         work_period IN ("1일", "1주일 이하", "1주일 ~ 1개월") AND
         </if>
         <if test="ad.adType == '급구'"> 
          end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND
@@ -902,7 +902,7 @@ interface AdMapper {
         FROM formmail_ad
         WHERE
         <if test="ad.adType == '단기'">
-         work_period IN ("1일", "1주일이하", "1주일~1개월") AND
+         work_period IN ("1일", "1주일 이하", "1주일 ~ 1개월") AND
         </if>
         <if test="ad.adType == '급구'"> 
          end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND
