@@ -431,13 +431,13 @@ public class jobsite_userService {
                                     userId = cookieName;
                                     log.info("아직 유효한 cookie = " + accessToken);
                                     Long accessTokenExpiration = jwtTokenProvider.getExpiration(accessToken);
-                                    log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
+                                    log.info("cookie 유효기간 seconds = " + accessTokenExpiration / 1000);
 
                                     JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
                                     user2.setRole("user");
                                     jobUserResponse.setUser(user2);
-
-                                    jobUserResponse.setCode("C001");
+                                    log.info("로그인 상태에서 또 로그인시 user = " + user2);
+                                    jobUserResponse.setCode("C000");
                                     String userName = jobUserMapper.userName(userId);
                                     jobUserResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                             accessTokenExpiration/1000 + "초 남았습니다.");
@@ -505,66 +505,74 @@ public class jobsite_userService {
     public ApiResponse jobLogout() throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         JobsiteUser user = new JobsiteUser();
+try {
 
-        Cookie cookies[] = request.getCookies();
-        String accessToken = "";
+    Cookie cookies[] = request.getCookies();
+    String accessToken = "";
 
-        // 만약 쿠키가 있다면
-        for(Cookie cookie : cookies) {
-            if("accesstoken".equals(cookie.getName())){
-                accessToken = cookie.getValue();
+    // 만약 쿠키가 있다면
+    for (Cookie cookie : cookies) {
+        if ("accesstoken".equals(cookie.getName())) {
+            accessToken = cookie.getValue();
+        }
+    }
+
+    // 쿠키가 없을때
+    if (!StringUtils.hasText(accessToken)) {
+        apiResponse.setCode("E401");
+        apiResponse.setMessage("로그인 후 다시 이용해주세요.");
+        return apiResponse;
+    }
+    log.info("로그아웃시 accessToken = " + accessToken);
+
+    // AccessToken 검증
+    if (jwtTokenProvider.validateToken(accessToken).equals("ACCESS")) {
+        //AccessToken에서 authentication 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        user.setUserId(authentication.getName());
+        log.info("로그아웃할 id = " + user.getUserId());
+
+        for (Cookie cookie : cookies) {
+            if (accessToken.equals(cookie.getValue())) {
+                // 해당 쿠키 삭제
+                cookie.setMaxAge(0);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                log.info("로그아웃시 쿠키 삭제 완료");
+                break;
             }
         }
 
-        // 쿠키가 없을때
-        if(!StringUtils.hasText(accessToken)) {
-            apiResponse.setCode("E401");
-            apiResponse.setMessage("로그인 후 다시 이용해주세요.");
-            return apiResponse;
-        }
-        log.info("로그아웃시 accessToken = " + accessToken);
+        // db속 refresh token 가져오기
+        RefToken refDB = jobsiteCommonService.getUserRefToken(user.getUserId());
+        log.info("refDb = " + refDB);
+//            log.info("refToken = " + refDB.getRefreshToken());
+        if (refDB.getRefreshToken() != null) {
+            // refresh 토큰 삭제
+            int deleteRefreshToken = commonMapper.deleteUserToken(user.getUserId());
+            if (deleteRefreshToken == 1) {
+                log.info("refresh 토큰 삭제");
 
-        // AccessToken 검증
-        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
-            //AccessToken에서 authentication 가져오기
-            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-            user.setUserId(authentication.getName());
-            log.info("로그아웃할 id = " + user.getUserId());
-
-            for(Cookie cookie : cookies){
-                if(accessToken.equals(cookie.getValue())){
-                    // 해당 쿠키 삭제
-                    cookie.setMaxAge(0);
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-                    break;
-                }
-            }
-
-            // db속 refresh token 가져오기
-            RefToken refDB = jobsiteCommonService.getUserRefToken(user.getUserId());
-            log.info("refDb = " + refDB);
-            log.info("refToken = " + refDB.getRefreshToken());
-            if(refDB.getRefreshToken() != null) {
-                // refresh 토큰 삭제
-                int deleteRefreshToken = commonMapper.deleteUserToken(user.getUserId());
-                if(deleteRefreshToken == 1) {
-                    log.info("refresh 토큰 삭제");
-
-                } else {
-                    log.info("refresh 토큰 삭제 x ");
+            } else {
+                log.info("refresh 토큰 삭제 x ");
 //                    apiResponse.setCode("C003");
 //                    apiResponse.setMessage("reftoken 삭제 안 되어서 로그아웃 실패");
-                }
-                apiResponse.setCode("C000");
-                String userName = jobUserMapper.userName(user.getUserId());
-                apiResponse.setMessage(userName + "님 로그아웃 되었습니다.");
             }
-
-        } else {
-            apiResponse.setCode("E401");
-            apiResponse.setMessage("유효하지 않은 접근입니다.");
+            apiResponse.setCode("C000");
+            String userName = jobUserMapper.userName(user.getUserId());
+            apiResponse.setMessage(userName + "님 로그아웃 되었습니다.");
         }
+
+    } else {
+        apiResponse.setCode("E401");
+        apiResponse.setMessage("유효하지 않은 접근입니다.");
+
+    }
+} catch (Exception e) {
+    apiResponse.setCode("E001");
+    apiResponse.setMessage(" Error !!! ");
+    log.info("로그아웃시 error : " + e.getMessage());
+}
         return apiResponse;
     }
 
