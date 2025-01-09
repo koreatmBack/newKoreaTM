@@ -2555,7 +2555,7 @@ try {
     }
 
     // userId , type 일치할 때 스크랩 or 좋아요 전체 조회
-    // 종료된것 제외
+    // 종료된것 제외 (2025-01-09)
     public BookMarkResponse bookMarkList(BookMark mark) throws Exception {
         BookMarkResponse bookMarkResponse = new BookMarkResponse();
 
@@ -2563,22 +2563,22 @@ try {
             int page = mark.getPage(); // 현재 페이지
             int size = mark.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = jobUserMapper.bookMarkListCount(mark); //전체 수
+            int totalCount = jobUserMapper.progressBookMarkListCount(mark); //전체 수
             mark.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
 
-            List<BookMark> bookMarkList = jobUserMapper.bookMarkList(mark);
-            List<BookMark> prgoressBookMarkList = new ArrayList<>();
-            for(BookMark bm : bookMarkList) {
-                int checkProgressAd = adMapper.checkProgressAd(bm.getAid());
-                if(checkProgressAd == 1) {
-                    // 진행중이면
-                    prgoressBookMarkList.add(bm);
-                }
-            }
+//            List<BookMark> bookMarkList = jobUserMapper.bookMarkList(mark);
+//            List<BookMark> prgoressBookMarkList = new ArrayList<>();
+//            for(BookMark bm : bookMarkList) {
+//                int checkProgressAd = adMapper.checkProgressAd(bm.getAid());
+//                if(checkProgressAd == 1) {
+//                    // 진행중이면
+//                    prgoressBookMarkList.add(bm);
+//                }
+//            }
 //            totalCount = prgoressBookMarkList.size();
-            bookMarkResponse.setBookMarkList(prgoressBookMarkList);
+            bookMarkResponse.setBookMarkList(jobUserMapper.progressBookMarkList(mark));
             if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);

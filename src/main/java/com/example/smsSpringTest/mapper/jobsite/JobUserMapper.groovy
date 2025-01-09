@@ -501,7 +501,8 @@ interface JobUserMapper {
         JOIN formmail_ad fa ON jb.aid = fa.aid
         WHERE jb.user_id = #{mark.userId} 
         AND jb.type = #{mark.type}
-        AND CURDATE() BETWEEN fa.start_date AND fa.end_date
+        AND fa.start_date <= CURDATE()
+        AND (fa.end_date IS NULL OR fa.end_date >= CURDATE())
         LIMIT #{mark.size} OFFSET #{mark.offset}
     """)
     List<BookMark> progressBookMarkList(@Param("mark") BookMark mark)
@@ -513,7 +514,8 @@ interface JobUserMapper {
         JOIN formmail_ad fa ON jb.aid = fa.aid
         WHERE jb.user_id = #{mark.userId} 
         AND jb.type = #{mark.type}
-        AND CURDATE() BETWEEN fa.start_date AND fa.end_date
+        AND fa.start_date <= CURDATE()
+        AND (fa.end_date IS NULL OR fa.end_date >= CURDATE())
     """)
     int progressBookMarkListCount(@Param("mark") BookMark mark)
 
