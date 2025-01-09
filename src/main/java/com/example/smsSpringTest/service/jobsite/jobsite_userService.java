@@ -2577,7 +2577,7 @@ try {
                     prgoressBookMarkList.add(bm);
                 }
             }
-            totalCount = prgoressBookMarkList.size();
+//            totalCount = prgoressBookMarkList.size();
             bookMarkResponse.setBookMarkList(prgoressBookMarkList);
             if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
