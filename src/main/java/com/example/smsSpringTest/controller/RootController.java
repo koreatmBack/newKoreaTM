@@ -19,4 +19,9 @@ public class RootController {
     public ResponseEntity<String> handleRoot() {
         return ResponseEntity.status(404).body("404 Not Found - Root Access Forbidden");
     }
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        // "/health" 경로는 반드시 200 상태와 메시지를 반환
+        return ResponseEntity.ok("Healthy");
+    }
 }
