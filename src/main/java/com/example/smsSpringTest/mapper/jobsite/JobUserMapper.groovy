@@ -271,6 +271,7 @@ interface JobUserMapper {
         UPDATE jobsite_user
         SET user_pwd = #{user.userPwd}
         WHERE user_name = #{user.userName}
+        AND user_id = #{user.userId}
         <if test="user.phone != null"> AND phone = #{user.phone}</if>
         <if test="user.email != null"> AND email = #{user.email} </if>
 </script>        
