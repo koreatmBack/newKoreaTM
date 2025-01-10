@@ -214,6 +214,12 @@ public class formMail_adService {
         try {
              List<fmAd> findOneAd = adMapper.findOneAd(ad);
 
+             if(!ad.isEndLimit()){
+                 // end_limit이 0 , 즉  상시 모집으로 수정될때
+                 adMapper.addTotalDay(0, ad.getAid());
+                 // 총 기간 0일로 수정하고
+                 ad.setEndDate(null);
+             }
 
             if(ad.getEndDate() != null){
                 // 만약 endDate를 수정한다면
