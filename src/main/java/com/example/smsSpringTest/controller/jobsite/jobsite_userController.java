@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.jobsite.BookMark;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.jobsite.JobsiteUser;
 import com.example.smsSpringTest.model.jobsite.RecentView;
+import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.jobsite.BookMarkResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
@@ -312,7 +313,7 @@ public class jobsite_userController {
 
     // 최근 열람 공고 조회하기
     @PostMapping("/recent/views")
-    public JobUserResponse recentViews(@RequestBody RecentView rv) throws Exception {
+    public AdResponse recentViews(@RequestBody RecentView rv) throws Exception {
         return jobsiteUserService.recentViews(rv);
     }
 }

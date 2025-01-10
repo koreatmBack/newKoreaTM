@@ -4,9 +4,12 @@ import com.example.smsSpringTest.mapper.AdMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobCommonMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
+import com.example.smsSpringTest.model.ad.JobSite;
+import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.jobsite.*;
+import com.example.smsSpringTest.model.response.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.jobsite.BookMarkResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;
@@ -869,8 +872,8 @@ try {
     }
 
     // 최근 열람 공고 조회하는 API
-    public JobUserResponse recentViews(RecentView rv) throws Exception {
-        JobUserResponse userResponse = new JobUserResponse();
+    public AdResponse recentViews(RecentView rv) throws Exception {
+        AdResponse adResponse = new AdResponse();
 
         try {
 
@@ -885,23 +888,34 @@ try {
                     progressRecentViews.add(rec);
                 }
             }
-            userResponse.setRecentViews(progressRecentViews);
 
-            if(!userResponse.getRecentViews().isEmpty() && userResponse.getRecentViews() != null){
-                userResponse.setTotalCount(progressRecentViews.size());
-                userResponse.setCode("C000");
-                userResponse.setMessage("최근 열람 공고 조회 성공");
+            // 공고 목록으로 반환
+            List<JobSite> jobsiteList = new ArrayList<>();
+            fmAd ad = new fmAd();
+            for(RecentView rec : progressRecentViews) {
+                ad.setAid(rec.getAid());
+                List<JobSite> newAd = adMapper.findOneJobsite(ad);
+                jobsiteList.addAll(newAd);
+            }
+
+            log.info(jobsiteList.toString());
+            adResponse.setJobSiteList(jobsiteList);
+
+            if(!adResponse.getJobSiteList().isEmpty() && adResponse.getJobSiteList() != null){
+                adResponse.setTotalCount(progressRecentViews.size());
+                adResponse.setCode("C000");
+                adResponse.setMessage("최근 열람 공고 조회 성공");
             } else {
-                userResponse.setCode("E003");
-                userResponse.setMessage("최근 열람 공고 조회 실패");
+                adResponse.setCode("E003");
+                adResponse.setMessage("최근 열람 공고 조회 실패");
             }
 
         } catch (Exception e) {
-            userResponse.setCode("E001");
-            userResponse.setMessage("Error!!!");
+            adResponse.setCode("E001");
+            adResponse.setMessage("Error!!!");
             log.info(e.getMessage());
         }
-        return userResponse;
+        return adResponse;
     }
 
     // 회원 id 일치할때 즐겨찾기 삭제
