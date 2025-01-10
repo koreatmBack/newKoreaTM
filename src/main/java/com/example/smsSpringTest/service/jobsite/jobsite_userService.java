@@ -2594,7 +2594,7 @@ try {
 //            totalCount = prgoressBookMarkList.size();
 
             List<BookMark> progressBookMarkList = jobUserMapper.progressBookMarkList(mark);
-            totalCount = progressBookMarkList.size();
+//            totalCount = progressBookMarkList.size();
 
             // 공고 목록으로 반환
             List<JobSite> jobsiteList = new ArrayList<>();
