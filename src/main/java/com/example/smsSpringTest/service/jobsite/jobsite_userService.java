@@ -2570,8 +2570,8 @@ try {
 
     // userId , type 일치할 때 스크랩 or 좋아요 전체 조회
     // 종료된것 제외 (2025-01-09)
-    public BookMarkResponse bookMarkList(BookMark mark) throws Exception {
-        BookMarkResponse bookMarkResponse = new BookMarkResponse();
+    public AdResponse bookMarkList(BookMark mark) throws Exception {
+        AdResponse adResponse = new AdResponse();
 
         try {
             int page = mark.getPage(); // 현재 페이지
@@ -2592,25 +2592,39 @@ try {
 //                }
 //            }
 //            totalCount = prgoressBookMarkList.size();
-            bookMarkResponse.setBookMarkList(jobUserMapper.progressBookMarkList(mark));
-            if(bookMarkResponse.getBookMarkList() != null && !bookMarkResponse.getBookMarkList().isEmpty()) {
+
+            List<BookMark> progressBookMarkList = jobUserMapper.progressBookMarkList(mark);
+            totalCount = progressBookMarkList.size();
+
+            // 공고 목록으로 반환
+            List<JobSite> jobsiteList = new ArrayList<>();
+            fmAd ad = new fmAd();
+            for(BookMark bm : progressBookMarkList) {
+                ad.setAid(bm.getAid());
+                List<JobSite> newAd = adMapper.findOneJobsite(ad);
+                jobsiteList.addAll(newAd);
+            }
+
+            adResponse.setJobSiteList(jobsiteList);
+//            bookMarkResponse.setBookMarkList(jobUserMapper.progressBookMarkList(mark));
+            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 log.info("totalPages = " + totalPages);
-                bookMarkResponse.setTotalPages(totalPages);
-                bookMarkResponse.setTotalCount(totalCount);
-                bookMarkResponse.setCode("C000");
-                bookMarkResponse.setMessage("조회 성공");
+                adResponse.setTotalPages(totalPages);
+                adResponse.setTotalCount(totalCount);
+                adResponse.setCode("C000");
+                adResponse.setMessage("조회 성공");
             } else {
-                bookMarkResponse.setCode("E003");
-                bookMarkResponse.setMessage("조회 실패");
+                adResponse.setCode("E003");
+                adResponse.setMessage("조회 실패");
             }
         } catch (Exception e) {
-            bookMarkResponse.setCode("E001");
-            bookMarkResponse.setMessage(" Error!!! ");
+            adResponse.setCode("E001");
+            adResponse.setMessage(" Error!!! ");
             log.info(e.getMessage());
         }
 
-        return bookMarkResponse;
+        return adResponse;
     }
 
     // userId , type 일치할 때 스크랩 or 좋아요 진행중인 공고 조회 (페이징 처리)

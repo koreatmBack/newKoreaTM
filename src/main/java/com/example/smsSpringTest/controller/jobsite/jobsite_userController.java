@@ -289,7 +289,7 @@ public class jobsite_userController {
 
     // userId , type 일치할 때 스크랩 or 좋아요 전체 조회
     @PostMapping("/find/bookmarkList")
-    public BookMarkResponse bookMarkList(@RequestBody BookMark mark) throws Exception {
+    public AdResponse bookMarkList(@RequestBody BookMark mark) throws Exception {
         return jobsiteUserService.bookMarkList(mark);
     }
 
