@@ -214,36 +214,49 @@ public class formMail_adService {
         try {
              List<fmAd> findOneAd = adMapper.findOneAd(ad);
 
-            if(ad.getStartDate() != null && ad.getEndDate() != null){
-                // 만약 둘 다 바꿀경우
-                Integer newTotalDate = holidayMapper.onlyTotalDay(ad);
-                log.info(String.valueOf(newTotalDate));
-                adMapper.addTotalDay(newTotalDate, ad.getAid());
-            } else if (ad.getStartDate() != null || ad.getEndDate() != null) {
-                // 만약 start_date 혹은 end_date를 수정하면 평일 광고 일수도 수정해야지
-                if(ad.getStartDate() != null){
-                    // 만약 startDate를 수정한다면
-                    if(findOneAd.get(0).getEndDate() != null) {
-                        // 상시모집이 아닐 때
-                        LocalDate newStartDate = ad.getStartDate();
-                        LocalDate originEndDate = findOneAd.get(0).getEndDate();
-                        Integer newTotalDate = holidayMapper.newTotalDay(newStartDate, originEndDate);
-                        adMapper.addTotalDay(newTotalDate, ad.getAid());
-                        log.info(String.valueOf(newTotalDate));
-                    } else {
-                        // 상시모집일 때
-                        adMapper.addTotalDay(0, ad.getAid());
-                    }
-                } else if(ad.getEndDate() != null){
-                    // 만약 endDate를 수정한다면
-                    LocalDate originStartDate = findOneAd.get(0).getStartDate();
-                    LocalDate newEndDate = ad.getEndDate();
-                    Integer newTotalDate = holidayMapper.newTotalDay(originStartDate, newEndDate);
-                    adMapper.addTotalDay(newTotalDate, ad.getAid());
-                    log.info(String.valueOf(newTotalDate));
-                }
 
+            if(ad.getEndDate() != null){
+                // 만약 endDate를 수정한다면
+                LocalDate originStartDate = findOneAd.get(0).getStartDate();
+                LocalDate newEndDate = ad.getEndDate();
+                Integer newTotalDate = holidayMapper.newTotalDay(originStartDate, newEndDate);
+                adMapper.addTotalDay(newTotalDate, ad.getAid());
+                log.info(String.valueOf(newTotalDate));
             }
+
+
+            // startDate 못바꿈 이제.
+            // 2025-01-10 아래 코드 잠정 폐기
+//            if(ad.getStartDate() != null && ad.getEndDate() != null){
+//                // 만약 둘 다 바꿀경우
+//                Integer newTotalDate = holidayMapper.onlyTotalDay(ad);
+//                log.info(String.valueOf(newTotalDate));
+//                adMapper.addTotalDay(newTotalDate, ad.getAid());
+//            } else if (ad.getStartDate() != null || ad.getEndDate() != null) {
+//                // 만약 start_date 혹은 end_date를 수정하면 평일 광고 일수도 수정해야지
+//                if(ad.getStartDate() != null){
+//                    // 만약 startDate를 수정한다면
+//                    if(findOneAd.get(0).getEndDate() != null) {
+//                        // 상시모집이 아닐 때
+//                        LocalDate newStartDate = ad.getStartDate();
+//                        LocalDate originEndDate = findOneAd.get(0).getEndDate();
+//                        Integer newTotalDate = holidayMapper.newTotalDay(newStartDate, originEndDate);
+//                        adMapper.addTotalDay(newTotalDate, ad.getAid());
+//                        log.info(String.valueOf(newTotalDate));
+//                    } else {
+//                        // 상시모집일 때
+//                        adMapper.addTotalDay(0, ad.getAid());
+//                    }
+//                } else if(ad.getEndDate() != null){
+//                    // 만약 endDate를 수정한다면
+//                    LocalDate originStartDate = findOneAd.get(0).getStartDate();
+//                    LocalDate newEndDate = ad.getEndDate();
+//                    Integer newTotalDate = holidayMapper.newTotalDay(originStartDate, newEndDate);
+//                    adMapper.addTotalDay(newTotalDate, ad.getAid());
+//                    log.info(String.valueOf(newTotalDate));
+//                }
+//
+//            }
 
 //            // 지역 수정하면
 //            if(ad.getAddress() != null){
