@@ -275,7 +275,6 @@ public class formMail_adController {
 
     // 11-29 ~
 
-
     // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
     // 정렬 조건 추가
     @PostMapping("/selectByRegions/sort")
@@ -291,13 +290,5 @@ public class formMail_adController {
      }
 
     // -------------------------
-
-    // get 테스트용 -> 삭제 예정
-    @GetMapping("/jobSiteListTest")
-    @Operation(summary = "테스트용", description="")
-    public AdResponse jobSiteListTest() throws Exception {
-        log.info("jobSiteListTest 컨트롤러 들어옴");
-        return formMailAdService.jobSiteListTest();
-    }
 
 }

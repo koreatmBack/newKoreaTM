@@ -1248,15 +1248,6 @@ interface AdMapper {
     int dupImgUrl(@Param("adImage") fmAd adImage)
 
 
-    // 잡사이트용 광고 목록 전체 조회 (페이징 처리, 종료기간 끝난것 조회 x)
-    @Select("""
-        SELECT *
-        FROM formmail_ad
-        WHERE end_date >= CURDATE()
-    """)
-    List<JobSite> jobSiteListTest()
-
-
     // ㅡㅡㅡㅡㅡㅡㅡㅡ 주변 지하철, 거리 등 정보 테이블 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
     // 주변 정보 등록하기
