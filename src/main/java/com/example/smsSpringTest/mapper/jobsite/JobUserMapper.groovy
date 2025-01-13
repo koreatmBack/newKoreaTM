@@ -216,7 +216,7 @@ interface JobUserMapper {
         <if test="user.email != null"> AND email = #{user.email} </if>
 </script>        
     """)
-    JobsiteUser findJobUserId(@Param("user") JobsiteUser user)
+    List<JobsiteUser> findJobUserId(@Param("user") JobsiteUser user)
 
     // 이메일 중복일시, 인증 완료되면 이미 쓰고 있던 유저의 email null로 바꾸기.
     @Update("""
