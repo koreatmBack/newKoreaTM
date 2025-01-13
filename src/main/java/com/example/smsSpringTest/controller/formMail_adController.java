@@ -165,13 +165,6 @@ public class formMail_adController {
         return formMailAdService.searchTitleAd(ad);
     }
 
-//    // 폼메일용 hashtag 일치하는 광고 조회
-//    @PostMapping("/searchHashtagAd")
-//    @Operation(summary = "해시태그 일치하는 광고 조회", description="필수 값 : hashtag")
-//    public AdResponse searchHashtagAd(@RequestBody fmAd ad) throws Exception {
-//        return formMailAdService.searchHashtagAd(ad);
-//    }
-
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
     @Operation(summary = "sido, sigungu 일치하는 광고 조회", description="sido는 필수, sigungu는 필수 아님")
     @PostMapping("/searchAddressAd")
@@ -279,22 +272,9 @@ public class formMail_adController {
         return formMailAdService.orderByMaxPay(ad);
     }
 
-//    // 잡사이트용 근무시간 짧은 순으로 광고 조회
-//    @PostMapping("/orderByWorkTime")
-//    @Operation(summary = "근무시간 짧은 순으로 광고 조회", description="페이징 처리, 필수 값 : page, size")
-//    public AdResponse orderByWorkTime(@RequestBody Paging paging) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//        adResponse = formMailAdService.orderByWorkTime(paging);
-//        return adResponse;
-//    }
 
     // 11-29 ~
 
-//    // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
-//    @PostMapping("/selectByRegions")
-//    public AdResponse selectByRegions(@RequestBody AdRequest ad) throws Exception {
-//        return formMailAdService.selectByRegions(ad);
-//    }
 
     // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
     // 정렬 조건 추가
@@ -303,11 +283,6 @@ public class formMail_adController {
         return formMailAdService.selectByRegionsSort(ad);
     }
 
-//    // 잡사이트용 급구 공고 (마감기한 3일이하로 남은 애들)
-//    @PostMapping("/hurriedAdList")
-//    public AdResponse hurriedAdList(@RequestBody AdRequest ad) throws Exception {
-//        return formMailAdService.hurriedAdList(ad);
-//    }
 
     // aid 일치하는 주변 역 정보 추출
      @PostMapping("/find/nearInfo")
@@ -317,13 +292,6 @@ public class formMail_adController {
 
     // -------------------------
 
-//    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
-//    @PostMapping("/findCompanyAndUser")
-//    @Operation(summary = "광고 고유id 일치하는 고객사 조회 -> 찾은 cid로 user 정보까지 조회", description="필수 값 : aid")
-//    public AdResponse findCompanyAndUser(@RequestBody fmAd ad) throws Exception {
-//        return formMailAdService.findCompanyAndUser(ad);
-//    }
-
     // get 테스트용 -> 삭제 예정
     @GetMapping("/jobSiteListTest")
     @Operation(summary = "테스트용", description="")
@@ -332,9 +300,4 @@ public class formMail_adController {
         return formMailAdService.jobSiteListTest();
     }
 
-//    // 주변 역 담는 API, 비동기로 실행시킬 것 선택, 선택해제시
-//    @PostMapping("/choose/type")
-//    public ApiResponse chooseType(@RequestBody AdNearInfo near) throws Exception {
-//        return formMailAdService.chooseType(near);
-//    }
 }

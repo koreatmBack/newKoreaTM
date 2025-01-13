@@ -89,102 +89,6 @@ public class formMail_adminService {
         return apiResponse;
     }
 
-//    // 로그인
-//    @Transactional
-//    public UserResponse logIn(UserProfile user) throws Exception {
-//
-//        UserResponse userResponse = new UserResponse();
-//
-//        try{
-//            String userId = user.getUserId();
-//
-//            // 아이디 있는지 확인
-//            int dupChkId = userMapper.userDuplicatedChkId(userId);
-//            if(dupChkId == 0){
-//                // 등록된 아이디 없음
-//                userResponse.setCode("E004");
-//                userResponse.setMessage("등록된 id가 없습니다.");
-//
-//                if(userId == null){
-//                    userResponse.setCode("E004");
-//                    userResponse.setMessage("ID를 입력해주세요.");
-//                }
-//
-//            } else {
-//                // 아이디 존재
-//
-//                // 입력 받은 PW
-//                String userPwd = user.getUserPwd();
-//
-//                // 입력받은 ID로 PW 체크 ( 등록된 비밀번호 체크 )
-//                String dupPw = userMapper.userPassword(userId);
-//
-//                // 비밀번호 검증
-//                boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPw);
-//
-//                if(isMatchPwd){
-//                    // 입력한 비밀번호와 등록된 비밀번호가 같을때
-//                    String userName = userMapper.userName(userId);
-//                    log.info("userId = " + userId);
-//                    log.info("userPwd = " + userPwd);
-//                    log.info("로그인 유저 정보 = " + userMapper.user(userId));
-//                    userResponse.setUser(userMapper.user(userId));
-////                    userResponse.setUserProfile(userMapper.userProfile(userId));
-//                    userResponse.setCode("C000");
-//                    userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
-//
-//
-//                    // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
-//                    String sessionKey = "login_" + userId;
-//
-////                    // Redis에서 로그인 정보 조회
-////                    String redisUserId = (String) redisTemplate.opsForValue().get(sessionKey);
-//
-////                    if (redisUserId != null) {
-////                        log.info("Redis에서 로그인 정보를 조회했습니다: " + redisUserId);
-////                        // Redis에서 남은 TTL 확인
-////                        Long ttl = redisTemplate.getExpire(sessionKey, TimeUnit.SECONDS);
-////                        log.info("만료까지 남은 시간은 : " + ttl+"초 입니다.");
-////                    } else {
-////                       // Redis에 로그인 ID 저장 (1시간 만료 시간 설정)
-////                        redisTemplate.opsForValue().set(sessionKey, userId, 1, TimeUnit.HOURS);
-////                        log.info("redis에 저장 성공");
-////                    }
-//
-//                } else {
-//                    // 입력한 비밀번호와 등록된 비밀번호가 다를때
-//                    userResponse.setCode("E005");
-//                    userResponse.setMessage("로그인 실패, 비밀번호 다시 확인해주세요");
-//                }
-//
-//            }
-//
-//        }catch (Exception e){
-//            log.error("로그인 중 예외 발생: {}", e.getMessage(), e);
-//            userResponse.setCode("E001");
-//            userResponse.setMessage("비밀번호를 입력해주세요.");
-//        }
-//
-//        return userResponse;
-//    }
-
-//    // 로그아웃
-//    public ApiResponse logOut(UserProfile user) throws Exception {
-//        ApiResponse apiResponse = new ApiResponse();
-//        try{
-//            String userId = user.getUserId();
-//            String sessionKey = "login_" + userId;
-////            redisTemplate.delete(sessionKey); // Redis에서 해당 세션 키 삭제
-////            log.info("로그아웃 성공. Redis에서 세션 키가 삭제되었습니다.");
-//
-//            apiResponse.setCode("C000");
-//            apiResponse.setMessage("로그아웃 성공");
-//        } catch (Exception e) {
-//            apiResponse.setCode("E001");
-//            apiResponse.setMessage("로그아웃 에러");
-//        }
-//        return apiResponse;
-//    }
 
     // jwt 로그인
     @Transactional
@@ -227,10 +131,6 @@ public class formMail_adminService {
                     log.info("authenticationToken = " + authenticationToken);
                     log.info("authentication = " + authentication);
                     log.info("auth ROLE = " + authentication.getAuthorities());
-//                    String role = authentication.getAuthorities().toString();
-//                    if(role.contains("ADMIN")){
-//                        log.info("롤 테스트 성공" + role);
-//                    }
 
                     userId = authentication.getName();
                     log.info("userId = " + userId);
@@ -320,14 +220,6 @@ public class formMail_adminService {
                     adminResponse.setCode("E003");
                     adminResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
                 }
-//                    String userName = userMapper.userName(userId);
-//                    log.info("userId = " + userId);
-//                    log.info("userPwd = " + userPwd);
-//                    log.info("로그인 유저 정보 = " + userMapper.user(userId));
-//                    userResponse.setUser(userMapper.user(userId));
-////                    userResponse.setUserProfile(userMapper.userProfile(userId));
-//                    userResponse.setCode("C000");
-//                    userResponse.setMessage("로그인 성공! " + userName+"님 환영합니다.");
 
                 } else {
                     // 입력한 비밀번호와 등록된 비밀번호가 다를때
