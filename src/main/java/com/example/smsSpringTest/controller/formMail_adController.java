@@ -145,7 +145,8 @@ public class formMail_adController {
         return formMailAdService.searchAdNumList(ad);
     }
 
-    // 폼메일용 adNum 일치하는 광고 전체 조회
+    // 폼메일용 num 일치하는 광고 전체 조회
+    // 채용 담당자 고유 번호
     @PostMapping("/search/one/num")
     public AdResponse searchOneAd(@RequestBody fmAd ad) throws Exception {
         return formMailAdService.searchOneAd(ad);
