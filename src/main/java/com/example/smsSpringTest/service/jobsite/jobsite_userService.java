@@ -707,7 +707,7 @@ try {
 
             paging.setOffset(offset);
             jobUserResponse.setJobsiteUserList(jobUserMapper.jobsiteUserList(paging));
-            log.info(jobUserMapper.jobsiteUserList(paging).toString());
+//            log.info(jobUserMapper.jobsiteUserList(paging).toString());
             log.info("userResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
 
             if(jobUserResponse.getJobsiteUserList() != null && !jobUserResponse.getJobsiteUserList().isEmpty()){
@@ -724,6 +724,7 @@ try {
         } catch (Exception e) {
             jobUserResponse.setCode("E001");
             jobUserResponse.setMessage("ERROR!!!");
+            log.info(e.getMessage());
         }
         return jobUserResponse;
     }

@@ -341,6 +341,7 @@ interface JobUserMapper {
         , address_detail
         , favorite
         , clipping
+        , created_at
         FROM jobsite_user
         WHERE user_id = #{userId}
     """)
@@ -400,6 +401,7 @@ interface JobUserMapper {
         , photo
         , marketing
         , address_detail
+        , created_at
         FROM jobsite_user
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
