@@ -151,32 +151,9 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-//            if(StringUtils.hasText(user.getPhone())){
-//                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
-//                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
-//            }
 
             int findUserId = jobUserMapper.findJobUserIdBeforeCert(user);
             if(findUserId != 0) {
-//                // 소셜 id면 , id 찾기 결과 = 소셜 로그인으로 확인.반환하기
-//                String userId = jobUserMapper.socialIdCheckBeforeCert(user);
-//                String type = null;
-//                type = jobUserMapper.socialType(userId);
-//                if(StringUtils.hasText(type)){
-//                    // type 값이 있으면 소셜 로그인임.
-//                    if(type.equals("naver")){
-//                        type = "네이버";
-//                    } else if(type.equals("kakao")){
-//                        type = "카카오";
-//                    } else if(type.equals("google")) {
-//                        type = "구글";
-//                    } else if(type.equals("facebook")) {
-//                        type = "페이스북";
-//                    }
-//                    apiResponse.setCode("C005");
-//                    apiResponse.setMessage(type +" 소셜 가입 유저입니다.");
-//                  return apiResponse;
-//                }
 
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("가입된 정보가 있습니다.");
@@ -299,13 +276,7 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-//            int dupFormMailIdCheck = jobUserMapper.dupFormMailIdCheck(user.getUserId());
-//            if(dupFormMailIdCheck != 0){
-//                // 폼메일에 같은 id가 있으면
-//                apiResponse.setCode("E004");
-//                apiResponse.setMessage("폼메일에서 사용중인 id입니다. 다른 id를 입력해주세요");
-//                return apiResponse;
-//            }
+
             String userId = null;
             String userPwd = null;
 
@@ -448,14 +419,7 @@ public class jobsite_userService {
                             // 만약 쿠키가 있다면
                             if(cookies != null) {
                                 String accessToken = jwtTokenProvider.extractTokenFromCookies(cookies);
-//                                for (Cookie cookie : cookies) {
-//                                    if ("accesstoken".equals(cookie.getName())) {
-//                                        accessToken = cookie.getValue();
-//                                    }
-//                                }
-//                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
-//                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
-//                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
+
                                 if(StringUtils.hasText(accessToken) && userId.equals(jwtTokenProvider.getAuthentication(accessToken).getName())) {
                                     // accesstoken 이라는 쿠키가 있을때
                                     String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
@@ -478,8 +442,6 @@ public class jobsite_userService {
 
                             token = jwtTokenProvider.accessToken(authentication);
                             log.info("새로 생성한 AccessToken = " + token);
-//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
-//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
                         }
                     } else {
                         // refresh token이 null
@@ -495,7 +457,6 @@ public class jobsite_userService {
 
                     if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                         // 최종적으로 Access token이 있을때
-//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
                         JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
                         user2.setRole("user");
                         log.info("로그인 성공시 user = " + user2);
@@ -505,9 +466,6 @@ public class jobsite_userService {
                         jobUserResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
                         Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
                         response.addCookie(cookie);
-//                        response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-//                                URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-//                        return null;
                     } else {
                         // 최종적으로 access 토큰이 없을때
                         jobUserResponse.setCode("E001");
@@ -588,8 +546,6 @@ try {
 
             } else {
                 log.info("refresh 토큰 삭제 x ");
-//                    apiResponse.setCode("C003");
-//                    apiResponse.setMessage("reftoken 삭제 안 되어서 로그아웃 실패");
             }
             apiResponse.setCode("C000");
             String userName = jobUserMapper.userName(user.getUserId());
@@ -1441,132 +1397,6 @@ try {
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-//    // 소셜 로그인 성공시
-//    public SocialResponse socialSuccess(String userId) throws Exception {
-//        SocialResponse socialResponse = new SocialResponse();
-//        log.info("소셜 성공시 서비스 호출됨?");
-//        try {
-//            int dupSocialUserIdCheck = jobUserMapper.dupSocialUserIdCheck(userId);
-//            if(dupSocialUserIdCheck == 1) {
-////                String userId = user.getUserId();
-//
-//                RefToken refToken = commonMapper.getUserRefreshTokenData(userId);
-//                log.info("refToken = " + refToken);
-//                RefToken refToken2 = new RefToken();
-//                Token token = null;
-//
-//                if (refToken != null) {
-//                    // refresh token이 null이 아닐때
-//                    LocalDate now = LocalDate.now();
-//                    String uptDate = refToken.getUptDate();
-//                    LocalDate parseUptDate = LocalDate.parse(uptDate);
-//                    log.info("uptDate = " + uptDate);
-//                    log.info("parseUptDate = " + parseUptDate);
-//
-//                    Long remainingMilliseconds = jwtTokenProvider.getExpiration(refToken.getRefreshToken());
-//                    log.info("남은 Refresh Token 유효 기간 밀리seconds = " + remainingMilliseconds);
-//
-//                    if (remainingMilliseconds == null || remainingMilliseconds <= 0) {
-//                        // refresh token 유효기간이 null 이거나 0보다 같거나 작을때 ( 즉, 만료 되었을 때 )
-//                        commonMapper.deleteUserToken(userId);
-//
-//                        // 토큰(access, refresh) 재생성
-//                        token = jwtTokenProvider.socialGenerateToken(userId);
-//                        log.info("만료되었을때 재생성한 토큰 = " + token);
-//                        refToken2.setUserId(userId);
-//                        refToken2.setGrantType(token.getGrantType());
-//                        refToken2.setRefreshToken(token.getRefreshToken());
-//                        commonMapper.addUserToken(refToken2);
-//                    } else if (now.isAfter(parseUptDate.plusDays(28))) {
-//                        // 현재 날짜가, uptdate + 28일보다 이후일때
-//                        // 토큰 재생성
-//                        token = jwtTokenProvider.socialGenerateToken(userId);
-//                        log.info("After 28 -> token = " + token);
-//                        refToken2.setUserId(userId);
-//                        refToken2.setGrantType(token.getGrantType());
-//                        refToken2.setRefreshToken(token.getRefreshToken());
-//                        commonMapper.updateUserToken(refToken2);
-//                    } else {
-//                        // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
-//                        // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
-//                        Cookie cookies[] = request.getCookies();
-//                        log.info("현재 쿠키 = " + cookies.toString());
-//                        // 만약 쿠키가 있다면
-//                        if(cookies != null) {
-//                            String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
-////                                for (Cookie cookie : cookies) {
-////                                    if ("accesstoken".equals(cookie.getName())) {
-////                                        accessToken = cookie.getValue();
-////                                    }
-////                                }
-////                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
-////                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
-////                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
-//                            if(StringUtils.hasText(cookieToken) && userId.equals(jwtTokenProvider.getAuthentication(cookieToken).getName())) {
-//                                // accesstoken 이라는 쿠키가 있을때
-//                                String cookieName = jwtTokenProvider.getAuthentication(cookieToken).getName();
-//                                userId = cookieName;
-//                                log.info("아직 유효한 cookie = " + cookieToken);
-//                                Long accessTokenExpiration = jwtTokenProvider.getExpiration(cookieToken);
-//                                log.info("cookie 유효기간 밀리 seconds = " + accessTokenExpiration);
-//                                socialResponse.setCode("C001");
-//                                String userName = jobUserMapper.userName(userId);
-//                                JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
-//                                user2.setRole("user");
-//                                socialResponse.setUser(user2);
-//                                socialResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
-//                                        accessTokenExpiration/1000 + "초 남았습니다.");
-////                                response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-////                                        URLEncoder.encode(userId, "UTF-8") + "&code=C000");
-////                                return null;
-//                                return socialResponse;
-//                            }
-//                        }
-//
-//                        token = jwtTokenProvider.socialAccessToken(userId);
-//                        log.info("새로 생성한 AccessToken = " + token);
-////                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
-////                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
-//                    }
-//                } else {
-//                    // refresh token이 null
-//                    // 토큰 재생성
-//                    token = jwtTokenProvider.socialGenerateToken(userId);
-//                    log.info("refToken이 null일때 token = " + token);
-//                    refToken2.setUserId(userId);
-//                    refToken2.setGrantType(token.getGrantType());
-//                    refToken2.setRefreshToken(token.getRefreshToken());
-//                    commonMapper.addUserToken(refToken2);
-//                }
-//
-//                if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
-//                    // 최종적으로 Access token이 있을때
-////                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
-//                    JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
-//                    user2.setRole("user");
-//                    socialResponse.setUser(user2);
-//                    String userName = jobUserMapper.userName(userId);
-//                    socialResponse.setCode("C000");
-//                    socialResponse.setMessage("로그인 성공! " + userName + "님 환영합니다.");
-//                    Cookie cookie = jwtTokenProvider.createCookie(token.getAccessToken());
-//                    log.info("********** 나 쿠키 생성 했음 ********");
-//                    response.addCookie(cookie);
-//
-//                } else {
-//                    // 최종적으로 access 토큰이 없을때
-//                    socialResponse.setCode("E001");
-//                    socialResponse.setMessage("최종적으로 Access Token이 없습니다.");
-//                }
-//            }
-//        } catch (Exception e) {
-//            socialResponse.setCode("E003");
-//            socialResponse.setMessage("아이디 또는 비밀번호를 확인해주세요.");
-//            log.info(e.getMessage());
-//        }
-//
-//        return socialResponse;
-//    }
-
     // NAVER 로그인
     @Transactional
     public SocialResponse naverLogin(String code) throws Exception {
@@ -1577,8 +1407,6 @@ try {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-//        String redirectUri = URLEncoder.encode("https://d1hw28kg3ibv9b.cloudfront.net/naver-login", "UTF-8");
-//        String redirectUri = URLEncoder.encode("https://d1hw28kg3ibv9b.cloudfront.net/", "UTF-8");
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1589,7 +1417,6 @@ try {
                     "&client_id=" + naverClientId +
                     "&client_secret=" + naverClientSecret +
                     "&redirect_uri=" + naverRedirectUri +
-//                    "&redirect_uri=" + redirectUri +
                     "&code=" + code;
 
             bw.write(sb);
@@ -1621,23 +1448,16 @@ try {
         int result = jobUserMapper.dupSocialIdCheck(naverSocialId);
 
         if(result == 0) {
-//            socialUser.setSocialType("naver");
             socialResponse.setSocialId(naverSocialId);
             socialResponse.setSocialType("naver");
-//            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
-
         } else {
-
             String userId = jobUserMapper.socialUserId(naverSocialId);
-//            response.sendRedirect("http://localhost:5173/naver-login?userId=" +
-//                    URLEncoder.encode(userId, "UTF-8") + "&code=C000");
 
             try {
 
                 log.info("userId = " + userId);
-
                 RefToken refToken = commonMapper.getUserRefreshTokenData(userId);
                 log.info("refToken = " + refToken);
                 RefToken refToken2 = new RefToken();
@@ -1710,8 +1530,6 @@ try {
 
                         token = jwtTokenProvider.socialAccessToken(userId);
                         log.info("새로 생성한 AccessToken = " + token);
-//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
-//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
                     }
                 } else {
                     // refresh token이 null
@@ -1728,7 +1546,6 @@ try {
 
                 if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                     // 최종적으로 Access token이 있을때
-//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
                     JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
                     user2.setRole("user");
                     socialResponse.setUser(user2);
@@ -1779,13 +1596,9 @@ try {
             JsonObject keys = (JsonObject) JsonParser.parseString(res.toString());
 
             JsonObject naver_response = (JsonObject) keys.get("response");
-//            log.info("naver_response = " + naver_response);
             String mobile = naver_response.get("mobile").toString();
             String id = naver_response.get("id").toString();
-//            log.info("naver mobile = " + mobile);
-//            log.info("naver id = " + id);
             String naverSocialId = id.replaceAll("\"","");
-//            log.info("naverSocialId = " + naverSocialId);
             socialUser.setId(naverSocialId);
 
             br.close();
@@ -1823,7 +1636,6 @@ try {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-//        String redirectUrl = "http://localhost:8080/v1/jobsite/user/naver/integ";
         String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/naver/integ";
 
         try {
@@ -1849,9 +1661,6 @@ try {
 
             JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
             accessToken = keys.get("access_token").getAsString();
-//            log.info("연동시 keys = " + keys);
-//            log.info("연동시 accessToken = " + accessToken);
-
             br.close();
             bw.close();
 
@@ -1861,9 +1670,6 @@ try {
 
         SocialUser socialUser = getNaverUserDetail(accessToken);
 
-        // 카카오만 쓸때 필요하고, 현재는 x
-//        int result = jobUserMapper.kakaoUserChk(socialUser.getId());
-
         // 소셜 로그인 완료된 id 있는지 찾기
         int socialUserIdCheck = jobUserMapper.dupSocialUserIdCheck(userId);
 
@@ -1871,20 +1677,9 @@ try {
         String socialId = socialUser.getId();
         int socialIdCheck = jobUserMapper.dupSocialIdCheck(socialId);
 
-//        log.info("socialId = " + socialId);
-//        log.info("socialIdCheck = " + socialIdCheck);
-
         try {
             if (socialUserIdCheck == 0 && socialIdCheck == 0) {
                 Social social = new Social();
-//            String email = userMapper.getUserEmail(user.getUserId());
-//
-//            if(email == null || email.isBlank()) {
-//                user.setEmail(socialUser.getEmail());
-//                userMapper.editUserEmail(user);
-//            }
-
-
                 social.setUserId(userId);
                 social.setSocialId(socialUser.getId());
                 social.setSocialType("naver");
@@ -1919,7 +1714,6 @@ try {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-//        String redirectUrl = "http://localhost:8080/v1/jobsite/user/login/kakao";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -1947,8 +1741,6 @@ try {
 
             br.close();
             bw.close();
-
-//            log.info("구글 accessToken = " + accessToken);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -2017,14 +1809,7 @@ try {
                         // 만약 쿠키가 있다면
                         if(cookies != null) {
                             String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
-//                                for (Cookie cookie : cookies) {
-//                                    if ("accesstoken".equals(cookie.getName())) {
-//                                        accessToken = cookie.getValue();
-//                                    }
-//                                }
-//                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
-//                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
-//                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
+
                             if(StringUtils.hasText(cookieToken) && userId.equals(jwtTokenProvider.getAuthentication(cookieToken).getName())) {
                                 // accesstoken 이라는 쿠키가 있을때
                                 String cookieName = jwtTokenProvider.getAuthentication(cookieToken).getName();
@@ -2045,8 +1830,6 @@ try {
 
                         token = jwtTokenProvider.socialAccessToken(userId);
                         log.info("새로 생성한 AccessToken = " + token);
-//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
-//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
                     }
                 } else {
                     // refresh token이 null
@@ -2062,7 +1845,6 @@ try {
 
                 if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                     // 최종적으로 Access token이 있을때
-//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
                     JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
                     user2.setRole("user");
                     socialResponse.setUser(user2);
@@ -2109,19 +1891,10 @@ try {
             }
 
             JsonObject keys = (JsonObject) JsonParser.parseString(res.toString());
-
-//            log.info("google key = " + keys);
-
-//            JsonObject google_response = (JsonObject) keys.get("response");
-//            log.info("google_response = " + google_response);
-//            String mobile = google_response.get("mobile").toString();
             String id = keys.get("id").toString();
-//            log.info("naver mobile = " + mobile);
             String googleSocialId = id.replaceAll("\"","");
-//            log.info("google id = " + googleSocialId);
 
             socialUser.setId(googleSocialId);
-
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -2157,7 +1930,6 @@ try {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-//        String redirectUrl = "http://localhost:8080/v1/jobsite/user/google/integ";
         String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/google/integ";
 
         try {
@@ -2183,12 +1955,8 @@ try {
 
             JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
             accessToken = keys.get("access_token").getAsString();
-//            log.info("연동시 keys = " + keys);
-//            log.info("연동시 accessToken = " + accessToken);
-
             br.close();
             bw.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2238,7 +2006,6 @@ try {
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String accessToken = null;
-//        String redirectUrl = "http://localhost:8080/v1/jobsite/user/login/kakao";
 
         try {
             urlConnection.setRequestMethod("POST");
@@ -2266,9 +2033,6 @@ try {
 
             br.close();
             bw.close();
-
-//            log.info("구글 accessToken = " + accessToken);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2282,7 +2046,6 @@ try {
         if(result == 0) {
             socialResponse.setSocialId(facebookSocialId);
             socialResponse.setSocialType("facebook");
-//            socialResponse.setSocialUser(socialUser);
             socialResponse.setCode("C003");
             socialResponse.setMessage("최초 로그인 1회 한정 회원 가입이 필요합니다.");
         } else {
@@ -2337,14 +2100,7 @@ try {
                         // 만약 쿠키가 있다면
                         if(cookies != null) {
                             String cookieToken = jwtTokenProvider.extractTokenFromCookies(cookies);
-//                                for (Cookie cookie : cookies) {
-//                                    if ("accesstoken".equals(cookie.getName())) {
-//                                        accessToken = cookie.getValue();
-//                                    }
-//                                }
-//                                String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
-//                                log.info("쿠키 유저 정보 테스트 = " + jwtTokenProvider.getAuthentication(accessToken));
-//                                log.info("쿠키 유저 이름 테스트 = " + cookieName);
+
                             if(StringUtils.hasText(cookieToken) && userId.equals(jwtTokenProvider.getAuthentication(cookieToken).getName())) {
                                 // accesstoken 이라는 쿠키가 있을때
                                 String cookieName = jwtTokenProvider.getAuthentication(cookieToken).getName();
@@ -2365,8 +2121,6 @@ try {
 
                         token = jwtTokenProvider.socialAccessToken(userId);
                         log.info("새로 생성한 AccessToken = " + token);
-//                            Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());
-//                            log.info("accessToken 유효기간 밀리 seconds = " + accessTokenExpiration);
                     }
                 } else {
                     // refresh token이 null
@@ -2382,7 +2136,6 @@ try {
 
                 if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                     // 최종적으로 Access token이 있을때
-//                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
                     JobsiteUser user2 = jobUserMapper.findOneJobLoginUser(userId);
                     user2.setRole("user");
                     socialResponse.setUser(user2);
@@ -2430,15 +2183,8 @@ try {
 
             JsonObject keys = (JsonObject) JsonParser.parseString(res.toString());
 
-//            log.info("facebook key = " + keys);
-
-//            JsonObject google_response = (JsonObject) keys.get("response");
-//            log.info("google_response = " + google_response);
-//            String mobile = google_response.get("mobile").toString();
             String id = keys.get("id").toString();
-//            log.info("naver mobile = " + mobile);
             String googleSocialId = id.replaceAll("\"","");
-//            log.info("google id = " + googleSocialId);
 
             socialUser.setId(googleSocialId);
 
@@ -2479,7 +2225,6 @@ try {
         String accessToken = null;
         String redirectUrl = "https://cafecon.co.kr/v1/jobsite/user/facebook/integ";
 
-
         try {
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true); // 데이터 기록 알려주기
@@ -2503,8 +2248,6 @@ try {
 
             JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
             accessToken = keys.get("access_token").getAsString();
-//            log.info("연동시 keys = " + keys);
-//            log.info("연동시 accessToken = " + accessToken);
 
             br.close();
             bw.close();

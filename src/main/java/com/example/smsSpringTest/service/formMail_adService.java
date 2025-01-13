@@ -490,26 +490,6 @@ public class formMail_adService {
         return adResponse;
     }
 
-//    // 폼메일용 hashtag 일치하는 광고 조회
-//    public AdResponse searchHashtagAd(fmAd ad) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//
-//        try {
-//            adResponse.setFmAdList(adMapper.searchHashtagAd(ad));
-//            if(adResponse.getFmAdList() != null && !adResponse.getFmAdList().isEmpty()){
-//                adResponse.setCode("C000");
-//                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 성공");
-//            } else {
-//                adResponse.setCode("E004");
-//                adResponse.setMessage("hashtag 일치하는 폼메일용 광고 조회 실패");
-//            }
-//        } catch (Exception e) {
-//            adResponse.setCode("E001");
-//            adResponse.setMessage("ERROR");
-//        }
-//
-//        return adResponse;
-//    }
 
     // 폼메일용 sido (필수) , sigungu (필수아님) 일치하는 광고 찾기
     public AdResponse searchAddressAd(fmAd ad) throws Exception{
@@ -774,51 +754,6 @@ public class formMail_adService {
         try {
             String aid = ad.getAid();
 
-//            // 진행중인 공고인지 체크하기. 진행중이면 1, 아니면 0
-//            int checkProgressAd = adMapper.checkProgressAd(ad);
-//            log.info("진행중 체크 = " + checkProgressAd);
-//            if(checkProgressAd == 0) {
-//                // 대기중이거나 종료된 공고면
-//
-//                Cookie cookies[] = request.getCookies();
-//                String accessToken = "";
-//                if(cookies != null) {
-//
-//                    // 만약 쿠키가 있다면
-//                    for (Cookie cookie : cookies) {
-//                        if ("accesstoken".equals(cookie.getName())) {
-//                            accessToken = cookie.getValue();
-//                            break;
-//                        }
-//                    }
-//                }
-//                // 쿠키가 없을때
-//                if(!StringUtils.hasText(accessToken)) {
-//                    hasError = true;
-//                } else {
-//                    //쿠키 있으면
-//                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-//                    log.info("auth ROLE = " + authentication.getAuthorities());
-//                    String authRole = authentication.getAuthorities().toString();
-//                    if("[ROLE_USER]".equals(authRole)){
-//                        // 만약 역할이 유저면
-//                        hasError = true;
-//                    }
-//                }
-//
-////                // 쿠키가 없거나 user 역할이면
-////                // 쿠키가 없을때
-////                if(!StringUtils.hasText(accessToken) || authRole.equals("ROLE_USER")) {
-////                    adResponse.setCode("E003");
-////                    adResponse.setMessage("마감된 공고입니다.");
-////                    return adResponse;
-////                }
-//                if(hasError) {
-//                    adResponse.setCode("E003");
-//                    adResponse.setMessage("마감된 공고입니다.");
-//                    return adResponse;
-//                }
-//            }
 
             // 기존 조회수 갖고오기
             int viewCount = adMapper.findOneJobsite(ad).get(0).getViewCount();
@@ -998,97 +933,6 @@ public class formMail_adService {
     }
 
 
-//    // 잡사이트용 근무시간 짧은 순으로 광고 조회
-//    public AdResponse orderByWorkTime(Paging paging) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//
-//        try {
-//            int page = paging.getPage(); // 현재 페이지
-//            int size = paging.getSize(); // 한 페이지에 표시할 수
-//            int offset = (page - 1) * size; // 시작 위치
-//            int totalCount = adMapper.allJobsiteListCount(); //전체 수
-//            paging.setOffset(offset);
-//
-//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-//            adResponse.setJobSiteList(adMapper.orderByWorkTime(paging));
-//
-//            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-//                int totalPages = (int) Math.ceil((double) totalCount / size);
-//                log.info("totalPages = " + totalPages);
-//                adResponse.setTotalPages(totalPages);
-//                adResponse.setCode("C000");
-//                adResponse.setMessage("근무시간 짧은 순으로 조회 성공");
-//            } else {
-//                adResponse.setCode("E004");
-//                adResponse.setMessage("근무시간 짧은 순으로 조회 실패");
-//            }
-//        } catch (Exception e) {
-//            adResponse.setCode("E001");
-//            adResponse.setMessage("ERROR");
-//        }
-//
-//        return adResponse;
-//    }
-
-
-//    // aid가 일치하는 고객사 정보 반환 + 정보로 찾은 cid -> user 정보 까지 반환
-//    public AdResponse findCompanyAndUser(fmAd ad) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//        try {
-//
-//            String cid = adMapper.findCid(ad);
-//
-//            adResponse.setFindCompanyAndUserList(adMapper.findCompanyAndUser(cid));
-//            log.info(adMapper.findCompanyAndUser(cid).toString());
-//            if(adResponse.getFindCompanyAndUserList() != null && !adResponse.getFindCompanyAndUserList().isEmpty()){
-//                adResponse.setCode("C000");
-//                adResponse.setMessage("조회 성공");
-//            } else {
-//                adResponse.setCode("E004");
-//                adResponse.setMessage("조회 실패");
-//            }
-//        } catch (Exception e) {
-//            adResponse.setCode("E001");
-//            adResponse.setMessage("ERROR");
-//            log.info(e.getMessage());
-//        }
-//        return adResponse;
-//    }
-
-// 11-29 ~
-//    // 일단 정렬 , 등록일 조건 없이 시/도, 시,군,구 / 동,읍,면에 대해서만
-//    public AdResponse selectByRegions(AdRequest ad) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//        log.info(String.valueOf(ad));
-//        try {
-//            int page = ad.getPage(); // 현재 페이지
-//            int size = ad.getSize(); // 한 페이지에 표시할 수
-//            int offset = (page - 1) * size; // 시작 위치
-////            int totalCount = adMapper.allJobsiteListCount(); //전체 수
-//            ad.setOffset(offset);
-//
-////            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-//            log.info("page = " + page + " size = " + size + " offset = " + offset);
-//            adResponse.setJobSiteList(adMapper.selectByRegions(ad));
-//
-//            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-////                adResponse.setTotalPages(totalCount);
-//                adResponse.setCode("C000");
-//                adResponse.setMessage("지역 선택 조회 성공");
-//            } else {
-//                adResponse.setCode("E004");
-//                adResponse.setMessage("지역 선택 조회 실패");
-//            }
-//        } catch (Exception e){
-//            adResponse.setCode("E001");
-//            adResponse.setMessage("ERROR");
-//            log.info(e.getMessage());
-//        }
-//
-//        return adResponse;
-//    }
-
-
     // 등록일, 정렬 조건 없이 시/도, 시/군/구 , 동/읍/면에 대해서만
     // 정렬 조건 추가
     public AdResponse selectByRegionsSort(AdRequest ad) throws Exception {
@@ -1098,7 +942,6 @@ public class formMail_adService {
             int page = ad.getPage(); // 현재 페이지
             int size = ad.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-
 
             if("최근등록순".equals(ad.getSortType())){
                 ad.setSortType("최근등록순");
@@ -1150,10 +993,6 @@ public class formMail_adService {
 
                             int count = 0;
                             for(JobSite j : newJobsiteList) {
-//                                log.info("j = "+j.toString());
-//                                    log.info("r = " + r.toString());
-//                                    log.info("j.getSido() = " + j.getSido() + ", j.getSido2() = " + j.getSido2() + ", j.getSido3() = " + j.getSido3());
-//                                    log.info("r.getSido() = " + r.getSido());
 
                                     if(r.getSido().equals(j.getSido())){
 //                                        log.info("첫단계 조건 만족");
@@ -1217,18 +1056,11 @@ public class formMail_adService {
                                         }
 //                                        log.info("셋단계");
                                     }
-//                                    if(count == 1) {
-//                                        log.info("braek 체크");
-//                                        break;
-//                                    }
+
                                 }
                         }
                         adResponse.setJobSiteList(newJobsiteList);
                 }
-
-
-                // 총 개수
-//                int total = adResponse.getJobSiteList().size();
 
                 adResponse.setTotalPages(totalPages);
                 adResponse.setCode("C000");
@@ -1349,64 +1181,6 @@ public class formMail_adService {
         return adResponse;
     }
 
-//    // 잡사이트용 급구 공고 (마감기한 3일이하로 남은 애들)
-//    public AdResponse hurriedAdList(AdRequest ad) throws Exception {
-//        AdResponse adResponse = new AdResponse();
-//
-//        try {
-//            int page = ad.getPage(); // 현재 페이지
-//            int size = ad.getSize(); // 한 페이지에 표시할 수
-//            int offset = (page - 1) * size; // 시작 위치
-//            int totalCount = adMapper.hurriedAdListCount(ad); //전체 수
-//            ad.setOffset(offset);
-//
-//            log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-//
-//            if("최신등록순".equals(ad.getSortType())){
-//                ad.setSortType("최신등록순");
-//            } else if("시급높은순".equals(ad.getSortType())) {
-//                ad.setSalaryType("시급");
-//                ad.setSortType("salary");
-//                // 샐러리 타입 (시급, 주급, 일급 ,월급, 연봉)
-//                // 샐러리 타입 조건으로 주고, salary DESC; 하면 될듯?
-//            } else if("주급높은순".equals(ad.getSortType())){
-//                ad.setSalaryType("주급");
-//                ad.setSortType("salary");
-//            } else if("일급높은순".equals(ad.getSortType())){
-//                ad.setSalaryType("일급");
-//                ad.setSortType("salary");
-//            } else if("월급높은순".equals(ad.getSortType())){
-//                ad.setSalaryType("월급");
-//                ad.setSortType("salary");
-//            } else if("연봉높은순".equals(ad.getSortType())){
-//                ad.setSalaryType("연봉");
-//                ad.setSortType("salary");
-//            } else if("건별높은순".equals(ad.getSortType())){
-//                // 나중에 건 별로 공고 등록 추가할 때 사용할 코드
-//                ad.setSalaryType("건별");
-//                ad.setSortType("salary");
-//            }
-//            adResponse.setJobSiteList(adMapper.hurriedAdList(ad));
-//            if(adResponse.getJobSiteList() != null && !adResponse.getJobSiteList().isEmpty()){
-//                int totalPages = (int) Math.ceil((double) totalCount / size);
-//                log.info("totalPages = " + totalPages);
-//                adResponse.setTotalPages(totalPages);
-//                adResponse.setCode("C000");
-//                adResponse.setMessage("조회 성공");
-//            } else {
-//                adResponse.setCode("E004");
-//                adResponse.setMessage("조회 실패");
-//            }
-//        } catch (Exception e){
-//            adResponse.setCode("E001");
-//            adResponse.setMessage("ERROR");
-//            log.info(e.getMessage());
-//        }
-//
-//        return adResponse;
-//    }
-
-
     // aid 일치하는 주변 역 정보들 추출
     public AdResponse nearInfoList(AdNearInfo near) throws Exception {
         AdResponse adResponse = new AdResponse();
@@ -1428,12 +1202,6 @@ public class formMail_adService {
 
         return adResponse;
     }
-
-
-
-
-
-
 
 
 // ------------------ 광고 테이블 끝 -----------------
@@ -1498,67 +1266,6 @@ public class formMail_adService {
         return s3UploadResponse;
     }
 
-//    // 광고 이미지 DB에 저장 . 실패시 S3에 업로드된 해당 파일 삭제
-//    public ApiResponse addAdImg(fmAdImage adImage) throws Exception {
-//        ApiResponse apiResponse = new ApiResponse();
-//        String url = adImage.getPath();
-//        try {
-//            String serialNumber = UUID.randomUUID().toString();
-//            adImage.setAiId(serialNumber);
-//            int addAdImg = adMapper.addAdImg(adImage);
-//            log.info(adImage.toString());
-//
-//            if(addAdImg == 1){
-////                int addUrl = commonMapper.addUrl(url);
-////                log.info("addUrl : " + addUrl);
-//                apiResponse.setCode("C001");
-//                apiResponse.setMessage("이미지 업로드 최종 성공");
-//
-//            } else {
-//                int deleteUrl = commonMapper.deleteUrl(url);
-//                apiResponse.setCode("C005");
-//                apiResponse.setMessage("이미지 업로드 실패, S3 해당 파일 삭제");
-//                s3Uploader.deleteFile(adImage.getPath());
-//            }
-//        }catch (Exception e){
-//            int deleteUrl = commonMapper.deleteUrl(url);
-//            apiResponse.setCode("E001");
-//            apiResponse.setMessage("이미지 업로드 실패, S3 해당 파일 삭제");
-//            s3Uploader.deleteFile(adImage.getPath());
-//            log.info(e.getMessage());
-//        }
-//        return apiResponse;
-//    }
-
-//    // 광고 이미지 DB 삭제 및 S3에서도 삭제
-//    public ApiResponse deleteAdImg(fmAdImage adImage) throws Exception {
-//        ApiResponse apiResponse = new ApiResponse();
-//
-//        try {
-//            log.info(adImage.toString());
-//            //db속 이미지 path 갖고오기
-//            String path = adMapper.getPath(adImage);
-//            log.info("path = " + path);
-//            if(path != null) {
-//                int deleteAdImg = adMapper.deleteAdImg(adImage);
-//                if (deleteAdImg == 1) {
-//                    // fa_file 테이블의 url row도 삭제
-//                    int deleteUrl = commonMapper.deleteUrl(path);
-//                    s3Uploader.deleteFile(path);
-//                    apiResponse.setCode("C001");
-//                    apiResponse.setMessage("이미지 삭제 및 DB 삭제 성공");
-//                } else {
-//                    apiResponse.setCode("C004");
-//                    apiResponse.setMessage("이미지 삭제 및 DB 삭제 실패");
-//                }
-//            }
-//        } catch(Exception e) {
-//            apiResponse.setCode("E001");
-//            apiResponse.setMessage("ERROR!");
-//            log.info(e.getMessage());
-//        }
-//        return apiResponse;
-//    }
 
     // 광고 이미지 전체 조회
     public AdResponse fmAdImageList(AdImageRequest adImage) throws Exception {
