@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -551,6 +552,18 @@ public class formMail_adService {
     public ApiResponse updateAdClose(fmAd ad) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {
+            List<fmAd> newAd = new ArrayList<>();
+            newAd = adMapper.findOneAd(ad);
+            LocalDate startDate = newAd.get(0).getStartDate();
+
+            // 오늘 날짜
+            LocalDate today = LocalDate.now();
+
+            if(startDate.isAfter(today)){
+                // 시작일이 오늘보다 크면 (대기중)
+                ad.setStartDate(startDate);
+            }
+
             int updateAdClose = adMapper.updateAdClose(ad);
             if(updateAdClose == 0) {
                 apiResponse.setCode("C003");

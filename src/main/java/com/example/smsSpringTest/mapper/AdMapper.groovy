@@ -575,9 +575,16 @@ interface AdMapper {
 
     // 마감 버튼 클릭시 마감 처리할 수 있는 API (오직 마감 기능만)
     @Update("""
+<script>
         UPDATE formmail_ad
-        SET end_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        <set> 
+        <if test="ad.startDate != null">
+        start_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+        </if>
+        end_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        </set>
         WHERE aid = #{ad.aid}
+</script>        
     """)
     int updateAdClose(@Param("ad") fmAd ad)
 
