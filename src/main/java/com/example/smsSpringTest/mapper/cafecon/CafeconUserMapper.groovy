@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.mapper.cafecon
 
+import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.cafecon.BizApi
 import com.example.smsSpringTest.model.cafecon.CafeCoupon
 import com.example.smsSpringTest.model.cafecon.CafeUser
@@ -333,6 +334,8 @@ interface CafeconUserMapper {
         SELECT user_id
         , manager_name
         , phone
+        , point
+        , company_name
         FROM cafecon_user
         WHERE user_id = #{userId}
     """)
@@ -390,4 +393,30 @@ interface CafeconUserMapper {
         WHERE user_id = #{userId}
     """)
     CafeUser findOneCafUser(@Param("userId") String userId)
+
+    // 회원 전체 수 조회
+    @Select("""
+        SELECT count(*)
+        from cafecon_user
+    """)
+    int getUserListCount()
+
+    // 전체 회원 리스트
+    @Select("""
+        SELECT user_id
+        , manager_name
+        , company_name
+        , point
+        , phone
+        , business_no
+        , business_name
+        , business_email
+        , business_license
+        , agree_terms
+        , agree_privacy
+        , agree_marketing
+        FROM cafecon_user
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<CafeUser> cafeconUserList(@Param("paging") Paging paging)
 }

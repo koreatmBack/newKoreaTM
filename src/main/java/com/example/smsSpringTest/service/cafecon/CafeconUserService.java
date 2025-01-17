@@ -3,6 +3,7 @@ package com.example.smsSpringTest.service.cafecon;
 import com.example.smsSpringTest.mapper.cafecon.CafeconCommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.cafecon.CafeUser;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
@@ -405,9 +406,53 @@ public class CafeconUserService {
         return apiResponse;
     }
 
+    // 카페콘 회원 한 명 정보 조회
+    public CafeconResponse findOneCafUser(CafeUser user) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
 
+        try {
+            cafeconResponse.setUser(cafeconUserMapper.findOneCafUser(user.getUserId()));
+            cafeconResponse.setCode("C000");
+            cafeconResponse.setMessage("잡사이트 회원 한 명 정보 조회 성공");
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("조회할 회원의 아이디를 입력하세요");
+        }
+        return cafeconResponse;
+    }
 
+    // 카페콘 전체 회원 목록 조회
+    public CafeconResponse findAllCafUser(Paging paging) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
 
+        try {
+            int page = paging.getPage(); // 현재 페이지
+            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = cafeconUserMapper.getUserListCount();
+
+            paging.setOffset(offset);
+            cafeconResponse.setCafeconUserList(cafeconUserMapper.cafeconUserList(paging));
+//            log.info(jobUserMapper.jobsiteUserList(paging).toString());
+            log.info("userResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
+            if(cafeconResponse.getCafeconUserList() != null && !cafeconResponse.getCafeconUserList().isEmpty()){
+                // 비어있지 않을 때
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                cafeconResponse.setTotalPages(totalPages);
+                cafeconResponse.setCode("C000");
+                cafeconResponse.setMessage("잡사이트 회원 전체 조회 성공");
+            } else {
+                // 비어 있을 때
+                cafeconResponse.setCode("E002");
+                cafeconResponse.setMessage("조회된 계정이 없습니다.");
+            }
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("ERROR!!!");
+            log.info(e.getMessage());
+        }
+        return cafeconResponse;
+    }
 
 
 

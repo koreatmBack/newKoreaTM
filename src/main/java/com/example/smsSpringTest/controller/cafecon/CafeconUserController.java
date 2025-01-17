@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.controller.cafecon;
 
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.cafecon.CafeUser;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
@@ -84,6 +85,18 @@ public class CafeconUserController {
     @PutMapping("/update/point")
     public ApiResponse updatePoint(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.updatePoint(user);
+    }
+
+    // 카페콘 회원 한 명 정보 조회
+    @PostMapping("/find/one")
+    public CafeconResponse findOneCafUser(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.findOneCafUser(user);
+    }
+
+    // 카페콘 전체 회원 목록 반환
+    @PostMapping("/find/all")
+    public CafeconResponse findAllCafUser(@RequestBody Paging paging) throws Exception {
+        return cafeconUserService.findAllCafUser(paging);
     }
 
 }
