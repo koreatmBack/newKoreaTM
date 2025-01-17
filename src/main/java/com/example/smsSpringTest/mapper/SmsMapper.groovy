@@ -28,7 +28,7 @@ interface SmsMapper {
 
     // 본인인증용 db 저장
     @Insert("""
-        INSERT INTO jobsite_sms_code(
+        INSERT INTO cert_sms_code(
             user_name
             ,phone
             ,sms_code
@@ -42,7 +42,7 @@ interface SmsMapper {
 
     // 본인인증용 db 모두 삭제 ( 자정에 실행할 예정 )
     @Delete("""
-        DELETE FROM jobsite_sms_code
+        DELETE FROM cert_sms_code
     """)
     int deleteAllSMSCode()
 }

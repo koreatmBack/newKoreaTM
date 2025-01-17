@@ -14,7 +14,7 @@ interface JobUserMapper {
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 본인인증 (문자) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     // 문자 본인인증 코드 저장할때 이미 인증 받았으면 해당 row에 인증 번호 덮어 씌우기
     @Update("""
-        UPDATE jobsite_sms_code
+        UPDATE cert_sms_code
         SET sms_code = #{cert.smsCode},
             user_name = #{cert.userName}
         WHERE phone = #{cert.phone} 
@@ -24,7 +24,7 @@ interface JobUserMapper {
     // 문자 본인인증 일치하는지 찾기
     @Select("""
         SELECT count(*)
-        FROM jobsite_sms_code
+        FROM cert_sms_code
         WHERE user_name = #{cert.userName}
         AND phone = #{cert.phone}
         AND sms_code = #{cert.smsCode}
@@ -33,7 +33,7 @@ interface JobUserMapper {
 
     // 문자 본인인증 성공시 테이블에서 해당 row 삭제
     @Delete("""
-        DELETE FROM jobsite_sms_code
+        DELETE FROM cert_sms_code
         WHERE phone = #{cert.phone}
     """)
     int deleteSmsCode(@Param("cert") Cert cert);

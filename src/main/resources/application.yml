@@ -118,6 +118,12 @@ facebook:
 #  redirect-uri: http://localhost:5173/facebook-login
   redirect-uri: https://goalba.co.kr/facebook-login
 
+biz:
+  auth-code: ${BIZ_AUTH_CODE}
+  auth-token: ${BIZ_AUTH_TOKEN}
+  client-id: ${BIZ_CLIENT_ID}
+
+
 logging:
   level:
     com:

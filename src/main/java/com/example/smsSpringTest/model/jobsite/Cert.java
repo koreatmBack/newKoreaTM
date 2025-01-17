@@ -20,4 +20,6 @@ public class Cert {
     private String smsCode;
     private String email;
     private String emailCode;
+
+    private String managerName; // 카페콘에서 사용할 유저이름 ( 담당자명 )
 }
