@@ -1,8 +1,10 @@
 package com.example.smsSpringTest.service;
 
+import com.example.smsSpringTest.entity.CafeconUserEntity;
 import com.example.smsSpringTest.entity.JobsiteUserEntity;
 import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.repository.AdminRepository;
+import com.example.smsSpringTest.repository.CafeconUserRepository;
 import com.example.smsSpringTest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * author : 신기훈
@@ -26,29 +30,29 @@ public class CustomUserDetailsService implements UserDetailsService {
 //    private final MemberRepository memberRepository;
       private final AdminRepository adminRepository;
       private final UserRepository userRepository;
+      private final CafeconUserRepository cafeconUserRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 
         // 1. 먼저 관리자로 검색
-        return adminRepository.findByUserId(userId)
-                .map(this::createAdminDetails)
-                // 2. 관리자가 없다면 일반 유저로 검색
-                .orElseGet(() -> userRepository.findByUserId(userId)
-                        .map(this::createUserDetails)
-                        .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.")));
+        return findAdminDetails(userId)
+                .orElseGet(() -> findUserDetails(userId)
+                        .orElseGet(() -> findCafeconUserDetails(userId)
+                                .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."))));
     }
 
-    // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 리턴
-//    private UserDetails createUserDetails(Member member) {
-//
-//
-//        return User.builder()
-//                .username(member.getUserId())
-//                .password(member.getUserPwd())
-//                .roles(member.getRole())
-//                .build();
-//    }
+    private Optional<UserDetails> findAdminDetails(String userId) {
+        return adminRepository.findByUserId(userId).map(this::createAdminDetails);
+    }
+
+    private Optional<UserDetails> findUserDetails(String userId) {
+        return userRepository.findByUserId(userId).map(this::createUserDetails);
+    }
+
+    private Optional<UserDetails> findCafeconUserDetails(String userId) {
+        return cafeconUserRepository.findByUserId(userId).map(this::createCafeconUserDetails);
+    }
 
     // fm_admin 으로 변경하기 위해
     private UserDetails createAdminDetails(UserProfile admin) {
@@ -67,6 +71,15 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .username(user.getUserId())
                 .password(user.getUserPwd())
                 .roles("USER")
+                .build();
+    }
+
+    // Cafecon user 용
+    private UserDetails createCafeconUserDetails(CafeconUserEntity user) { // 일반 유저 엔티티
+        return User.builder()
+                .username(user.getUserId())
+                .password(user.getUserPwd())
+                .roles("CAFECON")
                 .build();
     }
 
