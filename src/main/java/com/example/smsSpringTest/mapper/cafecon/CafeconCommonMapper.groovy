@@ -205,10 +205,10 @@ interface CafeconCommonMapper {
                 , #{cafeCoupon.goodsCode}
                 , 'N'
                 , 'Y'
-                , #{cafeCoupon.realPrice}
-                , #{cafeCoupon.discountPrice}
                 , #{cafeCoupon.code}
                 , #{cafeCoupon.message}
+                , #{cafeCoupon.realPrice}
+                , #{cafeCoupon.discountPrice}
                 , sysdate()
                 , sysdate()
         )

@@ -170,7 +170,6 @@ public class CafeconCommonService {
             bizApi.setUserId(authentication.getName());
         }
 
-
 //        CouponResponse couponResponse = new CouponResponse();
 
         String userId = bizApi.getUserId();
@@ -211,7 +210,7 @@ public class CafeconCommonService {
 
             log.info("(수신) sendPhone :: " + sendPhone);
             log.info("(발신) callbackNo :: " + callbackNo);
-
+            int getRealPrice = bizApi.getRealPrice();
             HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
 
             bizApi.setApiCode("0204");
@@ -223,10 +222,10 @@ public class CafeconCommonService {
             bizApi.setOrderNo(orderNo);
             bizApi.setCallbackNo(callbackNo);  // 발신번호
             bizApi.setPhoneNo(sendPhone);
-            bizApi.setMmsTitle("기프티콘이 전송되었습니다.");
+            bizApi.setMmsTitle("기프티콘 전송");
             bizApi.setMmsMsg("이용해 주셔서 감사합니다.");
-            bizApi.setTemplateId("202410170273587");
-            bizApi.setBannerId("202403050282742");
+            bizApi.setTemplateId("202308010219374");
+            bizApi.setBannerId("202308010243647");
 //            bizApi.setTemplateId("202403050247761");
 //            bizApi.setBannerId("202403050282744");
             bizApi.setBizId("millinien@naver.com");
@@ -250,6 +249,8 @@ public class CafeconCommonService {
                     "&user_id=" + bizApi.getBizId() +
                     "&gubun=" + bizApi.getGubun() +
                     "&rev_info_yn=" + bizApi.getRevInfoYn();
+
+        log.info(uri);
 
             try {
                 HttpResponse<String> response = client.send(
@@ -283,7 +284,7 @@ public class CafeconCommonService {
 
                     cafeCoupon.setGoodsImgB(bizApi.getGoodsImgB());
                     cafeCoupon.setGoodsName(bizApi.getGoodsName());
-                    cafeCoupon.setRealPrice(bizApi.getRealPrice());
+                    cafeCoupon.setRealPrice(getRealPrice);
                     cafeCoupon.setDiscountPrice(bizApi.getDiscountPrice());
                     cafeCoupon.setCode(code);
                     cafeCoupon.setMessage(message);
@@ -296,7 +297,7 @@ public class CafeconCommonService {
 
                     log.info("result ::: " + result);
                     if(result == 1) {
-                        int realPrice = bizApi.getRealPrice();
+                        int realPrice = getRealPrice;
                         int userPoint = cafeconUserMapper.getUserPoint(userId);
                         int remaining = userPoint - realPrice;
                         CafeUser cafeUser = new CafeUser();
@@ -534,6 +535,36 @@ public class CafeconCommonService {
         HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
         BizApi bizApi = new BizApi();
         CouponResponse couponResponse = new CouponResponse();
+
+        Cookie cookies[] = request.getCookies();
+        String accessToken = "";
+        CafeUser user = new CafeUser();
+        // 만약 쿠키가 있다면
+        for(Cookie cookie : cookies) {
+            if("accesstoken".equals(cookie.getName())){
+                accessToken = cookie.getValue();
+            }
+        }
+
+        // 쿠키가 없다면
+        if(!StringUtils.hasText(accessToken)){
+            couponResponse.setCode("E401");
+            couponResponse.setMessage("로그인 상태가 아닙니다.");
+            return couponResponse;
+        }
+        // AccessToken 검증
+        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+            //AccessToken에서 authentication 가져오기
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            user.setUserId(authentication.getName());
+            log.info("id = " + user.getUserId());
+            bizApi.setUserId(authentication.getName());
+        }
+
+
+//        CouponResponse couponResponse = new CouponResponse();
+
+        String userId = bizApi.getUserId();
 
         bizApi.setApiCode("0201");
         bizApi.setCustomAuthCode("REALd6f625bd88904490938d49ebb9687a3b");
