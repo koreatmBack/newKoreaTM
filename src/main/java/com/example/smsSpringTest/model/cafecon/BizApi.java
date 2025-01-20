@@ -39,4 +39,11 @@ public class BizApi {
     private String revInfoYn;
     private String memo;
 
+    private int realPrice; // 결제 가격
+    private String userPoint; // 유저의 현재 포인트
+    private String limitDay; // 만료일
+    private String goodsImgB; // 상품 이미지
+    private String goodsName; // 상품명
+    private int remaining; // 유저 포인트 - 결제가격 = 현재 유저의 포인트
+    private String discountPrice; // 할인 금액
 }

@@ -1,14 +1,15 @@
 package com.example.smsSpringTest.controller.cafecon;
 
+import com.example.smsSpringTest.model.cafecon.BizApi;
+import com.example.smsSpringTest.model.cafecon.Coupon;
 import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.service.cafecon.CafeconCommonService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * author : 신기훈
@@ -36,6 +37,35 @@ public class CafeconCommonController {
         return cafeconCommonService.reissuAccessToken();
     }
 
-    
+    // 기프티콘 쿠폰 전송하기
+    @PostMapping("/goods/send")
+    public CouponResponse sendGoodsToBiz(@RequestBody BizApi bizApi) throws Exception {
+        return cafeconCommonService.cafeConSendGiftToBiz(bizApi);
+    }
+
+    // 기프티콘 쿠폰 취소하기
+    @PostMapping("/cancel/bizapi")
+    public ApiResponse cancelCouponToBizapi(@RequestBody BizApi bizApi) throws Exception {
+        return cafeconCommonService.cancelCouponToBizapi(bizApi);
+    }
+
+    // 기프티콘 쿠폰 상세 정보
+    @PostMapping("/goods/coupons")
+    public CouponResponse getCouponsDetailData(@RequestBody Coupon coupon) throws Exception {
+//
+//        CouponResponse couponResponse = new CouponResponse();
+//
+//        if(authentication.getName() != null && !authentication.getName().isBlank()) {
+//            String userId = authentication.getName();
+//            coupon.setUserId(userId);
+//            couponResponse = cafeConService.getCouponsDetailData(coupon);
+//
+//        } else {
+//            couponResponse.setCode("E001");
+//            couponResponse.setMessage("로그인 후 이용하세요.");
+//        }
+
+        return cafeconCommonService.getCouponsDetailData(coupon);
+    }
 
 }

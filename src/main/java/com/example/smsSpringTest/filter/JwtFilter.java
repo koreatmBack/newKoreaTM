@@ -126,6 +126,12 @@ public class JwtFilter extends OncePerRequestFilter {
                    }
                }
 
+               if(authorities.equals("ROLE_CAFECON")){
+                   if(!isCafUserEndpoint(requestURI)){
+                       // 권한이 카페콘 유저인데, 유저 권한 없는 엔드포인트 접근
+                       hasError = true;
+                   }
+               }
 
                // validateToken 으로 유효성 검사
                if (tokenStatus.equals("ACCESS") && !hasError) {
@@ -365,6 +371,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/cafecon/user/edit" , "/v1/cafecon/user/edit"
                 , "/api/v1/cafecon/user/update/point" , "/v1/cafecon/user/update/point"
                 , "/api/v1/cafecon/user/check/id" , "/v1/cafecon/user/check/id"
+                , "/api/v1/cafecon/common/exper_cookie" , "/v1/cafecon/common/exper_cookie"
         };
 
         for (String allowedURI : allowedURIs) {
@@ -384,6 +391,26 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/formMail_ad/find/applyMethod","/api/v1/formMail_ad/find/applyMethod",
                 "/v1/jobsite/common/reissu/AccessToken", "/api/v1/jobsite/common/reissu/AccessToken",
                 "/api/v1/jobsite/user/recent/views", "/v1/jobsite/user/recent/views"
+
+        };
+
+        for (String userEndpoint : userEndpoints) {
+            if(pathMatcher.match(userEndpoint, requestURI)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 잡사이트 회원이 이용 가능한 API
+    private boolean isCafUserEndpoint(String requestURI){
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        String[] userEndpoints = {
+                "/v1/cafecon/user/**", "/api/v1/cafecon/user/**",
+                "/v1/cafecon/common/reissu/AccessToken", "/api/v1/cafecon/common/reissu/AccessToken",
+                "/v1/cafecon/common/goods/send", "/api/v1/cafecon/common/goods/send",
+                "/v1/cafecon/common/cancel/bizapi", "/api/v1/cafecon/common/cancel/bizapi",
+                "/v1/cafecon/common/goods/coupons", "/api/v1/cafecon/common/goods/coupons"
 
         };
 

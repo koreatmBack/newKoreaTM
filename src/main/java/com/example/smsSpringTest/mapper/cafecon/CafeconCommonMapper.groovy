@@ -152,6 +152,8 @@ interface CafeconCommonMapper {
                 , memo
                 , success_yn
                 , use_yn
+                , real_price
+                , discount_price
                 , code
                 , message
                 , limit_date
@@ -168,6 +170,8 @@ interface CafeconCommonMapper {
                 , #{cafeCoupon.memo}
                 , 'Y'
                 , 'Y'
+                , #{cafeCoupon.realPrice}
+                , #{cafeCoupon.discountPrice}
                 , #{cafeCoupon.code}
                 , #{cafeCoupon.message}
                 , #{cafeCoupon.limitDate}
@@ -189,6 +193,8 @@ interface CafeconCommonMapper {
                 , use_yn
                 , code
                 , message
+                , real_price
+                , discount_price
                 , reg_date
                 , upt_date
         ) VALUES (
@@ -199,6 +205,8 @@ interface CafeconCommonMapper {
                 , #{cafeCoupon.goodsCode}
                 , 'N'
                 , 'Y'
+                , #{cafeCoupon.realPrice}
+                , #{cafeCoupon.discountPrice}
                 , #{cafeCoupon.code}
                 , #{cafeCoupon.message}
                 , sysdate()
@@ -277,6 +285,8 @@ interface CafeconCommonMapper {
                 , code
                 , message
                 , limit_date
+                , real_price
+                , discount_price
                 , reg_date
                 , upt_date
           FROM cafecon_coupon

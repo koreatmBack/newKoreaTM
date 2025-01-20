@@ -191,6 +191,14 @@ interface CafeconUserMapper {
     """)
     int updatePoint(@Param("user") CafeUser user)
 
+    // 회원 포인트 조회
+    @Select("""
+        SELECT point
+          FROM cafecon_user
+         WHERE user_id = #{userId}
+    """)
+    int getUserPoint(@Param("userId") String userId)
+
     // 카페콘 회원 한명 (비밀번호 제외) 조회
     @Select("""
         SELECT user_id
