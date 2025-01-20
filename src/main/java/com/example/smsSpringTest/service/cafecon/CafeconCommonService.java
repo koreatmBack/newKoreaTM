@@ -417,6 +417,33 @@ public class CafeconCommonService {
 
         ApiResponse apiResponse = new ApiResponse();
 
+        CouponResponse couponResponse = new CouponResponse();
+        // 로그인 유저인지 체크
+        Cookie cookies[] = request.getCookies();
+        String accessToken = "";
+        CafeUser user = new CafeUser();
+        // 만약 쿠키가 있다면
+        for(Cookie cookie : cookies) {
+            if("accesstoken".equals(cookie.getName())){
+                accessToken = cookie.getValue();
+            }
+        }
+
+        // 쿠키가 없다면
+        if(!StringUtils.hasText(accessToken)){
+            apiResponse.setCode("E401");
+            apiResponse.setMessage("로그인 상태가 아닙니다.");
+            return apiResponse;
+        }
+        // AccessToken 검증
+        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+            //AccessToken에서 authentication 가져오기
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            user.setUserId(authentication.getName());
+            log.info("id = " + user.getUserId());
+            bizApi.setUserId(authentication.getName());
+        }
+
         int count = cafeconCommonMapper.isUserCouponCheck(bizApi);
 
         if(count == 1) {
@@ -459,11 +486,11 @@ public class CafeconCommonService {
                 int userPoint = cafeconUserMapper.getUserPoint(userId);
                 int totalPoint = realPrice + userPoint;
 
-                CafeUser user = new CafeUser();
-                user.setUserId(userId);
-                user.setPoint(totalPoint);
+                CafeUser user2 = new CafeUser();
+                user2.setUserId(userId);
+                user2.setPoint(totalPoint);
 
-                int result = cafeconUserMapper.updatePoint(user);
+                int result = cafeconUserMapper.updatePoint(user2);
 
                 if(result == 1) {
 //                    Goods goods = cafeConMapper.getGoodsPriceData(coupon.getGoodsCode());
