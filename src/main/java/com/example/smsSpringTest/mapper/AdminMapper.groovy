@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.entity.PhoneNum
-import com.example.smsSpringTest.entity.UserProfile
+import com.example.smsSpringTest.entity.FormMailAdminEntity
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser
@@ -154,7 +154,7 @@ interface AdminMapper {
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
-    UserProfile userProfile(@Param("userId") String userId)
+    FormMailAdminEntity userProfile(@Param("userId") String userId)
 
 //    // 이름이 일치할때 그 회원의 모든 db값 반환
 //    @Select("""

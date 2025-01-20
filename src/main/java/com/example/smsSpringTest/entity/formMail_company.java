@@ -46,7 +46,7 @@ public class formMail_company {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserProfile mid;
+    private FormMailAdminEntity mid;
 
     @Column(name="survey_type")
     @JsonProperty("surveyType")

@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.model.response;
 
 import com.example.smsSpringTest.entity.PhoneNum;
-import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.entity.FormMailAdminEntity;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.findUser;
 import com.example.smsSpringTest.model.FormMailAdmin;
@@ -24,10 +24,10 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AdminResponse extends ApiResponse{
 
-    private UserProfile userProfile;
+    private FormMailAdminEntity formMailAdminEntity;
     private FormMailAdmin formMailAdmin;
     private User user;
-    private List<UserProfile> userList;
+    private List<FormMailAdminEntity> userList;
     private List<FormMailAdmin> adminList;
     private String position;
     private String rName;

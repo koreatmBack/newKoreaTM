@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.entity.UserProfile
+import com.example.smsSpringTest.entity.FormMailAdminEntity
 import com.example.smsSpringTest.model.ad.fmAd
 import com.example.smsSpringTest.model.common.RefToken
 import org.apache.ibatis.annotations.Delete
@@ -228,7 +228,7 @@ interface CommonMapper {
         INNER JOIN formmail_admin_token at on am.user_id = at.user_id
         WHERE am.user_id = #{userId}
     """)
-    UserProfile getFrontUserProfile(@Param("userId") String userId)
+    FormMailAdminEntity getFrontUserProfile(@Param("userId") String userId)
 
     // 이메일 인증번호 테이블 전체 비우기 (자정에 실행시킬 예정)
     @Delete("""

@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.service;
 
-import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.entity.FormMailAdminEntity;
 import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
@@ -57,24 +57,19 @@ public class formMail_adminService {
     // 회원 등록
     @Transactional
     public ApiResponse signUp(FormMailAdmin admin) throws Exception {
-        log.info("USER = ? " + admin);
+        log.info("admin = ? " + admin);
         ApiResponse apiResponse = new ApiResponse();
 
         try{
-            // 폼메일, 고알바에서 사용중인 id는 사용 불가
 
-            // 잡사이트에서 체크
-            int jobCheckId = jobUserMapper.checkId(admin.getUserId());
 
             // 폼메일에서 체크
             int formCheckId = jobUserMapper.dupFormMailIdCheck(admin.getUserId());
 
-            // 카페콘에서 체크
-            int cafeconCheckId = cafeconUserMapper.checkId(admin.getUserId());
 
-            if(jobCheckId == 1 || formCheckId == 1 || cafeconCheckId == 1) {
+            if(formCheckId == 1) {
                 apiResponse.setCode("E002");
-                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
+                apiResponse.setMessage("(폼메일) 이미 사용중인 ID입니다.");
                 return apiResponse;
             }
 
@@ -106,7 +101,7 @@ public class formMail_adminService {
 
     // jwt 로그인
     @Transactional
-    public AdminResponse logIn(UserProfile user) throws Exception {
+    public AdminResponse logIn(FormMailAdminEntity user) throws Exception {
 
         AdminResponse adminResponse = new AdminResponse();
 
@@ -140,7 +135,7 @@ public class formMail_adminService {
                 if(isMatchPwd){
                     // 입력한 비밀번호와 등록된 비밀번호가 같을때
                 try {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPwd);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("ADMIN:"+ userId, userPwd);
                     Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
                     log.info("authenticationToken = " + authenticationToken);
                     log.info("authentication = " + authentication);
@@ -255,7 +250,7 @@ public class formMail_adminService {
     //jwt 로그아웃 -> 로그아웃시 리프레쉬 토큰, 해당 쿠키도 삭제
     public ApiResponse logout() throws Exception {
         ApiResponse apiResponse = new ApiResponse();
-        UserProfile user = new UserProfile();
+        FormMailAdminEntity user = new FormMailAdminEntity();
 
         Cookie cookies[] = request.getCookies();
         String accessToken = "";

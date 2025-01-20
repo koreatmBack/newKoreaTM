@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.cafecon.CafeUser;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
+import com.example.smsSpringTest.service.CustomUserDetailsService;
 import com.example.smsSpringTest.service.SmsService;
 import com.example.smsSpringTest.service.cafecon.CafeconUserService;
 import com.example.smsSpringTest.service.jobsite.jobsite_userService;
@@ -29,6 +30,7 @@ public class CafeconUserController {
     private final jobsite_userService jobsiteUserService;
     private final CafeconUserService cafeconUserService;
     private final SmsService smsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     // 카페콘 연락처 본인인증 (문자 전송)
     @PostMapping("/cert/sms")
@@ -60,6 +62,7 @@ public class CafeconUserController {
     // 카페콘 로그인
     @PostMapping("/login")
     public CafeconResponse cafeconLogin(@RequestBody CafeUser user) throws Exception {
+
         return cafeconUserService.cafeconLogin(user);
     }
 

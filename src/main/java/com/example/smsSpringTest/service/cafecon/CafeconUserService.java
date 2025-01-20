@@ -52,18 +52,11 @@ public class CafeconUserService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            // 폼메일, 고알바에서 사용중인 id는 사용 불가
-
-            // 잡사이트에서 체크
-            int jobCheckId = jobUserMapper.checkId(user.getUserId());
-
-            // 폼메일에서 체크
-            int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
 
             // 카페콘에서 체크
             int cafeconCheckId = cafeconUserMapper.checkId(user.getUserId());
 
-            if(jobCheckId == 1 || formCheckId == 1 || cafeconCheckId == 1) {
+            if(cafeconCheckId == 1) {
                 apiResponse.setCode("E002");
                 apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
                 return apiResponse;
@@ -102,16 +95,11 @@ public class CafeconUserService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            // 잡사이트에서 체크
-            int jobCheckId = jobUserMapper.checkId(user.getUserId());
-
-            // 폼메일에서 체크
-            int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
 
             // 카페콘에서 체크
             int cafeconCheckId = cafeconUserMapper.checkId(user.getUserId());
 
-            if(jobCheckId == 0 && formCheckId == 0 && cafeconCheckId == 0) {
+            if(cafeconCheckId == 0) {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("사용 가능한 ID입니다.");
             } else {
@@ -142,7 +130,7 @@ public class CafeconUserService {
             if(isMatchPwd) {
                 // 비밀번호 일치
                 try {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPwd);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("CAFECON:"+userId, userPwd);
                     Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
                     log.info("authenticationToken = " + authenticationToken);
                     log.info("authentication = " + authentication);
@@ -258,7 +246,6 @@ public class CafeconUserService {
                 cafeconResponse.setCode("E005");
                 cafeconResponse.setMessage("로그인 실패, 로그인 정보가 일치하지 않습니다.");
             }
-
 
         } catch (Exception e) {
             log.info("로그인 중 예외 발생: {}", e.getMessage(), e);

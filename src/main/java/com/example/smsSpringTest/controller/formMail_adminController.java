@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.entity.FormMailAdminEntity;
 import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.User;
@@ -47,7 +47,7 @@ public class formMail_adminController {
 
     // 회원 로그인
     @PostMapping("/login")
-    public AdminResponse login(@RequestBody UserProfile user) throws Exception {
+    public AdminResponse login(@RequestBody FormMailAdminEntity user) throws Exception {
 
         AdminResponse adminResponse = new AdminResponse();
 

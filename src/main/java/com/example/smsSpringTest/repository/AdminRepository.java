@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.repository;
 
-import com.example.smsSpringTest.entity.UserProfile;
+import com.example.smsSpringTest.entity.FormMailAdminEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * comment : JPA 관리자 조회 Repository (JWT 용)
  */
 
-public interface AdminRepository extends JpaRepository<UserProfile, Long> {
+public interface AdminRepository extends JpaRepository<FormMailAdminEntity, Long> {
 
-    Optional<UserProfile> findByUserId(String userId);
+    Optional<FormMailAdminEntity> findByUserId(String userId);
 }

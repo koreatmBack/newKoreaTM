@@ -21,7 +21,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Entity
 @Table(name = "formmail_admin")
-public class UserProfile {
+public class FormMailAdminEntity {
 
     @Id
     @Column(name = "user_id")
