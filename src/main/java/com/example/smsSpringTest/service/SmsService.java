@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -361,8 +362,16 @@ public class SmsService {
 
             con.setRequestProperty("User-Agent", userAgent);
 
+            String site = null;
+            if(StringUtils.hasText(cert.getSite())){
+                // 값이 있으면 카페콘
+                site = "카페콘";
+            } else {
+                site = "고알바";
+            }
+
             String randomNumber = randomNumber();
-            String originMsg = String.format("[(주)고알바] 인증번호 [%s]를 입력해주세요. 사칭/전화사기에 주의하세요.", randomNumber);
+            String originMsg = String.format("[(주)%s] 인증번호 [%s]를 입력해주세요. 사칭/전화사기에 주의하세요.",site ,randomNumber);
             String originSphone1 = "1644";
             String originSphone2 = "4223";
 //            log.info("rnd num = "+ randomNumber);

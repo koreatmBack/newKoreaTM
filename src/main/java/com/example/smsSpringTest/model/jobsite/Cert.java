@@ -21,5 +21,6 @@ public class Cert {
     private String email;
     private String emailCode;
 
+    private String site; // 카페콘인지 고알바인지 (문자에 포함할 내용)
     private String managerName; // 카페콘에서 사용할 유저이름 ( 담당자명 )
 }
