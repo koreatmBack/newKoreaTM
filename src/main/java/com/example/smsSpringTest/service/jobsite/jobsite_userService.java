@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.service.jobsite;
 
 import com.example.smsSpringTest.mapper.AdMapper;
+import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobCommonMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
@@ -56,6 +57,7 @@ public class jobsite_userService {
     private final JobUserMapper jobUserMapper;
     private final JobCommonMapper commonMapper;
     private final AdMapper adMapper;
+    private final CafeconUserMapper cafeconUserMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -276,6 +278,22 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            // 폼메일, 카페콘에서 사용중인 id는 사용 불가
+
+            // 잡사이트에서 체크
+            int jobCheckId = jobUserMapper.checkId(user.getUserId());
+
+            // 폼메일에서 체크
+            int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
+
+            // 카페콘에서 체크
+            int cafeconCheckId = cafeconUserMapper.checkId(user.getUserId());
+
+            if(jobCheckId == 1 || formCheckId == 1 || cafeconCheckId == 1) {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
+                return apiResponse;
+            }
 
             String userId = null;
             String userPwd = null;
@@ -756,12 +774,15 @@ try {
             // 폼메일에서 체크
             int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
 
-            if(jobCheckId == 0 && formCheckId == 0) {
+            // 카페콘에서 체크
+            int cafeconCheckId = cafeconUserMapper.checkId(user.getUserId());
+
+            if(jobCheckId == 0 && formCheckId == 0 && cafeconCheckId == 0) {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("사용 가능한 ID입니다.");
             } else {
                 apiResponse.setCode("E002");
-                apiResponse.setMessage("(폼메일, 잡사이트) 이미 사용중인 ID입니다.");
+                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
             }
         } catch (Exception e) {
             apiResponse.setCode("E001");

@@ -35,4 +35,7 @@ public class CafeconCommonController {
     public ApiResponse reissuAccessToken() throws Exception {
         return cafeconCommonService.reissuAccessToken();
     }
+
+    
+
 }

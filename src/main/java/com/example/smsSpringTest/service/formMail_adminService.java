@@ -3,6 +3,8 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.entity.UserProfile;
 import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
+import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
+import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
@@ -42,6 +44,8 @@ public class formMail_adminService {
 
     private final CommonMapper commonMapper;
     private final AdminMapper adminMapper;
+    private final JobUserMapper jobUserMapper;
+    private final CafeconUserMapper cafeconUserMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final HttpServletResponse response;
@@ -57,10 +61,24 @@ public class formMail_adminService {
         ApiResponse apiResponse = new ApiResponse();
 
         try{
-            // id 중복체크 ( 값이 0 -> 중복 없음 )
-            int dupJobsiteIdCheck = adminMapper.dupJobsiteIdCheck(admin.getUserId());
-            log.info("잡사이트id와 중복 값 = " + dupJobsiteIdCheck);
-            if(dupJobsiteIdCheck == 0) {
+            // 폼메일, 고알바에서 사용중인 id는 사용 불가
+
+            // 잡사이트에서 체크
+            int jobCheckId = jobUserMapper.checkId(admin.getUserId());
+
+            // 폼메일에서 체크
+            int formCheckId = jobUserMapper.dupFormMailIdCheck(admin.getUserId());
+
+            // 카페콘에서 체크
+            int cafeconCheckId = cafeconUserMapper.checkId(admin.getUserId());
+
+            if(jobCheckId == 1 || formCheckId == 1 || cafeconCheckId == 1) {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
+                return apiResponse;
+            }
+
+
                 // id 중복 없음
 
                 // 비밀번호 암호화
@@ -75,11 +93,7 @@ public class formMail_adminService {
                     apiResponse.setCode("E003");
                     apiResponse.setMessage("회원 등록 실패 !!");
                 }
-            } else {
-                //id 중복 있음
-                apiResponse.setCode("E002");
-                apiResponse.setMessage("등록 불가 ! 이미 jobsite에서 사용중인 ID입니다.");
-            }
+
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage("ERROR!!! Id와 pw를 다시 입력하세요.");

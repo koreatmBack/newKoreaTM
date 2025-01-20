@@ -52,6 +52,23 @@ public class CafeconUserService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            // 폼메일, 고알바에서 사용중인 id는 사용 불가
+
+            // 잡사이트에서 체크
+            int jobCheckId = jobUserMapper.checkId(user.getUserId());
+
+            // 폼메일에서 체크
+            int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
+
+            // 카페콘에서 체크
+            int cafeconCheckId = cafeconUserMapper.checkId(user.getUserId());
+
+            if(jobCheckId == 1 || formCheckId == 1 || cafeconCheckId == 1) {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
+                return apiResponse;
+            }
+
             String userPwd = user.getUserPwd();
             // 입력한 비밀번호 암호화
             user.setUserPwd(passwordEncoder.encode(userPwd));
@@ -86,14 +103,20 @@ public class CafeconUserService {
 
         try {
             // 잡사이트에서 체크
-            int dupChkId = cafeconUserMapper.checkId(user.getUserId());
+            int jobCheckId = jobUserMapper.checkId(user.getUserId());
 
-            if(dupChkId == 0) {
+            // 폼메일에서 체크
+            int formCheckId = jobUserMapper.dupFormMailIdCheck(user.getUserId());
+
+            // 카페콘에서 체크
+            int cafeconCheckId = cafeconUserMapper.checkId(user.getUserId());
+
+            if(jobCheckId == 0 && formCheckId == 0 && cafeconCheckId == 0) {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("사용 가능한 ID입니다.");
             } else {
-                apiResponse.setCode("C003");
-                apiResponse.setMessage("이미 사용중인 ID입니다.");
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
             }
         } catch (Exception e) {
             apiResponse.setCode("E001");
@@ -439,6 +462,7 @@ public class CafeconUserService {
                 // 비어있지 않을 때
                 int totalPages = (int) Math.ceil((double) totalCount / size);
                 cafeconResponse.setTotalPages(totalPages);
+                cafeconResponse.setTotalCount(totalCount);
                 cafeconResponse.setCode("C000");
                 cafeconResponse.setMessage("잡사이트 회원 전체 조회 성공");
             } else {
