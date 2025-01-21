@@ -367,9 +367,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/cafecon/user/cert/code" , "/v1/cafecon/user/cert/code"
                 , "/api/v1/cafecon/user/join" , "/v1/cafecon/user/join"
                 , "/api/v1/cafecon/user/login" , "/v1/cafecon/user/login"
-                , "/api/v1/cafecon/user/change/pwd" , "/v1/cafecon/user/change/pwd"
-                , "/api/v1/cafecon/user/edit" , "/v1/cafecon/user/edit"
-                , "/api/v1/cafecon/user/update/point" , "/v1/cafecon/user/update/point"
+//                , "/api/v1/cafecon/user/change/pwd" , "/v1/cafecon/user/change/pwd"
+//                , "/api/v1/cafecon/user/edit" , "/v1/cafecon/user/edit"
+//                , "/api/v1/cafecon/user/update/point" , "/v1/cafecon/user/update/point"
                 , "/api/v1/cafecon/user/check/id" , "/v1/cafecon/user/check/id"
                 , "/api/v1/cafecon/common/exper_cookie" , "/v1/cafecon/common/exper_cookie"
         };
