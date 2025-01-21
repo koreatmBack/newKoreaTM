@@ -198,15 +198,14 @@ public class CafeconCommonService {
         String userId = bizApi.getUserId();
         String memo = bizApi.getMemo();
         log.info("bizApi :: " + bizApi);
-//        int userPoint = cafeConMapper.getCompUserPoint(bizApi);
-//        int realPrice = commonMapper.getItemPrice(bizApi);
-// 2025-01-16 : 나중에 카페콘 서비스화하면 가격 비교는 제외해야함!!!! (프론트에서 비교)
+        int originUserPoint = cafeconUserMapper.getUserPoint(userId);
+        int originRealPrice = bizApi.getRealPrice();
 
-//        if(realPrice > userPoint) {
-//            couponResponse.setCode("E001");
-//            couponResponse.setMessage("포인트가 부족합니다.");
-//
-//        } else {
+        if(originRealPrice > originUserPoint) {
+            couponResponse.setCode("E001");
+            couponResponse.setMessage("포인트가 부족합니다.");
+
+        } else {
 
             String trId = cafeconCommonMapper.getTrId();
 //            String trId = cafeConMapper.localGetTrId();
@@ -390,7 +389,7 @@ public class CafeconCommonService {
                 couponResponse.setMessage("오류가 발생하였습니다.");
                 log.info(e.getMessage());
             }
-//        }
+        }
 
         return couponResponse;
     }
