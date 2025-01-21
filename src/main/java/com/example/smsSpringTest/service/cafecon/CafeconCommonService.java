@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,6 +49,13 @@ public class CafeconCommonService {
     private final HttpServletRequest request;
     private final CafeconCommonMapper cafeconCommonMapper;
     private final CafeconUserMapper cafeconUserMapper;
+
+    @Value("${biz.auth-code}")
+    private String authCode;
+    @Value("${biz.auth-token}")
+    private String authToken;
+    @Value("${biz.client-id}")
+    private String clientId;
 
     // access 토큰 재생성 -> 쿠키에 다시 담아주기 ( 쿠키 갱신하는법 )
     public ApiResponse reissuAccessToken() throws Exception {
@@ -229,8 +237,8 @@ public class CafeconCommonService {
             HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
 
             bizApi.setApiCode("0204");
-            bizApi.setCustomAuthCode("REALd6f625bd88904490938d49ebb9687a3b");
-            bizApi.setCustomAuthToken("fTy%2Bx%2FJCLaWNusNPs07%2F%2Fw%3D%3D");
+            bizApi.setCustomAuthCode(authCode);
+            bizApi.setCustomAuthToken(authToken);
             bizApi.setDevYn("N");
             bizApi.setGoodsCode(bizApi.getGoodsCode());
             bizApi.setTrId(trId);
@@ -243,7 +251,7 @@ public class CafeconCommonService {
 //            bizApi.setBannerId("202308010243647");
             bizApi.setTemplateId("202403050247761");
             bizApi.setBannerId("202403050282744");
-            bizApi.setBizId("millinien@naver.com");
+            bizApi.setBizId(clientId);
             bizApi.setGubun("N");
             bizApi.setRevInfoYn("N");
 
@@ -467,10 +475,10 @@ public class CafeconCommonService {
             String jsonDto = "";
 
             bizApi.setApiCode("0202");
-            bizApi.setCustomAuthCode("REALd6f625bd88904490938d49ebb9687a3b");
-            bizApi.setCustomAuthToken("fTy%2Bx%2FJCLaWNusNPs07%2F%2Fw%3D%3D");
+            bizApi.setCustomAuthCode(authCode);
+            bizApi.setCustomAuthToken(authToken);
             bizApi.setDevYn("N");
-            bizApi.setBizId("millinien@naver.com");
+            bizApi.setBizId(clientId);
 
             String uri = "https://bizapi.giftishow.com/bizApi/cancel" +
                     "?api_code=" + bizApi.getApiCode() +
@@ -582,8 +590,8 @@ public class CafeconCommonService {
         String userId = bizApi.getUserId();
 
         bizApi.setApiCode("0201");
-        bizApi.setCustomAuthCode("REALd6f625bd88904490938d49ebb9687a3b");
-        bizApi.setCustomAuthToken("fTy%2Bx%2FJCLaWNusNPs07%2F%2Fw%3D%3D");
+        bizApi.setCustomAuthCode(authCode);
+        bizApi.setCustomAuthToken(authToken);
         bizApi.setDevYn("N");
         bizApi.setTrId(coupon.getTrId());
 
