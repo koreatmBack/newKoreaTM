@@ -224,10 +224,10 @@ public class CafeconCommonService {
             bizApi.setPhoneNo(sendPhone);
             bizApi.setMmsTitle("기프티콘 전송");
             bizApi.setMmsMsg("이용해 주셔서 감사합니다.");
-            bizApi.setTemplateId("202308010219374");
-            bizApi.setBannerId("202308010243647");
-//            bizApi.setTemplateId("202403050247761");
-//            bizApi.setBannerId("202403050282744");
+//            bizApi.setTemplateId("202308010219374");
+//            bizApi.setBannerId("202308010243647");
+            bizApi.setTemplateId("202403050247761");
+            bizApi.setBannerId("202403050282744");
             bizApi.setBizId("millinien@naver.com");
             bizApi.setGubun("N");
             bizApi.setRevInfoYn("N");
