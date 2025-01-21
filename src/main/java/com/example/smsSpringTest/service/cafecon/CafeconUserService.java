@@ -322,6 +322,33 @@ public class CafeconUserService {
         return apiResponse;
     }
 
+    // 입력한 비밀번호가 db에 저장된 암호화 비밀번호와 일치하는지
+    public ApiResponse checkUserPwd(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            // 입력받은 비밀번호
+            String userPwd = user.getUserPwd();
+
+            // 암호화된 비밀번호 체크
+            String dupPwd = cafeconUserMapper.dupPwd(user);
+
+            // 비밀번호 일치하는지 검증
+            boolean isMatchPwd = passwordEncoder.matches(userPwd, dupPwd);
+            if(isMatchPwd) {
+                // 일치
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("일치");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("불일치");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
 
     // 카페콘 회원 비밀번호 변경
     public ApiResponse changePwd(CafeUser user) throws Exception {

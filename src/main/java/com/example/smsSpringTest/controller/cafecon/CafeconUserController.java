@@ -72,6 +72,12 @@ public class CafeconUserController {
         return cafeconUserService.cafeconLogout();
     }
 
+    // DB에 저장된 비밀번호와 일치하는지 체크
+    @GetMapping("/check/pwd")
+    public ApiResponse checkUserPwd(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.checkUserPwd(user);
+    }
+
     // 카페콘 비밀번호 변경
     @PutMapping("/change/pwd")
     public ApiResponse changePwd(@RequestBody CafeUser user) throws Exception {
@@ -84,7 +90,7 @@ public class CafeconUserController {
         return cafeconUserService.cafeconUserUpdate(user);
     }
 
-    // 카페콘 회원 포인트 수정
+    // 카페콘 회원 포인트 수정 ( 관리자가 지급하는 것 )
     @PutMapping("/update/point")
     public ApiResponse updatePoint(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.updatePoint(user);
