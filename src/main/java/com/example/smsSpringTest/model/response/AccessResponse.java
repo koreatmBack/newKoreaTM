@@ -19,5 +19,5 @@ import lombok.NoArgsConstructor;
 public class AccessResponse extends ApiResponse{
 
     private int limit;  // 쿠키 (access토큰) 남은시간 반환하기
-
+    private int point;
 }

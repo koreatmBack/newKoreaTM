@@ -100,11 +100,26 @@ public class CafeconCommonService {
                 accessResponse.setMessage("쿠키가 없습니다. 로그인이 필요합니다.");
                 return accessResponse;
             }
+            String userId="";
+            if(jwtTokenProvider.validateToken(cookieToken).equals("ACCESS")){
+                //AccessToken에서 authentication 가져오기
+                Authentication authentication = jwtTokenProvider.getAuthentication(cookieToken);
+                userId = authentication.getName();
+                log.info("id = " + userId);
+
+
+            int point = cafeconUserMapper.getUserPoint(userId);
 
             Long limit = jwtTokenProvider.getExpiration(cookieToken) / 1000; // 초로 변환
-            accessResponse.setCode("C000");
-            accessResponse.setMessage(Math.toIntExact(limit) + "초 남았습니다.");
-            accessResponse.setLimit(Math.toIntExact(limit));
+
+                accessResponse.setCode("C000");
+                accessResponse.setPoint(point);
+                accessResponse.setMessage(Math.toIntExact(limit) + "초 남았습니다.");
+                accessResponse.setLimit(Math.toIntExact(limit));
+            } else {
+                accessResponse.setCode("E001");
+                accessResponse.setMessage("쿠키가 유효하지 않습니다!!");
+            }
         } catch (Exception e){
             accessResponse.setCode("E001");
             accessResponse.setMessage("error!!");
