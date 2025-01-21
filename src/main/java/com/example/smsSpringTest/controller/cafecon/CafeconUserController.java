@@ -73,7 +73,7 @@ public class CafeconUserController {
     }
 
     // DB에 저장된 비밀번호와 일치하는지 체크
-    @GetMapping("/check/pwd")
+    @PostMapping("/check/pwd")
     public ApiResponse checkUserPwd(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.checkUserPwd(user);
     }
