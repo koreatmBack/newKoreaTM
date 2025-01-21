@@ -34,4 +34,6 @@ public class CafeUser {
 
     private String role;
     private String userNewPwd; // 새로운 비밀번호 (비밀번호 변경용)
+
+    private String logType; // 관리자 지급인지(AP) , 관리자 차감인지 (AD)
 }

@@ -5,6 +5,7 @@ import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.cafecon.CafeUser;
+import com.example.smsSpringTest.model.cafecon.PointLog;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.ApiResponse;
@@ -428,14 +429,65 @@ public class CafeconUserService {
     public ApiResponse updatePoint(CafeUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {
-            int updatePoint = cafeconUserMapper.updatePoint(user);
-            if(updatePoint == 1) {
-                apiResponse.setCode("C000");
-                apiResponse.setMessage("포인트 수정 완료");
-            } else {
-                apiResponse.setCode("C003");
-                apiResponse.setMessage("포인트 수정 실패");
+
+            // AP -> 관리자가 지급,
+            // AD -> 관리자가 차감
+
+            if(!StringUtils.hasText(user.getLogType())){
+                // 만약 로그 타입이 정해지지 않았다면,
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("지급 or 차감 (logType) 정해주세요.");
+                return apiResponse;
             }
+
+            int point = user.getPoint(); // 지급 or 차감하고자 하는 포인트
+            int currPoint = cafeconUserMapper.getUserPoint(user.getUserId()); // 현재(수정 전) 회원 포인트
+
+                String logType = "";
+                String gubun = "";
+                if("지급".equals(user.getLogType())){
+                    // 관리자 지급일때
+                    logType = "AP";
+                    gubun = "P";
+                    currPoint += point;
+                    user.setPoint(currPoint);
+                } else {
+                    // 관리자 차감일때
+                    logType = "AD";
+                    gubun = "B";
+                    if(point > currPoint) {
+                        // 만약 차감 포인트가 현재 포인트보다 크다면
+                        apiResponse.setCode("E001");
+                        apiResponse.setMessage("차감할 보유 포인트가 부족합니다.");
+                        return apiResponse;
+                    }
+                    currPoint -= point;
+                    user.setPoint(currPoint);
+                }
+                int updatePoint = cafeconUserMapper.updatePoint(user);
+
+                if(updatePoint == 1) {
+                    // 포인트 수정 성공
+                    PointLog pointLog = new PointLog();
+                    pointLog.setUserId(user.getUserId());
+                    pointLog.setGubun(gubun);
+                    pointLog.setLogType(logType);
+                    pointLog.setPoint(point);
+                    pointLog.setCurrPoint(currPoint);
+
+                    int addCompUserPointLog = cafeCommonMapper.addCompUserPointLog(pointLog);
+                    if(addCompUserPointLog == 1) {
+                        // 포인트 로그 추가 성공
+                        apiResponse.setCode("C000");
+                        apiResponse.setMessage("포인트 수정 및 로그 추가 완료");
+                    } else {
+                        apiResponse.setCode("C003");
+                        apiResponse.setMessage("포인트 수정은 완료, 로그 추가는 실패");
+                    }
+                } else {
+                    apiResponse.setCode("C003");
+                    apiResponse.setMessage("포인트 수정 실패");
+                }
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage("Error!!!");
@@ -478,7 +530,7 @@ public class CafeconUserService {
                 cafeconResponse.setTotalPages(totalPages);
                 cafeconResponse.setTotalCount(totalCount);
                 cafeconResponse.setCode("C000");
-                cafeconResponse.setMessage("잡사이트 회원 전체 조회 성공");
+                cafeconResponse.setMessage("카페콘 회원 전체 조회 성공");
             } else {
                 // 비어 있을 때
                 cafeconResponse.setCode("E002");
