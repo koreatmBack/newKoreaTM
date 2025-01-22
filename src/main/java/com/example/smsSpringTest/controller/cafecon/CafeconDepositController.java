@@ -1,7 +1,9 @@
 package com.example.smsSpringTest.controller.cafecon;
 
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.cafecon.Deposit;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
 import com.example.smsSpringTest.service.cafecon.CafeconDepositService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,5 +33,18 @@ public class CafeconDepositController {
     public ApiResponse changeStatus(@RequestBody Deposit deposit) throws Exception {
         return cafeconDepositService.changeStatus(deposit);
     }
+
+    // 모든 회원의 입금 내역 조회
+    @PostMapping("/find/all")
+    public CafeconResponse allDepositList(@RequestBody Paging paging) throws Exception {
+        return cafeconDepositService.allDepositList(paging);
+    }
+
+    // 회원 한 명의 입금 내역 조회
+    @PostMapping("/find/one")
+    public CafeconResponse userDepositList(@RequestBody Deposit deposit) throws Exception {
+        return cafeconDepositService.userDepositList(deposit);
+    }
+
 
 }

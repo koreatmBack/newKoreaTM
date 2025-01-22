@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * author : 신기훈
  * date : 2025-01-22
@@ -26,5 +28,14 @@ public class Deposit {
     private String status;  // 상태 (충전예정, 보류확인, 충전완료)
     private String chargeRequest;   // 충전요청 (신청완료, 재신청)
     private String invoice; // 거래명세서
-    private String regDate; // 등록일
+    private LocalDateTime regDate; // 등록일
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int page;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int size;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int offset;
 }

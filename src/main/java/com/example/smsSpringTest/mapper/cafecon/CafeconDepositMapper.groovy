@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.mapper.cafecon
 
+import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.cafecon.Deposit
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
@@ -75,4 +76,40 @@ interface CafeconDepositMapper {
     """)
     Deposit findOne(@Param("deposit") Deposit deposit)
 
+    // 회원별로 입금 내역 조회
+    @Select("""
+        SELECT *
+        FROM cafecon_deposit
+        WHERE user_id = #{deposit.userId}
+        ORDER BY reg_date DESC
+        LIMIT #{deposit.size} OFFSET #{deposit.offset}
+    """)
+    List<Deposit> userDepositList(@Param("deposit") Deposit deposit)
+
+    // 회원의 입금 내역 개수
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_deposit
+        WHERE user_id = #{deposit.userId}
+        ORDER BY reg_date DESC
+    """)
+    int countUserDeposit(@Param("deposit") Deposit deposit)
+
+
+    // 모든 회원의 입금 내역 조회
+    @Select("""
+        SELECT *
+        FROM cafecon_deposit
+        ORDER BY reg_date DESC
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<Deposit> allDepositList(@Param("paging") Paging paging)
+
+    // 회원의 입금 내역 개수
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_deposit
+        ORDER BY reg_date DESC
+    """)
+    int countAllDeposit()
 }

@@ -3,10 +3,12 @@ package com.example.smsSpringTest.service.cafecon;
 import com.example.smsSpringTest.mapper.cafecon.CafeconCommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconDepositMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.cafecon.CafeUser;
 import com.example.smsSpringTest.model.cafecon.Deposit;
 import com.example.smsSpringTest.model.cafecon.PointLog;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -119,8 +121,64 @@ public class CafeconDepositService {
        return apiResponse;
    }
 
+    // 모든 회원의 입금 내역 조회
+    public CafeconResponse allDepositList(Paging paging) throws Exception {
+       CafeconResponse cafeconResponse = new CafeconResponse();
 
+       try {
+           int page = paging.getPage(); // 현재 페이지
+           int size = paging.getSize(); // 한 페이지에 표시할 수
+           int offset = (page - 1) * size; // 시작 위치
+           int totalCount = depositMapper.countAllDeposit();
 
+           paging.setOffset(offset);
+           cafeconResponse.setDepositList(depositMapper.allDepositList(paging));
+           if(cafeconResponse.getDepositList() != null && !cafeconResponse.getDepositList().isEmpty()) {
+               int totalPages = (int) Math.ceil((double) totalCount / size);
+               cafeconResponse.setTotalPages(totalPages);
+               cafeconResponse.setTotalCount(totalCount);
+               cafeconResponse.setCode("C000");
+               cafeconResponse.setMessage("모든 회원의 입금 내역 조회 성공");
+           } else {
+               cafeconResponse.setCode("E001");
+               cafeconResponse.setMessage("모든 회원의 입금 내역 조회 실패");
+           }
+       } catch (Exception e) {
+           cafeconResponse.setCode("E001");
+           cafeconResponse.setMessage("Error !!!!");
+           log.info(e.getMessage());
+       }
+       return cafeconResponse;
+    }
+
+    // 회원 한 명의 입금 내역 조회
+    public CafeconResponse userDepositList(Deposit deposit) throws Exception {
+       CafeconResponse cafeconResponse = new CafeconResponse();
+        try {
+            int page = deposit.getPage(); // 현재 페이지
+            int size = deposit.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = depositMapper.countUserDeposit(deposit);
+
+            deposit.setOffset(offset);
+            cafeconResponse.setDepositList(depositMapper.userDepositList(deposit));
+            if(cafeconResponse.getDepositList() != null && !cafeconResponse.getDepositList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                cafeconResponse.setTotalPages(totalPages);
+                cafeconResponse.setTotalCount(totalCount);
+                cafeconResponse.setCode("C000");
+                cafeconResponse.setMessage("회원 한 명의 입금 내역 조회 성공");
+            } else {
+                cafeconResponse.setCode("E001");
+                cafeconResponse.setMessage("회원 한 명의 입금 내역 조회 실패");
+            }
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("Error !!!!");
+            log.info(e.getMessage());
+        }
+       return cafeconResponse;
+    }
 
 
    // 거래번호 생성

@@ -194,7 +194,7 @@ public class CafeconUserService {
                                     log.info("cookie 유효기간 seconds = " + accessTokenExpiration / 1000);
 
                                     CafeUser user2 = cafeconUserMapper.findOneCafeconLoginUser(userId);
-                                    user2.setRole("cafecon");
+//                                    user2.setRole(user2.getRole());
                                     cafeconResponse.setUser(user2);
                                     log.info("로그인 상태에서 또 로그인시 user = " + user2);
                                     cafeconResponse.setCode("C000");
@@ -223,7 +223,7 @@ public class CafeconUserService {
                     if (token.getAccessToken() != null && !token.getAccessToken().isBlank()) {
                         // 최종적으로 Access token이 있을때
                         CafeUser user2 = cafeconUserMapper.findOneCafeconLoginUser(userId);
-                        user2.setRole("cafecon");
+//                        user2.setRole(user2.getRole());
                         log.info("로그인 성공시 user = " + user2);
                         cafeconResponse.setUser(user2);
                         String userName = user2.getManagerName();
@@ -544,7 +544,29 @@ public class CafeconUserService {
         return cafeconResponse;
     }
 
-
+    // 회원 역할 수정하기
+    public ApiResponse updateRole(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+         if(!StringUtils.hasText(user.getRole()) || !StringUtils.hasText(user.getUserId())){
+             apiResponse.setCode("E001");
+             apiResponse.setMessage("변경할 역할 혹은 아이디가 지정되지 않았습니다.");
+             return apiResponse;
+         }
+            int updateRole = cafeconUserMapper.updateRole(user);
+         if(updateRole == 1) {
+             apiResponse.setCode("C000");
+             apiResponse.setMessage("역할 변경 성공");
+         } else {
+             apiResponse.setCode("E001");
+             apiResponse.setMessage("역할 변경 실패");
+         }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage(" Error !!! ");
+        }
+        return apiResponse;
+    }
 
 
 

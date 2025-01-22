@@ -38,6 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     private final JwtTokenProvider jwtTokenProvider;
 
+
     // 실제 필터링 로직은 doFilterInternal 에 들어감
     // JWT 토큰의 인증 정보를 현재 쓰레드의 SecurityContext 에 저장 하는 역할
     @Override
@@ -127,10 +128,14 @@ public class JwtFilter extends OncePerRequestFilter {
                }
 
                if(authorities.equals("ROLE_CAFECON")){
-                   if(!isCafUserEndpoint(requestURI)){
-                       // 권한이 카페콘 유저인데, 유저 권한 없는 엔드포인트 접근
-                       hasError = true;
-                   }
+                   String userId = authentication.getName();
+                   String role = jwtTokenProvider.findUserRole(userId);
+                   log.info("role = " + role);
+
+                       if(!isCafUserEndpoint(requestURI, role)){
+                           // 권한별로 설정 ( ADMIN , USER )
+                           hasError = true;
+                       }
                }
 
                // validateToken 으로 유효성 검사
@@ -403,16 +408,34 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     // 카페콘 회원이 이용 가능한 API
-    private boolean isCafUserEndpoint(String requestURI){
+    private boolean isCafUserEndpoint(String requestURI, String role){
         AntPathMatcher pathMatcher = new AntPathMatcher();
+
+        // 관리자 역할이면 모두 접근 가능.
+        String[] adminEndpoints = {
+                "/v1/cafecon/**", "/api/v1/cafecon/**"
+        };
+
+        if("ADMIN".equals(role)) {
+            for (String adminEndpoint : adminEndpoints) {
+                if(pathMatcher.match(adminEndpoint, requestURI)) {
+                    return true;
+                }
+            }
+        }
+
         String[] userEndpoints = {
-                "/v1/cafecon/user/**", "/api/v1/cafecon/user/**",
+                "/v1/cafecon/user/edit", "/api/v1/cafecon/user/edit",
+                "/v1/cafecon/user/logout", "/api/v1/cafecon/user/logout",
+                "/v1/cafecon/user/check/pwd", "/api/v1/cafecon/user/check/pwd",
+                "/v1/cafecon/user/change/pwd", "/api/v1/cafecon/user/change/pwd",
+                "/v1/cafecon/user/edit", "/api/v1/cafecon/user/edit",
                 "/v1/cafecon/common/reissu/AccessToken", "/api/v1/cafecon/common/reissu/AccessToken",
                 "/v1/cafecon/common/goods/send", "/api/v1/cafecon/common/goods/send",
                 "/v1/cafecon/common/cancel/bizapi", "/api/v1/cafecon/common/cancel/bizapi",
                 "/v1/cafecon/common/goods/coupons", "/api/v1/cafecon/common/goods/coupons",
-                "/v1/cafecon/deposit/add", "/api/v1/cafecon/deposit/add",
-                "/v1/cafecon/deposit/change/status", "/api/v1/cafecon/deposit/change/status"
+                "/v1/cafecon/deposit/add", "/api/v1/cafecon/deposit/add"
+//                "/v1/cafecon/deposit/change/status", "/api/v1/cafecon/deposit/change/status"
 
         };
 
@@ -423,6 +446,22 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         return false;
     }
+
+//    // 카페콘 회원 -> 관리자만 이용 가능한 API
+//    private boolean isCafAdminEndpoint(String requestURI){
+//        AntPathMatcher pathMatcher = new AntPathMatcher();
+//        String[] adminEndpoints = {
+//                "/v1/cafecon/**", "/api/v1/cafecon/**"
+//
+//        };
+//
+//        for (String adminEndpoint : adminEndpoints) {
+//            if(pathMatcher.match(adminEndpoint, requestURI)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     /*
     // 토큰 조회가 필요없는 API

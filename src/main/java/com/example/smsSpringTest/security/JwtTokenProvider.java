@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.security;
 
 import com.example.smsSpringTest.mapper.CommonMapper;
+import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import io.jsonwebtoken.*;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final CommonMapper commonMapper;
+    private final CafeconUserMapper cafeconUserMapper;
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
     private static final String TYPE_ACCESS = "access";
@@ -55,9 +57,11 @@ public class JwtTokenProvider {
 
     private final Key key;
 
+
     // application.yml에서 secret 값 가져와서 key에 저장
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CommonMapper commonMapper) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CommonMapper commonMapper, CafeconUserMapper cafeconUserMapper) {
         this.commonMapper = commonMapper;
+        this.cafeconUserMapper = cafeconUserMapper;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -483,6 +487,13 @@ public class JwtTokenProvider {
         }
         return null;
     }
+
+    // 쿠키 정보 토대로, userId 획득 후 role 가져오기
+    public String findUserRole(String userId){
+        String role = cafeconUserMapper.findRole(userId);
+        return role;
+    }
+
 //    // 쿠키 삭제 -> 만료 시간 0으로 설정하면 자동 삭제됨
 //    public Cookie deleteCookie(String cookieName) {
 //        Cookie cookie = new Cookie(cookieName, null);

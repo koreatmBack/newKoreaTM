@@ -90,7 +90,7 @@ public class CafeconUserController {
         return cafeconUserService.cafeconUserUpdate(user);
     }
 
-    // 카페콘 회원 포인트 수정 ( 관리자가 지급하는 것 )
+    // 카페콘 회원 포인트 수정 ( 관리자가 지급 및 차감하는 것 )
     @PutMapping("/update/point")
     public ApiResponse updatePoint(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.updatePoint(user);
@@ -108,4 +108,9 @@ public class CafeconUserController {
         return cafeconUserService.findAllCafUser(paging);
     }
 
+    // 카페콘 역할 변경
+    @PutMapping("/change/role")
+    public ApiResponse updateRole(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.updateRole(user);
+    }
 }

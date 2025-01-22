@@ -152,6 +152,7 @@ interface CafeconUserMapper {
         , phone
         , point
         , company_name
+        , role
         FROM cafecon_user
         WHERE user_id = #{userId}
     """)
@@ -206,6 +207,7 @@ interface CafeconUserMapper {
         , manager_name
         , phone
         , point
+        , role
         , business_no
         , business_name
         , business_email
@@ -231,6 +233,7 @@ interface CafeconUserMapper {
         , manager_name
         , company_name
         , point
+        , role
         , phone
         , business_no
         , business_name
@@ -243,4 +246,21 @@ interface CafeconUserMapper {
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<CafeUser> cafeconUserList(@Param("paging") Paging paging)
+
+    // 회원 역할 체킹하기
+    @Select("""
+        SELECT role
+        FROM cafecon_user
+        WHERE user_id = #{userId}
+    """)
+    String findRole(@Param("userId") String userId)
+
+    // 회원 역할 수정하기
+    @Update("""
+        UPDATE cafecon_user
+        SET role = #{user.role}
+        WHERE user_id = #{user.userId}
+    """)
+    int updateRole(@Param("user") CafeUser user)
+
 }
