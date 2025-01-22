@@ -247,7 +247,7 @@ interface CafeconUserMapper {
     """)
     List<CafeUser> cafeconUserList(@Param("paging") Paging paging)
 
-    // 회원 역할 체킹하기
+    // 회원 권한 체킹하기
     @Select("""
         SELECT role
         FROM cafecon_user
@@ -255,7 +255,7 @@ interface CafeconUserMapper {
     """)
     String findRole(@Param("userId") String userId)
 
-    // 회원 역할 수정하기
+    // 회원 권한 수정하기
     @Update("""
         UPDATE cafecon_user
         SET role = #{user.role}

@@ -544,7 +544,7 @@ public class CafeconUserService {
         return cafeconResponse;
     }
 
-    // 회원 역할 수정하기
+    // 회원 권한 수정하기
     public ApiResponse updateRole(CafeUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {

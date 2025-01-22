@@ -108,7 +108,7 @@ public class CafeconUserController {
         return cafeconUserService.findAllCafUser(paging);
     }
 
-    // 카페콘 역할 변경
+    // 카페콘 권한 변경
     @PutMapping("/change/role")
     public ApiResponse updateRole(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.updateRole(user);

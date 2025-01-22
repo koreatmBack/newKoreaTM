@@ -28,7 +28,7 @@ public class CafeconDepositController {
         return cafeconDepositService.addDepositInfo(deposit);
     }
 
-    // 상태 변경하기 (보류확인 or 충전완료)
+    // 입금 상태 변경하기 (보류확인 or 충전완료)
     @PutMapping("/change/status")
     public ApiResponse changeStatus(@RequestBody Deposit deposit) throws Exception {
         return cafeconDepositService.changeStatus(deposit);
