@@ -410,7 +410,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/cafecon/common/reissu/AccessToken", "/api/v1/cafecon/common/reissu/AccessToken",
                 "/v1/cafecon/common/goods/send", "/api/v1/cafecon/common/goods/send",
                 "/v1/cafecon/common/cancel/bizapi", "/api/v1/cafecon/common/cancel/bizapi",
-                "/v1/cafecon/common/goods/coupons", "/api/v1/cafecon/common/goods/coupons"
+                "/v1/cafecon/common/goods/coupons", "/api/v1/cafecon/common/goods/coupons",
+                "/v1/cafecon/deposit/add", "/api/v1/cafecon/deposit/add",
+                "/v1/cafecon/deposit/change/status", "/api/v1/cafecon/deposit/change/status"
 
         };
 
