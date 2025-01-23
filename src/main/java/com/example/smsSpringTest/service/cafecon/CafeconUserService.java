@@ -199,7 +199,7 @@ public class CafeconUserService {
                                     cafeconResponse.setUser(user2);
                                     log.info("로그인 상태에서 또 로그인시 user = " + user2);
                                     cafeconResponse.setCode("C000");
-                                    String userName = jobUserMapper.userName(userId);
+                                    String userName = user2.getManagerName();
                                     cafeconResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
                                             accessTokenExpiration/1000 + "초 남았습니다.");
                                     return cafeconResponse;
