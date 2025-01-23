@@ -48,4 +48,6 @@ public class CafeUser {
 
     private String searchType;  // 검색 타입
     private String searchKeyword; // 검색어
+    private String startDate;
+    private String endDate;
 }

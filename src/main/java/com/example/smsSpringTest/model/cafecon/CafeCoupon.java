@@ -31,5 +31,5 @@ public class CafeCoupon {
     private String memo;
 
     private int realPrice; // 우리가 측정한 실제 결제금액
-    private String discountPrice; // 우리가 결제한 할인된 금액
+    private int discountPrice; // 우리가 결제한 할인된 금액
 }

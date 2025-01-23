@@ -341,7 +341,9 @@ public class CafeconCommonService {
                     if(result == 1) {
                         int realPrice = getRealPrice;
                         int userPoint = cafeconUserMapper.getUserPoint(userId);
-                        int remaining = userPoint - realPrice;
+//                        int remaining = userPoint - realPrice;
+                        int discountPrice = bizApi.getDiscountPrice();
+                        int remaining = userPoint - discountPrice;
                         CafeUser cafeUser = new CafeUser();
                         cafeUser.setUserId(userId);
                         cafeUser.setPoint(remaining);
@@ -359,7 +361,7 @@ public class CafeconCommonService {
                         pointLog.setGubun("B");
                         pointLog.setLogType(logType);
                         pointLog.setUserId(userId);
-                        pointLog.setPoint(bizApi.getRealPrice());
+                        pointLog.setPoint(discountPrice);
                         pointLog.setCurrPoint(remaining);
                         pointLog.setGoodsName(bizApi.getGoodsName());
                         pointLog.setDiscountPrice(bizApi.getDiscountPrice());
@@ -534,9 +536,10 @@ public class CafeconCommonService {
                 bizApi.setGoodsCode(coupon.getGoodsCode());
 
                 String userId = bizApi.getUserId();
-                int realPrice = coupon.getRealPrice();
+//                int realPrice = coupon.getRealPrice();
+                int discountPrice = coupon.getDiscountPrice();
                 int userPoint = cafeconUserMapper.getUserPoint(userId);
-                int totalPoint = realPrice + userPoint;
+                int totalPoint = discountPrice + userPoint;
 
                 CafeUser user2 = new CafeUser();
                 user2.setUserId(userId);
@@ -585,7 +588,7 @@ public class CafeconCommonService {
                     pointLog.setGubun("P");
                     pointLog.setLogType("CE");
                     pointLog.setUserId(userId);
-                    pointLog.setPoint(realPrice);
+                    pointLog.setPoint(discountPrice);
                     pointLog.setCurrPoint(totalPoint);
                     pointLog.setGoodsName(coupon.getGoodsName());
                     pointLog.setDiscountPrice(coupon.getDiscountPrice());

@@ -19,7 +19,7 @@ public class PointLog {
     private int currPoint;
     private String gubun;
     private String goodsName;
-    private String discountPrice;
+    private int discountPrice;
     private String logType;
     private String orderNo;
     private String regDate;
