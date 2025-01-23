@@ -311,7 +311,7 @@ interface CafeconUserMapper {
         <if test="user.searchType == 'orderNo'"> AND cp.order_no = #{user.searchKeyword}</if>
         <if test="user.searchType == 'phone'"> AND cc.phone = #{user.searchKeyword}</if>
         <if test="user.searchType == 'goodsName'"> AND cc.goods_name = #{user.searchKeyword}</if>      
-        <if test="user.startDate != null"> AND cp.reg_date BETWEEN #{user.startDate} AND #{user.endDate} </if>
+        <if test="user.startDate != null"> AND cp.reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND </if>
         ORDER BY cp.reg_date DESC
         LIMIT #{user.size} OFFSET #{user.offset}
 </script>        
