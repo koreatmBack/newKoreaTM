@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.cafecon.CafeUser;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
+import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.service.CustomUserDetailsService;
 import com.example.smsSpringTest.service.SmsService;
 import com.example.smsSpringTest.service.cafecon.CafeconUserService;
@@ -113,4 +114,11 @@ public class CafeconUserController {
     public ApiResponse updateRole(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.updateRole(user);
     }
+
+    // 회원의 쿠폰(기프티콘) 구매 내역 조회
+    @PostMapping("/find/couponList")
+    public CouponResponse userCouponList(@RequestBody Paging paging) throws Exception {
+        return cafeconUserService.userCouponList(paging);
+    }
+
 }

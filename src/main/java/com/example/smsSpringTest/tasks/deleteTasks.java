@@ -2,6 +2,7 @@ package com.example.smsSpringTest.tasks;
 
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.SmsMapper;
+import com.example.smsSpringTest.mapper.cafecon.CafeconCommonMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobCommonMapper;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.security.JwtTokenProvider;
@@ -29,6 +30,7 @@ public class deleteTasks {
     private final JobCommonMapper jobCommonMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final CommonMapper commonMapper;
+    private final CafeconCommonMapper cafeconCommonMapper;
 
     // 잡사이트 회원 만료 리프레시 토큰 삭제
     @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
@@ -54,6 +56,20 @@ public class deleteTasks {
 
             if(remainingMilliseconds == null || remainingMilliseconds <= 0) {
                 commonMapper.deleteUserToken(token.getUserId());
+            }
+        }
+    }
+
+    // 카페콘 계정 만료 리프레시 토큰 삭제
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
+    public void cafeconRefreshTokenExpirationCheck() throws Exception {
+        List<RefToken> expiredTokens = cafeconCommonMapper.getCafeconUserRefreshTokenAll();
+
+        for (RefToken token : expiredTokens) {
+            Long remainingMilliseconds = jwtTokenProvider.getExpiration(token.getRefreshToken());
+
+            if(remainingMilliseconds == null || remainingMilliseconds <= 0) {
+                cafeconCommonMapper.deleteUserToken(token.getUserId());
             }
         }
     }

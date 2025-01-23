@@ -38,4 +38,12 @@ public class Deposit {
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int offset;
+
+    // 조인 테이블로 값 추출 위한 변수들
+    private String companyName; // 업체명
+    private String managerName; // 담당자명
+    private String phone; // 회원 연락처
+
+
+
 }

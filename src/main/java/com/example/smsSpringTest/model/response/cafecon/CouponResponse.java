@@ -28,4 +28,6 @@ public class CouponResponse extends ApiResponse {
     private int point;
     private int totalPages;
 
+    private int totalCount;
+
 }

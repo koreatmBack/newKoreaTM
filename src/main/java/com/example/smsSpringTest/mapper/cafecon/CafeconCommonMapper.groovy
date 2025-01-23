@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.*
 @Mapper
 interface CafeconCommonMapper {
 
-    // 잡사이트 회원 RefreshToken 전체 조회
+    // 카페콘 회원 RefreshToken 전체 조회
     @Select("""
         SELECT user_id
                 , grant_type
@@ -36,6 +36,17 @@ interface CafeconCommonMapper {
            AND use_yn = 'Y'
     """)
     RefToken getUserRefreshTokenData(@Param("userId") String userId)
+
+    // 카페콘 계정 RefreshToken 전체 조회
+    @Select("""
+        SELECT user_id
+                , grant_type
+                , refresh_token
+                , reg_date
+                , upt_date
+          FROM formmail_user_token
+    """)
+    List<RefToken> getCafeconUserRefreshTokenAll()
 
     // RefreshToken 삭제
     @Delete("""
@@ -312,5 +323,20 @@ interface CafeconCommonMapper {
          WHERE goods_code = #{bizApi.goodsCode}
     """)
     int getItemPrice(@Param("bizApi") BizApi bizApi)
+
+//    // 관리자 -> 지급관리 탭
+//    @Select("""
+//        SELECT cd.user_id
+//              ,cu.company_name
+//              ,cu.manager_name
+//              ,cu.phone
+//              ,cd.charge_point
+//              ,cd.depositor_name
+//              ,cd.status
+//              ,cd.reg_date
+//        FROM cafecon_deposit cd
+//        JOIN cafecon_user cu ON cu.user_id = cd.user_id
+//    """)
+//    List<Deposit>
 
 }

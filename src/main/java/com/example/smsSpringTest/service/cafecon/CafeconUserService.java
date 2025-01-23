@@ -10,6 +10,7 @@ import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
+import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -568,6 +569,60 @@ public class CafeconUserService {
         return apiResponse;
     }
 
+    // 회원의 쿠폰(기프티콘) 구매 내역 조회
+    public CouponResponse userCouponList(Paging paging) throws Exception {
+        CouponResponse couponResponse = new CouponResponse();
+        try {
 
+            // 로그인 유저인지 체크
+            Cookie cookies[] = request.getCookies();
+            String accessToken = "";
+//            CafeUser user = new CafeUser();
+            String userId = "";
+            // 만약 쿠키가 있다면
+            for(Cookie cookie : cookies) {
+                if("accesstoken".equals(cookie.getName())){
+                    accessToken = cookie.getValue();
+                }
+            }
+
+            // 쿠키가 없다면
+            if(!StringUtils.hasText(accessToken)){
+                couponResponse.setCode("E401");
+                couponResponse.setMessage("로그인 상태가 아닙니다.");
+                return couponResponse;
+            }
+            // AccessToken 검증
+            if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+                //AccessToken에서 authentication 가져오기
+                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+//                user.setUserId(authentication.getName());
+//                log.info("id = " + user.getUserId());
+                userId = authentication.getName();
+            }
+            int page = paging.getPage(); // 현재 페이지
+            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int offset = (page - 1) * size; // 시작 위치
+            int totalCount = cafeconUserMapper.countUserCouponList(userId);
+
+            paging.setOffset(offset);
+
+            couponResponse.setCouponList(cafeconUserMapper.userCouponList(paging, userId));
+            if(couponResponse.getCouponList() != null && !couponResponse.getCouponList().isEmpty()){
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                couponResponse.setTotalPages(totalPages);
+                couponResponse.setTotalCount(totalCount);
+                couponResponse.setCode("C000");
+                couponResponse.setMessage("회원의 쿠폰 구매 내역 조회 성공");
+            } else {
+                couponResponse.setCode("E001");
+                couponResponse.setMessage("회원의 쿠폰 구매 내역 조회 실패");
+            }
+        } catch (Exception e){
+            couponResponse.setCode("E001");
+            couponResponse.setMessage("Error!!!");
+        }
+        return couponResponse;
+    }
 
 }

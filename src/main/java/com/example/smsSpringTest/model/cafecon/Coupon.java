@@ -1,8 +1,11 @@
 package com.example.smsSpringTest.model.cafecon;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 /**
  * author : 신기훈
@@ -12,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL) // null 값을 응답에서 제외
 public class Coupon {
 
     private String userId;
@@ -25,8 +29,8 @@ public class Coupon {
     private String couponImgUrl;
     private String goodsImgB;
     private String successYn;
-    private String regDate;
-    private String limitDate;
+    private LocalDateTime regDate;
+    private LocalDateTime limitDate;
     private String code;
     private String message;
 }

@@ -36,4 +36,13 @@ public class CafeUser {
     private String userNewPwd; // 새로운 비밀번호 (비밀번호 변경용)
 
     private String logType; // 관리자 지급인지(AP) , 관리자 차감인지 (AD)
+
+//    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+//    private int page;
+//
+//    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+//    private int size;
+//
+//    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+//    private int offset;
 }

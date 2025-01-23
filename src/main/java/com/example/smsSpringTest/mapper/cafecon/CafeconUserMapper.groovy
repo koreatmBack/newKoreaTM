@@ -2,6 +2,7 @@ package com.example.smsSpringTest.mapper.cafecon
 
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.cafecon.CafeUser
+import com.example.smsSpringTest.model.cafecon.Coupon
 import org.apache.ibatis.annotations.*
 /**
  * author : 신기훈
@@ -262,5 +263,31 @@ interface CafeconUserMapper {
         WHERE user_id = #{user.userId}
     """)
     int updateRole(@Param("user") CafeUser user)
+
+    // 회원의 쿠폰(기프티콘) 구매 내역 조회
+    @Select("""
+        SELECT user_id
+              ,tr_id
+              ,phone
+              ,goods_code
+              ,goods_name
+              ,goods_img_b
+              ,reg_date
+              ,limit_date
+        FROM cafecon_coupon
+        WHERE user_id = #{userId}
+        ORDER BY reg_date DESC
+        LIMIT #{paging.size} OFFSET #{paging.offset}
+    """)
+    List<Coupon> userCouponList(@Param("paging") Paging paging, @Param("userId") String userId)
+
+    // 회원의 쿠폰(기프티콘) 구매 내역 개수
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_coupon
+        WHERE user_id = #{userId}
+        ORDER BY reg_date DESC
+    """)
+    int countUserCouponList(@Param("userId") String userId)
 
 }
