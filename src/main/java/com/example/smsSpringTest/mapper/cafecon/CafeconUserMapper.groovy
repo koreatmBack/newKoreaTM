@@ -276,6 +276,7 @@ interface CafeconUserMapper {
               ,limit_date
         FROM cafecon_coupon
         WHERE user_id = #{userId}
+        AND success_yn = 'Y'
         ORDER BY reg_date DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
@@ -286,6 +287,7 @@ interface CafeconUserMapper {
         SELECT count(*)
         FROM cafecon_coupon
         WHERE user_id = #{userId}
+        AND success_yn = 'Y'
         ORDER BY reg_date DESC
     """)
     int countUserCouponList(@Param("userId") String userId)
