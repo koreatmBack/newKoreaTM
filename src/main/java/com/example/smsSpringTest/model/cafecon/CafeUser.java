@@ -37,12 +37,15 @@ public class CafeUser {
 
     private String logType; // 관리자 지급인지(AP) , 관리자 차감인지 (AD)
 
-//    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
-//    private int page;
-//
-//    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
-//    private int size;
-//
-//    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
-//    private int offset;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int page;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int size;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int offset;
+
+    private String searchType;  // 검색 타입
+    private String searchKeyword; // 검색어
 }

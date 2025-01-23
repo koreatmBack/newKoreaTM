@@ -121,4 +121,10 @@ public class CafeconUserController {
         return cafeconUserService.userCouponList(paging);
     }
 
+    // 회원의 포인트 내역 조회
+    @PostMapping("/find/pointLogList")
+    public CafeconResponse userPointLog(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.userPointLog(user);
+    }
+
 }

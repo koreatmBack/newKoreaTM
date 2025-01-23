@@ -3,6 +3,7 @@ package com.example.smsSpringTest.mapper.cafecon
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.cafecon.CafeUser
 import com.example.smsSpringTest.model.cafecon.Coupon
+import com.example.smsSpringTest.model.cafecon.PointLog
 import org.apache.ibatis.annotations.*
 /**
  * author : 신기훈
@@ -292,4 +293,36 @@ interface CafeconUserMapper {
     """)
     int countUserCouponList(@Param("userId") String userId)
 
+    // 회원의 포인트 지급 및 차감 내역 조회
+    @Select("""
+<script>
+        SELECT cp.reg_date
+              ,cp.order_no
+              ,cp.log_type
+              ,cc.memo
+              ,cc.phone
+              ,cc.goods_name
+              ,cp.point
+              ,cc.tr_id
+        FROM cafecon_point_log cp
+        LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
+        WHERE cp.user_id = #{user.userId}
+        <if test="user.searchType == 'memo'"> AND cc.memo = #{user.searchKeyword}</if>
+        <if test="user.searchType == 'orderNo'"> AND cp.order_no = #{user.searchKeyword}</if>
+        <if test="user.searchType == 'phone'"> AND cc.phone = #{user.searchKeyword}</if>
+        <if test="user.searchType == 'goodsName'"> AND cc.goods_name = #{user.searchKeyword}</if>      
+        ORDER BY cp.reg_date DESC
+        LIMIT #{user.size} OFFSET #{user.offset}
+</script>        
+    """)
+    List<PointLog> userPointLogList(@Param("user") CafeUser user)
+
+    // 회원의 포인트 지급 및 차감 내역 총 개수
+    @Select("""
+        SELECT COUNT(*)
+        FROM cafecon_point_log cp
+        LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
+        WHERE cp.user_id = #{user.userId}
+    """)
+    int countUserPointLogList(@Param("user") CafeUser user)
 }

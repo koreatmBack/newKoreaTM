@@ -206,24 +206,44 @@ public class CafeconCommonService {
             couponResponse.setMessage("포인트가 부족합니다.");
 
         } else {
-
+            LocalDate now = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            String date = now.format(formatter);
             String trId = cafeconCommonMapper.getTrId();
-//            String trId = cafeConMapper.localGetTrId();
+            if (trId == null) {
 
-            if(trId == null) {
-                LocalDate now = LocalDate.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-                String date = now.format(formatter);
                 String num = "00000001";
 
                 trId = "cafe_" + date + "_" + num;
 //                trId = "lafe_" + date + "_" + num;
             }
+            String orderNo = this.addOrderNo(trId);
+            // point_log 테이블에서 order_no 찾기
+            String findOrderNo = cafeconCommonMapper.findOrderNoPointLog(date);
+            log.info("findOrderNoPL = " + findOrderNo);
+            if(findOrderNo != null) {
+                // point_log 테이블에 order_no 값이 있으면
+                // coupon의 order_no와 point_log의 order_no 크기 비교하기
+                String remainCp = orderNo.replace(date, ""); // "0000000_"
+                String remainPl = findOrderNo.replace(date, "");
+                int cp = Integer.parseInt(remainCp);
+                int pl = Integer.parseInt(remainPl);
+                String newTrId = "";
+                if(pl >= cp) {
+                    // point_log의 order_no이 coupon테이블의 order_no보다 클때
+                    int nextNumber = pl + 1;
+                    String newFormat = String.format("%08d", nextNumber);
+                    // 최종 tr_id
+                    newTrId = "cafe_" + date + "_" + newFormat;
+                    trId = newTrId;
+                    orderNo = this.addOrderNo(trId);
+                }
+            }
 
             log.info("trId :: " + trId);
 
             CafeCoupon cafeCoupon = new CafeCoupon();
-            String orderNo = this.addOrderNo(trId);
+//            String orderNo = this.addOrderNo(trId);
             String sendPhone = bizApi.getPhoneNo();
             // 발신번호
             String callbackNo = bizApi.getCallbackNo();
@@ -327,14 +347,23 @@ public class CafeconCommonService {
                         cafeUser.setPoint(remaining);
                         cafeconUserMapper.updatePoint(cafeUser);
 
+                        // 만약 수신번호, 발신번호가 같으면 CP, 다르면 GI
+                        String logType = "";
+                        if(sendPhone.equals(callbackNo)){
+                            logType = "CP";
+                        } else {
+                            logType = "GI";
+                        }
+
                         PointLog pointLog = new PointLog();
                         pointLog.setGubun("B");
-                        pointLog.setLogType("CP");
+                        pointLog.setLogType(logType);
                         pointLog.setUserId(userId);
                         pointLog.setPoint(bizApi.getRealPrice());
                         pointLog.setCurrPoint(remaining);
                         pointLog.setGoodsName(bizApi.getGoodsName());
                         pointLog.setDiscountPrice(bizApi.getDiscountPrice());
+                        pointLog.setOrderNo(orderNo);
                         cafeconCommonMapper.addCompUserPointLog(pointLog);
 
                         couponResponse.setTrId(cafeCoupon.getTrId());
@@ -395,7 +424,7 @@ public class CafeconCommonService {
     }
 
     // orderNo 생성
-    private String addOrderNo(String trId) throws Exception {
+    String addOrderNo(String trId) throws Exception {
 
         String removePrefix = trId.replace("cafe_", "");
 
@@ -518,6 +547,40 @@ public class CafeconCommonService {
                 if(result == 1) {
 //                    Goods goods = cafeConMapper.getGoodsPriceData(coupon.getGoodsCode());
 
+                    LocalDate now = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                    String date = now.format(formatter);
+                    String trId = cafeconCommonMapper.getTrId();
+                    if (trId == null) {
+
+                        String num = "00000001";
+
+                        trId = "cafe_" + date + "_" + num;
+//                trId = "lafe_" + date + "_" + num;
+                    }
+                    String orderNo = this.addOrderNo(trId);
+                    // point_log 테이블에서 order_no 찾기
+                    String findOrderNo = cafeconCommonMapper.findOrderNoPointLog(date);
+                    log.info("findOrderNoPL = " + findOrderNo);
+                    if(findOrderNo != null) {
+                        // point_log 테이블에 order_no 값이 있으면
+                        // coupon의 order_no와 point_log의 order_no 크기 비교하기
+                        String remainCp = orderNo.replace(date, ""); // "0000000_"
+                        String remainPl = findOrderNo.replace(date, "");
+                        int cp = Integer.parseInt(remainCp);
+                        int pl = Integer.parseInt(remainPl);
+                        String newTrId = "";
+                        if(pl >= cp) {
+                            // point_log의 order_no이 coupon테이블의 order_no보다 클때
+                            int nextNumber = pl + 1;
+                            String newFormat = String.format("%08d", nextNumber);
+                            // 최종 tr_id
+                            newTrId = "cafe_" + date + "_" + newFormat;
+                            trId = newTrId;
+                            orderNo = this.addOrderNo(trId);
+                        }
+                    }
+
                     PointLog pointLog = new PointLog();
                     pointLog.setGubun("P");
                     pointLog.setLogType("CE");
@@ -526,6 +589,7 @@ public class CafeconCommonService {
                     pointLog.setCurrPoint(totalPoint);
                     pointLog.setGoodsName(coupon.getGoodsName());
                     pointLog.setDiscountPrice(coupon.getDiscountPrice());
+                    pointLog.setOrderNo(orderNo);
 
                     cafeconCommonMapper.addCompUserPointLog(pointLog);
                 }
@@ -634,4 +698,6 @@ public class CafeconCommonService {
 
         return couponResponse;
     }
+
+
 }

@@ -140,6 +140,26 @@ interface CafeconCommonMapper {
     """)
     String getTrId();
 
+    // point_log 테이블의 order_no이 오늘 날짜로 있는지 체킹하기
+    @Select("""
+        SELECT order_no
+        FROM cafecon_point_log
+        WHERE order_no LIKE CONCAT(#{currDate}, '%')
+        ORDER BY order_no DESC
+        LIMIT 1
+    """)
+    String findOrderNoPointLog(@Param("currDate") String date)
+
+    // cafecon_coupon 테이블의 order_no이 오늘 날짜로 있는지 체킹하기
+    @Select("""
+        SELECT order_no
+        FROM cafecon_coupon
+        WHERE order_no LIKE CONCAT(#{currDate}, '%')
+        ORDER BY order_no DESC
+        LIMIT 1
+    """)
+    String findOrderNoCoupon(@Param("currDate") String date)
+
     // 로컬 전용 tr_id 값 생성
     @Select("""
         SELECT CONCAT('lafe_', DATE_FORMAT(CURDATE(), '%Y%m%d'), '_', LPAD(CAST(SUBSTRING_INDEX(tr_id, '_', -1) AS UNSIGNED) + 1, 8, '0')) AS tr_id
@@ -236,6 +256,7 @@ interface CafeconCommonMapper {
                 , point
                 , curr_point
                 , log_type
+                , order_no
                 , use_status
                 , reg_date
                 , upt_date
@@ -247,6 +268,7 @@ interface CafeconCommonMapper {
                 , #{pointlog.point}
                 , #{pointlog.currPoint}
                 , #{pointlog.logType}
+                , #{pointlog.orderNo}
                 , 'Y'
                 , sysdate()
                 , sysdate()

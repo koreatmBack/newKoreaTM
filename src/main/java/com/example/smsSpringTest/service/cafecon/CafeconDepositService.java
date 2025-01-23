@@ -37,6 +37,7 @@ public class CafeconDepositService {
     private final CafeconCommonMapper cafeconCommonMapper;
     private final CafeconUserMapper cafeconUserMapper;
     private final CafeconDepositMapper depositMapper;
+    private final CafeconCommonService cafeconCommonService;
 
 
    // 입금 정보 등록
@@ -96,6 +97,58 @@ public class CafeconDepositService {
                    pointLog.setPoint(chargePoint); // 충전 포인트
                    pointLog.setCurrPoint(currPoint); // 지급 후 현재 포인트
                    pointLog.setLogType("AP"); // AP = 관리자 지급
+
+                   // coupon 테이블에서 orderNo 찾기
+                   LocalDate now = LocalDate.now();
+                   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                   String date = now.format(formatter);
+                   String findOrderNoCp = cafeconCommonMapper.findOrderNoCoupon(date);
+                   String orderNo = "";
+                   if(findOrderNoCp != null) {
+                       // 만약 쿠폰 테이블에 값이 있으면
+                       String findOrderNoPl = cafeconCommonMapper.findOrderNoPointLog(date);
+                       if(findOrderNoPl != null) {
+                           // 포인트 로그에도 오늘 날짜의 order_no 값이 있으면
+                           String remainCp = findOrderNoCp.replace(date, ""); // "0000000_"
+                           String remainPl = findOrderNoPl.replace(date, "");
+                           int cp = Integer.parseInt(remainCp);
+                           int pl = Integer.parseInt(remainPl);
+                           String newTrId = "";
+                           if(cp > pl) {
+                               //만약 쿠폰 테이블이 포인트로그보다 더 클때
+                               int nextNumber = cp +1;
+                               String newFormat = String.format("%08d", nextNumber);
+                               orderNo = date + newFormat; // 2025012300000005
+                           } else {
+                               // 포인트로그 테이블이 쿠폰 테이블보다 크거나 같을때
+                               int nextNumber = pl + 1;
+                               String newFormat = String.format("%08d", nextNumber);
+                               orderNo = date + newFormat; // 2025012300000005
+                           }
+                       } else {
+                           // 포인트 로그에 오늘 날짜의 order_no 값이 없으면
+                           String trId = cafeconCommonMapper.getTrId();
+                           if (trId == null) {
+
+                               String num = "00000001";
+
+                               trId = "cafe_" + date + "_" + num;
+                           }
+                           orderNo = cafeconCommonService.addOrderNo(trId);
+                       }
+                   } else {
+                       // 쿠폰 테이블에 order_no이 없으면
+                       String trId = cafeconCommonMapper.getTrId();
+                       if (trId == null) {
+
+                           String num = "00000001";
+
+                           trId = "cafe_" + date + "_" + num;
+                       }
+                       orderNo = cafeconCommonService.addOrderNo(trId);
+                   }
+
+                   pointLog.setOrderNo(orderNo);
 
                    int addPointLog = cafeconCommonMapper.addCompUserPointLog(pointLog);
                    if (addPointLog == 1) {

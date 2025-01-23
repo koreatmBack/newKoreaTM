@@ -21,6 +21,7 @@ public class PointLog {
     private String goodsName;
     private String discountPrice;
     private String logType;
+    private String orderNo;
     private String regDate;
     private String uptDate;
     private String useStatus;
@@ -29,4 +30,10 @@ public class PointLog {
     private int page;
     private int size;
     private int offset;
+
+    // 조인으로 뽑기 위함
+    private String trId;
+    private String memo;
+    private String phone;
+    private String searchType;
 }
