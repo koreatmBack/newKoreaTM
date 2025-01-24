@@ -228,13 +228,24 @@ interface CafeconUserMapper {
 
     // 회원 전체 수 조회
     @Select("""
+<script>
         SELECT count(*)
         from cafecon_user
+        WHERE 1=1
+        <if test="user.searchType == 'userId'">AND user_id = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'companyName'">AND company_name = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'managerName'">AND manager_name = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'phone'">AND phone = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'businessNo'">AND business_no = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'businessName'">AND business_name LIKE CONCAT('%', #{user.searchKeyword}, '%')  </if>
+        <if test="user.searchType == 'businessEmail'">AND business_email LIKE CONCAT('%', #{user.searchKeyword}, '%') </if>
+</script>    
     """)
-    int getUserListCount()
+    int getUserListCount(@Param("user") CafeUser user)
 
     // 전체 회원 리스트
     @Select("""
+<script>
         SELECT user_id
         , manager_name
         , company_name
@@ -250,9 +261,19 @@ interface CafeconUserMapper {
         , agree_privacy
         , agree_marketing
         FROM cafecon_user
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        WHERE 1=1
+        <if test="user.searchType == 'userId'">AND user_id = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'companyName'">AND company_name = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'managerName'">AND manager_name = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'phone'">AND phone = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'businessNo'">AND business_no = #{user.searchKeyword} </if>
+        <if test="user.searchType == 'businessName'">AND business_name LIKE CONCAT('%', #{user.searchKeyword}, '%')  </if>
+        <if test="user.searchType == 'businessEmail'">AND business_email LIKE CONCAT('%', #{user.searchKeyword}, '%')  </if>
+        ORDER BY created_at DESC
+        LIMIT #{user.size} OFFSET #{user.offset}
+</script>        
     """)
-    List<CafeUser> cafeconUserList(@Param("paging") Paging paging)
+    List<CafeUser> cafeconUserList(@Param("user") CafeUser user)
 
     // 회원 권한 체킹하기
     @Select("""
@@ -312,10 +333,10 @@ interface CafeconUserMapper {
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
         WHERE cp.user_id = #{user.userId}
-        <if test="user.searchType == 'memo'"> AND cc.memo = #{user.searchKeyword}</if>
+        <if test="user.searchType == 'memo'"> AND cc.memo LIKE CONCAT('%', #{user.searchKeyword}, '%') </if>
         <if test="user.searchType == 'orderNo'"> AND cp.order_no = #{user.searchKeyword}</if>
         <if test="user.searchType == 'phone'"> AND cc.phone = #{user.searchKeyword}</if>
-        <if test="user.searchType == 'goodsName'"> AND cc.goods_name = #{user.searchKeyword}</if>      
+        <if test="user.searchType == 'goodsName'"> AND cc.goods_name LIKE CONCAT('%', #{user.searchKeyword}, '%') </if>      
         <if test="user.startDate != null"> AND cp.reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND </if>
         ORDER BY cp.reg_date DESC
         LIMIT #{user.size} OFFSET #{user.offset}

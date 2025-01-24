@@ -105,8 +105,8 @@ public class CafeconUserController {
 
     // 카페콘 전체 회원 목록 반환
     @PostMapping("/find/all")
-    public CafeconResponse findAllCafUser(@RequestBody Paging paging) throws Exception {
-        return cafeconUserService.findAllCafUser(paging);
+    public CafeconResponse findAllCafUser(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.findAllCafUser(user);
     }
 
     // 카페콘 권한 변경

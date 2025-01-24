@@ -514,17 +514,17 @@ public class CafeconUserService {
     }
 
     // 카페콘 전체 회원 목록 조회
-    public CafeconResponse findAllCafUser(Paging paging) throws Exception {
+    public CafeconResponse findAllCafUser(CafeUser user) throws Exception {
         CafeconResponse cafeconResponse = new CafeconResponse();
 
         try {
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int page = user.getPage(); // 현재 페이지
+            int size = user.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = cafeconUserMapper.getUserListCount();
+            int totalCount = cafeconUserMapper.getUserListCount(user);
 
-            paging.setOffset(offset);
-            cafeconResponse.setCafeconUserList(cafeconUserMapper.cafeconUserList(paging));
+            user.setOffset(offset);
+            cafeconResponse.setCafeconUserList(cafeconUserMapper.cafeconUserList(user));
 //            log.info(jobUserMapper.jobsiteUserList(paging).toString());
             log.info("userResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
             if(cafeconResponse.getCafeconUserList() != null && !cafeconResponse.getCafeconUserList().isEmpty()){
