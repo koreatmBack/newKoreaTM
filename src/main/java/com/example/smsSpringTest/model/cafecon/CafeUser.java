@@ -27,6 +27,7 @@ public class CafeUser {
     private String businessName; // 사업자명
     private String businessEmail; // 계산서발행 이메일
     private String businessLicense; //사업자 등록증 첨부 url
+    private String businessLicenseName; //사업자 등록증 첨부 url
 
     private String agreeTerms; // 이용약관 동의 Y/N
     private String agreePrivacy; // 개인정보 수집 및 이용 동의 Y/N
