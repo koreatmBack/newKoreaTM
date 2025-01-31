@@ -751,7 +751,7 @@ public class CafeconUserService {
             int page = user.getPage();
             int size = user.getSize();
             int offset = (page - 1) * size;
-            int totalCount = cafeconUserMapper.countUSERChargeList(user);
+            int totalCount = cafeconUserMapper.countUserChargeList(user);
 
             user.setOffset(offset);
             cafeconResponse.setPointLogList(cafeconUserMapper.userChargeList(user));

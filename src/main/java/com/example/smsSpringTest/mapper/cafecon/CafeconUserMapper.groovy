@@ -394,5 +394,5 @@ interface CafeconUserMapper {
         WHERE user_id = #{user.userId}
         AND log_type = 'AP'
     """)
-    int countUSERChargeList(@Param("user") CafeUser user)
+    int countUserChargeList(@Param("user") CafeUser user)
 }
