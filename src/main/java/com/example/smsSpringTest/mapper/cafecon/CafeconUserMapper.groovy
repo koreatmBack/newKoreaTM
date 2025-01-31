@@ -107,7 +107,6 @@ interface CafeconUserMapper {
             , company_name
             , manager_name
             , phone
-            , address
             , business_no
             , business_name
             , business_email
@@ -115,6 +114,7 @@ interface CafeconUserMapper {
             , business_license_name
             , business_status
             , business_sector
+            , business_address
             , agree_terms
             , agree_privacy
             , agree_marketing
@@ -132,6 +132,7 @@ interface CafeconUserMapper {
             , #{user.businessLicenseName}
             , #{user.businessStatus}
             , #{user.businessSector}
+            , #{user.businessAddress}
             , #{user.agreeTerms}
             , #{user.agreePrivacy}
             , #{user.agreeMarketing}
@@ -184,7 +185,7 @@ interface CafeconUserMapper {
             <if test="user.companyName != null"> company_name = #{user.companyName}, </if>
             <if test="user.managerName != null"> manager_name = #{user.managerName}, </if>
             <if test="user.phone != null"> phone = #{user.phone}, </if>
-            <if test="user.address != null"> address = #{user.address}, </if>
+            <if test="user.businessAddress != null"> business_address = #{user.businessAddress}, </if>
             <if test="user.businessNo != null"> business_no = #{user.businessNo}, </if>
             <if test="user.businessName != null"> business_name = #{user.businessName}, </if>
             <if test="user.businessEmail != null"> business_email = #{user.businessEmail}, </if>
@@ -221,7 +222,6 @@ interface CafeconUserMapper {
         , manager_name
         , phone
         , point
-        , address
         , role
         , business_no
         , business_name
@@ -230,6 +230,7 @@ interface CafeconUserMapper {
         , business_license_name
         , business_status
         , business_sector
+        , business_address
         , agree_terms
         , agree_privacy
         , agree_marketing
@@ -264,7 +265,6 @@ interface CafeconUserMapper {
         , point
         , role
         , phone
-        , address
         , business_no
         , business_name
         , business_email
@@ -272,6 +272,7 @@ interface CafeconUserMapper {
         , business_license_name
         , business_status
         , business_sector
+        , business_address
         , agree_terms
         , agree_privacy
         , agree_marketing
