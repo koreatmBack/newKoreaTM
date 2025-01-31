@@ -112,6 +112,8 @@ interface CafeconUserMapper {
             , business_email
             , business_license
             , business_license_name
+            , business_status
+            , business_sector
             , agree_terms
             , agree_privacy
             , agree_marketing
@@ -126,6 +128,8 @@ interface CafeconUserMapper {
             , #{user.businessEmail}
             , #{user.businessLicense}
             , #{user.businessLicenseName}
+            , #{user.businessStatus}
+            , #{user.businessSector}
             , #{user.agreeTerms}
             , #{user.agreePrivacy}
             , #{user.agreeMarketing}
@@ -183,6 +187,8 @@ interface CafeconUserMapper {
             <if test="user.businessEmail != null"> business_email = #{user.businessEmail}, </if>
             <if test="user.businessLicense != null"> business_license = #{user.businessLicense}, </if>
             <if test="user.businessLicenseName != null"> business_license_name = #{user.businessLicenseName}, </if>
+            <if test="user.businessStatus != null"> business_status = #{user.businessStatus}, </if>
+            <if test="user.businessSector != null"> business_sector = #{user.businessSector}, </if>
         </set>
         WHERE user_id = #{user.userId}
 </script>
@@ -218,6 +224,8 @@ interface CafeconUserMapper {
         , business_email
         , business_license
         , business_license_name
+        , business_status
+        , business_sector
         , agree_terms
         , agree_privacy
         , agree_marketing
@@ -257,6 +265,8 @@ interface CafeconUserMapper {
         , business_email
         , business_license
         , business_license_name
+        , business_status
+        , business_sector
         , agree_terms
         , agree_privacy
         , agree_marketing
