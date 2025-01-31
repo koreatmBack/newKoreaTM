@@ -127,4 +127,9 @@ public class CafeconUserController {
         return cafeconUserService.userPointLog(user);
     }
 
+    // 회원 한 명의 충전 내역 조회
+    @PostMapping("/find/chargeList")
+    public CafeconResponse userChargeList(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.userChargeList(user);
+    }
 }

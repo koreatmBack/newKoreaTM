@@ -27,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -435,6 +436,7 @@ public class CafeconUserService {
 
             // AP -> 관리자가 지급,
             // AD -> 관리자가 차감
+            String userId = user.getUserId();
 
             if(!StringUtils.hasText(user.getLogType())){
                 // 만약 로그 타입이 정해지지 않았다면,
@@ -477,6 +479,58 @@ public class CafeconUserService {
                     pointLog.setLogType(logType);
                     pointLog.setPoint(point);
                     pointLog.setCurrPoint(currPoint);
+
+                    // coupon 테이블에서 orderNo 찾기
+                    LocalDate now = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                    String date = now.format(formatter);
+                    String findOrderNoCp = cafeCommonMapper.findOrderNoCoupon(date);
+                    String orderNo = "";
+                    if(findOrderNoCp != null) {
+                        // 만약 쿠폰 테이블에 값이 있으면
+                        String findOrderNoPl = cafeCommonMapper.findOrderNoPointLog(date);
+                        if(findOrderNoPl != null) {
+                            // 포인트 로그에도 오늘 날짜의 order_no 값이 있으면
+                            String remainCp = findOrderNoCp.replace(date, ""); // "0000000_"
+                            String remainPl = findOrderNoPl.replace(date, "");
+                            int cp = Integer.parseInt(remainCp);
+                            int pl = Integer.parseInt(remainPl);
+                            String newTrId = "";
+                            if(cp > pl) {
+                                //만약 쿠폰 테이블이 포인트로그보다 더 클때
+                                int nextNumber = cp +1;
+                                String newFormat = String.format("%08d", nextNumber);
+                                orderNo = date + newFormat; // 2025012300000005
+                            } else {
+                                // 포인트로그 테이블이 쿠폰 테이블보다 크거나 같을때
+                                int nextNumber = pl + 1;
+                                String newFormat = String.format("%08d", nextNumber);
+                                orderNo = date + newFormat; // 2025012300000005
+                            }
+                        } else {
+                            // 포인트 로그에 오늘 날짜의 order_no 값이 없으면
+                            String trId = cafeCommonMapper.getTrId();
+                            if (trId == null) {
+
+                                String num = "00000001";
+
+                                trId = "cafe_" + date + "_" + num;
+                            }
+                            orderNo = cafeconCommonService.addOrderNo(trId);
+                        }
+                    } else {
+                        // 쿠폰 테이블에 order_no이 없으면
+                        String trId = cafeCommonMapper.getTrId();
+                        if (trId == null) {
+
+                            String num = "00000001";
+
+                            trId = "cafe_" + date + "_" + num;
+                        }
+                        orderNo = cafeconCommonService.addOrderNo(trId);
+                    }
+
+                    pointLog.setOrderNo(orderNo);
 
                     int addCompUserPointLog = cafeCommonMapper.addCompUserPointLog(pointLog);
                     if(addCompUserPointLog == 1) {
@@ -688,5 +742,36 @@ public class CafeconUserService {
         }
         return cafeconResponse;
     }
+
+
+    // 회원 한 명의 충전 내역 조회
+    public CafeconResponse userChargeList(CafeUser user) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
+        try {
+            int page = user.getPage();
+            int size = user.getSize();
+            int offset = (page - 1) * size;
+            int totalCount = cafeconUserMapper.countUSERChargeList(user);
+
+            user.setOffset(offset);
+            cafeconResponse.setPointLogList(cafeconUserMapper.userChargeList(user));
+            if (cafeconResponse.getPointLogList() != null && !cafeconResponse.getPointLogList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                cafeconResponse.setTotalPages(totalPages);
+                cafeconResponse.setTotalCount(totalCount);
+                cafeconResponse.setCode("C000");
+                cafeconResponse.setMessage("회원의 충전 내역 조회 성공");
+            } else {
+                cafeconResponse.setCode("E001");
+                cafeconResponse.setMessage("회원의 충전 내역 조회 실패");
+            }
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return cafeconResponse;
+    }
+
 
 }

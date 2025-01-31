@@ -352,4 +352,26 @@ interface CafeconUserMapper {
         WHERE cp.user_id = #{user.userId}
     """)
     int countUserPointLogList(@Param("user") CafeUser user)
+
+    // 회원의 충전 내역 조회
+    @Select("""
+        SELECT reg_date
+              ,order_no
+              ,point
+        FROM cafecon_point_log
+        WHERE user_id = #{user.userId}
+        AND log_type = 'AP'
+        ORDER BY reg_date DESC
+        LIMIT #{user.size} OFFSET #{user.offset}
+    """)
+    List<PointLog> userChargeList(@Param("user") CafeUser user)
+
+    // 회원의 충전 내역 수
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_point_log
+        WHERE user_id = #{user.userId}
+        AND log_type = 'AP'
+    """)
+    int countUSERChargeList(@Param("user") CafeUser user)
 }
