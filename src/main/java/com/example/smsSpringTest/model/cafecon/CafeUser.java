@@ -31,6 +31,7 @@ public class CafeUser {
     private String businessStatus; // 업태
     private String businessSector; // 업종
     private String businessAddress; // 사업장 주소
+    private String ownerName; // 대표명
 
     private String agreeTerms; // 이용약관 동의 Y/N
     private String agreePrivacy; // 개인정보 수집 및 이용 동의 Y/N
