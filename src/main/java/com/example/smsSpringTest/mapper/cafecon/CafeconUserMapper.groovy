@@ -107,6 +107,7 @@ interface CafeconUserMapper {
             , company_name
             , manager_name
             , phone
+            , address
             , business_no
             , business_name
             , business_email
@@ -123,6 +124,7 @@ interface CafeconUserMapper {
             , #{user.companyName}
             , #{user.managerName}
             , #{user.phone}
+            , #{user.address}
             , #{user.businessNo}
             , #{user.businessName}
             , #{user.businessEmail}
@@ -182,6 +184,7 @@ interface CafeconUserMapper {
             <if test="user.companyName != null"> company_name = #{user.companyName}, </if>
             <if test="user.managerName != null"> manager_name = #{user.managerName}, </if>
             <if test="user.phone != null"> phone = #{user.phone}, </if>
+            <if test="user.address != null"> address = #{user.address}, </if>
             <if test="user.businessNo != null"> business_no = #{user.businessNo}, </if>
             <if test="user.businessName != null"> business_name = #{user.businessName}, </if>
             <if test="user.businessEmail != null"> business_email = #{user.businessEmail}, </if>
@@ -218,6 +221,7 @@ interface CafeconUserMapper {
         , manager_name
         , phone
         , point
+        , address
         , role
         , business_no
         , business_name
@@ -260,6 +264,7 @@ interface CafeconUserMapper {
         , point
         , role
         , phone
+        , address
         , business_no
         , business_name
         , business_email
