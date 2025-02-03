@@ -548,14 +548,27 @@ public class CafeconUserService {
                         }
                     } else {
                         // 쿠폰 테이블에 order_no이 없으면
-                        String trId = cafeCommonMapper.getTrId();
-                        if (trId == null) {
 
-                            String num = "00000001";
+                        // point_log 테이블에 값 있는지 체크
+                        String findOrderNoPl = cafeCommonMapper.findOrderNoPointLog(date);
+                        if(findOrderNoPl != null) {
+                            // 만약 point_log 테이블에 값이 있으면
+                            String remainPl = findOrderNoPl.replace(date, "");
+                            int pl = Integer.parseInt(remainPl);
+                            int nextNumber = pl + 1;
+                            String newFormat = String.format("%08d", nextNumber);
+                            orderNo = date + newFormat; // 2025012300000005
+                        } else {
+                            // point_log 테이블에도 값이 없음.
+                            String trId = cafeCommonMapper.getTrId();
+                            if (trId == null) {
 
-                            trId = "cafe_" + date + "_" + num;
+                                String num = "00000001";
+
+                                trId = "cafe_" + date + "_" + num;
+                                orderNo = cafeconCommonService.addOrderNo(trId);
+                            }
                         }
-                        orderNo = cafeconCommonService.addOrderNo(trId);
                     }
 
                     pointLog.setOrderNo(orderNo);
