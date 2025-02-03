@@ -346,6 +346,15 @@ interface CafeconCommonMapper {
     """)
     int getItemPrice(@Param("bizApi") BizApi bizApi)
 
+    // orderNo, userId로 tr_id 조회하기
+    @Select("""
+        SELECT tr_id
+        FROM cafecon_point_log
+        WHERE user_id = #{userId}
+        AND order_no = #{orderNo}
+    """)
+    String findTrId(@Param("userId") String userId, @Param("orderNo") String orderNo)
+
 //    // 관리자 -> 지급관리 탭
 //    @Select("""
 //        SELECT cd.user_id

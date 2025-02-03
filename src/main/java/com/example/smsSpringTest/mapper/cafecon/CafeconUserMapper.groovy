@@ -280,7 +280,7 @@ interface CafeconUserMapper {
     """)
     int countUserCouponList(@Param("userId") String userId)
 
-    // 회원의 포인트 지급 및 차감 내역 조회
+    // 회원의 쿠폰 구매, 취소, 선물 내역 조회
     @Select("""
 <script>
         SELECT cp.reg_date
@@ -294,6 +294,7 @@ interface CafeconUserMapper {
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
         WHERE cp.user_id = #{user.userId}
+        AND cp.log_type IN ('CP', 'CE' ,'GI')
         <if test="user.searchType == 'memo'"> AND cc.memo LIKE CONCAT('%', #{user.searchKeyword}, '%') </if>
         <if test="user.searchType == 'orderNo'"> AND cp.order_no = #{user.searchKeyword}</if>
         <if test="user.searchType == 'phone'"> AND cc.phone = #{user.searchKeyword}</if>
@@ -314,14 +315,15 @@ interface CafeconUserMapper {
     """)
     int countUserPointLogList(@Param("user") CafeUser user)
 
-    // 회원의 충전 내역 조회
+    // 회원의 충전 내역 조회 관리자 지급, 차감만
     @Select("""
         SELECT reg_date
               ,order_no
               ,point
+              ,log_type
         FROM cafecon_point_log
         WHERE user_id = #{user.userId}
-        AND log_type = 'AP'
+        AND log_type IN ('AP', 'AD')
         ORDER BY reg_date DESC
         LIMIT #{user.size} OFFSET #{user.offset}
     """)
@@ -332,7 +334,7 @@ interface CafeconUserMapper {
         SELECT count(*)
         FROM cafecon_point_log
         WHERE user_id = #{user.userId}
-        AND log_type = 'AP'
+        AND log_type IN ('AP', 'AD')
     """)
     int countUserChargeList(@Param("user") CafeUser user)
 
