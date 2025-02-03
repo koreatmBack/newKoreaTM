@@ -107,7 +107,7 @@ public class jobsite_userController {
         return jobsiteUserService.jobLogout();
     }
 
-    // jobsite 회원 탈퇴 ( userId, userPwd 일치해야함 )
+    // jobsite 회원 탈퇴
     @DeleteMapping("/resign")
     public ApiResponse jobResign(@RequestBody JobsiteUser user) throws Exception {
         return jobsiteUserService.jobResign(user);

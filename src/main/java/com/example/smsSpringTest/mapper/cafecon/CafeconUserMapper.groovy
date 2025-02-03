@@ -153,6 +153,7 @@ interface CafeconUserMapper {
         SELECT point
           FROM cafecon_user
          WHERE user_id = #{userId}
+         AND use_status = 'Y'
     """)
     int getUserPoint(@Param("userId") String userId)
 
@@ -178,6 +179,7 @@ interface CafeconUserMapper {
         , agree_marketing
         FROM cafecon_user
         WHERE user_id = #{userId}
+        AND use_status = 'Y'
     """)
     CafeUser findOneCafUser(@Param("userId") String userId)
 
@@ -186,7 +188,7 @@ interface CafeconUserMapper {
 <script>
         SELECT count(*)
         from cafecon_user
-        WHERE 1=1
+        WHERE use_status = 'Y'
         <if test="user.searchType == 'userId'">AND user_id = #{user.searchKeyword} </if>
         <if test="user.searchType == 'companyName'">AND company_name = #{user.searchKeyword} </if>
         <if test="user.searchType == 'managerName'">AND manager_name = #{user.searchKeyword} </if>
@@ -220,7 +222,7 @@ interface CafeconUserMapper {
         , agree_privacy
         , agree_marketing
         FROM cafecon_user
-        WHERE 1=1
+        WHERE use_status = 'Y'
         <if test="user.searchType == 'userId'">AND user_id = #{user.searchKeyword} </if>
         <if test="user.searchType == 'companyName'">AND company_name = #{user.searchKeyword} </if>
         <if test="user.searchType == 'managerName'">AND manager_name = #{user.searchKeyword} </if>

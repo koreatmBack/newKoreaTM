@@ -154,12 +154,30 @@ interface JobUserMapper {
     """)
     String dupPwd(@Param("user") JobsiteUser user);
 
+//    // 회원 탈퇴하기 (2025-02-03 부로 사용 X , 삭제 대신 상태관리로)
+//    @Delete("""
+//        DELETE FROM jobsite_user
+//        WHERE user_id = #{user.userId}
+//    """)
+//    int resignUser(@Param("user") JobsiteUser user);
+
     // 회원 탈퇴하기
-    @Delete("""
-        DELETE FROM jobsite_user
-        WHERE user_id = #{user.userId}
+    @Update("""
+        UPDATE jobsite_user
+        SET use_status = 'N'
+            ,del_date = sysdate()
+        WHERE user_id = #{userId}
     """)
-    int resignUser(@Param("user") JobsiteUser user);
+    int deleteUser(@Param("userId") String userId)
+
+    // 탈퇴한 계정인지 체크하기
+    @Select("""
+        SELECT count(*)
+        FROM jobsite_user
+        WHERE user_id = #{userId}
+        AND use_status = 'N'
+    """)
+    int delUserCheck(@Param("userId") String userId)
 
     // 회원 한명(id, 이름, 연락처) 반환
     @Select("""
@@ -344,6 +362,7 @@ interface JobUserMapper {
         , created_at
         FROM jobsite_user
         WHERE user_id = #{userId}
+        AND use_status = 'Y'
     """)
     JobsiteUser findOneJobUser(@Param("userId") String userId)
 
@@ -384,6 +403,7 @@ interface JobUserMapper {
     @Select("""
         SELECT count(*)
         from jobsite_user
+        WHERE use_status = 'Y'
     """)
     int getUserListCount()
 
@@ -403,6 +423,7 @@ interface JobUserMapper {
         , address_detail
         , created_at
         FROM jobsite_user
+        WHERE use_status = 'Y'
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<JobsiteUser> jobsiteUserList(@Param("paging") Paging paging)

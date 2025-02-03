@@ -305,6 +305,14 @@ public class jobsite_userService {
                     userPwd = user.getUserPwd();
                 }
 
+            int delUserCheck = jobUserMapper.delUserCheck(userId);
+            if(delUserCheck == 1) {
+                // 탈퇴한 id면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("탈퇴한 ID입니다.");
+                return apiResponse;
+            }
+
             user.setUserId(userId);
             user.setUserPwd(passwordEncoder.encode(userPwd));
 
@@ -369,7 +377,13 @@ public class jobsite_userService {
             String userId = user.getUserId();
             // 입력 받은 비밀번호
             String userPwd = user.getUserPwd();
-
+            int delUserCheck = jobUserMapper.delUserCheck(userId);
+            if(delUserCheck == 1) {
+                // 탈퇴한 id면
+                jobUserResponse.setCode("E001");
+                jobUserResponse.setMessage("탈퇴한 ID입니다.");
+                return jobUserResponse;
+            }
             // 암호화된 비밀번호 체크
             String dupPwd = jobUserMapper.dupPwd(user);
 
@@ -740,15 +754,15 @@ try {
 
         try {
                 // 회원 탈퇴하기
-                int resign = jobUserMapper.resignUser(user);
+                int resign = jobUserMapper.deleteUser(user.getUserId());
                 if(resign == 1) {
+                    this.jobLogout();
                     apiResponse.setCode("C000");
                     apiResponse.setMessage(" 회원 탈퇴 성공 ");
                 } else {
                     apiResponse.setCode("C003");
                     apiResponse.setMessage(" 회원 탈퇴 실패 ");
                 }
-
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage(" Error!!! ");
@@ -763,6 +777,13 @@ try {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            int delUserCheck = jobUserMapper.delUserCheck(user.getUserId());
+            if(delUserCheck == 1) {
+                // 탈퇴한 id면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("탈퇴한 ID입니다.");
+                return apiResponse;
+            }
             // 잡사이트에서 체크
             int jobCheckId = jobUserMapper.checkId(user.getUserId());
 
