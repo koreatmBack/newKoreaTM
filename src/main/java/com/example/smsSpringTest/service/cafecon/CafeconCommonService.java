@@ -588,7 +588,7 @@ public class CafeconCommonService {
                     pointLog.setGubun("P");
                     pointLog.setLogType("CE");
                     pointLog.setUserId(userId);
-                    pointLog.setTrId(trId);
+                    pointLog.setTrId(bizApi.getTrId());
                     pointLog.setPoint(discountPrice);
                     pointLog.setCurrPoint(totalPoint);
                     pointLog.setGoodsName(coupon.getGoodsName());
