@@ -153,10 +153,9 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-
             int findUserId = jobUserMapper.findJobUserIdBeforeCert(user);
-            if(findUserId != 0) {
 
+            if(findUserId != 0) {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("가입된 정보가 있습니다.");
             } else {
@@ -203,37 +202,14 @@ public class jobsite_userService {
                     }
                     u.setUserId(findJobUserId);
                 }
+                int delUserCheck = jobUserMapper.delUserCheck(findJobUserId);
+                if(delUserCheck == 1) {
+                    u.setUserId("탈퇴한 ID입니다.");
+                }
                 LocalDate findJobUserCreate = u.getCreatedAt();
                 jobsiteUserList.add(u);
             }
-//            String findJobUserId = jobUserMapper.findJobUserId(user).getUserId();
-//            LocalDate findJobUserCreate = jobUserMapper.findJobUserId(user).getCreatedAt();
-//
-//            // 소셜 id면 , id 찾기 결과 = 소셜 로그인으로 확인.반환하기
-//            int dupSocialUserIdCheck = jobUserMapper.dupSocialUserIdCheck(findJobUserId);
-//            String type = null;
-//            type = jobUserMapper.socialType(findJobUserId);
-//            if(dupSocialUserIdCheck != 0){
-//                // 소셜 계정임
-//                if(type.equals("naver")){
-//                    findJobUserId = "네이버 소셜 가입 계정입니다.";
-//                } else if(type.equals("kakao")){
-//                    findJobUserId = "카카오 소셜 가입 계정입니다.";
-//                } else if(type.equals("google")) {
-//                    findJobUserId = "구글 소셜 가입 계정입니다.";
-//                } else if(type.equals("facebook")) {
-//                    findJobUserId = "페이스북 소셜 가입 계정입니다.";
-//                }
-//            }
-//            if(!StringUtils.hasText(findJobUserId)){
-//                jobUserResponse.setCode("E003");
-//                jobUserResponse.setMessage("Id 찾기 실패");
-//            } else {
-//                jobUserResponse.setUserId(findJobUserId);
-//                jobUserResponse.setCreatedAt(findJobUserCreate);
-//                jobUserResponse.setCode("C000");
-//                jobUserResponse.setMessage("Id 찾기 성공");
-//            }
+
             jobUserResponse.setJobsiteUserList(jobsiteUserList);
             jobUserResponse.setTotalCount(jobsiteUserList.size());
             jobUserResponse.setCode("C000");
@@ -1057,6 +1033,13 @@ try {
 //                // 만약 연락처 값이 있으면 010-0000-9999 형식으로 변환하기
 //                user.setPhone(user.getPhone().replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
 //            }
+            int delUserCheck = jobUserMapper.delUserCheck(user.getUserId());
+            if(delUserCheck == 1) {
+                // 탈퇴한 id면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("탈퇴한 ID입니다.");
+                return apiResponse;
+            }
             int findJobUserPwd = jobUserMapper.findJobUserPwd(user);
             if(findJobUserPwd == 0) {
                 apiResponse.setCode("E002");
