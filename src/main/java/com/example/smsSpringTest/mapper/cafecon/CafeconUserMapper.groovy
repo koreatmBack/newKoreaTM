@@ -13,88 +13,6 @@ import org.apache.ibatis.annotations.*
 @Mapper
 interface CafeconUserMapper {
 
-    // 회원 화면표시 정보 조회
-    @Select("""
-        SELECT user_id
-                , user_name
-                , point
-          FROM user_profile
-         WHERE user_id = #{cafeUser.userId}
-           AND use_status = 'Y'
-    """)
-    CafeUser getFrontUserProfile(@Param("cafeUser") CafeUser cafeUser)
-
-//    // RefreshToken 유무 조회
-//    @Select("""
-//        SELECT count(*)
-//          FROM user_token
-//         WHERE user_id = #{userId}
-//           AND use_yn = 'Y'
-//    """)
-//    int userRefreshTokenChk(@Param("userId") String userId)
-//
-//    // 로그인 시 토큰 없으면 추가
-//    @Insert("""
-//        INSERT INTO user_token (
-//                user_id
-//                , grant_type
-//                , refresh_token
-//                , use_yn
-//                , reg_date
-//                , upt_date
-//        ) VALUES (
-//                #{refToken.userId}
-//                , #{refToken.grantType}
-//                , #{refToken.refreshToken}
-//                , 'Y'
-//                , sysdate()
-//                , sysdate()
-//        )
-//    """)
-//    int addUserToken(@Param("refToken") RefToken refToken)
-//
-//    // 로그인 시 토큰 수정
-//    @Update("""
-//        UPDATE user_token
-//           SET refresh_token = #{refToken.refreshToken}
-//               , grant_type = #{refToken.grantType}
-//               , upt_date = sysdate()
-//         WHERE user_id = #{refToken.userId}
-//           AND use_yn = 'Y'
-//    """)
-//    int updateUserToken(@Param("refToken") RefToken refToken)
-//
-//    // 기업 회원 포인트 조회
-//    @Select("""
-//        SELECT point
-//          FROM user_profile
-//         WHERE user_id = #{bizApi.userId}
-//    """)
-//    int getCompUserPoint(@Param("bizApi") BizApi bizApi)
-//
-//    // 기업 회원 전화번호 조회
-//    @Select("""
-//        SELECT phone
-//          FROM user_profile
-//         WHERE user_id = #{bizApi.userId}
-//    """)
-//    String getCompUserPhone(@Param("bizApi") BizApi bizApi)
-
-
-
-//    // 회원 포인트 업데이트
-//    @Update("""
-//        UPDATE user_profile
-//           SET point = #{cafeUser.point}
-//                , upt_date = sysdate()
-//         WHERE user_id = #{cafeUser.userId}
-//    """)
-//    int userPointManage(@Param("cafeUser") CafeUser cafeUser)
-
-    // 2025-01-14 ~
-
-
-
     // 2025-01-17 ~
 
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡ 카페콘 회원 관련 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -156,7 +74,16 @@ interface CafeconUserMapper {
         FROM cafecon_user
         WHERE user_id = #{user.userId}
     """)
-    String dupPwd(@Param("user") CafeUser user);
+    String dupPwd(@Param("user") CafeUser user)
+
+    // 로그인시 use_status N인지 체크 = N일때는 탈퇴 회원이기 때문
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_user
+        WHERE user_id = #{userId}
+        AND use_status = 'N'
+    """)
+    int delUserCheck(@Param("userId") String userId)
 
     // 회원 한명(id, 이름, 연락처) 반환
     @Select("""
@@ -168,8 +95,18 @@ interface CafeconUserMapper {
         , role
         FROM cafecon_user
         WHERE user_id = #{userId}
+        AND use_status = 'Y'
     """)
     CafeUser findOneCafeconLoginUser(@Param("userId") String userId)
+
+    // 회원 탈퇴시 DB 삭제가 아닌, use_status 'N'으로 변경
+    @Update("""
+        UPDATE cafecon_user
+        SET use_status = 'N'
+            , del_date = sysdate()
+        WHERE user_id = #{userId}
+    """)
+    int deleteUser(@Param("userId") String userId)
 
     // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
     @Update("""

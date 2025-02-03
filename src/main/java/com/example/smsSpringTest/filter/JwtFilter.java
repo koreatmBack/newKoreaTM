@@ -430,6 +430,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/cafecon/user/check/pwd", "/api/v1/cafecon/user/check/pwd",
                 "/v1/cafecon/user/change/pwd", "/api/v1/cafecon/user/change/pwd",
                 "/v1/cafecon/user/edit", "/api/v1/cafecon/user/edit",
+                "/v1/cafecon/user/delete", "/api/v1/cafecon/user/delete",
                 "/v1/cafecon/common/reissu/AccessToken", "/api/v1/cafecon/common/reissu/AccessToken",
                 "/v1/cafecon/common/goods/send", "/api/v1/cafecon/common/goods/send",
                 "/v1/cafecon/common/cancel/bizapi", "/api/v1/cafecon/common/cancel/bizapi",

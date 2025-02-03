@@ -128,6 +128,14 @@ public class CafeconUserService {
             String userId = user.getUserId();
             String userPwd = user.getUserPwd();
 
+            int delUserCheck = cafeconUserMapper.delUserCheck(userId);
+            if(delUserCheck == 1) {
+                // 탈퇴한 id면
+                cafeconResponse.setCode("E001");
+                cafeconResponse.setMessage("탈퇴한 ID입니다.");
+                return cafeconResponse;
+            }
+
             // 암호화된 비밀번호 일치하는지 체크
             String dupPwd = cafeconUserMapper.dupPwd(user);
             // 비밀번호 일치하는지 검증
@@ -771,6 +779,25 @@ public class CafeconUserService {
             log.info(e.getMessage());
         }
         return cafeconResponse;
+    }
+
+    // 회원 탈퇴하기
+    public ApiResponse deleteUser(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int deleteUser = cafeconUserMapper.deleteUser(user.getUserId());
+            if(deleteUser == 1){
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("탈퇴 완료");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("탈퇴 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
     }
 
 

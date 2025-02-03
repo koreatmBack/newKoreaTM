@@ -63,7 +63,6 @@ public class CafeconUserController {
     // 카페콘 로그인
     @PostMapping("/login")
     public CafeconResponse cafeconLogin(@RequestBody CafeUser user) throws Exception {
-
         return cafeconUserService.cafeconLogin(user);
     }
 
@@ -71,6 +70,12 @@ public class CafeconUserController {
     @PostMapping("/logout")
     public ApiResponse cafeconLogout() throws Exception {
         return cafeconUserService.cafeconLogout();
+    }
+
+    // 카페콘 회원 탈퇴
+    @PutMapping("/delete")
+    public ApiResponse deleteUser(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.deleteUser(user);
     }
 
     // DB에 저장된 비밀번호와 일치하는지 체크
