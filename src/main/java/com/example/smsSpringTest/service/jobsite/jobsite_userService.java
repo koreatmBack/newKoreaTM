@@ -731,6 +731,7 @@ try {
                 // 회원 탈퇴하기
                 int resign = jobUserMapper.deleteUser(user.getUserId());
                 if(resign == 1) {
+                    jobUserMapper.deleteSocialUser(user.getUserId());
                     this.jobLogout();
                     apiResponse.setCode("C000");
                     apiResponse.setMessage(" 회원 탈퇴 성공 ");
@@ -1136,6 +1137,13 @@ try {
         SocialUser socialUser = getKakaoUserDetail(accessToken);
 //        log.info("SocialUser = " + socialUser);
 //        log.info("id = " + socialUser.getId());
+        int delUserCheck = jobUserMapper.delUserCheck(socialUser.getId());
+        if(delUserCheck == 1) {
+            // 탈퇴한 id면
+            socialResponse.setCode("C003");
+            socialResponse.setMessage("탈퇴한 ID입니다.");
+            return socialResponse;
+        }
         int result = jobUserMapper.dupSocialIdCheck(socialUser.getId());
 
         if(result == 0) {
@@ -1464,6 +1472,13 @@ try {
         log.info("SocialUser = " + socialUser);
         log.info("id = " + socialUser.getId());
         String naverSocialId = socialUser.getId();
+        int delUserCheck = jobUserMapper.delUserCheck(naverSocialId);
+        if(delUserCheck == 1) {
+            // 탈퇴한 id면
+            socialResponse.setCode("C003");
+            socialResponse.setMessage("탈퇴한 ID입니다.");
+            return socialResponse;
+        }
         int result = jobUserMapper.dupSocialIdCheck(naverSocialId);
 
         if(result == 0) {
@@ -1769,6 +1784,13 @@ try {
         log.info("SocialUser = " + socialUser);
         log.info("id = " + socialUser.getId());
         String googleSocialId = socialUser.getId();
+        int delUserCheck = jobUserMapper.delUserCheck(googleSocialId);
+        if(delUserCheck == 1) {
+            // 탈퇴한 id면
+            socialResponse.setCode("C003");
+            socialResponse.setMessage("탈퇴한 ID입니다.");
+            return socialResponse;
+        }
         int result = jobUserMapper.dupSocialIdCheck(googleSocialId);
 
         if(result == 0) {
@@ -2060,6 +2082,13 @@ try {
         log.info("SocialUser = " + socialUser);
         log.info("id = " + socialUser.getId());
         String facebookSocialId = socialUser.getId();
+        int delUserCheck = jobUserMapper.delUserCheck(facebookSocialId);
+        if(delUserCheck == 1) {
+            // 탈퇴한 id면
+            socialResponse.setCode("C003");
+            socialResponse.setMessage("탈퇴한 ID입니다.");
+            return socialResponse;
+        }
         int result = jobUserMapper.dupSocialIdCheck(facebookSocialId);
 
         if(result == 0) {

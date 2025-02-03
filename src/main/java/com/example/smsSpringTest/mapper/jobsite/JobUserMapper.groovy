@@ -170,6 +170,15 @@ interface JobUserMapper {
     """)
     int deleteUser(@Param("userId") String userId)
 
+    // 소셜 계정 테이블도 use_status 'N'으로 변경
+    @Update("""
+        UPDATE jobsite_user_social
+        SET use_status = 'N'
+            ,del_date = sysdate()
+        WHERE user_id = #{userId}
+    """)
+    int deleteSocialUser(@Param("userId") String userId)
+
     // 탈퇴한 계정인지 체크하기
     @Select("""
         SELECT count(*)
