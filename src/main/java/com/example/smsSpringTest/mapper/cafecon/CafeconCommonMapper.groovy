@@ -258,6 +258,7 @@ interface CafeconCommonMapper {
                 , log_type
                 , order_no
                 , use_status
+                , tr_id
                 , reg_date
                 , upt_date
         ) VALUES (
@@ -270,6 +271,7 @@ interface CafeconCommonMapper {
                 , #{pointlog.logType}
                 , #{pointlog.orderNo}
                 , 'Y'
+                , #{pointlog.trId}
                 , sysdate()
                 , sysdate()
         )

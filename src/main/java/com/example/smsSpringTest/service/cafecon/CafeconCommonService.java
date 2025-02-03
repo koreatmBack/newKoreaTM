@@ -564,7 +564,7 @@ public class CafeconCommonService {
                     String orderNo = this.addOrderNo(trId);
                     // point_log 테이블에서 order_no 찾기
                     String findOrderNo = cafeconCommonMapper.findOrderNoPointLog(date);
-                    log.info("findOrderNoPL = " + findOrderNo);
+
                     if(findOrderNo != null) {
                         // point_log 테이블에 order_no 값이 있으면
                         // coupon의 order_no와 point_log의 order_no 크기 비교하기
