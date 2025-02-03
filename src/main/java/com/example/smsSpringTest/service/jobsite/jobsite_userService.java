@@ -1036,7 +1036,7 @@ try {
             int delUserCheck = jobUserMapper.delUserCheck(user.getUserId());
             if(delUserCheck == 1) {
                 // 탈퇴한 id면
-                apiResponse.setCode("E001");
+                apiResponse.setCode("E002");
                 apiResponse.setMessage("탈퇴한 ID입니다.");
                 return apiResponse;
             }
