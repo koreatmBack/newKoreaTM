@@ -103,6 +103,7 @@ interface CafeconUserMapper {
     @Update("""
         UPDATE cafecon_user
         SET use_status = 'N'
+            , role = "DELETE"
             , del_date = sysdate()
         WHERE user_id = #{userId}
     """)

@@ -441,11 +441,12 @@ public class JwtFilter extends OncePerRequestFilter {
 //                "/v1/cafecon/deposit/change/status", "/api/v1/cafecon/deposit/change/status"
 
         };
-
+        if("USER".equals(role)) {
         for (String userEndpoint : userEndpoints) {
             if(pathMatcher.match(userEndpoint, requestURI)) {
                 return true;
             }
+        }
         }
         return false;
     }
