@@ -787,6 +787,7 @@ public class CafeconUserService {
         try {
             int deleteUser = cafeconUserMapper.deleteUser(user.getUserId());
             if(deleteUser == 1){
+                this.cafeconLogout();
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("탈퇴 완료");
             } else {
