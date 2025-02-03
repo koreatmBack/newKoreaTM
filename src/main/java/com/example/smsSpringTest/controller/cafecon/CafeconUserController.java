@@ -40,6 +40,12 @@ public class CafeconUserController {
         return smsService.certificateSMS(cert);
     }
 
+    // 이미 가입된 연락처인지 체킹
+    @PostMapping("/dupCheck/phone")
+    public ApiResponse dupCheckPhone(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.dupCheckPhone(user);
+    }
+
     // 문자 본인인증 코드 일치하는지 확인
     @PostMapping("/cert/code")
     @Operation(summary = "문자 본인인증 코드 확인", description="문자 본인인증 코드가 일치하는지 확인합니다.")
@@ -137,4 +143,11 @@ public class CafeconUserController {
     public CafeconResponse userChargeList(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.userChargeList(user);
     }
+
+    // 아이디 찾기 -> 이름, 연락처 입력 후 인증 버튼 클릭시 가입된 아이디인지 확인하기
+    @PostMapping("/find/id/before/cert")
+    public ApiResponse findCafUserIdBeforeCert(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.findCafUserIdBeforeCert(user);
+    }
+
 }

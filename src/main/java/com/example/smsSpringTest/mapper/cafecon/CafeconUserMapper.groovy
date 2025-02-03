@@ -335,4 +335,21 @@ interface CafeconUserMapper {
         AND log_type = 'AP'
     """)
     int countUserChargeList(@Param("user") CafeUser user)
+
+    // 아이디 찾기시 가입된 id인지 체킹
+    @Select("""
+        SELECT use_status
+        FROM cafecon_user
+        WHERE manager_name = #{user.managerName}
+        AND phone = #{user.phone}
+    """)
+    String findCafUserIdBeforeCert(@Param("user") CafeUser user)
+
+    // 이미 가입된 연락처인지 체킹하는 API
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_user
+        WHERE phone = #{phone}
+    """)
+    int dupCheckPhone(@Param("phone") String phone)
 }

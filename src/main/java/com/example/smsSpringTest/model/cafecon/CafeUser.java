@@ -22,6 +22,7 @@ public class CafeUser {
     private String managerName; // 담당자명
     private String phone;
     private int point; // 포인트
+    private String useStatus; // 회원 상태 Y : 기본 ,  N : 탈퇴
 
     private String businessNo; // 사업자 등록번호
     private String businessName; // 사업자명

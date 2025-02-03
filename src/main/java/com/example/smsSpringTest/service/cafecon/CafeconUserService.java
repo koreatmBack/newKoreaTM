@@ -52,6 +52,26 @@ public class CafeconUserService {
     private final HttpServletRequest request;
     private final CafeconCommonService cafeconCommonService;
 
+    // 이미 가입된 연락처인지 체킹하는 API
+    public ApiResponse dupCheckPhone(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int dupCheckPhone = cafeconUserMapper.dupCheckPhone(user.getPhone());
+            if(dupCheckPhone != 0) {
+                // 값이 있으면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("이미 가입된 연락처입니다.");
+            } else {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("가입 가능한 연락처입니다.");
+            }
+        } catch (Exception e){
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error !!!");
+        }
+        return apiResponse;
+    }
+
     // 문자 본인인증 후 회원가입 (카페콘)
     public ApiResponse cafeconSignUp(CafeUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
@@ -487,7 +507,7 @@ public class CafeconUserService {
                     pointLog.setLogType(logType);
                     pointLog.setPoint(point);
                     pointLog.setCurrPoint(currPoint);
-
+                    log.info(pointLog.toString());
                     // coupon 테이블에서 orderNo 찾기
                     LocalDate now = LocalDate.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -556,6 +576,7 @@ public class CafeconUserService {
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
         }
         return apiResponse;
     }
@@ -800,6 +821,32 @@ public class CafeconUserService {
         }
         return apiResponse;
     }
+
+    // 아이디 찾기 -> 이름, 연락처 입력 후 인증 버튼 클릭시 가입된 아이디인지 확인하기
+    public ApiResponse findCafUserIdBeforeCert(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            String useStatus = cafeconUserMapper.findCafUserIdBeforeCert(user);
+            if(!StringUtils.hasText(useStatus)){
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("가입된 정보가 없습니다.");
+            } else {
+                // 가입된 정보는 있는데, use_status가 'N'인 것. = 탈퇴 계정
+                if ("N".equals(useStatus)) {
+                    apiResponse.setCode("E003");
+                    apiResponse.setMessage("탈퇴한 계정입니다.");
+                } else {
+                    apiResponse.setCode("C000");
+                    apiResponse.setMessage("가입된 정보가 있습니다.");
+                }
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
+
 
 
 }

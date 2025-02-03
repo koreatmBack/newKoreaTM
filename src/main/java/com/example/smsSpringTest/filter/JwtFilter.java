@@ -377,6 +377,8 @@ public class JwtFilter extends OncePerRequestFilter {
 //                , "/api/v1/cafecon/user/update/point" , "/v1/cafecon/user/update/point"
                 , "/api/v1/cafecon/user/check/id" , "/v1/cafecon/user/check/id"
                 , "/api/v1/cafecon/common/exper_cookie" , "/v1/cafecon/common/exper_cookie"
+                , "/api/v1/cafecon/user/find/**" , "/v1/cafecon/user/find/**"
+
         };
 
         for (String allowedURI : allowedURIs) {
