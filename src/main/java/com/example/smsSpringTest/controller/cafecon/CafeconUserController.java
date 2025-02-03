@@ -155,4 +155,10 @@ public class CafeconUserController {
     public CafeconResponse findCafUserId(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.findCafUserId(user);
     }
+
+    // 시작일 ~ 종료일 사이에서 log_type이 CP 총 개수와 총 금액 리턴하기
+    @PostMapping("/find/cpLogList")
+    public CafeconResponse findCpLogList(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.findCpLogList(user);
+    }
 }

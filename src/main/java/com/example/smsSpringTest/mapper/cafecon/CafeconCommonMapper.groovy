@@ -357,6 +357,17 @@ interface CafeconCommonMapper {
     """)
     String findTrId(@Param("userId") String userId, @Param("orderNo") String orderNo)
 
+    // 취소 내역 있는지 조회
+    @Select("""
+        SELECT count(*)
+        FROM cafecon_point_log
+        WHERE tr_id = #{pl.trId}
+        AND user_id = #{pl.userId}
+        AND log_type = 'CE'
+    """)
+    int findTrIdCheck(@Param("pl") PointLog pl)
+
+
 //    // 관리자 -> 지급관리 탭
 //    @Select("""
 //        SELECT cd.user_id

@@ -887,5 +887,24 @@ public class CafeconUserService {
         return cafeconResponse;
     }
 
-
+    // 시작일 ~ 종료일 사이에서 log_type이 CP 총 개수와 총 금액 리턴하기
+    public CafeconResponse findCpLogList(CafeUser user) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
+        try {
+            List<PointLog> cpList = cafeconUserMapper.cpPointLogList(user);
+            int point = 0;
+            for(PointLog cp : cpList) {
+                point += cp.getPoint();
+            }
+            cafeconResponse.setTotalCount(cpList.size());
+            cafeconResponse.setTotalPoint(point);
+            cafeconResponse.setCode("C000");
+            cafeconResponse.setMessage("총 금액 및 총 개수 반환 성공");
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return cafeconResponse;
+    }
 }

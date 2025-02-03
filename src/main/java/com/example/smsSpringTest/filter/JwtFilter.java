@@ -441,6 +441,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/v1/cafecon/deposit/add", "/api/v1/cafecon/deposit/add",
                 "/api/v1/cafecon/user/find/couponList", "/v1/cafecon/user/find/couponList",
                 "/api/v1/cafecon/user/find/pointLogList", "/v1/cafecon/user/find/pointLogList"
+                ,"/api/v1/cafecon/common/find/cancelLog", "/v1/cafecon/common/find/cancelLog"
+                ,"/api/v1/cafecon/user/find/cpLogList", "/v1/cafecon/user/find/cpLogList"
 //                "/v1/cafecon/deposit/change/status", "/api/v1/cafecon/deposit/change/status"
 
         };

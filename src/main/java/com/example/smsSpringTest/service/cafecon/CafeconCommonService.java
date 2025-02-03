@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -701,6 +701,28 @@ public class CafeconCommonService {
         }
 
         return couponResponse;
+    }
+
+    // 취소 내역 있는지 조회
+    public ApiResponse findCancelLog(PointLog pl) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int findTrid = cafeconCommonMapper.findTrIdCheck(pl);
+            if(findTrid != 0) {
+                // 취소 내역 있음
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("취소 내역 있음");
+            } else {
+                // 취소 내역 없음
+                apiResponse.setCode("C003");
+                apiResponse.setMessage("취소 내역 없음");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
     }
 
 

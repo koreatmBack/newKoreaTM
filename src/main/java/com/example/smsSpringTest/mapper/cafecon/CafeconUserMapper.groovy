@@ -357,5 +357,13 @@ interface CafeconUserMapper {
     """)
     int dupCheckPhone(@Param("phone") String phone)
 
+    @Select("""
+        SELECT point
+        FROM cafecon_point_log
+        WHERE user_id = #{user.userId}
+        AND log_type = 'CP'
+        AND reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND 
+    """)
+    List<PointLog> cpPointLogList(@Param("user") CafeUser user)
 
 }

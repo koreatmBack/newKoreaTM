@@ -2,6 +2,7 @@ package com.example.smsSpringTest.controller.cafecon;
 
 import com.example.smsSpringTest.model.cafecon.BizApi;
 import com.example.smsSpringTest.model.cafecon.Coupon;
+import com.example.smsSpringTest.model.cafecon.PointLog;
 import com.example.smsSpringTest.model.response.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
@@ -47,6 +48,12 @@ public class CafeconCommonController {
     @PostMapping("/cancel/bizapi")
     public ApiResponse cancelCouponToBizapi(@RequestBody BizApi bizApi) throws Exception {
         return cafeconCommonService.cancelCouponToBizapi(bizApi);
+    }
+
+    // 기프티콘 취소 내역 있는지 조회
+    @PostMapping("/find/cancelLog")
+    public ApiResponse findCancelLog(@RequestBody PointLog pl) throws Exception {
+        return cafeconCommonService.findCancelLog(pl);
     }
 
     // 기프티콘 쿠폰 상세 정보
