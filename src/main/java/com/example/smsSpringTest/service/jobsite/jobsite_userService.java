@@ -278,6 +278,13 @@ public class jobsite_userService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+            int delUserCheck = jobUserMapper.delUserCheck(user.getUserId());
+            if(delUserCheck == 1) {
+                // 탈퇴한 id면
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("탈퇴한 ID입니다.");
+                return apiResponse;
+            }
             // 폼메일, 카페콘에서 사용중인 id는 사용 불가
 
             // 잡사이트에서 체크
@@ -286,7 +293,7 @@ public class jobsite_userService {
 
             if(jobCheckId == 1) {
                 apiResponse.setCode("E002");
-                apiResponse.setMessage("(잡사이트) 이미 사용중인 ID입니다.");
+                apiResponse.setMessage("이미 사용중인 ID입니다.");
                 return apiResponse;
             }
 
@@ -304,14 +311,6 @@ public class jobsite_userService {
                     userId = user.getUserId();
                     userPwd = user.getUserPwd();
                 }
-
-            int delUserCheck = jobUserMapper.delUserCheck(userId);
-            if(delUserCheck == 1) {
-                // 탈퇴한 id면
-                apiResponse.setCode("E001");
-                apiResponse.setMessage("탈퇴한 ID입니다.");
-                return apiResponse;
-            }
 
             user.setUserId(userId);
             user.setUserPwd(passwordEncoder.encode(userPwd));
