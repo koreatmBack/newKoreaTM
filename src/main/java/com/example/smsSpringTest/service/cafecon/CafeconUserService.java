@@ -529,7 +529,7 @@ public class CafeconUserService {
                                 int nextNumber = cp +1;
                                 String newFormat = String.format("%08d", nextNumber);
                                 orderNo = date + newFormat; // 2025012300000005
-                            } else {
+                            } else if(pl >= cp){
                                 // 포인트로그 테이블이 쿠폰 테이블보다 크거나 같을때
                                 int nextNumber = pl + 1;
                                 String newFormat = String.format("%08d", nextNumber);
