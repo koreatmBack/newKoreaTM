@@ -83,7 +83,14 @@ public class CafeconUserService {
 
             if(cafeconCheckId == 1) {
                 apiResponse.setCode("E002");
-                apiResponse.setMessage("(폼메일, 잡사이트, 카페콘) 이미 사용중인 ID입니다.");
+                apiResponse.setMessage("이미 사용중인 ID입니다.");
+                return apiResponse;
+            }
+
+            int dupCheckPhone = cafeconUserMapper.dupCheckPhone(user.getPhone());
+            if(dupCheckPhone == 1) {
+                apiResponse.setCode("E002");
+                apiResponse.setMessage("이미 사용중인 연락처입니다.");
                 return apiResponse;
             }
 
@@ -839,13 +846,13 @@ public class CafeconUserService {
     public ApiResponse findCafUserIdBeforeCert(CafeUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {
-            String useStatus = cafeconUserMapper.findCafUserIdBeforeCert(user);
-            if(!StringUtils.hasText(useStatus)){
+            CafeUser cafUser = cafeconUserMapper.findCafUserIdBeforeCert(user);
+            if(!StringUtils.hasText(cafUser.getUseStatus())){
                 apiResponse.setCode("E001");
                 apiResponse.setMessage("가입된 정보가 없습니다.");
             } else {
                 // 가입된 정보는 있는데, use_status가 'N'인 것. = 탈퇴 계정
-                if ("N".equals(useStatus)) {
+                if ("N".equals(cafUser.getUseStatus())) {
                     apiResponse.setCode("E003");
                     apiResponse.setMessage("탈퇴한 계정입니다.");
                 } else {
@@ -860,6 +867,22 @@ public class CafeconUserService {
         return apiResponse;
     }
 
+    // 인증 완료 후 ID , 가입일 조회 (managerName, phone 필수)
+    public CafeconResponse findCafUserId(CafeUser user) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
+        try {
+            CafeUser cafUser = cafeconUserMapper.findCafUserIdBeforeCert(user);
+            cafeconResponse.setUserId(cafUser.getUserId());
+            cafeconResponse.setCreatedAt(cafUser.getCreatedAt());
+            cafeconResponse.setCode("C000");
+            cafeconResponse.setMessage("아이디 찾기 성공");
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("아이디 찾기 실패");
+            log.info(e.getMessage());
+        }
+        return cafeconResponse;
+    }
 
 
 }

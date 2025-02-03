@@ -150,4 +150,9 @@ public class CafeconUserController {
         return cafeconUserService.findCafUserIdBeforeCert(user);
     }
 
+    // 인증 완료 후 ID, 가입일 조회 (managerName, phone 필수)
+    @PostMapping("/find/id")
+    public CafeconResponse findCafUserId(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.findCafUserId(user);
+    }
 }

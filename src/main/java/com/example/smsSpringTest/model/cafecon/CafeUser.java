@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 /**
  * author : 신기훈
  * date : 2025-01-17
@@ -37,6 +39,7 @@ public class CafeUser {
     private String agreeTerms; // 이용약관 동의 Y/N
     private String agreePrivacy; // 개인정보 수집 및 이용 동의 Y/N
     private String agreeMarketing; // 마케팅 및 이벤트 동의 Y/N
+    private LocalDate createdAt; // 가입일
 
     private String role;
     private String userNewPwd; // 새로운 비밀번호 (비밀번호 변경용)

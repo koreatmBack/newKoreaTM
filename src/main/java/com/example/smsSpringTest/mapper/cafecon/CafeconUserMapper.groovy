@@ -338,12 +338,14 @@ interface CafeconUserMapper {
 
     // 아이디 찾기시 가입된 id인지 체킹
     @Select("""
-        SELECT use_status
+        SELECT user_id
+              ,use_status
+              ,created_at
         FROM cafecon_user
         WHERE manager_name = #{user.managerName}
         AND phone = #{user.phone}
     """)
-    String findCafUserIdBeforeCert(@Param("user") CafeUser user)
+    CafeUser findCafUserIdBeforeCert(@Param("user") CafeUser user)
 
     // 이미 가입된 연락처인지 체킹하는 API
     @Select("""
@@ -352,4 +354,6 @@ interface CafeconUserMapper {
         WHERE phone = #{phone}
     """)
     int dupCheckPhone(@Param("phone") String phone)
+
+
 }
