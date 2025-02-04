@@ -19,23 +19,18 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddPointResponse extends ApiResponse {
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("AP") // JSON에서 대문자로 설정
     private int AP;
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("AD") // JSON에서 대문자로 설정
     private int AD;
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("CP") // JSON에서 대문자로 설정
     private int CP;
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("CE") // JSON에서 대문자로 설정
     private int CE;
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("GI") // JSON에서 대문자로 설정
     private int GI;
 
