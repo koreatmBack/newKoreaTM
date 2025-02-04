@@ -291,6 +291,7 @@ interface CafeconUserMapper {
               ,cc.goods_name
               ,cp.point
               ,cc.tr_id
+              ,cp.cancel_date
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
         WHERE cp.user_id = #{user.userId}
@@ -370,7 +371,7 @@ interface CafeconUserMapper {
     """)
     CafeUser findCafUserPwdBeforeCert(@Param("user") CafeUser user)
 
-
+    // 쿠폰 구매 이력 조회
     @Select("""
         SELECT point
         FROM cafecon_point_log
