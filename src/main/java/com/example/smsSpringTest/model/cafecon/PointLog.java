@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * author : 신기훈
  * date : 2025-01-16
@@ -29,7 +27,7 @@ public class PointLog {
     private String useStatus;
     private String startDate;
     private String endDate;
-    private LocalDateTime cancelDate;
+    private String cancelDate;
     private int page;
     private int size;
     private int offset;
