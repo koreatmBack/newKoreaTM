@@ -312,6 +312,7 @@ interface CafeconUserMapper {
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
         WHERE cp.user_id = #{user.userId}
+        AND cp.log_type IN ('CP', 'CE' ,'GI')
     """)
     int countUserPointLogList(@Param("user") CafeUser user)
 
