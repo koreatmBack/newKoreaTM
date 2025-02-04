@@ -716,6 +716,96 @@ public class CafeconCommonService {
         return couponResponse;
     }
 
+    // 쿠폰 재전송
+    public CouponResponse resendCoupon(BizApi bizApi) throws Exception {
+        CouponResponse couponResponse = new CouponResponse();
+        // 로그인 유저인지 체크
+        Cookie cookies[] = request.getCookies();
+        String accessToken = "";
+        CafeUser user = new CafeUser();
+        // 만약 쿠키가 있다면
+        for(Cookie cookie : cookies) {
+            if("accesstoken".equals(cookie.getName())){
+                accessToken = cookie.getValue();
+            }
+        }
+
+        // 쿠키가 없다면
+        if(!StringUtils.hasText(accessToken)){
+            couponResponse.setCode("E401");
+            couponResponse.setMessage("로그인 상태가 아닙니다.");
+            return couponResponse;
+        }
+        // AccessToken 검증
+        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+            //AccessToken에서 authentication 가져오기
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            user.setUserId(authentication.getName());
+            log.info("id = " + user.getUserId());
+            bizApi.setUserId(authentication.getName());
+        }
+
+        log.info("bizApi :: " + bizApi);
+
+        String trId = bizApi.getTrId();
+
+
+            String jsonDto = "";
+
+            HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
+
+            bizApi.setApiCode("0203");
+            bizApi.setCustomAuthCode(authCode);
+            bizApi.setCustomAuthToken(authToken);
+            bizApi.setDevYn("N");
+            bizApi.setTrId(trId);
+            bizApi.setSmsFlag("N");
+            bizApi.setBizId(clientId);
+
+
+            String uri = "https://bizapi.giftishow.com/bizApi/resend" +
+                    "?api_code=" + bizApi.getApiCode() +
+                    "&custom_auth_code=" + bizApi.getCustomAuthCode() +
+                    "&custom_auth_token=" + bizApi.getCustomAuthToken() +
+                    "&dev_yn=" + bizApi.getDevYn() +
+                    "&tr_id=" + bizApi.getTrId() +
+                    "&sms_flag=" + bizApi.getSmsFlag() +
+                    "&user_id=" + bizApi.getBizId();
+        log.info(uri);
+        try {
+            HttpResponse<String> response = client.send(
+                    HttpRequest.newBuilder()
+                            .uri(URI.create(uri))
+                            .header("Content-Type", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString(jsonDto)).build()
+                    , HttpResponse.BodyHandlers.ofString());
+
+            JsonNode bodyJson = JsonMapper.builder().build().readTree(response.body());
+            String code = bodyJson.get("code").asText();
+            String message = bodyJson.get("message").asText();
+
+            log.info("code :: " + code);
+            log.info("message :: " + message);
+
+
+            if(code.equals("0000")) {
+                log.info("재전송 성공!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                couponResponse.setCode("C000");
+                couponResponse.setMessage("기프티콘 재전송 성공하였습니다.");
+            } else {
+                couponResponse.setCode("E002");
+                couponResponse.setMessage("기프티콘 재전송 실패하였습니다.");
+            }
+        } catch (Exception e) {
+            couponResponse.setCode("E001");
+            couponResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return couponResponse;
+    }
+
+
+
     // 취소 내역 있는지 조회
     public ApiResponse findCancelLog(PointLog pl) throws Exception {
         ApiResponse apiResponse = new ApiResponse();

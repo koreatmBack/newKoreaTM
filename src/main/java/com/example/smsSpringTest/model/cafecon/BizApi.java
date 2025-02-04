@@ -38,6 +38,7 @@ public class BizApi {
     private String gubun;
     private String revInfoYn;
     private String memo;
+    private String smsFlag;
 
     private int realPrice; // 결제 가격
     private String userPoint; // 유저의 현재 포인트

@@ -59,20 +59,13 @@ public class CafeconCommonController {
     // 기프티콘 쿠폰 상세 정보
     @PostMapping("/goods/coupons")
     public CouponResponse getCouponsDetailData(@RequestBody Coupon coupon) throws Exception {
-//
-//        CouponResponse couponResponse = new CouponResponse();
-//
-//        if(authentication.getName() != null && !authentication.getName().isBlank()) {
-//            String userId = authentication.getName();
-//            coupon.setUserId(userId);
-//            couponResponse = cafeConService.getCouponsDetailData(coupon);
-//
-//        } else {
-//            couponResponse.setCode("E001");
-//            couponResponse.setMessage("로그인 후 이용하세요.");
-//        }
-
         return cafeconCommonService.getCouponsDetailData(coupon);
+    }
+
+    // 기프티콘 쿠폰 재전송
+    @PostMapping("/goods/resend")
+    public CouponResponse resendCoupon(@RequestBody BizApi bizApi) throws Exception {
+        return cafeconCommonService.resendCoupon(bizApi);
     }
 
 }
