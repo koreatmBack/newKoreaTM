@@ -3,7 +3,9 @@ package com.example.smsSpringTest.mapper.cafecon
 import com.example.smsSpringTest.model.Paging
 import com.example.smsSpringTest.model.cafecon.CafeUser
 import com.example.smsSpringTest.model.cafecon.Coupon
+import com.example.smsSpringTest.model.cafecon.LogResult
 import com.example.smsSpringTest.model.cafecon.PointLog
+import com.example.smsSpringTest.model.cafecon.TotalResult
 import org.apache.ibatis.annotations.*
 /**
  * author : 신기훈
@@ -393,4 +395,52 @@ interface CafeconUserMapper {
         WHERE reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND
     """)
     List<PointLog> allPointLog(@Param("user") CafeUser user)
+
+    // 관리자전용 날짜별 포인트 지급액, 사용액 조회
+    @Select("""
+         <script>
+         SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
+                , SUM(CASE WHEN log.log_type = 'AP' THEN log.point ELSE 0 END) as apPnt
+                , SUM(CASE WHEN log.log_type = 'AD' THEN log.point ELSE 0 END) as adPnt
+                , SUM(CASE WHEN log.log_type = 'GI' THEN log.point ELSE 0 END) as giPnt
+                , SUM(CASE WHEN log.log_type = 'CP' THEN log.point ELSE 0 END) as cpPnt
+                , SUM(CASE WHEN log.log_type = 'CE' THEN log.point ELSE 0 END) as cePnt
+           FROM cafecon_point_log log
+          WHERE 1=1
+          <if test="pointLog.startDate != null and pointLog.startDate != '' ">
+            AND log.reg_date BETWEEN date(#{pointLog.startDate}) AND DATE_ADD(date(#{pointLog.endDate}), INTERVAL 1 DAY) - INTERVAL 1 SECOND
+          </if>
+          GROUP BY DATE_FORMAT(log.reg_date, '%Y-%m-%d')
+          ORDER BY reg_date DESC
+          </script>
+    """)
+    List<LogResult> getAdminDateTotalPoint(@Param("pointLog") PointLog pointLog)
+
+    // 관리자 전용 날짜별 포인트 지급액, 사용액 합계 조회
+    @Select("""
+        <script>
+        SELECT SUM(apPnt) AS totalApPnt
+            , SUM(adPnt) AS totalAdPnt
+            , SUM(cpPnt) AS totalCpPnt
+            , SUM(cePnt) AS totalCePnt
+            , SUM(giPnt) AS totalGiPnt
+          FROM (
+            SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
+                , SUM(CASE WHEN log.log_type = 'AP' THEN log.point ELSE 0 END) as apPnt
+                , SUM(CASE WHEN log.log_type = 'AD' THEN log.point ELSE 0 END) as adPnt
+                , SUM(CASE WHEN log.log_type = 'GI' THEN log.point ELSE 0 END) as giPnt
+                , SUM(CASE WHEN log.log_type = 'CP' THEN log.point ELSE 0 END) as cpPnt
+                , SUM(CASE WHEN log.log_type = 'CE' THEN log.point ELSE 0 END) as cePnt
+           FROM cafecon_point_log log
+           WHERE 1=1
+             <if test="pointLog.startDate != null and pointLog.startDate != '' ">
+                AND log.reg_date BETWEEN date(#{pointLog.startDate}) AND DATE_ADD(date(#{pointLog.endDate}), INTERVAL 1 DAY) - INTERVAL 1 SECOND
+             </if>
+             GROUP BY DATE_FORMAT(log.reg_date, '%Y-%m-%d')
+             ORDER BY reg_date DESC
+          ) AS daily_summary
+        </script>
+    """)
+    TotalResult getTotalPoint(@Param("pointLog") PointLog pointLog)
+
 }

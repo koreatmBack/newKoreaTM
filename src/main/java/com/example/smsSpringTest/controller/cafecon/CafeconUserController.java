@@ -2,9 +2,9 @@ package com.example.smsSpringTest.controller.cafecon;
 
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.cafecon.CafeUser;
+import com.example.smsSpringTest.model.cafecon.PointLog;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.cafecon.AddPointResponse;
 import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
 import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.service.CustomUserDetailsService;
@@ -171,8 +171,8 @@ public class CafeconUserController {
 
     // 시작일 ~ 종료일 사이에서 log_type 별로 일마다 포인트 합산 후 type별로 리턴
     @PostMapping("/find/all/pointLog")
-    public AddPointResponse findAllPointLog(@RequestBody CafeUser user) throws Exception {
-        return cafeconUserService.findAllPointLog(user);
+    public CafeconResponse findAllPointLog(@RequestBody PointLog pointLog) throws Exception {
+        return cafeconUserService.findAllPointLog(pointLog);
     }
 
 }

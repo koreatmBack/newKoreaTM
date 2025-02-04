@@ -9,7 +9,6 @@ import com.example.smsSpringTest.model.cafecon.PointLog;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.cafecon.AddPointResponse;
 import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
 import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
@@ -922,48 +921,27 @@ public class CafeconUserService {
     }
 
     // 시작일 ~ 종료일 사이에서 log_type 별로 일마다 포인트 합산 후 type별로 리턴
-    public AddPointResponse findAllPointLog(CafeUser user) throws Exception {
-        AddPointResponse addPointResponse = new AddPointResponse();
+    public CafeconResponse findAllPointLog(PointLog pointLog) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
         try {
-            int AP = 0;
-            int AD = 0;
-            int CP = 0;
-            int CE = 0;
-            int GI = 0;
-            List<PointLog> allPointLog = cafeconUserMapper.allPointLog(user);
-            log.info(allPointLog+"");
-            for(PointLog pl : allPointLog) {
-                if("AP".equals(pl.getLogType())){
-                    AP += pl.getPoint();
-                } else if("AD".equals(pl.getLogType())) {
-                    AD += pl.getPoint();
-                } else if("CP".equals(pl.getLogType())) {
-                    CP += pl.getPoint();
-                } else if("CE".equals(pl.getLogType())) {
-                    CE += pl.getPoint();
-                } else {
-                    // GI (선물)
-                    GI += pl.getPoint();
-                }
+            cafeconResponse.setPointList(cafeconUserMapper.getAdminDateTotalPoint(pointLog));
+            cafeconResponse.setTotalResult(cafeconUserMapper.getTotalPoint(pointLog));
+
+            log.info("totalResult: {}", cafeconResponse.getTotalResult());
+
+            if(cafeconResponse.getPointList() != null && !cafeconResponse.getPointList().isEmpty()) {
+                cafeconResponse.setCode("C000");
+                cafeconResponse.setMessage("일별 조회 성공");
+            } else {
+                cafeconResponse.setCode("E001");
+                cafeconResponse.setMessage("일별 조회 실패");
             }
-            log.info("AP = " + AP);
-            log.info("AD = " + AD);
-            log.info("CP = " + CP);
-            log.info("CE = " + CE);
-            log.info("GI = " + GI);
-            addPointResponse.setAP(AP);
-            addPointResponse.setAD(AD);
-            addPointResponse.setCP(CP);
-            addPointResponse.setCE(CE);
-            addPointResponse.setGI(GI);
-            addPointResponse.setCode("C000");
-            addPointResponse.setMessage("합산 조회 성공");
         } catch (Exception e) {
-            addPointResponse.setCode("E001");
-            addPointResponse.setMessage("Error!!!");
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("Error!!!");
             log.info(e.getMessage());
         }
-        return addPointResponse;
+        return cafeconResponse;
     }
 
 
