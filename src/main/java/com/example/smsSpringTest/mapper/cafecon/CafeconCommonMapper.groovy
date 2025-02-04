@@ -375,6 +375,7 @@ interface CafeconCommonMapper {
            ,log_type = 'CE'
            ,gubun = 'P'
            ,cancel_date = sysdate()
+           ,upt_date = sysdate()
         WHERE tr_id = #{pl.trId}
     """)
     int cancelCoupon(@Param("pl") PointLog pl)
@@ -383,6 +384,7 @@ interface CafeconCommonMapper {
     @Update("""
         UPDATE cafecon_point_log
         SET resend_cnt = #{pl.resendCnt}
+            ,upt_date = sysdate()
         WHERE tr_id = #{pl.trId}
     """)
     int updateResendCnt(@Param("pl") PointLog pl)

@@ -367,6 +367,7 @@ public class CafeconCommonService {
                         pointLog.setDiscountPrice(bizApi.getDiscountPrice());
                         pointLog.setOrderNo(orderNo);
                         pointLog.setTrId(bizApi.getTrId());
+                        pointLog.setResendCnt(5);
                         cafeconCommonMapper.addCompUserPointLog(pointLog);
 
                         couponResponse.setTrId(cafeCoupon.getTrId());
@@ -793,7 +794,13 @@ public class CafeconCommonService {
                 log.info("재전송 성공!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 int resendCnt = 0;
                 int newResendCnt = cafeconCommonMapper.resendCnt(trId);
-                resendCnt = newResendCnt + 1;
+                resendCnt = newResendCnt - 1;
+                if(resendCnt < 0) {
+                    // 만약 횟수 초과되면
+                    couponResponse.setCode("E002");
+                    couponResponse.setMessage("기프티콘 재전송 실패하였습니다. 횟수 초과");
+                    return couponResponse;
+                }
                 PointLog pl = new PointLog();
                 pl.setTrId(trId);
                 pl.setResendCnt(resendCnt);
