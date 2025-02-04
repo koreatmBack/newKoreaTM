@@ -254,16 +254,18 @@ interface CafeconUserMapper {
 
     // 회원의 쿠폰(기프티콘) 구매 내역 조회
     @Select("""
-        SELECT user_id
-              ,tr_id
-              ,phone
-              ,goods_code
-              ,goods_name
-              ,goods_img_b
-              ,reg_date
-              ,limit_date
-        FROM cafecon_coupon
-        WHERE user_id = #{userId}
+        SELECT cc.user_id
+              ,cc.tr_id
+              ,cc.phone
+              ,cc.goods_code
+              ,cc.goods_name
+              ,cc.goods_img_b
+              ,cc.reg_date
+              ,cc.limit_date
+              ,cp.cancel_date
+        FROM cafecon_coupon cc
+        LEFT JOIN cafecon_point_log cp ON cp.tr_id = cc.tr_id
+        WHERE cc.user_id = #{userId}
         AND success_yn = 'Y'
         ORDER BY reg_date DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
@@ -273,8 +275,8 @@ interface CafeconUserMapper {
     // 회원의 쿠폰(기프티콘) 구매 내역 개수
     @Select("""
         SELECT count(*)
-        FROM cafecon_coupon
-        WHERE user_id = #{userId}
+        FROM cafecon_coupon cc
+        LEFT JOIN cafecon_point_log cp ON cp.tr_id = cc.tr_id
         AND success_yn = 'Y'
         ORDER BY reg_date DESC
     """)

@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * author : 신기훈
  * date : 2025-01-20
@@ -29,8 +27,9 @@ public class Coupon {
     private String couponImgUrl;
     private String goodsImgB;
     private String successYn;
-    private LocalDateTime regDate;
-    private LocalDateTime limitDate;
+    private String regDate;
+    private String limitDate;
+    private String cancelDate;
     private String code;
     private String message;
 }
