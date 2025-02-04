@@ -292,7 +292,7 @@ public class CafeconCommonService {
                     "&gubun=" + bizApi.getGubun() +
                     "&rev_info_yn=" + bizApi.getRevInfoYn();
 
-        log.info(uri);
+//        log.info(uri);
 
             try {
                 HttpResponse<String> response = client.send(
@@ -609,6 +609,8 @@ public class CafeconCommonService {
                         apiResponse.setMessage("쿠폰 취소가 불가능합니다.");
                         return apiResponse;
                     }
+                    pointLog.setResendCnt(0);
+                    cafeconCommonMapper.updateResendCnt(pointLog);
                 }
 
                 apiResponse.setCode("C000");
@@ -771,7 +773,7 @@ public class CafeconCommonService {
                     "&tr_id=" + bizApi.getTrId() +
                     "&sms_flag=" + bizApi.getSmsFlag() +
                     "&user_id=" + bizApi.getBizId();
-        log.info(uri);
+//        log.info(uri);
         try {
             HttpResponse<String> response = client.send(
                     HttpRequest.newBuilder()
@@ -787,9 +789,15 @@ public class CafeconCommonService {
             log.info("code :: " + code);
             log.info("message :: " + message);
 
-
             if(code.equals("0000")) {
                 log.info("재전송 성공!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                int resendCnt = cafeconCommonMapper.resendCnt(trId);
+                resendCnt += 1;
+                PointLog pl = new PointLog();
+                pl.setTrId(trId);
+                pl.setResendCnt(resendCnt);
+                int updateResendCnt = cafeconCommonMapper.updateResendCnt(pl);
+                couponResponse.setResendCnt(resendCnt);
                 couponResponse.setCode("C000");
                 couponResponse.setMessage("기프티콘 재전송 성공하였습니다.");
             } else {
@@ -803,7 +811,6 @@ public class CafeconCommonService {
         }
         return couponResponse;
     }
-
 
 
     // 취소 내역 있는지 조회

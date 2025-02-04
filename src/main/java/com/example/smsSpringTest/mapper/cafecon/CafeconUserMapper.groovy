@@ -292,6 +292,7 @@ interface CafeconUserMapper {
               ,cp.point
               ,cc.tr_id
               ,cp.cancel_date
+              ,cp.resend_cnt
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
         WHERE cp.user_id = #{user.userId}

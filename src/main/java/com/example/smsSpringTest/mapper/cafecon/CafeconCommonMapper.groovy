@@ -379,6 +379,22 @@ interface CafeconCommonMapper {
     """)
     int cancelCoupon(@Param("pl") PointLog pl)
 
+    // 재전송 횟수 수정하기
+    @Update("""
+        UPDATE cafecon_point_log
+        SET resend_cnt = #{pl.resendCnt}
+        WHERE tr_id = #{pl.trId}
+    """)
+    int updateResendCnt(@Param("pl") PointLog pl)
+
+    // 재전송할때 재전송 횟수 가져오기
+    @Select("""
+        SELECT resend_cnt
+        FROM cafecon_point_log
+        WHERE tr_id = #{trId}
+    """)
+    int resendCnt(@Param("trId") String trId)
+
 //    // 관리자 -> 지급관리 탭
 //    @Select("""
 //        SELECT cd.user_id

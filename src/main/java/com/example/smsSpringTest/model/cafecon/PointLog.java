@@ -27,7 +27,9 @@ public class PointLog {
     private String useStatus;
     private String startDate;
     private String endDate;
-    private String cancelDate;
+    private String cancelDate; // 취소 일자
+
+    private int resendCnt; // 재전송 횟수
     private int page;
     private int size;
     private int offset;

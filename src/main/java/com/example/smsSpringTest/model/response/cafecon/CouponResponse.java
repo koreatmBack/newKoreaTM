@@ -26,8 +26,14 @@ public class CouponResponse extends ApiResponse {
     private CouponDetail couponDetail;
     private String trId;
     private int point;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalCount;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int resendCnt;
 
 }
