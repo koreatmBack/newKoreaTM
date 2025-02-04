@@ -367,6 +367,17 @@ interface CafeconCommonMapper {
     """)
     int findTrIdCheck(@Param("pl") PointLog pl)
 
+    // point_log 테이블에서 tr_id 일치하는 값 찾아서
+    // 취소시 update 하기
+    @Update("""
+        UPDATE cafecon_point_log
+        SET curr_point = #{pl.currPoint}
+           ,log_type = 'CE'
+           ,gubun = 'P'
+           ,cancel_date = sysdate()
+        WHERE tr_id = #{pl.trId}
+    """)
+    int cancelCoupon(@Param("pl") PointLog pl)
 
 //    // 관리자 -> 지급관리 탭
 //    @Select("""

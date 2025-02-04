@@ -306,7 +306,6 @@ public class CafeconCommonService {
                 String code = bodyJson.get("code").asText();
                 String message = bodyJson.get("message").asText();
 
-                log.info("bodyJson = " + bodyJson);
                 log.info("code :: " + code);
                 log.info("message :: " + message);
 
@@ -367,6 +366,7 @@ public class CafeconCommonService {
                         pointLog.setGoodsName(bizApi.getGoodsName());
                         pointLog.setDiscountPrice(bizApi.getDiscountPrice());
                         pointLog.setOrderNo(orderNo);
+                        pointLog.setTrId(bizApi.getTrId());
                         cafeconCommonMapper.addCompUserPointLog(pointLog);
 
                         couponResponse.setTrId(cafeCoupon.getTrId());
@@ -551,52 +551,64 @@ public class CafeconCommonService {
                 if(result == 1) {
 //                    Goods goods = cafeConMapper.getGoodsPriceData(coupon.getGoodsCode());
 
-                    LocalDate now = LocalDate.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-                    String date = now.format(formatter);
-                    String trId = cafeconCommonMapper.getTrId();
-                    if (trId == null) {
+//                    LocalDate now = LocalDate.now();
+//                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+//                    String date = now.format(formatter);
+//                    String trId = cafeconCommonMapper.getTrId();
+//                    if (trId == null) {
+//
+//                        String num = "00000001";
+//
+//                        trId = "cafe_" + date + "_" + num;
+////                trId = "lafe_" + date + "_" + num;
+//                    }
+//                    String orderNo = this.addOrderNo(trId);
+//                    // point_log 테이블에서 order_no 찾기
+//                    String findOrderNo = cafeconCommonMapper.findOrderNoPointLog(date);
+//
+//                    if(findOrderNo != null) {
+//                        // point_log 테이블에 order_no 값이 있으면
+//                        // coupon의 order_no와 point_log의 order_no 크기 비교하기
+//                        String remainCp = orderNo.replace(date, ""); // "0000000_"
+//                        String remainPl = findOrderNo.replace(date, "");
+//                        int cp = Integer.parseInt(remainCp);
+//                        int pl = Integer.parseInt(remainPl);
+//                        String newTrId = "";
+//                        if(pl >= cp) {
+//                            // point_log의 order_no이 coupon테이블의 order_no보다 클때
+//                            int nextNumber = pl + 1;
+//                            String newFormat = String.format("%08d", nextNumber);
+//                            // 최종 tr_id
+//                            newTrId = "cafe_" + date + "_" + newFormat;
+//                            trId = newTrId;
+//                            orderNo = this.addOrderNo(trId);
+//                        }
+//                    }
 
-                        String num = "00000001";
-
-                        trId = "cafe_" + date + "_" + num;
-//                trId = "lafe_" + date + "_" + num;
-                    }
-                    String orderNo = this.addOrderNo(trId);
-                    // point_log 테이블에서 order_no 찾기
-                    String findOrderNo = cafeconCommonMapper.findOrderNoPointLog(date);
-
-                    if(findOrderNo != null) {
-                        // point_log 테이블에 order_no 값이 있으면
-                        // coupon의 order_no와 point_log의 order_no 크기 비교하기
-                        String remainCp = orderNo.replace(date, ""); // "0000000_"
-                        String remainPl = findOrderNo.replace(date, "");
-                        int cp = Integer.parseInt(remainCp);
-                        int pl = Integer.parseInt(remainPl);
-                        String newTrId = "";
-                        if(pl >= cp) {
-                            // point_log의 order_no이 coupon테이블의 order_no보다 클때
-                            int nextNumber = pl + 1;
-                            String newFormat = String.format("%08d", nextNumber);
-                            // 최종 tr_id
-                            newTrId = "cafe_" + date + "_" + newFormat;
-                            trId = newTrId;
-                            orderNo = this.addOrderNo(trId);
-                        }
-                    }
-
+//                    PointLog pointLog = new PointLog();
+//                    pointLog.setGubun("P");
+//                    pointLog.setLogType("CE");
+//                    pointLog.setUserId(userId);
+//                    pointLog.setTrId(bizApi.getTrId());
+//                    pointLog.setPoint(discountPrice);
+//                    pointLog.setCurrPoint(totalPoint);
+//                    pointLog.setGoodsName(coupon.getGoodsName());
+//                    pointLog.setDiscountPrice(coupon.getDiscountPrice());
+//                    pointLog.setOrderNo(orderNo);
+//
+//                    cafeconCommonMapper.addCompUserPointLog(pointLog);
+                    String trId = bizApi.getTrId();
                     PointLog pointLog = new PointLog();
-                    pointLog.setGubun("P");
-                    pointLog.setLogType("CE");
-                    pointLog.setUserId(userId);
-                    pointLog.setTrId(bizApi.getTrId());
-                    pointLog.setPoint(discountPrice);
                     pointLog.setCurrPoint(totalPoint);
-                    pointLog.setGoodsName(coupon.getGoodsName());
-                    pointLog.setDiscountPrice(coupon.getDiscountPrice());
-                    pointLog.setOrderNo(orderNo);
-
-                    cafeconCommonMapper.addCompUserPointLog(pointLog);
+                    pointLog.setTrId(trId);
+//                    pointLog.setLogType("CE");
+//                    pointLog.setGubun("P");
+                    int cancelCoupon = cafeconCommonMapper.cancelCoupon(pointLog);
+                    if(cancelCoupon == 0) {
+                        apiResponse.setCode("E0805");
+                        apiResponse.setMessage("쿠폰 취소가 불가능합니다.");
+                        return apiResponse;
+                    }
                 }
 
                 apiResponse.setCode("C000");

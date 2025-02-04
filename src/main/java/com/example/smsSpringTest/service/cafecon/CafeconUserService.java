@@ -772,9 +772,9 @@ public class CafeconUserService {
                 String phone = cafeconUserMapper.findOneCafUser(userId).getPhone();
                 List<PointLog> newList = new ArrayList<>();
                 for(PointLog p : cafeconUserMapper.userPointLogList(user)) {
-                    if("CE".equals(p.getLogType())){
-                        p.setTrId(cafeCommonMapper.findTrId(userId, p.getOrderNo()));
-                    }
+//                    if("CE".equals(p.getLogType())){
+//                        p.setTrId(cafeCommonMapper.findTrId(userId, p.getOrderNo()));
+//                    }
                     p.setPhone(phone);
                     newList.add(p);
                 }
