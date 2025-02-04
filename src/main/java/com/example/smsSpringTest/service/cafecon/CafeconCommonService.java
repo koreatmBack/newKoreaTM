@@ -306,6 +306,7 @@ public class CafeconCommonService {
                 String code = bodyJson.get("code").asText();
                 String message = bodyJson.get("message").asText();
 
+                log.info("bodyJson = " + bodyJson);
                 log.info("code :: " + code);
                 log.info("message :: " + message);
 
