@@ -850,6 +850,11 @@ public class CafeconUserService {
         ApiResponse apiResponse = new ApiResponse();
         try {
             CafeUser cafUser = cafeconUserMapper.findCafUserIdBeforeCert(user);
+            if(cafUser == null) {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("가입된 정보가 없습니다.");
+                return apiResponse;
+            }
             if(!StringUtils.hasText(cafUser.getUseStatus())){
                 apiResponse.setCode("E001");
                 apiResponse.setMessage("가입된 정보가 없습니다.");
@@ -885,6 +890,37 @@ public class CafeconUserService {
             log.info(e.getMessage());
         }
         return cafeconResponse;
+    }
+
+    // 비밀번호 찾기 -> 아이디 , 이름 , 연락처 입력 후 인증버튼 클릭시 가입된 계정인지 확인
+    public ApiResponse findCafUserPwdBeforeCert(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            CafeUser cafUser = cafeconUserMapper.findCafUserPwdBeforeCert(user);
+            if(cafUser == null) {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("가입된 정보가 없습니다.");
+                return apiResponse;
+            }
+            if(!StringUtils.hasText(cafUser.getUseStatus())){
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("가입된 정보가 없습니다.");
+            } else {
+                // 가입된 정보는 있는데, use_status가 'N'인 것. = 탈퇴 계정
+                if ("N".equals(cafUser.getUseStatus())) {
+                    apiResponse.setCode("E003");
+                    apiResponse.setMessage("탈퇴한 계정입니다.");
+                } else {
+                    apiResponse.setCode("C000");
+                    apiResponse.setMessage("가입된 정보가 있습니다.");
+                }
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
     }
 
     // 시작일 ~ 종료일 사이에서 log_type이 CP 총 개수와 총 금액 리턴하기

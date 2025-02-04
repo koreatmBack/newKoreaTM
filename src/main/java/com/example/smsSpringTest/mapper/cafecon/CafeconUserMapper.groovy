@@ -357,6 +357,19 @@ interface CafeconUserMapper {
     """)
     int dupCheckPhone(@Param("phone") String phone)
 
+    // 비밀번호 찾기시 가입된 id인지 체킹
+    @Select("""
+        SELECT user_id
+              ,use_status
+              ,created_at
+        FROM cafecon_user
+        WHERE manager_name = #{user.managerName}
+        AND phone = #{user.phone}
+        AND user_id = #{user.userId}
+    """)
+    CafeUser findCafUserPwdBeforeCert(@Param("user") CafeUser user)
+
+
     @Select("""
         SELECT point
         FROM cafecon_point_log
