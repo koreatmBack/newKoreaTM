@@ -385,4 +385,12 @@ interface CafeconUserMapper {
     """)
     List<PointLog> cpPointLogList(@Param("user") CafeUser user)
 
+    // 시작일 ~ 종료일 사이에서 log_type 별로 일마다 포인트 합산 후 type별로 리턴
+    @Select("""
+        SELECT point
+              ,log_type
+        FROM cafecon_point_log
+        WHERE reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+    """)
+    List<PointLog> allPointLog(@Param("user") CafeUser user)
 }

@@ -9,6 +9,7 @@ import com.example.smsSpringTest.model.cafecon.PointLog;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.cafecon.AddPointResponse;
 import com.example.smsSpringTest.model.response.cafecon.CafeconResponse;
 import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
@@ -734,32 +735,8 @@ public class CafeconUserService {
     public CafeconResponse userPointLog(CafeUser user) throws Exception {
         CafeconResponse cafeconResponse = new CafeconResponse();
         try {
-            // 로그인 유저인지 체크
-            Cookie cookies[] = request.getCookies();
-            String accessToken = "";
-//            CafeUser user = new CafeUser();
-            String userId = "";
-            // 만약 쿠키가 있다면
-            for(Cookie cookie : cookies) {
-                if("accesstoken".equals(cookie.getName())){
-                    accessToken = cookie.getValue();
-                }
-            }
 
-            // 쿠키가 없다면
-            if(!StringUtils.hasText(accessToken)){
-                cafeconResponse.setCode("E401");
-                cafeconResponse.setMessage("로그인 상태가 아닙니다.");
-                return cafeconResponse;
-            }
-            // AccessToken 검증
-            if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
-                //AccessToken에서 authentication 가져오기
-                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-                user.setUserId(authentication.getName());
-//                log.info("id = " + user.getUserId());
-                userId = authentication.getName();
-            }
+
             int page = user.getPage(); // 현재 페이지
             int size = user.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
@@ -943,4 +920,51 @@ public class CafeconUserService {
         }
         return cafeconResponse;
     }
+
+    // 시작일 ~ 종료일 사이에서 log_type 별로 일마다 포인트 합산 후 type별로 리턴
+    public AddPointResponse findAllPointLog(CafeUser user) throws Exception {
+        AddPointResponse addPointResponse = new AddPointResponse();
+        try {
+            int AP = 0;
+            int AD = 0;
+            int CP = 0;
+            int CE = 0;
+            int GI = 0;
+            List<PointLog> allPointLog = cafeconUserMapper.allPointLog(user);
+            log.info(allPointLog+"");
+            for(PointLog pl : allPointLog) {
+                if("AP".equals(pl.getLogType())){
+                    AP += pl.getPoint();
+                } else if("AD".equals(pl.getLogType())) {
+                    AD += pl.getPoint();
+                } else if("CP".equals(pl.getLogType())) {
+                    CP += pl.getPoint();
+                } else if("CE".equals(pl.getLogType())) {
+                    CE += pl.getPoint();
+                } else {
+                    // GI (선물)
+                    GI += pl.getPoint();
+                }
+            }
+            log.info("AP = " + AP);
+            log.info("AD = " + AD);
+            log.info("CP = " + CP);
+            log.info("CE = " + CE);
+            log.info("GI = " + GI);
+            addPointResponse.setAP(AP);
+            addPointResponse.setAD(AD);
+            addPointResponse.setCP(CP);
+            addPointResponse.setCE(CE);
+            addPointResponse.setGI(GI);
+            addPointResponse.setCode("C000");
+            addPointResponse.setMessage("합산 조회 성공");
+        } catch (Exception e) {
+            addPointResponse.setCode("E001");
+            addPointResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return addPointResponse;
+    }
+
+
 }
