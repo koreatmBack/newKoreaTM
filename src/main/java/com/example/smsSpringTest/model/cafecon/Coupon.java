@@ -34,7 +34,7 @@ public class Coupon {
     private String cancelDate;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
-    private String resendCnt;
+    private int resendCnt;
     private String code;
     private String message;
 }

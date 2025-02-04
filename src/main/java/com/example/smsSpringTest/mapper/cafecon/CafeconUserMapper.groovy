@@ -262,7 +262,7 @@ interface CafeconUserMapper {
               ,cc.goods_img_b
               ,cc.reg_date
               ,cc.limit_date
-              ,cp.cancel_date
+              ,IF(cp.cancel_date = '0000-00-00 00:00:00', NULL, cp.cancel_date) AS cancel_date
               ,cp.resend_cnt
         FROM cafecon_coupon cc
         LEFT JOIN cafecon_point_log cp ON cp.tr_id = cc.tr_id
@@ -278,6 +278,7 @@ interface CafeconUserMapper {
         SELECT count(*)
         FROM cafecon_coupon cc
         LEFT JOIN cafecon_point_log cp ON cp.tr_id = cc.tr_id
+        WHERE cc.user_id = #{userId}
         AND cc.success_yn = 'Y'
     """)
     int countUserCouponList(@Param("userId") String userId)
