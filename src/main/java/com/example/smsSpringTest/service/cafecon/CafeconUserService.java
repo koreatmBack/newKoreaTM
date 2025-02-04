@@ -726,6 +726,7 @@ public class CafeconUserService {
         } catch (Exception e){
             couponResponse.setCode("E001");
             couponResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
         }
         return couponResponse;
     }

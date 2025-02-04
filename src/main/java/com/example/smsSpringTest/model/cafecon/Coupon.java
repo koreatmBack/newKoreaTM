@@ -30,6 +30,7 @@ public class Coupon {
     private String regDate;
     private String limitDate;
     private String cancelDate;
+    private String resendCnt;
     private String code;
     private String message;
 }

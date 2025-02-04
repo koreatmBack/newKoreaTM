@@ -263,11 +263,12 @@ interface CafeconUserMapper {
               ,cc.reg_date
               ,cc.limit_date
               ,cp.cancel_date
+              ,cp.resend_cnt
         FROM cafecon_coupon cc
         LEFT JOIN cafecon_point_log cp ON cp.tr_id = cc.tr_id
         WHERE cc.user_id = #{userId}
-        AND success_yn = 'Y'
-        ORDER BY reg_date DESC
+        AND cc.success_yn = 'Y'
+        ORDER BY cc.reg_date DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<Coupon> userCouponList(@Param("paging") Paging paging, @Param("userId") String userId)
@@ -277,8 +278,7 @@ interface CafeconUserMapper {
         SELECT count(*)
         FROM cafecon_coupon cc
         LEFT JOIN cafecon_point_log cp ON cp.tr_id = cc.tr_id
-        AND success_yn = 'Y'
-        ORDER BY reg_date DESC
+        AND cc.success_yn = 'Y'
     """)
     int countUserCouponList(@Param("userId") String userId)
 
