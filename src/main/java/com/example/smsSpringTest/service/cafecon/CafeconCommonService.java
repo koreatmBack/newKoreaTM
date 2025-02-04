@@ -791,8 +791,9 @@ public class CafeconCommonService {
 
             if(code.equals("0000")) {
                 log.info("재전송 성공!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                int resendCnt = cafeconCommonMapper.resendCnt(trId);
-                resendCnt += 1;
+                int resendCnt = 0;
+                int newResendCnt = cafeconCommonMapper.resendCnt(trId);
+                resendCnt = newResendCnt + 1;
                 PointLog pl = new PointLog();
                 pl.setTrId(trId);
                 pl.setResendCnt(resendCnt);
