@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -770,16 +769,16 @@ public class CafeconUserService {
             cafeconResponse.setPointLogList(cafeconUserMapper.userPointLogList(user));
             if(cafeconResponse.getPointLogList() != null && !cafeconResponse.getPointLogList().isEmpty()) {
                 int totalPages = (int) Math.ceil((double) totalCount / size);
-                String phone = cafeconUserMapper.findOneCafUser(userId).getPhone();
-                List<PointLog> newList = new ArrayList<>();
-                for(PointLog p : cafeconUserMapper.userPointLogList(user)) {
-//                    if("CE".equals(p.getLogType())){
-//                        p.setTrId(cafeCommonMapper.findTrId(userId, p.getOrderNo()));
-//                    }
-                    p.setPhone(phone);
-                    newList.add(p);
-                }
-                cafeconResponse.setPointLogList(newList);
+//                String phone = cafeconUserMapper.findOneCafUser(userId).getPhone();
+//                List<PointLog> newList = new ArrayList<>();
+//                for(PointLog p : cafeconUserMapper.userPointLogList(user)) {
+////                    if("CE".equals(p.getLogType())){
+////                        p.setTrId(cafeCommonMapper.findTrId(userId, p.getOrderNo()));
+////                    }
+//                    p.setPhone(phone);
+//                    newList.add(p);
+//                }
+//                cafeconResponse.setPointLogList(newList);
                 cafeconResponse.setTotalPages(totalPages);
                 cafeconResponse.setTotalCount(totalCount);
                 cafeconResponse.setCode("C000");

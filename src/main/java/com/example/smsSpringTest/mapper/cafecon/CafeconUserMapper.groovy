@@ -294,7 +294,7 @@ interface CafeconUserMapper {
               ,cc.goods_name
               ,cp.point
               ,cc.tr_id
-              ,cp.cancel_date
+              ,IF(cp.cancel_date = '0000-00-00 00:00:00', NULL, cp.cancel_date) AS cancel_date
               ,cp.resend_cnt
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
