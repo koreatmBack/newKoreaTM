@@ -29,7 +29,11 @@ public class Coupon {
     private String successYn;
     private String regDate;
     private String limitDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String cancelDate;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private String resendCnt;
     private String code;
     private String message;
