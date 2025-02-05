@@ -223,6 +223,7 @@ interface CafeconUserMapper {
         , agree_terms
         , agree_privacy
         , agree_marketing
+        , created_at
         FROM cafecon_user
         WHERE use_status = 'Y'
         <if test="user.searchType == 'userId'">AND user_id = #{user.searchKeyword} </if>
