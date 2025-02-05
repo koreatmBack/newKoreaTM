@@ -5,7 +5,6 @@ import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ public class CafeconResponse extends ApiResponse {
 
     private CafeUser user;
     private String userId;
-    private LocalDate createdAt;
+    private String createdAt;
     private List<CafeUser> cafeconUserList;
     private List<Deposit> depositList;
     private List<PointLog> pointLogList;
