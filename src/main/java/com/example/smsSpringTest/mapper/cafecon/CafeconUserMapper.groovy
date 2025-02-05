@@ -45,7 +45,6 @@ interface CafeconUserMapper {
             , #{user.companyName}
             , #{user.managerName}
             , #{user.phone}
-            , #{user.address}
             , #{user.businessNo}
             , #{user.businessName}
             , #{user.businessEmail}

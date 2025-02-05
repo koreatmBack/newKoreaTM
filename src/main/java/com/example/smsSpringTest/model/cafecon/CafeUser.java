@@ -28,7 +28,7 @@ public class CafeUser {
     private String businessName; // 사업자명
     private String businessEmail; // 계산서발행 이메일
     private String businessLicense; //사업자 등록증 첨부 url
-    private String businessLicenseName; //사업자 등록증 첨부 url
+    private String businessLicenseName; // 사업자 등록증명
     private String businessStatus; // 업태
     private String businessSector; // 업종
     private String businessAddress; // 사업장 주소
