@@ -315,11 +315,18 @@ interface CafeconUserMapper {
 
     // 회원의 포인트 지급 및 차감 내역 총 개수
     @Select("""
+<script>
         SELECT COUNT(*)
         FROM cafecon_point_log cp
         LEFT JOIN cafecon_coupon cc ON cc.order_no = cp.order_no
         WHERE cp.user_id = #{user.userId}
         AND cp.log_type IN ('CP', 'CE' ,'GI')
+        <if test="user.searchType == 'memo'"> AND cc.memo LIKE CONCAT('%', #{user.searchKeyword}, '%') </if>
+        <if test="user.searchType == 'orderNo'"> AND cp.order_no = #{user.searchKeyword}</if>
+        <if test="user.searchType == 'phone'"> AND cc.phone = #{user.searchKeyword}</if>
+        <if test="user.searchType == 'goodsName'"> AND cc.goods_name LIKE CONCAT('%', #{user.searchKeyword}, '%') </if>      
+        <if test="user.startDate != null"> AND cp.reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND </if>
+</script>        
     """)
     int countUserPointLogList(@Param("user") CafeUser user)
 
