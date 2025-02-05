@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LogResult {
 
+    private int plusPnt;
+    private int miunsPnt;
     private int cpPnt;
     private int cePnt;
     private int apPnt;

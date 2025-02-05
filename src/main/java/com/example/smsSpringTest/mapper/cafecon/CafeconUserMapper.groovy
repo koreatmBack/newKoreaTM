@@ -400,6 +400,8 @@ interface CafeconUserMapper {
     @Select("""
          <script>
          SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
+                , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
+                , SUM(CASE WHEN log.gubun = 'D' OR log.gubun = 'B' THEN log.point ELSE 0 END) AS miunsPnt
                 , SUM(CASE WHEN log.log_type = 'AP' THEN log.point ELSE 0 END) as apPnt
                 , SUM(CASE WHEN log.log_type = 'AD' THEN log.point ELSE 0 END) as adPnt
                 , SUM(CASE WHEN log.log_type = 'GI' THEN log.point ELSE 0 END) as giPnt
@@ -419,13 +421,17 @@ interface CafeconUserMapper {
     // 관리자 전용 날짜별 포인트 지급액, 사용액 합계 조회
     @Select("""
         <script>
-        SELECT SUM(apPnt) AS totalApPnt
+        SELECT SUM(plusPnt) AS totalPlusPnt
+            , SUM(miunsPnt) AS totalMiunsPnt
+            , SUM(apPnt) AS totalApPnt
             , SUM(adPnt) AS totalAdPnt
             , SUM(cpPnt) AS totalCpPnt
             , SUM(cePnt) AS totalCePnt
             , SUM(giPnt) AS totalGiPnt
           FROM (
             SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
+                , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
+                , SUM(CASE WHEN log.gubun = 'D' OR log.gubun = 'B' THEN log.point ELSE 0 END) AS miunsPnt
                 , SUM(CASE WHEN log.log_type = 'AP' THEN log.point ELSE 0 END) as apPnt
                 , SUM(CASE WHEN log.log_type = 'AD' THEN log.point ELSE 0 END) as adPnt
                 , SUM(CASE WHEN log.log_type = 'GI' THEN log.point ELSE 0 END) as giPnt
