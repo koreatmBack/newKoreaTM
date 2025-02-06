@@ -471,8 +471,11 @@ public class CafeconUserService {
              AP -> 관리자가 지급
              AD -> 관리자가 차감
 
+             CH -> 포인트 충전
+             CA -> 포인트 충전 취소
+
              PR -> 프로모션 지급
-             PC -> 프로모션 차감
+             PC -> 프로모션 지급 취소
             */
 
             String userId = user.getUserId();
@@ -1022,8 +1025,8 @@ public class CafeconUserService {
     public CafeconResponse findAllPromotionLog(PointLog pointLog) throws Exception {
         CafeconResponse cafeconResponse = new CafeconResponse();
         try {
-            cafeconResponse.setPointList(cafeconUserMapper.getAdminDateTotalPrPoint(pointLog));
-            cafeconResponse.setTotalResult(cafeconUserMapper.getTotalPrPoint(pointLog));
+            cafeconResponse.setPrPointList(cafeconUserMapper.getAdminDateTotalPrPoint(pointLog));
+            cafeconResponse.setPrTotalResult(cafeconUserMapper.getTotalPrPoint(pointLog));
 
             log.info("totalResult: {}", cafeconResponse.getTotalResult());
 

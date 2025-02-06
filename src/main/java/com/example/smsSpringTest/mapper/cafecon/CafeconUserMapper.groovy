@@ -5,6 +5,8 @@ import com.example.smsSpringTest.model.cafecon.CafeUser
 import com.example.smsSpringTest.model.cafecon.Coupon
 import com.example.smsSpringTest.model.cafecon.LogResult
 import com.example.smsSpringTest.model.cafecon.PointLog
+import com.example.smsSpringTest.model.cafecon.PrLogResult
+import com.example.smsSpringTest.model.cafecon.PrTotalResult
 import com.example.smsSpringTest.model.cafecon.TotalResult
 import org.apache.ibatis.annotations.*
 /**
@@ -469,6 +471,7 @@ interface CafeconUserMapper {
     """)
     TotalResult getTotalPoint(@Param("pointLog") PointLog pointLog)
 
+    // ㅡㅡㅡㅡㅡㅡㅡ 프로모션 ㅡㅡㅡㅡㅡㅡㅡ
 
     // 관리자전용 날짜별 프로모션 지급액, 차감액 조회
     @Select("""
@@ -493,9 +496,9 @@ interface CafeconUserMapper {
           ORDER BY reg_date DESC
           </script>
     """)
-    List<LogResult> getAdminDateTotalPrPoint(@Param("pointLog") PointLog pointLog)
+    List<PrLogResult> getAdminDateTotalPrPoint(@Param("pointLog") PointLog pointLog)
 
-    // 관리자 전용 날짜별 포인트 지급액, 사용액 합계 조회
+    // 관리자 전용 날짜별 프로모션 포인트 지급액, 사용액 합계 조회
     @Select("""
         <script>
         SELECT SUM(plusPnt) AS totalPlusPnt
@@ -530,6 +533,6 @@ interface CafeconUserMapper {
           ) AS daily_summary
         </script>
     """)
-    TotalResult getTotalPrPoint(@Param("pointLog") PointLog pointLog)
+    PrTotalResult getTotalPrPoint(@Param("pointLog") PointLog pointLog)
 
 }

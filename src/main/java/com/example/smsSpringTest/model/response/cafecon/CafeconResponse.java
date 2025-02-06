@@ -30,6 +30,10 @@ public class CafeconResponse extends ApiResponse {
     private List<LogResult> pointList;
     private TotalResult totalResult;
 
+    // 프로모션
+    private List<PrLogResult> prPointList;
+    private PrTotalResult prTotalResult;
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
 
