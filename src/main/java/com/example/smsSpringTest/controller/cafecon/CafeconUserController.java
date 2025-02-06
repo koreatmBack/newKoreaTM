@@ -104,6 +104,7 @@ public class CafeconUserController {
     }
 
     // 카페콘 회원 포인트 수정 ( 관리자가 지급 및 차감하는 것 )
+    // 프로모션 지급 및 차감도 추가
     @PutMapping("/update/point")
     public ApiResponse updatePoint(@RequestBody CafeUser user) throws Exception {
         return cafeconUserService.updatePoint(user);
@@ -173,6 +174,12 @@ public class CafeconUserController {
     @PostMapping("/find/all/pointLog")
     public CafeconResponse findAllPointLog(@RequestBody PointLog pointLog) throws Exception {
         return cafeconUserService.findAllPointLog(pointLog);
+    }
+
+    // 시작일 ~ 종료일 사이에서 프로모션 타입 별로 일마다 포인트 합산 후 type별로 리턴
+    @PostMapping("/find/all/promotionLog")
+    public CafeconResponse findAllPromotionLog(@RequestBody PointLog pointLog) throws Exception {
+        return cafeconUserService.findAllPromotionLog(pointLog);
     }
 
 }

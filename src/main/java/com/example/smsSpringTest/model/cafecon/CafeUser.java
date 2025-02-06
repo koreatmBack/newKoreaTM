@@ -57,4 +57,6 @@ public class CafeUser {
     private String searchKeyword; // 검색어
     private String startDate;
     private String endDate;
+
+    private String prType; // 프로모션 타입
 }

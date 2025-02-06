@@ -330,7 +330,8 @@ interface CafeconUserMapper {
     """)
     int countUserPointLogList(@Param("user") CafeUser user)
 
-    // 회원의 충전 내역 조회 관리자 지급, 차감만
+    // 회원의 충전 내역 조회 관리자 지급, 관리자 임의 차감
+    // 포인트 충전 , 프로모션 지급 까지 총 4개
     @Select("""
         SELECT reg_date
               ,order_no
@@ -338,7 +339,7 @@ interface CafeconUserMapper {
               ,log_type
         FROM cafecon_point_log
         WHERE user_id = #{user.userId}
-        AND log_type IN ('AP', 'AD')
+        AND log_type IN ('AP', 'AD' , 'CH', 'PR')
         ORDER BY reg_date DESC
         LIMIT #{user.size} OFFSET #{user.offset}
     """)
@@ -349,7 +350,7 @@ interface CafeconUserMapper {
         SELECT count(*)
         FROM cafecon_point_log
         WHERE user_id = #{user.userId}
-        AND log_type IN ('AP', 'AD')
+        AND log_type IN ('AP', 'AD' , 'CH', 'PR')
     """)
     int countUserChargeList(@Param("user") CafeUser user)
 
@@ -394,14 +395,14 @@ interface CafeconUserMapper {
     """)
     List<PointLog> cpPointLogList(@Param("user") CafeUser user)
 
-    // 시작일 ~ 종료일 사이에서 log_type 별로 일마다 포인트 합산 후 type별로 리턴
-    @Select("""
-        SELECT point
-              ,log_type
-        FROM cafecon_point_log
-        WHERE reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND
-    """)
-    List<PointLog> allPointLog(@Param("user") CafeUser user)
+//    // 시작일 ~ 종료일 사이에서 log_type 별로 일마다 포인트 합산 후 type별로 리턴
+//    @Select("""
+//        SELECT point
+//              ,log_type
+//        FROM cafecon_point_log
+//        WHERE reg_date BETWEEN #{user.startDate} AND DATE_ADD(#{user.endDate}, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+//    """)
+//    List<PointLog> allPointLog(@Param("user") CafeUser user)
 
     // 관리자전용 날짜별 포인트 지급액, 사용액 조회
     @Select("""
@@ -414,6 +415,10 @@ interface CafeconUserMapper {
                 , SUM(CASE WHEN log.log_type = 'GI' THEN log.point ELSE 0 END) as giPnt
                 , SUM(CASE WHEN log.log_type = 'CP' THEN log.point ELSE 0 END) as cpPnt
                 , SUM(CASE WHEN log.log_type = 'CE' THEN log.point ELSE 0 END) as cePnt
+                , SUM(CASE WHEN log.log_type = 'CH' THEN log.point ELSE 0 END) as chPnt
+                , SUM(CASE WHEN log.log_type = 'CA' THEN log.point ELSE 0 END) as caPnt
+                , SUM(CASE WHEN log.log_type = 'PR' THEN log.point ELSE 0 END) as prPnt
+                , SUM(CASE WHEN log.log_type = 'PC' THEN log.point ELSE 0 END) as pcPnt
            FROM cafecon_point_log log
           WHERE 1=1
           <if test="pointLog.startDate != null and pointLog.startDate != '' ">
@@ -435,6 +440,10 @@ interface CafeconUserMapper {
             , SUM(cpPnt) AS totalCpPnt
             , SUM(cePnt) AS totalCePnt
             , SUM(giPnt) AS totalGiPnt
+            , SUM(chPnt) AS totalChPnt
+            , SUM(caPnt) AS totalCaPnt
+            , SUM(prPnt) AS totalPrPnt
+            , SUM(pcPnt) AS totalPcPnt
           FROM (
             SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
                 , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
@@ -444,6 +453,10 @@ interface CafeconUserMapper {
                 , SUM(CASE WHEN log.log_type = 'GI' THEN log.point ELSE 0 END) as giPnt
                 , SUM(CASE WHEN log.log_type = 'CP' THEN log.point ELSE 0 END) as cpPnt
                 , SUM(CASE WHEN log.log_type = 'CE' THEN log.point ELSE 0 END) as cePnt
+                , SUM(CASE WHEN log.log_type = 'CH' THEN log.point ELSE 0 END) as chPnt
+                , SUM(CASE WHEN log.log_type = 'CA' THEN log.point ELSE 0 END) as caPnt
+                , SUM(CASE WHEN log.log_type = 'PR' THEN log.point ELSE 0 END) as prPnt
+                , SUM(CASE WHEN log.log_type = 'PC' THEN log.point ELSE 0 END) as pcPnt
            FROM cafecon_point_log log
            WHERE 1=1
              <if test="pointLog.startDate != null and pointLog.startDate != '' ">
@@ -455,5 +468,56 @@ interface CafeconUserMapper {
         </script>
     """)
     TotalResult getTotalPoint(@Param("pointLog") PointLog pointLog)
+
+
+    // 관리자전용 날짜별 프로모션 지급액, 차감액 조회
+    @Select("""
+         <script>
+         SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
+                , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
+                , SUM(CASE WHEN log.gubun = 'D' OR log.gubun = 'B' THEN log.point ELSE 0 END) AS miunsPnt
+                , SUM(CASE WHEN log.pr_type = 'RT' THEN log.point ELSE 0 END) as rtPnt
+                , SUM(CASE WHEN log.pr_type = 'AT' THEN log.point ELSE 0 END) as atPnt
+                , SUM(CASE WHEN log.pr_type = 'RB' THEN log.point ELSE 0 END) as rbPnt
+                , SUM(CASE WHEN log.pr_type = 'DR' THEN log.point ELSE 0 END) as drPnt
+           FROM cafecon_point_log log
+          WHERE log.log_type IN ('PR', 'PC')
+          <if test="pointLog.startDate != null and pointLog.startDate != '' ">
+            AND log.reg_date BETWEEN date(#{pointLog.startDate}) AND DATE_ADD(date(#{pointLog.endDate}), INTERVAL 1 DAY) - INTERVAL 1 SECOND
+          </if>
+          GROUP BY DATE_FORMAT(log.reg_date, '%Y-%m-%d')
+          ORDER BY reg_date DESC
+          </script>
+    """)
+    List<LogResult> getAdminDateTotalPrPoint(@Param("pointLog") PointLog pointLog)
+
+    // 관리자 전용 날짜별 포인트 지급액, 사용액 합계 조회
+    @Select("""
+        <script>
+        SELECT SUM(plusPnt) AS totalPlusPnt
+            , SUM(miunsPnt) AS totalMiunsPnt
+            , SUM(rtPnt) AS totalRtPnt
+            , SUM(atPnt) AS totalAtPnt
+            , SUM(rbPnt) AS totalRbPnt
+            , SUM(drPnt) AS totalDrPnt
+          FROM (
+            SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
+                , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
+                , SUM(CASE WHEN log.gubun = 'D' OR log.gubun = 'B' THEN log.point ELSE 0 END) AS miunsPnt
+                , SUM(CASE WHEN log.pr_type = 'RT' THEN log.point ELSE 0 END) as rtPnt
+                , SUM(CASE WHEN log.pr_type = 'AT' THEN log.point ELSE 0 END) as atPnt
+                , SUM(CASE WHEN log.pr_type = 'RB' THEN log.point ELSE 0 END) as rbPnt
+                , SUM(CASE WHEN log.pr_type = 'DR' THEN log.point ELSE 0 END) as drPnt
+           FROM cafecon_point_log log
+           WHERE log.log_type IN ('PR', 'PC')
+             <if test="pointLog.startDate != null and pointLog.startDate != '' ">
+                AND log.reg_date BETWEEN date(#{pointLog.startDate}) AND DATE_ADD(date(#{pointLog.endDate}), INTERVAL 1 DAY) - INTERVAL 1 SECOND
+             </if>
+             GROUP BY DATE_FORMAT(log.reg_date, '%Y-%m-%d')
+             ORDER BY reg_date DESC
+          ) AS daily_summary
+        </script>
+    """)
+    TotalResult getTotalPrPoint(@Param("pointLog") PointLog pointLog)
 
 }

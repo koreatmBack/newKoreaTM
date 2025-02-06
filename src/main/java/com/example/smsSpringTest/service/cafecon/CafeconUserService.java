@@ -467,9 +467,14 @@ public class CafeconUserService {
     public ApiResponse updatePoint(CafeUser user) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {
+            /**
+             AP -> 관리자가 지급
+             AD -> 관리자가 차감
 
-            // AP -> 관리자가 지급,
-            // AD -> 관리자가 차감
+             PR -> 프로모션 지급
+             PC -> 프로모션 차감
+            */
+
             String userId = user.getUserId();
 
             if(!StringUtils.hasText(user.getLogType())){
@@ -479,23 +484,84 @@ public class CafeconUserService {
                 return apiResponse;
             }
 
+            if("PR".equals(user.getLogType()) || "PC".equals(user.getLogType())){
+                // 만약 프로모션 지급/취소 이면 프로모션 타입도 필수
+                if(!StringUtils.hasText(user.getPrType())){
+                    apiResponse.setCode("E001");
+                    apiResponse.setMessage("프로모션 타입을 정해주세요.");
+                    return apiResponse;
+                }
+            }
+
             int point = user.getPoint(); // 지급 or 차감하고자 하는 포인트
             int currPoint = cafeconUserMapper.getUserPoint(user.getUserId()); // 현재(수정 전) 회원 포인트
 
-                String logType = "";
+                String logType = user.getLogType();
                 String gubun = "";
-                if("지급".equals(user.getLogType())){
-                    // 관리자 지급일때
-                    logType = "AP";
+
+//                if("AP".equals(logType)){
+//                    // 관리자 지급일때
+////                    logType = "AP";
+//                    gubun = "P";
+//                    currPoint += point;
+//                    user.setPoint(currPoint);
+//                } else if("AD".equals(logType)){
+//                    // 관리자 차감일때
+////                    logType = "AD";
+//                    gubun = "B";
+//                    if(point > currPoint) {
+//                        // 만약 차감 포인트가 현재 포인트보다 크다면
+//                        apiResponse.setCode("E001");
+//                        apiResponse.setMessage("차감할 보유 포인트가 부족합니다.");
+//                        return apiResponse;
+//                    }
+//                    currPoint -= point;
+//                    user.setPoint(currPoint);
+//                } else if("CH".equals(logType)) {
+//                    // 포인트 충전
+//
+//                } else if("CA".equals(logType)) {
+//                    gubun = "B";
+//                    // 포인트 충전 취소
+//                    if(point > currPoint) {
+//                    // 만약 차감 포인트가 현재 포인트보다 크다면
+//                    apiResponse.setCode("E001");
+//                    apiResponse.setMessage("차감할 보유 포인트가 부족합니다.");
+//                    return apiResponse;
+//                    }
+//                    currPoint -= point;
+//                    user.setPoint(currPoint);
+//                } else if("PR".equals(logType)){
+//                    // 프로모션 지급
+////                    logType = "PR";
+//                    gubun = "P";
+//                    currPoint += point;
+//                    user.setPoint(currPoint);
+//                } else if("PC".equals(logType)){
+//                    // 프로모션  차감
+////                    logType = "PC";
+////                    gubun = "B";
+//                    if(point > currPoint) {
+//                        // 만약 차감할 포인트가 현재 보유 포인트보다 크면
+//                        apiResponse.setCode("E001");
+//                        apiResponse.setMessage("차감할 보유 포인트가 부족합니다.");
+//                        return apiResponse;
+//                    }
+//                    currPoint -= point;
+//                    user.setPoint(currPoint);
+//                }
+
+                if(logType.equals("AP") || logType.equals("CH") || logType.equals("PR")) {
+                    // 만약 로그 타입이 관리자 임의 지급 or 포인트 충전 or 프로모션 지급 이면
                     gubun = "P";
                     currPoint += point;
                     user.setPoint(currPoint);
-                } else {
-                    // 관리자 차감일때
-                    logType = "AD";
+
+                } else if(logType.equals("AD") || logType.equals("CA") || logType.equals("PC")) {
+                    // 만약 로그 타입이 관리자 임의 차감 or 포인트 충전 취소 or 프로모션 지급 취소 일때
                     gubun = "B";
                     if(point > currPoint) {
-                        // 만약 차감 포인트가 현재 포인트보다 크다면
+                        // 만약 차감할 포인트가 현재 보유 포인트보다 크면
                         apiResponse.setCode("E001");
                         apiResponse.setMessage("차감할 보유 포인트가 부족합니다.");
                         return apiResponse;
@@ -503,6 +569,8 @@ public class CafeconUserService {
                     currPoint -= point;
                     user.setPoint(currPoint);
                 }
+
+
                 int updatePoint = cafeconUserMapper.updatePoint(user);
 
                 if(updatePoint == 1) {
@@ -513,6 +581,12 @@ public class CafeconUserService {
                     pointLog.setLogType(logType);
                     pointLog.setPoint(point);
                     pointLog.setCurrPoint(currPoint);
+
+                    // 만약 프로모션 지급 / 차감 이면
+                    if(StringUtils.hasText(user.getPrType())){
+                        pointLog.setPrType(user.getPrType());
+                    }
+
                     log.info(pointLog.toString());
                     // coupon 테이블에서 orderNo 찾기
                     LocalDate now = LocalDate.now();
@@ -944,5 +1018,28 @@ public class CafeconUserService {
         return cafeconResponse;
     }
 
+    // 시작일 ~ 종료일 사이에서 프로모션 타입 별로 일마다 포인트 합산 후 type별로 리턴
+    public CafeconResponse findAllPromotionLog(PointLog pointLog) throws Exception {
+        CafeconResponse cafeconResponse = new CafeconResponse();
+        try {
+            cafeconResponse.setPointList(cafeconUserMapper.getAdminDateTotalPrPoint(pointLog));
+            cafeconResponse.setTotalResult(cafeconUserMapper.getTotalPrPoint(pointLog));
+
+            log.info("totalResult: {}", cafeconResponse.getTotalResult());
+
+            if(cafeconResponse.getPointList() != null && !cafeconResponse.getPointList().isEmpty()) {
+                cafeconResponse.setCode("C000");
+                cafeconResponse.setMessage("프로모션 일별 조회 성공");
+            } else {
+                cafeconResponse.setCode("E001");
+                cafeconResponse.setMessage("프로모션 일별 조회 실패");
+            }
+        } catch (Exception e) {
+            cafeconResponse.setCode("E001");
+            cafeconResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return cafeconResponse;
+    }
 
 }
