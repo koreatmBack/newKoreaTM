@@ -476,10 +476,14 @@ interface CafeconUserMapper {
          SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
                 , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
                 , SUM(CASE WHEN log.gubun = 'D' OR log.gubun = 'B' THEN log.point ELSE 0 END) AS miunsPnt
-                , SUM(CASE WHEN log.pr_type = 'RT' THEN log.point ELSE 0 END) as rtPnt
-                , SUM(CASE WHEN log.pr_type = 'AT' THEN log.point ELSE 0 END) as atPnt
-                , SUM(CASE WHEN log.pr_type = 'RB' THEN log.point ELSE 0 END) as rbPnt
-                , SUM(CASE WHEN log.pr_type = 'DR' THEN log.point ELSE 0 END) as drPnt
+                , SUM(CASE WHEN log.pr_type = 'RT' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as rtPnt
+                , SUM(CASE WHEN log.pr_type = 'AT' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as atPnt
+                , SUM(CASE WHEN log.pr_type = 'RB' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as rbPnt
+                , SUM(CASE WHEN log.pr_type = 'DR' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as drPnt
+                , SUM(CASE WHEN log.pr_type = 'RT' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as rtCancelPnt
+                , SUM(CASE WHEN log.pr_type = 'AT' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as atCancelPnt
+                , SUM(CASE WHEN log.pr_type = 'RB' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as rbCancelPnt
+                , SUM(CASE WHEN log.pr_type = 'DR' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as drCancelPnt
            FROM cafecon_point_log log
           WHERE log.log_type IN ('PR', 'PC')
           <if test="pointLog.startDate != null and pointLog.startDate != '' ">
@@ -500,14 +504,22 @@ interface CafeconUserMapper {
             , SUM(atPnt) AS totalAtPnt
             , SUM(rbPnt) AS totalRbPnt
             , SUM(drPnt) AS totalDrPnt
+            , SUM(rtCancelPnt) AS totalRtCancelPnt
+            , SUM(atCancelPnt) AS totalAtCancelPnt
+            , SUM(rbCancelPnt) AS totalRbCancelPnt
+            , SUM(drCancelPnt) AS totalDrCancelPnt
           FROM (
             SELECT DATE_FORMAT(log.reg_date, '%Y-%m-%d') AS reg_date
                 , SUM(CASE WHEN log.gubun = 'P' THEN log.point ELSE 0 END) AS plusPnt
                 , SUM(CASE WHEN log.gubun = 'D' OR log.gubun = 'B' THEN log.point ELSE 0 END) AS miunsPnt
-                , SUM(CASE WHEN log.pr_type = 'RT' THEN log.point ELSE 0 END) as rtPnt
-                , SUM(CASE WHEN log.pr_type = 'AT' THEN log.point ELSE 0 END) as atPnt
-                , SUM(CASE WHEN log.pr_type = 'RB' THEN log.point ELSE 0 END) as rbPnt
-                , SUM(CASE WHEN log.pr_type = 'DR' THEN log.point ELSE 0 END) as drPnt
+                , SUM(CASE WHEN log.pr_type = 'RT' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as rtPnt
+                , SUM(CASE WHEN log.pr_type = 'AT' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as atPnt
+                , SUM(CASE WHEN log.pr_type = 'RB' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as rbPnt
+                , SUM(CASE WHEN log.pr_type = 'DR' AND log.log_type = 'PR' THEN log.point ELSE 0 END) as drPnt
+                , SUM(CASE WHEN log.pr_type = 'RT' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as rtCancelPnt
+                , SUM(CASE WHEN log.pr_type = 'AT' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as atCancelPnt
+                , SUM(CASE WHEN log.pr_type = 'RB' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as rbCancelPnt
+                , SUM(CASE WHEN log.pr_type = 'DR' AND log.log_type = 'PC' THEN log.point ELSE 0 END) as drCancelPnt
            FROM cafecon_point_log log
            WHERE log.log_type IN ('PR', 'PC')
              <if test="pointLog.startDate != null and pointLog.startDate != '' ">
