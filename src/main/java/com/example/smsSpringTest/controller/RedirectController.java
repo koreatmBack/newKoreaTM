@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
@@ -32,11 +33,24 @@ public class RedirectController {
     }
 
     @GetMapping
-    public ResponseEntity<byte[]> fetchResource(@RequestParam String url,
-                                                @RequestParam(required = false) String page) {
+    public ResponseEntity<byte[]> fetchResource(@RequestParam String url) {
         try {
             // URL 디코딩
             String decodedUrl = URLDecoder.decode(url, StandardCharsets.UTF_8.name());
+
+            // URL에서 page 파라미터 추출
+            URI uri = new URI(decodedUrl);
+            String query = uri.getQuery(); // "page=albamon"
+            String page = null;
+
+            if (query != null) {
+                for (String param : query.split("&")) {
+                    if (param.startsWith("page=")) {
+                        page = param.split("=")[1];
+                        break;
+                    }
+                }
+            }
 
             if (StringUtils.hasText(page)) {
                 // 페이지 값 있으면 조회수 추가
