@@ -112,7 +112,7 @@ interface CafeconUserMapper {
     """)
     int deleteUser(@Param("userId") String userId)
 
-    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 기존 pwd, 새로운 pwd)
+    // 회원 정보 수정 -> 비밀번호 변경하기 (userId, 새로운 pwd)
     @Update("""
         UPDATE cafecon_user
         SET user_pwd = #{user.userPwd}

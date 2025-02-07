@@ -97,6 +97,12 @@ public class CafeconUserController {
         return cafeconUserService.changePwd(user);
     }
 
+    // 카페콘 비밀번호 재설정 (비밀번호 찾기 이후)
+    @PutMapping("/reset/pwd")
+    public ApiResponse resetPwd(@RequestBody CafeUser user) throws Exception {
+        return cafeconUserService.resetPwd(user);
+    }
+
     // 카페콘 회원 정보 수정
     @PutMapping("/edit")
     public CafeconResponse cafeconUserUpdate(@RequestBody CafeUser user) throws Exception {

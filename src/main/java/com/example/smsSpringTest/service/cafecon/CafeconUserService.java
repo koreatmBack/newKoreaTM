@@ -429,6 +429,33 @@ public class CafeconUserService {
         return apiResponse;
     }
 
+    // 카페콘 비밀번호 재설정 (비밀번호 찾기 이후)
+    public ApiResponse resetPwd(CafeUser user) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            if(!StringUtils.hasText(user.getUserId())){
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("변경할 아이디가 없습니다.");
+                return apiResponse;
+            }
+            user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+            int resetPwd = cafeconUserMapper.changePwd(user);
+            if(resetPwd == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("비밀번호 재설정 성공");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("비밀번호 재설정 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error !!!");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
+    }
+
+
     // 카페콘 회원 정보 수정
     @Transactional
     public CafeconResponse cafeconUserUpdate(CafeUser user) throws Exception {
