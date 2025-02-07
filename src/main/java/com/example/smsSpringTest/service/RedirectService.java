@@ -36,6 +36,7 @@ public class RedirectService {
             String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
             int firstInsertCheck = commonMapper.firstInsertChk(date,url,page);
+            log.info("firstCheck = " + firstInsertCheck);
             if(firstInsertCheck != 0) {
                 // 이미 값 있음
                 // 그럼 업데이트 해야겠지
