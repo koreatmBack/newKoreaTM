@@ -235,4 +235,52 @@ interface CommonMapper {
         DELETE FROM jobsite_email_code
     """)
     int deleteAllEmailCode()
+
+
+    // 2025-02-07 리다이렉트 매퍼
+
+    // 최초 등록인지 체킹하기
+    @Select("""
+        SELECT count(*)
+        FROM ad_view_log
+        WHERE date = #{date}
+        AND url = #{url}
+        AND page = #{page}
+    """)
+    int firstInsertChk(@Param("date") String date, @Param("url") String url, @Param("page") String page)
+
+    // 최초 등록
+    @Insert("""
+        INSERT INTO ad_view_log (
+            page
+            , date
+            , total_view
+            , \${timeType}
+            , url
+        ) VALUES (
+            #{page}
+            ,#{date}
+            ,1
+            ,1
+            ,#{url}
+        )
+    """)
+    int firstInsert(@Param("page") String page, @Param("date") String date,
+                    @Param("timeType") String timeType, @Param("url") String url)
+
+    // 최초 아닐때 조회수 올리기
+    @Update("""
+        UPDATE ad_view_log
+        SET total_view = total_view + 1
+           ,\${timeType} = \${timeType} + 1
+        WHERE page = #{page}
+        AND date = #{date}
+        AND url = #{url}
+    """)
+    int updatePageView(@Param("page") String page, @Param("date") String date,
+                       @Param("timeType") String timeType, @Param("url") String url)
+
+
+
+
 }

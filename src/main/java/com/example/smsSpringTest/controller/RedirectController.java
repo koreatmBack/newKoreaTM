@@ -1,8 +1,10 @@
 package com.example.smsSpringTest.controller;
 
+import com.example.smsSpringTest.service.RedirectService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +23,23 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/redirect")
 public class RedirectController {
 
+    private final RedirectService redirectService;
+
+    public RedirectController(RedirectService redirectService) {
+        this.redirectService = redirectService;
+    }
+
     @GetMapping
-    public ResponseEntity<byte[]> fetchResource(@RequestParam String url) {
+    public ResponseEntity<byte[]> fetchResource(@RequestParam String url,
+                                                @RequestParam(required = false) String page) {
         try {
             // URL 디코딩
             String decodedUrl = URLDecoder.decode(url, StandardCharsets.UTF_8.name());
+
+            if (StringUtils.hasText(page)) {
+                // 페이지 값 있으면 조회수 추가
+                redirectService.countRedirect(page, decodedUrl);
+            }
 
             // HTTP URL에서 리소스 가져오기
             RestTemplate restTemplate = new RestTemplate();
