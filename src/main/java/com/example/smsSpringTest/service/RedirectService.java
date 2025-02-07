@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -27,10 +28,11 @@ public class RedirectService {
         try {
 
             // 현재 시간 가져오기
-            LocalTime now = LocalTime.now();
-
+//            LocalTime now = LocalTime.now();
+            LocalTime time = LocalTime.now(ZoneId.of("Asia/Seoul")); // 한국 시간 적용
+            log.info("한국시간 = "+time+"");
             // 시간대별 카운트 컬럼 선택
-            String timeType = getTimeType(now);
+            String timeType = getTimeType(time);
 
             // 20250207 형식
             String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -53,6 +55,8 @@ public class RedirectService {
     }
 
     private String getTimeType(LocalTime time) {
+
+
         if (time.isBefore(LocalTime.of(6, 0))) {
             return "dawn_view";   // 새벽 (00:00 - 05:59)
         } else if (time.isBefore(LocalTime.of(12, 0))) {
