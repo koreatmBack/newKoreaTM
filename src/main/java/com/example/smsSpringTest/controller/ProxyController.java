@@ -27,7 +27,7 @@ public class ProxyController {
             String encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.name());
 
             // 2. 자체 서버의 HTTPS로 변환된 URL을 생성
-            String httpsUrl = "https://cafecon.co.kr/redirect?url=" + encodedUrl;
+            String httpsUrl = "https://api.inssain.co.kr/redirect?url=" + encodedUrl;
 
             // 3. 변환된 HTTPS URL을 클라이언트에 반환
             return ResponseEntity.ok(httpsUrl);
