@@ -251,6 +251,7 @@ interface CommonMapper {
 
     // 최초 등록
     @Insert("""
+<script>
         INSERT INTO ad_view_log (
             page
             , date
@@ -264,18 +265,21 @@ interface CommonMapper {
             ,1
             ,#{url}
         )
+</script>        
     """)
     int firstInsert(@Param("page") String page, @Param("date") String date,
                     @Param("timeType") String timeType, @Param("url") String url)
 
     // 최초 아닐때 조회수 올리기
     @Update("""
+<script>
         UPDATE ad_view_log
         SET total_view = total_view + 1
            ,\${timeType} = \${timeType} + 1
         WHERE page = #{page}
         AND date = #{date}
         AND url = #{url}
+</script>        
     """)
     int updatePageView(@Param("page") String page, @Param("date") String date,
                        @Param("timeType") String timeType, @Param("url") String url)
