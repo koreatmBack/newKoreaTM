@@ -14,20 +14,28 @@ interface JobUserMapper {
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 본인인증 (문자) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     // 문자 본인인증 코드 저장할때 이미 인증 받았으면 해당 row에 인증 번호 덮어 씌우기
     @Update("""
+<script>
         UPDATE cert_sms_code
-        SET sms_code = #{cert.smsCode},
-            user_name = #{cert.userName}
-        WHERE phone = #{cert.phone} 
+        <set>
+            sms_code = #{cert.smsCode},
+            user_name = #{cert.userName},
+            user_id = #{cert.userId}
+        </set>    
+        WHERE phone = #{cert.phone}
+</script>        
     """)
     int dupSmsCode(@Param("cert") Cert cert);
 
     // 문자 본인인증 일치하는지 찾기
     @Select("""
+<script>
         SELECT count(*)
         FROM cert_sms_code
         WHERE user_name = #{cert.userName}
         AND phone = #{cert.phone}
         AND sms_code = #{cert.smsCode}
+        <if test="cert.userId != null"> AND user_id = #{cert.userId} </if>
+</script>        
     """)
     int certUser(@Param("cert") Cert cert);
 

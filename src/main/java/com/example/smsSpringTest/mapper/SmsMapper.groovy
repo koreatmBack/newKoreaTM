@@ -32,10 +32,12 @@ interface SmsMapper {
             user_name
             ,phone
             ,sms_code
+            ,user_id
         ) VALUES (
             #{cert.userName}
             , #{cert.phone}
             , #{cert.smsCode}
+            , #{cert.userId}
         )
     """)
     int addCertSMS(@Param("cert") Cert cert)
