@@ -43,7 +43,7 @@ public class RedirectController {
                 redirectService.countRedirect(page, decodedUrl);
                 log.info("여기 들어옴?");
             }
-
+            log.info("여기는 ?? 들어옴");
             // HTTP URL에서 리소스 가져오기
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<byte[]> response = restTemplate.getForEntity(decodedUrl, byte[].class);
