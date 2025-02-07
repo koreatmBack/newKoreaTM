@@ -438,7 +438,7 @@ public class CafeconUserService {
                 apiResponse.setMessage("변경할 아이디가 없습니다.");
                 return apiResponse;
             }
-            user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+            user.setUserPwd(passwordEncoder.encode(user.getUserNewPwd()));
             int resetPwd = cafeconUserMapper.changePwd(user);
             if(resetPwd == 1) {
                 apiResponse.setCode("C000");
