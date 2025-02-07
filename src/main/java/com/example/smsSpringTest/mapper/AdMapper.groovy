@@ -209,7 +209,8 @@ interface AdMapper {
     <script>
         UPDATE formmail_ad
      <set>
-        <if test="ad.endDate != null>
+        
+        <if test="ad.endDate != null">
             end_date = #{ad.endDate},
         </if>
         <if test="ad.extensionDay != null">
@@ -238,9 +239,6 @@ interface AdMapper {
         </if>   
         <if test="ad.concept != null">
             concept = #{ad.concept},
-        </if>   
-        <if test="ad.userName != null">
-            user_name = #{ad.userName},
         </if>   
         <if test="ad.company != null">
             company = #{ad.company},
