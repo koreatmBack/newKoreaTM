@@ -380,6 +380,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/cafecon/user/find/id/**" , "/v1/cafecon/user/find/id"
                 , "/api/v1/cafecon/user/find/pwd/before/cert" , "/v1/cafecon/user/find/pwd/before/cert"
                 , "/api/v1/cafecon/user/dupCheck/phone" , "/v1/cafecon/user/dupCheck/phone"
+                , "/api/v1/cafecon/user/reset/pwd" , "/v1/cafecon/user/reset/pwd"
 
         };
 
