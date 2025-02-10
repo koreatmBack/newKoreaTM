@@ -196,7 +196,7 @@ public class formMail_adminService {
                                     log.info("cookie 유효기간 seconds = " + accessTokenExpiration / 1000);
 
                                     FormMailAdmin user2 = adminMapper.findOneAdmin(userId);
-//                                    user2.setRole(user2.getRole());
+
                                     adminResponse.setFormMailAdmin(user2);
                                     log.info("로그인 상태에서 또 로그인시 user = " + user2);
                                     adminResponse.setCode("C000");
@@ -230,11 +230,7 @@ public class formMail_adminService {
                         // 최종적으로 Access token이 있을때
 //                        userResponse.setUserProfile(commonMapper.getFrontUserProfile(userId));
                         FormMailAdmin user2 = adminMapper.findOneAdmin(userId);
-                        if(user2.isAdmin()){
-                            user2.setRole("admin");
-                        } else {
-                            user2.setRole("manager");
-                        }
+
                         adminResponse.setFormMailAdmin(user2);
                         String userName = adminMapper.userName(userId);
                         adminResponse.setCode("C000");

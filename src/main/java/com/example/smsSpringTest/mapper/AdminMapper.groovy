@@ -25,7 +25,7 @@ interface AdminMapper {
             , r_name
             , user_name
             , position
-            , admin
+            , role
             , team
             , m_phone
             , r_phone
@@ -36,7 +36,7 @@ interface AdminMapper {
             , #{admin.rName}
             , #{admin.userName}
             , #{admin.position}
-            , #{admin.admin}
+            , #{admin.role}
             , #{admin.team}
             , #{admin.mPhone}
             , #{admin.rPhone}
@@ -74,7 +74,7 @@ interface AdminMapper {
     @Select("""
         SELECT r_name
         , m_phone
-        , admin
+        , role
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
@@ -94,7 +94,7 @@ interface AdminMapper {
             , r_name
             , user_name
             , position
-            , admin
+            , role
             , team
             , m_phone
             , r_phone
@@ -119,7 +119,7 @@ interface AdminMapper {
             , r_name
             , user_name
             , position
-            , admin
+            , role
             , team
             , m_phone
             , r_phone
@@ -142,6 +142,7 @@ interface AdminMapper {
         <if test="admin.mPhone != null"> m_phone = #{admin.mPhone},</if>
         <if test="admin.rPhone != null"> r_phone = #{admin.rPhone},</if>
         <if test="admin.email != null"> email = #{admin.email},</if>
+        <if test="admin.role != null"> role = #{admin.role},</if>
       </set>
         WHERE user_id = #{user.userId}
 </script>
@@ -178,7 +179,7 @@ interface AdminMapper {
         , r_name
         , user_name
         , position
-        , admin
+        , role
         , team
         , m_phone
         , r_phone

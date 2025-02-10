@@ -72,12 +72,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     // fm_admin 으로 변경하기 위해
     private UserDetails createAdminDetails(FormMailAdminEntity admin) {
-        String role = admin.getTeam().equals("관리자") ? "ADMIN" : "MANAGER";
+//        String role = admin.getTeam().equals("관리자") ? "ADMIN" : "MANAGER";
 
         return User.builder()
                 .username(admin.getUserId())
                 .password(admin.getUserPwd())
-                .roles(role)
+                .roles("FORMMAIL")
                 .build();
     }
 

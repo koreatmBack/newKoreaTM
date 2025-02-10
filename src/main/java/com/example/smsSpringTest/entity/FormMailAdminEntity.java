@@ -43,8 +43,8 @@ public class FormMailAdminEntity {
     @Column(name = "position")
     private String position;
 
-    @Column(name = "admin")
-    private boolean admin;
+    @Column(name = "role")
+    private String role;
 
     @NotBlank(message = "팀 등록은 필수입니다.")
     @Column(name = "team")

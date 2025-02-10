@@ -30,7 +30,6 @@ public class FormMailAdmin {
     @JsonProperty("userName")
     private String userName;
     private String position;
-    private boolean admin;
     private String team;
     @JsonProperty("mPhone")
     private String mPhone;
