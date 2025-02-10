@@ -182,6 +182,31 @@ public class formMail_adminService {
                             commonMapper.updateUserToken(refToken2);
                         } else {
                             // 현재 날짜가, uptdate + 28일보다 이전이면서, refresh 토큰도 유효할때
+                            // 만약 쿠키에 accesstoken이 있으면 (즉, 로그인이 유효하면)
+                            Cookie cookies[] = request.getCookies();
+                            // 만약 쿠키가 있다면
+                            if(cookies != null) {
+                                String accessToken = jwtTokenProvider.extractTokenFromCookies(cookies);
+                                if(StringUtils.hasText(accessToken) && userId.equals(jwtTokenProvider.getAuthentication(accessToken).getName())) {
+                                    // accesstoken 이라는 쿠키가 있을때
+                                    String cookieName = jwtTokenProvider.getAuthentication(accessToken).getName();
+                                    userId = cookieName;
+                                    log.info("아직 유효한 cookie = " + accessToken);
+                                    Long accessTokenExpiration = jwtTokenProvider.getExpiration(accessToken);
+                                    log.info("cookie 유효기간 seconds = " + accessTokenExpiration / 1000);
+
+                                    FormMailAdmin user2 = adminMapper.findOneAdmin(userId);
+//                                    user2.setRole(user2.getRole());
+                                    adminResponse.setFormMailAdmin(user2);
+                                    log.info("로그인 상태에서 또 로그인시 user = " + user2);
+                                    adminResponse.setCode("C000");
+                                    String userName = adminMapper.userName(userId);
+                                    adminResponse.setMessage(userName + "님 현재 로그인 상태입니다. 로그인 만료까지" +
+                                            accessTokenExpiration/1000 + "초 남았습니다.");
+                                    return adminResponse;
+                                }
+                            }
+
                             token = jwtTokenProvider.AdminAccessToken(authentication);
                             log.info("아직 유효한 AccessToken = " + token);
                             Long accessTokenExpiration = jwtTokenProvider.getExpiration(token.getAccessToken());

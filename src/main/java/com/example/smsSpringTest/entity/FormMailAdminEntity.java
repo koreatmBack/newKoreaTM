@@ -36,7 +36,6 @@ public class FormMailAdminEntity {
     @Column(name = "r_name")
     private String rName;
 
-    @NotBlank(message = "예명은 필수입니다.")
     @Column(name = "user_name")
     private String userName;
 
