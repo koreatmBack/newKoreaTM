@@ -30,6 +30,7 @@ interface AdminMapper {
             , m_phone
             , r_phone
             , email
+            , form_no
         ) VALUES (
             #{admin.userId}
             , #{admin.userPwd}
@@ -41,6 +42,7 @@ interface AdminMapper {
             , #{admin.mPhone}
             , #{admin.rPhone}
             , #{admin.email}
+            , #{admin.formNo}
         )
     """)
     int signUp(@Param("admin") FormMailAdmin admin)
@@ -99,6 +101,7 @@ interface AdminMapper {
             , m_phone
             , r_phone
             , email
+            , form_no
             , created
             , updated
         FROM formmail_admin
@@ -124,6 +127,7 @@ interface AdminMapper {
             , m_phone
             , r_phone
             , email
+            , form_no
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
@@ -143,6 +147,7 @@ interface AdminMapper {
         <if test="admin.rPhone != null"> r_phone = #{admin.rPhone},</if>
         <if test="admin.email != null"> email = #{admin.email},</if>
         <if test="admin.role != null"> role = #{admin.role},</if>
+        <if test="admin.formNo != null"> form_no = #{admin.formNo},</if>
       </set>
         WHERE user_id = #{user.userId}
 </script>
@@ -184,6 +189,7 @@ interface AdminMapper {
         , m_phone
         , r_phone
         , email
+        , form_no
     FROM formmail_admin
     WHERE user_name LIKE CONCAT('%', #{name}, '%')
     OR r_name LIKE CONCAT('%', #{name}, '%')

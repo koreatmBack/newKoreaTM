@@ -60,4 +60,10 @@ public class FormMailAdminEntity {
     @JsonProperty("rPhone")
     private String rPhone;
 
+    @Column(name = "form_no")
+    @JsonProperty("formNo")
+    private String formNo;
+
+
+
 }
