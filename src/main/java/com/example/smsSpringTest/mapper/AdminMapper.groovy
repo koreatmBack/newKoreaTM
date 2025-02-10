@@ -31,6 +31,7 @@ interface AdminMapper {
             , r_phone
             , email
             , form_no
+            ,rank
         ) VALUES (
             #{admin.userId}
             , #{admin.userPwd}
@@ -43,6 +44,7 @@ interface AdminMapper {
             , #{admin.rPhone}
             , #{admin.email}
             , #{admin.formNo}
+            , #{admin.rank}
         )
     """)
     int signUp(@Param("admin") FormMailAdmin admin)
@@ -102,6 +104,7 @@ interface AdminMapper {
             , r_phone
             , email
             , form_no
+            , rank
             , created
             , updated
         FROM formmail_admin
@@ -128,6 +131,7 @@ interface AdminMapper {
             , r_phone
             , email
             , form_no
+            , rank
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
@@ -148,6 +152,7 @@ interface AdminMapper {
         <if test="admin.email != null"> email = #{admin.email},</if>
         <if test="admin.role != null"> role = #{admin.role},</if>
         <if test="admin.formNo != null"> form_no = #{admin.formNo},</if>
+        <if test="admin.rank != null"> rank = #{admin.rank},</if>
       </set>
         WHERE user_id = #{user.userId}
 </script>

@@ -40,6 +40,7 @@ public class FormMailAdmin {
     private LocalDate updated;  // 수정일
     private String role;
     private String formNo;
+    private String rank;
 
     private String keyword; //  검색시
 }

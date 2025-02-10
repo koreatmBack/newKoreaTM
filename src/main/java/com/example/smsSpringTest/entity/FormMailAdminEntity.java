@@ -64,6 +64,8 @@ public class FormMailAdminEntity {
     @JsonProperty("formNo")
     private String formNo;
 
-
+    @Column(name = "rank")
+    @JsonProperty("rank")
+    private String rank;
 
 }
