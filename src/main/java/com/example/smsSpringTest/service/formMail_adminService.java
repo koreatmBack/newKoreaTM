@@ -461,6 +461,7 @@ public class formMail_adminService {
         } catch (Exception e) {
             adminResponse.setCode("E001");
             adminResponse.setMessage("ERROR!!!");
+            log.info(e.getMessage());
         }
 
         return adminResponse;

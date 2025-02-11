@@ -154,10 +154,10 @@ interface AdminMapper {
         <if test="admin.formNo != null"> form_no = #{admin.formNo},</if>
         <if test="admin.rank != null"> rank = #{admin.rank},</if>
       </set>
-        WHERE user_id = #{user.userId}
+        WHERE user_id = #{admin.userId}
 </script>
     """)
-    int updateAdmin(@Param("user") FormMailAdmin admin)
+    int updateAdmin(@Param("admin") FormMailAdmin admin)
 
     // id가 일치할때 그 회원의 모든 db값 반환
     @Select("""
