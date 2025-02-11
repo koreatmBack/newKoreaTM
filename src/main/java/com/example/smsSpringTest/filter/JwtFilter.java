@@ -129,7 +129,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                if(authorities.equals("ROLE_CAFECON")){
                    String userId = authentication.getName();
-                   String role = jwtTokenProvider.findUserRole(userId);
+                   String role = jwtTokenProvider.findUserRole(userId, "CAFECON");
                    log.info("role = " + role);
 
                        if(!isCafUserEndpoint(requestURI, role)){
@@ -137,6 +137,18 @@ public class JwtFilter extends OncePerRequestFilter {
                            hasError = true;
                        }
                }
+
+               if(authorities.equals("ROLE_FORMMAIL")) {
+                   String userId = authentication.getName();
+                   String role = jwtTokenProvider.findUserRole(userId , "FORMMAIL");
+                   log.info("role = " + role);
+
+                   if(!isFormAdminEndpoint(requestURI, role)) {
+                       hasError = true;
+                   }
+
+               }
+
 
                // validateToken 으로 유효성 검사
                if (tokenStatus.equals("ACCESS") && !hasError) {
@@ -457,6 +469,66 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         return false;
     }
+
+    // FORMMAIL_ADMIN 회원이 이용 가능
+    private boolean isFormAdminEndpoint(String requestURI, String role){
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+
+        // FORMMAIL_ADMIN 관리자는 모두 이용 가능 ( TOTALADMIN , ADMIN )
+        String[] adminEndpoints = {
+                "/v1/**", "/api/v1/**"
+        };
+
+        String[] subAdminEndPoints = {
+                "/v1/formMail_admin/findOneAdmin" , "/api/v1/formMail_admin/findOneAdmin"
+                ,"/v1/formMail_admin/adminList" , "/api/v1/formMail_admin/adminList"
+                ,"/v1/formMail_admin/findAdmins" , "/api/v1/formMail_admin/findAdmins"
+                ,"/v1/formMail_admin/addPhoneNum" , "/api/v1/formMail_admin/addPhoneNum"
+                ,"/v1/formMail_admin/allPhoneNumList" , "/api/v1/formMail_admin/allPhoneNumList"
+                ,"/v1/formMail_admin/delPhoneNum" , "/api/v1/formMail_admin/delPhoneNum"
+                ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
+        };
+
+        String[] managerEndPoints = {
+                "/v1/formMail_admin/findOneAdmin" , "/api/v1/formMail_admin/findOneAdmin"
+                ,"/v1/formMail_admin/findAdmins" , "/api/v1/formMail_admin/findAdmins"
+                ,"/v1/formMail_admin/addPhoneNum" , "/api/v1/formMail_admin/addPhoneNum"
+                ,"/v1/formMail_admin/allPhoneNumList" , "/api/v1/formMail_admin/allPhoneNumList"
+                ,"/v1/formMail_admin/delPhoneNum" , "/api/v1/formMail_admin/delPhoneNum"
+                ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
+
+        };
+
+
+        if("ADMIN".equals(role) || "TOTALADMIN".equals(role)) {
+            for (String adminEndpoint : adminEndpoints) {
+                if(pathMatcher.match(adminEndpoint, requestURI)) {
+                    return true;
+                }
+            }
+        } else if ("MANAGER".equals(role)) {
+            for (String managerEndPoint : managerEndPoints) {
+                // 매니저일때 여기 접근하면 에러
+                if(pathMatcher.match(managerEndPoint, requestURI)) {
+                    return true;
+                }
+            }
+        } else if("SUBADMIN".equals(role)) {
+            // SUBADMIN 일때
+            for (String subAdminEndPoint : subAdminEndPoints) {
+                if (pathMatcher.match(subAdminEndPoint, requestURI)) {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
+
+
+
 
 //    // 카페콘 회원 -> 관리자만 이용 가능한 API
 //    private boolean isCafAdminEndpoint(String requestURI){

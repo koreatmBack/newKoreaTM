@@ -2,7 +2,6 @@ package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
 import com.example.smsSpringTest.model.FormMailAdmin;
-import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.response.AccessResponse;
@@ -86,8 +85,8 @@ public class formMail_adminController {
 
     // 회원 목록
     @PostMapping("/adminList")
-    public AdminResponse adminList(@RequestBody Paging paging) throws Exception{
-        return formMailAdminService.adminList(paging);
+    public AdminResponse adminList(@RequestBody FormMailAdmin admin) throws Exception{
+        return formMailAdminService.adminList(admin);
     }
 
     // 회원 한명 정보 반환
@@ -157,4 +156,9 @@ public class formMail_adminController {
         return adminResponse;
     }
 
+    // 폼메일 회원 삭제하기 (TOTALADMIN, ADMIN) 만 가능
+    @DeleteMapping("/delete/one")
+    public ApiResponse deleteOne(@RequestBody FormMailAdmin admin) throws Exception {
+        return formMailAdminService.deleteOne(admin);
+    }
 }

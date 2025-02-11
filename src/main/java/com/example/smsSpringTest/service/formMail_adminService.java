@@ -6,7 +6,6 @@ import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.FormMailAdmin;
-import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.AccessResponse;
@@ -326,13 +325,13 @@ public class formMail_adminService {
 
 
     // 전체 회원 목록
-    public AdminResponse adminList(Paging paging) {
+    public AdminResponse adminList(FormMailAdmin admin) {
 
         AdminResponse adminResponse = new AdminResponse();
 
-        // 캐시 키
-        String cacheKey = "userList_" + paging.getPage() + "_" + paging.getSize();
-        long cacheTime = 1000 * 60 * 60; // 만료시간 1시간.
+//        // 캐시 키
+//        String cacheKey = "userList_" + paging.getPage() + "_" + paging.getSize();
+//        long cacheTime = 1000 * 60 * 60; // 만료시간 1시간.
 
         // Redis에서 데이터가 있는지 확인
 //        if (Boolean.TRUE.equals(redisTemplate.hasKey(cacheKey))) {
@@ -341,17 +340,60 @@ public class formMail_adminService {
 //            log.info("Redis에서 회원 목록을 조회했습니다.");
 //        } else {
 
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+        // 로그인 유저인지 체크
+        Cookie cookies[] = request.getCookies();
+        String accessToken = "";
+//            CafeUser user = new CafeUser();
+        String userId = "";
+        // 만약 쿠키가 있다면
+        for(Cookie cookie : cookies) {
+            if("accesstoken".equals(cookie.getName())){
+                accessToken = cookie.getValue();
+            }
+        }
+
+        // 쿠키가 없다면
+        if(!StringUtils.hasText(accessToken)){
+            adminResponse.setCode("E401");
+            adminResponse.setMessage("로그인 상태가 아닙니다.");
+            return adminResponse;
+        }
+
+        // AccessToken 검증
+        if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+            //AccessToken에서 authentication 가져오기
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            userId = authentication.getName();
+        }
+
+
+            int page = admin.getPage(); // 현재 페이지
+            int size = admin.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = adminMapper.getUserListCount();
+            int totalCount = adminMapper.getUserListCount(admin);
 
-            paging.setOffset(offset);
+        admin.setOffset(offset);
 
-            adminResponse.setAdminList(adminMapper.adminProfileList(paging));
-            log.info(adminMapper.adminProfileList(paging).toString());
+            adminResponse.setAdminList(adminMapper.adminProfileList(admin));
+//            log.info(adminMapper.adminProfileList(paging).toString());
 
-            log.info("adminResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
+//            log.info("adminResponse :  page = " + page + ", size = " + size + ", offset = " + offset + ", totalCount = " + totalCount);
+
+            String role = adminMapper.findOneAdmin(userId).getRole();
+
+            if("SUBADMIN".equals(role)) {
+                // 회원이랑 team이 일치한 데이터 목록만 리턴
+                String team = adminMapper.findOneAdmin(userId).getTeam();
+                admin.setTeam(team);
+                adminResponse.setAdminList(adminMapper.teamList(admin));
+                totalCount = adminMapper.teamListCount(team);
+            }
+//            else if ("ADMIN".equals(role) || "TOTALADMIN".equals(role)) {
+//            // 부서 검색 기능
+//            if(StringUtils.hasText(admin.getTeam())){
+//
+//            }
+//        }
 
             if (adminResponse.getAdminList() != null && !adminResponse.getAdminList().isEmpty()) {
                 // 비어있지 않을 때
@@ -707,5 +749,27 @@ public class formMail_adminService {
 
         return refToken;
     }
+
+    // 폼메일 회원 삭제
+    public ApiResponse deleteOne(FormMailAdmin admin) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int deleteOne = adminMapper.deleteOne(admin);
+            if(deleteOne == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("삭제 완료");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("삭제 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+
+        return apiResponse;
+    }
+
 }
 

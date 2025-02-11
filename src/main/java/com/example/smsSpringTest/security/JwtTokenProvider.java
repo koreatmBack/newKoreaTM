@@ -1,5 +1,6 @@
 package com.example.smsSpringTest.security;
 
+import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.model.common.RefToken;
@@ -38,6 +39,7 @@ public class JwtTokenProvider {
 
     private final CommonMapper commonMapper;
     private final CafeconUserMapper cafeconUserMapper;
+    private final AdminMapper adminMapper;
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
     private static final String TYPE_ACCESS = "access";
@@ -59,9 +61,10 @@ public class JwtTokenProvider {
 
 
     // application.yml에서 secret 값 가져와서 key에 저장
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CommonMapper commonMapper, CafeconUserMapper cafeconUserMapper) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CommonMapper commonMapper, CafeconUserMapper cafeconUserMapper, AdminMapper adminMapper) {
         this.commonMapper = commonMapper;
         this.cafeconUserMapper = cafeconUserMapper;
+        this.adminMapper = adminMapper;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -489,10 +492,16 @@ public class JwtTokenProvider {
     }
 
     // 쿠키 정보 토대로, userId 획득 후 role 가져오기
-    public String findUserRole(String userId){
-        String role = cafeconUserMapper.findRole(userId);
+    public String findUserRole(String userId, String type){
+        String role = "";
+        if(type.equals("CAFECON")) {
+            role = cafeconUserMapper.findRole(userId);
+        } else if(type.equals("FORMMAIL")) {
+            role = adminMapper.findOneAdmin(userId).getRole();
+        }
         return role;
     }
+
 
 //    // 쿠키 삭제 -> 만료 시간 0으로 설정하면 자동 삭제됨
 //    public Cookie deleteCookie(String cookieName) {

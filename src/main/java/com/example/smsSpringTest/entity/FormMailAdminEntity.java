@@ -68,4 +68,8 @@ public class FormMailAdminEntity {
     @JsonProperty("rank")
     private String rank;
 
+    @Column(name = "use_status")
+    @JsonProperty("useStatus")
+    private boolean useStatus;
+
 }

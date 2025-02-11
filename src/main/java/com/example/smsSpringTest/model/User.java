@@ -27,4 +27,6 @@ public class User {
     private String mPhone;
 
     private boolean admin;
+
+    private String role;
 }

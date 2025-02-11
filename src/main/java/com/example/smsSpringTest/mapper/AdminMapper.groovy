@@ -1,13 +1,11 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.entity.PhoneNum
 import com.example.smsSpringTest.entity.FormMailAdminEntity
-import com.example.smsSpringTest.model.Paging
+import com.example.smsSpringTest.entity.PhoneNum
+import com.example.smsSpringTest.model.FormMailAdmin
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser
-import com.example.smsSpringTest.model.FormMailAdmin
 import org.apache.ibatis.annotations.*
-
 /*
 
     ADMIN 용 mapper
@@ -94,6 +92,7 @@ interface AdminMapper {
 
     // 회원 목록(pw 제외) 반환
     @Select("""
+<script>
         SELECT user_id
             , r_name
             , user_name
@@ -107,17 +106,55 @@ interface AdminMapper {
             , rank
             , created
             , updated
+            , use_status
         FROM formmail_admin
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        WHERE 1=1
+        <if test="admin.team != null"> AND team = #{admin.team} </if>
+        LIMIT #{admin.size} OFFSET #{admin.offset}
+</script>        
     """)
-    List<FormMailAdmin> adminProfileList(@Param("paging") Paging paging)
+    List<FormMailAdmin> adminProfileList(@Param("admin") FormMailAdmin admin)
 
-    // 전체 회원 수
+    // SUBADMIN 일때 team 일치한 회원 목록 리턴
+    @Select("""
+        SELECT user_id
+            , r_name
+            , user_name
+            , position
+            , role
+            , team
+            , m_phone
+            , r_phone
+            , email
+            , form_no
+            , rank
+            , created
+            , updated
+            , use_status
+            FROM formmail_admin
+            WHERE team = #{admin.team}
+            LIMIT #{admin.size} OFFSET #{admin.offset}
+    """)
+    List<FormMailAdmin> teamList(@Param("admin") FormMailAdmin admin)
+
+    // SUBADMIN 일때 team 일치한 회원 목록 리턴
     @Select("""
         SELECT count(*)
         FROM formmail_admin
+        WHERE team = #{team}
     """)
-    int getUserListCount()
+    int teamListCount(@Param("team") String team)
+
+    // 전체 회원 수
+    @Select("""
+<script>
+        SELECT count(*)
+        FROM formmail_admin
+        WHERE 1=1
+        <if test="admin.team != null"> AND team = #{admin.team} </if>
+</script>        
+    """)
+    int getUserListCount(@Param("admin") FormMailAdmin admin)
 
     // 회원 한명(pw 제외) 반환
     @Select("""
@@ -132,6 +169,7 @@ interface AdminMapper {
             , email
             , form_no
             , rank
+            , use_status
         FROM formmail_admin
         WHERE user_id = #{userId}
     """)
@@ -153,6 +191,7 @@ interface AdminMapper {
         <if test="admin.role != null"> role = #{admin.role},</if>
         <if test="admin.formNo != null"> form_no = #{admin.formNo},</if>
         <if test="admin.rank != null"> rank = #{admin.rank},</if>
+        <if test="admin.useStatus != null"> use_status = #{admin.useStatus},</if>
       </set>
         WHERE user_id = #{admin.userId}
 </script>
@@ -195,6 +234,7 @@ interface AdminMapper {
         , r_phone
         , email
         , form_no
+        , use_status
     FROM formmail_admin
     WHERE user_name LIKE CONCAT('%', #{name}, '%')
     OR r_name LIKE CONCAT('%', #{name}, '%')
@@ -246,6 +286,13 @@ interface AdminMapper {
         WHERE fp.phone_number = #{phoneNum}
     """)
     List<findUser> findUserList(@Param("phoneNum") String phoneNum)
+
+    // 폼메일 회원 삭제
+    @Delete("""
+        DELETE FROM formmail_admin
+        WHERE user_id = #{admin.userId}
+    """)
+    int deleteOne(@Param("admin") FormMailAdmin admin)
 
     // -------- jwt 토큰 관련 mapper -------------------------
 
