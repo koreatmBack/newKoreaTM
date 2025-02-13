@@ -14,8 +14,6 @@ interface ApplyMapper {
            , aid
            , cid
            , user_id
-           , company
-           , partner
            , apply_name
            , apply_birth
            , apply_gender
@@ -31,8 +29,6 @@ interface ApplyMapper {
             ,#{apply.aid}
             ,#{apply.cid}
             ,#{apply.userId}
-            ,#{apply.company}
-            ,#{apply.partner}
             ,#{apply.applyName}
             ,#{apply.applyBirth}
             ,#{apply.applyGender}
