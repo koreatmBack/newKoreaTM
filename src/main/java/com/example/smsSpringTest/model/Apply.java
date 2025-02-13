@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * author : 신기훈
  * date : 2024-10-02
@@ -53,5 +51,12 @@ public class Apply {
 
     private String addressDetail;
 
-    private LocalDateTime createdAt;
+    private String applyDate;
+
+    private String applyStatus;
+
+    private String applyPath;
+
+    private String lastModified;
+
 }

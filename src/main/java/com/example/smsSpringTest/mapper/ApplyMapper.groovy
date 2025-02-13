@@ -19,11 +19,12 @@ interface ApplyMapper {
            , apply_gender
            , apply_address
            , apply_phone
-           , interview_time
            , admin_memo
            , sido
            , sigungu
            , address_detail
+           , apply_status
+           , apply_path
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -34,11 +35,12 @@ interface ApplyMapper {
             ,#{apply.applyGender}
             ,#{apply.applyAddress}
             ,#{apply.applyPhone}
-            ,#{apply.interviewTime}
             ,#{apply.adminMemo}
             ,#{apply.sido}
             ,#{apply.sigungu}
             ,#{apply.addressDetail}
+            ,#{apply.applyStatus}
+            ,#{apply.applyPath}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -61,6 +63,8 @@ interface ApplyMapper {
            <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
            <if test="apply.adminMemo != null"> admin_memo  = #{apply.adminMemo},   </if>
            <if test="apply.addressDetail != null"> address_detail  = #{apply.addressDetail},   </if>     
+           <if test="apply.applyStatus != null"> apply_status  = #{apply.applyStatus},   </if>     
+           <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
@@ -71,6 +75,7 @@ interface ApplyMapper {
     @Select("""
         SELECT *
         FROM formmail_apply
+        ORDER BY apply_date DESC
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<Apply> applyList(@Param("paging") Paging paging)
@@ -89,6 +94,29 @@ interface ApplyMapper {
         WHERE apply_id = #{apply.applyId}
     """)
     List<Apply> findOneApply(@Param("apply") Apply apply)
+
+    // 지원자 등록할 때 블랙리스트면 등록 방지
+    @Select("""
+        SELECT count(*)
+        FROM formmail_apply
+        WHERE apply_name = #{apply.applyName}
+        AND apply_birth LIKE CONCAT (#{apply.applyBirth} , '%')
+        AND apply_gender = #{apply.applyGender}
+        AND apply_phone = #{apply.applyPhone}
+        AND apply_status = '블랙리스트'
+    """)
+    int blackListCheck(@Param("apply") Apply apply)
+
+    // 중복 지원인지 체크 (전체 계열사 중 한 곳이라도 지원한 이력이 있는지)
+    @Select("""
+        SELECT count(*)
+        FROM formmail_apply
+        WHERE apply_name = #{apply.applyName}
+        AND apply_birth LIKE CONCAT (#{apply.applyBirth} , '%')
+        AND apply_gender = #{apply.applyGender}
+        AND apply_phone = #{apply.applyPhone} 
+    """)
+    int dupApplyCheck(@Param("apply") Apply apply)
 
 }
 

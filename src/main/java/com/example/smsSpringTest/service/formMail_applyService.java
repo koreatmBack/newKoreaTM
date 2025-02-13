@@ -30,7 +30,25 @@ public class formMail_applyService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            // cid 시리얼 넘버 생성 -> 중복처리 필요 x
+            apply.setApplyStatus("신규DB");
+            // 블랙 리스트 체크
+            int blackListCheck = applyMapper.blackListCheck(apply);
+            if(blackListCheck != 0) {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("- 등록 불가 - \n 블랙리스트입니다.");
+                return apiResponse;
+            }
+
+            // 중복 DB 체크
+
+            // 나이제한 , 성별제한 체크
+
+            // 지원이력 체크
+
+
+
+
+            // 시리얼 넘버 생성 -> 중복처리 필요 x
             String serialNumber = UUID.randomUUID().toString();
             apply.setApplyId(serialNumber);
             int addApply = applyMapper.addApply(apply);
