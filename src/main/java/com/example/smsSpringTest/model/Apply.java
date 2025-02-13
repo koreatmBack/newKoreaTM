@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Apply {
 
+    private int no;
+
     private String applyId;
 
     private String aid;
