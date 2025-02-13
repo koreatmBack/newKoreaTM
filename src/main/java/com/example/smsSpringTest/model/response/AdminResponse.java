@@ -34,6 +34,7 @@ public class AdminResponse extends ApiResponse{
     private String userName;
     private List<PhoneNum> phoneNumList;
     private List<findUser> findUserList;
+//    private List<FormMailAdmin> managerList;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;

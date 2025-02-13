@@ -487,6 +487,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_admin/allPhoneNumList" , "/api/v1/formMail_admin/allPhoneNumList"
                 ,"/v1/formMail_admin/delPhoneNum" , "/api/v1/formMail_admin/delPhoneNum"
                 ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
+                ,"/v1/formMail_admin/find/recruitTeam" , "/api/v1/formMail_admin/find/recruitTeam"
         };
 
         String[] managerEndPoints = {
@@ -496,6 +497,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_admin/allPhoneNumList" , "/api/v1/formMail_admin/allPhoneNumList"
                 ,"/v1/formMail_admin/delPhoneNum" , "/api/v1/formMail_admin/delPhoneNum"
                 ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
+                ,"/v1/formMail_admin/find/recruitTeam" , "/api/v1/formMail_admin/find/recruitTeam"
 
         };
 

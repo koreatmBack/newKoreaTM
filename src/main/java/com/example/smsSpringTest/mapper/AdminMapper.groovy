@@ -294,100 +294,25 @@ interface AdminMapper {
     """)
     int deleteOne(@Param("admin") FormMailAdmin admin)
 
-    // -------- jwt 토큰 관련 mapper -------------------------
+    // "채용"팀이며 사용중(use_status = true)인 회원 목록
+    @Select("""
+        SELECT user_id
+              ,form_no
+              ,r_name
+              ,user_name
+              ,rank
+        FROM formmail_admin
+        WHERE team = '채용'
+        AND use_status = 1
+    """)
+    List<FormMailAdmin> recruitTeamList()
 
-//    // RefreshToken 조회
-//    @Select("""
-//        SELECT user_id
-//                , grant_type
-//                , refresh_token
-//                , DATE_FORMAT(reg_date, '%Y-%m-%d') as reg_date
-//                , DATE_FORMAT(upt_date, '%Y-%m-%d') as upt_date
-//          FROM formmail_admin_token
-//         WHERE user_id = #{userId}
-//           AND use_yn = 'Y'
-//    """)
-//    RefToken getUserRefreshTokenData(@Param("userId") String userId)
-//
-//    // RefreshToken 삭제
-//    @Delete("""
-//        DELETE FROM formmail_admin_token
-//         WHERE user_id = #{userId}
-//    """)
-//    int deleteUserToken(@Param("userId") String userId)
-//
-//    // RefreshToken 토큰 등록
-//    @Insert("""
-//        INSERT INTO formmail_admin_token (
-//                user_id
-//                , grant_type
-//                , refresh_token
-//                , use_yn
-//                , reg_date
-//                , upt_date
-//        ) VALUES (
-//                #{refToken.userId}
-//                , #{refToken.grantType}
-//                , #{refToken.refreshToken}
-//                , 'Y'
-//                , sysdate()
-//                , sysdate()
-//        )
-//    """)
-//    int addUserToken(@Param("refToken") RefToken refToken)
-//
-//    // RefreshToken 업데이트
-//    @Update("""
-//        UPDATE formmail_admin_token
-//           SET refresh_token = #{refToken.refreshToken}
-//               , grant_type = #{refToken.grantType}
-//               , upt_date = sysdate()
-//         WHERE user_id = #{refToken.userId}
-//           AND use_yn = 'Y'
-//    """)
-//    int updateUserToken(@Param("refToken") RefToken refToken)
-//
-//    // RefreshToken 존재여부 확인
-//    @Select("""
-//        SELECT count(*)
-//          FROM formmail_admin_token
-//         WHERE user_id = #{userId}
-//           AND use_yn = 'Y'
-//    """)
-//    int getUserRefreshTokenCount(@Param("userId") String userId)
-//
-//    // 동일한 RefreshToken 확인
-//    @Select("""
-//        SELECT count(*)
-//          FROM formmail_admin_token
-//         WHERE refresh_token = #{refToken.refreshToken}
-//           AND use_yn = 'Y'
-//    """)
-//    int getRefreshTokenCount(@Param("refToken") RefToken refToken)
-//
-//    // RefreshToken 으로 정보 조회
-//    @Select("""
-//        SELECT user_id
-//                , grant_type
-//                , refresh_token
-//                , DATE_FORMAT(reg_date, '%Y-%m-%d') as reg_date
-//                , DATE_FORMAT(upt_date, '%Y-%m-%d') as upt_date
-//          FROM formmail_admin_token
-//         WHERE refresh_token = #{refToken.refreshToken}
-//           AND use_yn = 'Y'
-//    """)
-//    RefToken getRefreshTokenData(@Param("refToken") RefToken refToken)
-//
-//    // 토큰 있을때 회원 정보 조회
-//    @Select("""
-//        SELECT am.user_id
-//                , am.r_name
-//                , at.refresh_token
-//        FROM formmail_admin am
-//        INNER JOIN formmail_admin_token at on am.user_id = at.user_id
-//        WHERE am.user_id = #{userId}
-//    """)
-//    UserProfile getFrontUserProfile(@Param("userId") String userId)
-
+    @Select("""
+        SELECT count(*)
+        FROM formmail_admin
+        WHERE team = '채용'
+        AND use_status = 1
+    """)
+    int recruitTeamListCount()
 
 }

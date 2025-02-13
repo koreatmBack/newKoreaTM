@@ -161,4 +161,11 @@ public class formMail_adminController {
     public ApiResponse deleteOne(@RequestBody FormMailAdmin admin) throws Exception {
         return formMailAdminService.deleteOne(admin);
     }
+
+    // "채용"팀이며 사용중(use_status = true)인 회원 목록
+    @GetMapping("/find/recruitTeam")
+    public AdminResponse recruitTeamList() throws Exception {
+        return formMailAdminService.recruitTeamList();
+    }
+
 }

@@ -6,6 +6,7 @@ import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.FormMailAdmin;
+import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.AccessResponse;
@@ -770,6 +771,27 @@ public class formMail_adminService {
 
         return apiResponse;
     }
+
+    // "채용"팀이며 사용중(use_status = true)인 회원 목록
+    public AdminResponse recruitTeamList() throws Exception {
+        AdminResponse adminResponse = new AdminResponse();
+        try {
+
+            adminResponse.setAdminList(adminMapper.recruitTeamList());
+            if(adminResponse.getAdminList() != null && !adminResponse.getAdminList().isEmpty()) {
+                adminResponse.setCode("C000");
+                adminResponse.setMessage("채용팀 조회 성공");
+            } else {
+                adminResponse.setCode("E001");
+                adminResponse.setMessage("채용팀 조회 실패");
+            }
+        } catch (Exception e) {
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("Error!!!");
+        }
+        return adminResponse;
+    }
+
 
 }
 
