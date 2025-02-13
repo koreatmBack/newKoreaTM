@@ -30,7 +30,7 @@ public class formMail_applyService {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            apply.setApplyStatus("신규DB");
+
             // 블랙 리스트 체크
             int blackListCheck = applyMapper.blackListCheck(apply);
             if(blackListCheck != 0) {
@@ -39,12 +39,17 @@ public class formMail_applyService {
                 return apiResponse;
             }
 
+            apply.setApplyStatus("신규DB");
+
+            // 지원이력 체크
+            int dupApplyCheck = applyMapper.dupApplyCheck(apply);
+            if(dupApplyCheck != 0) {
+                apply.setApplyStatus("중복지원");
+            }
+
             // 중복 DB 체크
 
             // 나이제한 , 성별제한 체크
-
-            // 지원이력 체크
-
 
 
 
