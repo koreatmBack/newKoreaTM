@@ -62,6 +62,8 @@ interface ApplyMapper {
            <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
            <if test="apply.adminMemo != null"> admin_memo  = #{apply.adminMemo},   </if>
            <if test="apply.addressDetail != null"> address_detail  = #{apply.addressDetail},   </if>     
+           <if test="apply.sido != null"> sido  = #{apply.sido},   </if>     
+           <if test="apply.sigungu != null"> sigungu  = #{apply.sigungu},   </if>     
            <if test="apply.applyStatus != null"> apply_status  = #{apply.applyStatus},   </if>     
            <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
        </set> 
