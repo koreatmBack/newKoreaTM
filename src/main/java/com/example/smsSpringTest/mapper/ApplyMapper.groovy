@@ -13,7 +13,7 @@ interface ApplyMapper {
            apply_id
            , aid
            , cid
-           , user_id
+           , manager_id
            , apply_name
            , apply_birth
            , apply_gender
@@ -28,7 +28,7 @@ interface ApplyMapper {
             #{apply.applyId}
             ,#{apply.aid}
             ,#{apply.cid}
-            ,#{apply.userId}
+            ,#{apply.managerId}
             ,#{apply.applyName}
             ,#{apply.applyBirth}
             ,#{apply.applyGender}
@@ -50,7 +50,7 @@ interface ApplyMapper {
        <set>
            <if test="apply.aid != null"> aid = #{apply.aid},   </if>
            <if test="apply.cid != null"> cid = #{apply.cid},   </if>
-           <if test="apply.userId != null"> user_id = #{apply.userId},   </if>
+           <if test="apply.managerId != null"> manager_id = #{apply.managerId},   </if>
            <if test="apply.company != null"> company = #{apply.company},   </if>
            <if test="apply.partner != null">  partner = #{apply.partner},   </if>
            <if test="apply.applyName != null"> apply_name = #{apply.applyName},   </if>

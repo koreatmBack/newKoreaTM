@@ -6,6 +6,7 @@ import com.example.smsSpringTest.model.FormMailAdmin
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser
 import org.apache.ibatis.annotations.*
+
 /*
 
     ADMIN 용 mapper
@@ -104,12 +105,13 @@ interface AdminMapper {
             , email
             , form_no
             , rank
-            , created
-            , updated
+            , created_at
+            , updated_at
             , use_status
         FROM formmail_admin
         WHERE 1=1
         <if test="admin.team != null"> AND team = #{admin.team} </if>
+        ORDER BY created_at DESC
         LIMIT #{admin.size} OFFSET #{admin.offset}
 </script>        
     """)
@@ -128,11 +130,12 @@ interface AdminMapper {
             , email
             , form_no
             , rank
-            , created
-            , updated
+            , created_at
+            , updated_at
             , use_status
             FROM formmail_admin
             WHERE team = #{admin.team}
+            ORDER BY created_at DESC
             LIMIT #{admin.size} OFFSET #{admin.offset}
     """)
     List<FormMailAdmin> teamList(@Param("admin") FormMailAdmin admin)

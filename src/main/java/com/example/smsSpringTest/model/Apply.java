@@ -27,7 +27,7 @@ public class Apply {
 
     private String cid;
 
-    private String userId;
+    private String managerId;
 
     private String company;
 
