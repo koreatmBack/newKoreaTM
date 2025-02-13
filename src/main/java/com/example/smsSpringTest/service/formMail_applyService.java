@@ -35,7 +35,7 @@ public class formMail_applyService {
             int blackListCheck = applyMapper.blackListCheck(apply);
             if(blackListCheck != 0) {
                 apiResponse.setCode("E001");
-                apiResponse.setMessage("- 등록 불가 - \n 블랙리스트입니다.");
+                apiResponse.setMessage("블랙리스트입니다.");
                 return apiResponse;
             }
 
