@@ -1,7 +1,6 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Apply
-import com.example.smsSpringTest.model.Paging
 import org.apache.ibatis.annotations.*
 
 @Mapper
@@ -73,19 +72,38 @@ interface ApplyMapper {
 
     // 지원자 전체 조회 (페이징 처리)
     @Select("""
+<script>
         SELECT *
         FROM formmail_apply
-        ORDER BY apply_date DESC
-        LIMIT #{paging.size} OFFSET #{paging.offset}
+        WHERE 1=1
+        <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
+        ORDER BY 
+        <choose>
+            <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
+            <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
+            <otherwise> apply_date DESC </otherwise>
+        </choose>
+        LIMIT #{apply.size} OFFSET #{apply.offset}
+</script>                
     """)
-    List<Apply> applyList(@Param("paging") Paging paging)
+    List<Apply> applyList(@Param("apply") Apply apply)
 
     // 지원자 전체 수
     @Select("""
+<script>
         SELECT count(*)
         FROM formmail_apply
+        WHERE 1=1
+        <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
+        ORDER BY 
+        <choose>
+            <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
+            <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
+            <otherwise> apply_date DESC </otherwise>
+        </choose>
+</script>          
     """)
-    int applyListCount()
+    int applyListCount(@Param("apply") Apply apply)
 
     // 지원자 한명 조회 (apply_id 일치하는)
     @Select("""

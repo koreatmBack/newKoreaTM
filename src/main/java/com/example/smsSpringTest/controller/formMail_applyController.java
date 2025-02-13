@@ -1,7 +1,6 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Apply;
-import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
@@ -41,9 +40,9 @@ public class formMail_applyController {
 
     // 지원자 전체 조회
     @PostMapping("/applyList")
-    public ApplyResponse applyList(@RequestBody Paging paging) throws Exception {
+    public ApplyResponse applyList(@RequestBody Apply apply) throws Exception {
         ApplyResponse applyResponse = new ApplyResponse();
-        applyResponse = formMailApplyService.applyList(paging);
+        applyResponse = formMailApplyService.applyList(apply);
         return applyResponse;
     }
 

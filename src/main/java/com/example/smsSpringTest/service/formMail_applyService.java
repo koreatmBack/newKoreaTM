@@ -2,7 +2,6 @@ package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.mapper.ApplyMapper;
 import com.example.smsSpringTest.model.Apply;
-import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import lombok.RequiredArgsConstructor;
@@ -96,21 +95,22 @@ public class formMail_applyService {
     }
 
     // 지원자 전체 조회
-    public ApplyResponse applyList(Paging paging) throws Exception {
+    public ApplyResponse applyList(Apply apply) throws Exception {
         ApplyResponse applyResponse = new ApplyResponse();
 
         try {
-            int page = paging.getPage(); // 현재 페이지
-            int size = paging.getSize(); // 한 페이지에 표시할 수
+            int page = apply.getPage(); // 현재 페이지
+            int size = apply.getSize(); // 한 페이지에 표시할 수
             int offset = (page - 1) * size; // 시작 위치
-            int totalCount = applyMapper.applyListCount(); //전체 수
-            paging.setOffset(offset);
+            int totalCount = applyMapper.applyListCount(apply); //전체 수
+            apply.setOffset(offset);
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
-            applyResponse.setApplyList(applyMapper.applyList(paging));
+            applyResponse.setApplyList(applyMapper.applyList(apply));
 
             if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
                 applyResponse.setTotalPages(totalCount);
+                applyResponse.setTotalCount(totalCount);
                 applyResponse.setCode("C000");
                 applyResponse.setMessage("지원자 전제 조회 성공");
             } else {
@@ -120,6 +120,7 @@ public class formMail_applyService {
         } catch (Exception e) {
             applyResponse.setCode("E001");
             applyResponse.setMessage("ERROR");
+            log.info(e.getMessage());
         }
 
         return applyResponse;

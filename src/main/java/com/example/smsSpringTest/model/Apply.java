@@ -59,4 +59,13 @@ public class Apply {
 
     private String lastModified;
 
+    private String interviewSort; // 면접시간 기준 정렬 키값
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int page;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int size;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int offset;
+
 }

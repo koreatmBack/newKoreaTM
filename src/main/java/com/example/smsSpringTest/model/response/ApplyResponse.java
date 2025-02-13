@@ -22,5 +22,6 @@ public class ApplyResponse extends ApiResponse{
 
     private List<Apply> applyList;
     private int totalPages;
+    private int totalCount;
 
 }
