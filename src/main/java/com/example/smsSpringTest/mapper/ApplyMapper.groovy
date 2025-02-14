@@ -93,9 +93,10 @@ interface ApplyMapper {
         </choose>
         ORDER BY 
         <choose>
+         <when test="apply.interviewQnaSort == '내림차순'"> apply_date DESC, FIELD(apply_status, '미발송', '발송', '완료')</when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
-            <when test="apply.interviewQnaSort == '내림차순'"> apply_date DESC, FIELD(apply_status, '미발송', '발송', '완료')</when>
+           
             <otherwise> apply_date DESC </otherwise>
         </choose>
         LIMIT #{apply.size} OFFSET #{apply.offset}
@@ -120,9 +121,9 @@ interface ApplyMapper {
         </choose>
         ORDER BY 
         <choose>
+         <when test="apply.interviewQnaSort == '내림차순'"> apply_date DESC, FIELD(apply_status, '미발송', '발송', '완료')</when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
-            <when test="apply.interviewQnaSort == '내림차순'"> apply_date DESC, FIELD(apply_status, '미발송', '발송', '완료')</when>
             <otherwise> apply_date DESC </otherwise>
         </choose>
 </script>          
