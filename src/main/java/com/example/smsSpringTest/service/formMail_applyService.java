@@ -109,7 +109,8 @@ public class formMail_applyService {
             applyResponse.setApplyList(applyMapper.applyList(apply));
 
             if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
-                applyResponse.setTotalPages(totalCount);
+                int totalPages = (int) Math.ceil((double) totalCount / size );
+                applyResponse.setTotalPages(totalPages);
                 applyResponse.setTotalCount(totalCount);
                 applyResponse.setCode("C000");
                 applyResponse.setMessage("지원자 전제 조회 성공");
