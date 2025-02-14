@@ -225,6 +225,33 @@ public class formMail_applyService {
         return apiResponse;
     }
 
+    // 면접일 갱신 버튼 클릭 -> 일괄 변경
+    public ApiResponse updateAllInterview() throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            // 만약 오늘 이전인데, 당일 면접이 남아 있으면
+            int checkTodayInterview = applyMapper.checkTodayInterview();
+            if(checkTodayInterview > 0) {
+                apiResponse.setCode("E003");
+                apiResponse.setMessage("[당일면접] 현황이 남아있습니다.");
+                return apiResponse;
+            }
+
+            int updateAllInterview = applyMapper.updateAllInterview();
+            if(updateAllInterview != 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("면접일 갱신 성공");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("면접일 갱신 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
+    }
 
 
 }

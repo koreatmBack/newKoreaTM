@@ -96,7 +96,7 @@ interface ApplyMapper {
         </choose>
         ORDER BY 
         <choose>
-            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(interview_qna, '미발송', '발송', '완료'), apply_date DESC </when>
+            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(interview_qna, '미발송', '발송', '완료'), interview_time DESC </when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
             <otherwise> apply_date DESC </otherwise>
@@ -189,6 +189,24 @@ interface ApplyMapper {
     """)
     int updateApplyStatus(@Param("applyStatus") String applyStatus , @Param("applyIds") List<Apply> applyIds)
 
+    // 면접일 갱신 버튼 클릭 -> 일괄 변경
+    @Update("""
+<script>
+        UPDATE formmail_apply
+        SET apply_status = '익일면접'
+        WHERE DATE(STR_TO_DATE(interview_time, '%Y-%m-%d %H:%i')) = DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+        AND apply_status = '면접예정'
+</script>
+    """)
+    int updateAllInterview()
 
+    // 면접일 갱신하기 전, 오늘 이전에 당일면접 데이터가 남아있는지 체크
+    @Select("""
+        SELECT count(*)
+        FROM formmail_apply
+        WHERE DATE(STR_TO_DATE(interview_time, '%Y-%m-%d %H:%i')) < CURDATE()
+        AND apply_status = '당일면접'
+    """)
+    int checkTodayInterview();
 }
 

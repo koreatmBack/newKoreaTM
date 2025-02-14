@@ -58,4 +58,12 @@ public class formMail_applyController {
     public ApiResponse updateApplyStatus(@RequestBody ApplyRequest applyRequest) throws Exception {
         return formMailApplyService.updateApplyStatus(applyRequest);
     }
+
+    // 면접일 갱신 버튼 클릭 -> 일괄 변경
+    @PutMapping("/update/all/interviewTime")
+    public ApiResponse updateAllInterview() throws Exception {
+        return formMailApplyService.updateAllInterview();
+    }
+
+
 }

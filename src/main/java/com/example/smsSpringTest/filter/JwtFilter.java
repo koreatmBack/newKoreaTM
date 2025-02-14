@@ -492,6 +492,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_apply/applyList", "/api/v1/formMail_apply/applyList"
                 ,"/v1/formMail_apply/find/history", "/api/v1/formMail_apply/find/history"
                 ,"/v1/formMail_apply/update/status", "/api/v1/formMail_apply/update/status"
+                ,"/v1/formMail_apply/update/all/interviewTime", "/api/v1/formMail_apply/update/all/interviewTime"
 
         };
 
