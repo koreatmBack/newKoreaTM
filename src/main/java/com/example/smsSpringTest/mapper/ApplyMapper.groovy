@@ -108,6 +108,8 @@ interface ApplyMapper {
         WHERE 1=1
         <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
         <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
+        <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
+        <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>        
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
