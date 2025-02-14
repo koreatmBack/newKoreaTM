@@ -69,6 +69,7 @@ interface ApplyMapper {
            <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
            <if test="apply.applyCareer != null"> apply_career  = #{apply.applyCareer},   </if>     
            <if test="apply.managerMemo != null"> manager_memo  = #{apply.managerMemo},   </if>     
+           <if test="apply.interviewQna != null"> interview_qna  = #{apply.interviewQna},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
@@ -85,6 +86,7 @@ interface ApplyMapper {
         <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
         <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>
+        <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>                
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
@@ -93,6 +95,7 @@ interface ApplyMapper {
         <choose>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
+            <when test="apply.interviewQnaSort == '내림차순'"> apply_date DESC, FIELD(apply_status, '미발송', '발송', '완료')</when>
             <otherwise> apply_date DESC </otherwise>
         </choose>
         LIMIT #{apply.size} OFFSET #{apply.offset}
@@ -110,6 +113,7 @@ interface ApplyMapper {
         <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
         <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>        
+        <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>        
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
@@ -118,6 +122,7 @@ interface ApplyMapper {
         <choose>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
+            <when test="apply.interviewQnaSort == '내림차순'"> apply_date DESC, FIELD(apply_status, '미발송', '발송', '완료')</when>
             <otherwise> apply_date DESC </otherwise>
         </choose>
 </script>          
