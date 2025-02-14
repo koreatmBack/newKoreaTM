@@ -25,6 +25,7 @@ interface ApplyMapper {
            , apply_status
            , apply_path
            , apply_career
+           , manager_memo
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -42,6 +43,7 @@ interface ApplyMapper {
             ,#{apply.applyStatus}
             ,#{apply.applyPath}
             ,#{apply.applyCareer}
+            ,#{apply.managerMemo}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -69,6 +71,7 @@ interface ApplyMapper {
            <if test="apply.applyStatus != null"> apply_status  = #{apply.applyStatus},   </if>     
            <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
            <if test="apply.applyCareer != null"> apply_career  = #{apply.applyCareer},   </if>     
+           <if test="apply.managerMemo != null"> manager_memo  = #{apply.managerMemo},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
@@ -82,6 +85,11 @@ interface ApplyMapper {
         FROM formmail_apply
         WHERE 1=1
         <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
+        <choose>
+            <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
+            <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
+        
+        </choose>
         ORDER BY 
         <choose>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
@@ -100,6 +108,11 @@ interface ApplyMapper {
         FROM formmail_apply
         WHERE 1=1
         <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
+        <choose>
+            <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
+            <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
+            
+        </choose>
         ORDER BY 
         <choose>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>

@@ -61,19 +61,14 @@ public class formMail_adminService {
 
         try{
 
-
             // 폼메일에서 체크
             int formCheckId = jobUserMapper.dupFormMailIdCheck(admin.getUserId());
-
 
             if(formCheckId == 1) {
                 apiResponse.setCode("E002");
                 apiResponse.setMessage("(폼메일) 이미 사용중인 ID입니다.");
                 return apiResponse;
             }
-
-
-                // id 중복 없음
 
                 // 비밀번호 암호화
                 admin.setUserPwd(passwordEncoder.encode(admin.getUserPwd()));
@@ -87,7 +82,6 @@ public class formMail_adminService {
                     apiResponse.setCode("E003");
                     apiResponse.setMessage("회원 등록 실패 !!");
                 }
-
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage("ERROR!!! Id와 pw를 다시 입력하세요.");
@@ -113,12 +107,6 @@ public class formMail_adminService {
                 // 등록된 아이디 없음
                 adminResponse.setCode("E004");
                 adminResponse.setMessage("등록된 id가 없습니다.");
-
-                if(userId == null){
-                    adminResponse.setCode("E004");
-                    adminResponse.setMessage("ID를 입력해주세요.");
-                }
-
             } else {
                 // 아이디 존재
 

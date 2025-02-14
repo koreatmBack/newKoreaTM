@@ -65,6 +65,11 @@ public class Apply {
 
     private String applyCareer; // 신입 or 경력
 
+    private String managerMemo; // 담당자 메모
+
+    private String searchType;    // 검색타입
+    private String searchKeyword; // 검색어
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
