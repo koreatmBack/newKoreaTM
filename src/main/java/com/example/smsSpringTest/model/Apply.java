@@ -61,6 +61,8 @@ public class Apply {
 
     private String interviewSort; // 면접시간 기준 정렬 키값
 
+    private String interviewQna; // 면접 질의서
+
     private String interviewQnaSort; // 면접 질의서 기준 내림차순 정렬
 
     private String applyCareer; // 신입 or 경력
