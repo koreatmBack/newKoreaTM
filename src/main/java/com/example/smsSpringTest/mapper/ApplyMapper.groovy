@@ -24,6 +24,7 @@ interface ApplyMapper {
            , address_detail
            , apply_status
            , apply_path
+           , apply_career
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -40,6 +41,7 @@ interface ApplyMapper {
             ,#{apply.addressDetail}
             ,#{apply.applyStatus}
             ,#{apply.applyPath}
+            ,#{apply.applyCareer}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -66,6 +68,7 @@ interface ApplyMapper {
            <if test="apply.sigungu != null"> sigungu  = #{apply.sigungu},   </if>     
            <if test="apply.applyStatus != null"> apply_status  = #{apply.applyStatus},   </if>     
            <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
+           <if test="apply.applyCareer != null"> apply_career  = #{apply.applyCareer},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
