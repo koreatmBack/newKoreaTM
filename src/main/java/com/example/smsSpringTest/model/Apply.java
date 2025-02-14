@@ -45,8 +45,6 @@ public class Apply {
 
     private String interviewTime;
 
-    private String adminMemo;
-
     private String sido;
 
     private String sigungu;

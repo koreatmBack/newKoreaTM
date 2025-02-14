@@ -18,7 +18,6 @@ interface ApplyMapper {
            , apply_gender
            , apply_address
            , apply_phone
-           , admin_memo
            , sido
            , sigungu
            , address_detail
@@ -36,7 +35,6 @@ interface ApplyMapper {
             ,#{apply.applyGender}
             ,#{apply.applyAddress}
             ,#{apply.applyPhone}
-            ,#{apply.adminMemo}
             ,#{apply.sido}
             ,#{apply.sigungu}
             ,#{apply.addressDetail}
@@ -64,7 +62,6 @@ interface ApplyMapper {
            <if test="apply.applyAddress != null"> apply_address = #{apply.applyAddress},   </if>
            <if test="apply.applyPhone  != null"> apply_phone = #{apply.applyPhone},   </if>
            <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
-           <if test="apply.adminMemo != null"> admin_memo  = #{apply.adminMemo},   </if>
            <if test="apply.addressDetail != null"> address_detail  = #{apply.addressDetail},   </if>     
            <if test="apply.sido != null"> sido  = #{apply.sido},   </if>     
            <if test="apply.sigungu != null"> sigungu  = #{apply.sigungu},   </if>     
@@ -85,10 +82,12 @@ interface ApplyMapper {
         FROM formmail_apply
         WHERE 1=1
         <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
+        <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
+        <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
+        <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
-        
         </choose>
         ORDER BY 
         <choose>
@@ -108,10 +107,10 @@ interface ApplyMapper {
         FROM formmail_apply
         WHERE 1=1
         <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
+        <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
-            
         </choose>
         ORDER BY 
         <choose>
