@@ -21,7 +21,11 @@ import java.util.List;
 public class ApplyResponse extends ApiResponse{
 
     private List<Apply> applyList;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalCount;
 
 }

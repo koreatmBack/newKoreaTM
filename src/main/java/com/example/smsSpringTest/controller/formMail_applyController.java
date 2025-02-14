@@ -25,32 +25,31 @@ public class formMail_applyController {
     // 지원자 등록
     @PostMapping("/addApply")
     public ApiResponse addApply(@RequestBody Apply apply) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = formMailApplyService.addApply(apply);
-        return apiResponse;
+        return formMailApplyService.addApply(apply);
     }
 
     // 지원자 수정
     @PutMapping("/updateApply")
     public ApiResponse updateApply(@RequestBody Apply apply) throws Exception {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = formMailApplyService.updateApply(apply);
-        return apiResponse;
+        return formMailApplyService.updateApply(apply);
     }
 
     // 지원자 전체 조회
     @PostMapping("/applyList")
     public ApplyResponse applyList(@RequestBody Apply apply) throws Exception {
-        ApplyResponse applyResponse = new ApplyResponse();
-        applyResponse = formMailApplyService.applyList(apply);
-        return applyResponse;
+        return formMailApplyService.applyList(apply);
     }
 
     // 지원자 한명 조회 (apply_id 일치하는)
     @PostMapping("/findOneApply")
     public ApplyResponse findOneApply(@RequestBody Apply apply) throws Exception {
-        ApplyResponse applyResponse = new ApplyResponse();
-        applyResponse = formMailApplyService.findOneApply(apply);
-        return applyResponse;
+        return formMailApplyService.findOneApply(apply);
     }
+
+    // 지원자 입력시, 지원자 이력 반환
+    @PostMapping("/find/history")
+    public ApplyResponse applyHistory(@RequestBody Apply apply) throws Exception {
+        return formMailApplyService.applyHistory(apply);
+    }
+
 }

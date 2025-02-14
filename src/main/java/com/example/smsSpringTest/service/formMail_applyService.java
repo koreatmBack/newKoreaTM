@@ -150,4 +150,25 @@ public class formMail_applyService {
         return applyResponse;
     }
 
+    // 지원자 입력시, 지원자 이력 반환
+    public ApplyResponse applyHistory(Apply apply) throws Exception {
+        ApplyResponse applyResponse = new ApplyResponse();
+        try {
+            applyResponse.setApplyList(applyMapper.applyHistory(apply));
+            if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()) {
+                applyResponse.setCode("C000");
+                applyResponse.setMessage("지원자 이력 조회 성공");
+            } else {
+                applyResponse.setCode("E001");
+                applyResponse.setMessage("지원자 이력 조회 실패");
+            }
+        } catch (Exception e) {
+                applyResponse.setCode("E001");
+                applyResponse.setMessage("Error!!!");
+        }
+        return applyResponse;
+    }
+
 }
+
+

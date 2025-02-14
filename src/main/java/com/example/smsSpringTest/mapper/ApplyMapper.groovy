@@ -141,5 +141,17 @@ interface ApplyMapper {
     """)
     int dupApplyCheck(@Param("apply") Apply apply)
 
+    // 지원자 입력시, 지원자 이력 반환
+    @Select("""
+        SELECT *
+        FROM formmail_apply
+        WHERE apply_name = #{apply.applyName}
+        AND apply_birth LIKE CONCAT (#{apply.applyBirth} , '%')
+        AND apply_gender = #{apply.applyGender}
+        AND apply_phone = #{apply.applyPhone}
+        ORDER BY apply_date DESC 
+    """)
+    List<Apply> applyHistory(@Param("apply") Apply apply)
+
 }
 
