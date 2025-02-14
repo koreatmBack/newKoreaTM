@@ -2,6 +2,7 @@ package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.mapper.ApplyMapper;
 import com.example.smsSpringTest.model.Apply;
+import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -79,6 +83,14 @@ public class formMail_applyService {
         ApiResponse apiResponse = new ApiResponse();
 
         try{
+
+            if(apply.getInterviewTime() != null && apply.getApplyStatus() == null) {
+                // 면접시간이 변경되며 채용현황은 변경하지 않았을때
+                // 자동으로 당일면접, 익일면접, 면접예정으로 변환
+                String applyStatus = getInterviewStatus(apply.getInterviewTime());
+                apply.setApplyStatus(applyStatus);
+            }
+
             int updateApply = applyMapper.updateApply(apply);
             if(updateApply == 1) {
                 apiResponse.setCode("C000");
@@ -93,6 +105,27 @@ public class formMail_applyService {
             log.info(e.getMessage());
         }
         return apiResponse;
+    }
+
+    // 오늘 날짜와 비교하여 당일면접, 익일면접, 면접예정 체크 후 반환
+    public static String getInterviewStatus(String applyDateStr) {
+        // 날짜 형식 지정 (문자열을 날짜로 변환)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime applyDateTime = LocalDateTime.parse(applyDateStr, formatter);
+
+        // 오늘 날짜 가져오기
+        LocalDate today = LocalDate.now();
+        LocalDate applyDate = applyDateTime.toLocalDate();
+
+        // 면접 상태 판별
+        if (applyDate.isEqual(today)) {
+            return "당일면접";
+        } else if (applyDate.isEqual(today.plusDays(1))) {
+            return "익일면접";
+        } else if (applyDate.isAfter(today)) {
+            return "면접예정";
+        }
+        return "기타"; // 혹시 모를 예외 처리
     }
 
     // 지원자 전체 조회
@@ -172,11 +205,12 @@ public class formMail_applyService {
     }
 
     // 지원자 채용 현황 변경 버튼 클릭 -> 변경
-    public ApiResponse updateApplyStatus(@RequestBody Apply apply) throws Exception {
+    // 일괄 수정도 가능
+    public ApiResponse updateApplyStatus(@RequestBody ApplyRequest applyRequest) throws Exception {
         ApiResponse apiResponse = new ApiResponse();
         try {
-            int updateApplyStatus = applyMapper.updateApplyStatus(apply);
-            if(updateApplyStatus == 1) {
+            int updateApplyStatus = applyMapper.updateApplyStatus(applyRequest.getApplyStatus(), applyRequest.getApplyIds());
+            if(updateApplyStatus != 0) {
                 apiResponse.setCode("C000");
                 apiResponse.setMessage("채용 현황 변경 성공");
             } else {
@@ -186,6 +220,7 @@ public class formMail_applyService {
         } catch (Exception e) {
             apiResponse.setCode("E001");
             apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
         }
         return apiResponse;
     }

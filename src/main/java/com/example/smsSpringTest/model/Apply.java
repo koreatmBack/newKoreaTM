@@ -29,6 +29,8 @@ public class Apply {
 
     private String managerId;
 
+    private String managerName;
+
     private String company;
 
     private String partner;

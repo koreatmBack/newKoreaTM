@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Apply;
+import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
@@ -54,7 +55,7 @@ public class formMail_applyController {
 
     // 지원자 채용 현황 변경 버튼 클릭 -> 변경
     @PutMapping("/update/status")
-    public ApiResponse updateApplyStatus(@RequestBody Apply apply) throws Exception {
-        return formMailApplyService.updateApplyStatus(apply);
+    public ApiResponse updateApplyStatus(@RequestBody ApplyRequest applyRequest) throws Exception {
+        return formMailApplyService.updateApplyStatus(applyRequest);
     }
 }

@@ -25,6 +25,7 @@ interface ApplyMapper {
            , apply_path
            , apply_career
            , manager_memo
+           , manager_name
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -42,6 +43,7 @@ interface ApplyMapper {
             ,#{apply.applyPath}
             ,#{apply.applyCareer}
             ,#{apply.managerMemo}
+            ,#{apply.managerName}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -69,6 +71,7 @@ interface ApplyMapper {
            <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
            <if test="apply.applyCareer != null"> apply_career  = #{apply.applyCareer},   </if>     
            <if test="apply.managerMemo != null"> manager_memo  = #{apply.managerMemo},   </if>     
+           <if test="apply.managerName != null"> manager_name = #{apply.managerName},   </if>     
            <if test="apply.interviewQna != null"> interview_qna  = #{apply.interviewQna},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
@@ -175,11 +178,16 @@ interface ApplyMapper {
 
     // 지원자 채용 현황 변경 버튼 클릭 -> 변경
     @Update("""
+<script>
         UPDATE formmail_apply
-        SET apply_status = #{apply.applyStatus}
-        WHERE apply_id = #{apply.applyId}
+        SET apply_status = #{applyStatus}
+        WHERE apply_id IN 
+        <foreach item="apply" collection="applyIds" open="(" separator="," close=")">
+            #{apply.applyId}
+        </foreach>
+</script>
     """)
-    int updateApplyStatus(@Param("apply") Apply apply)
+    int updateApplyStatus(@Param("applyStatus") String applyStatus , @Param("applyIds") List<Apply> applyIds)
 
 
 }
