@@ -52,4 +52,9 @@ public class formMail_applyController {
         return formMailApplyService.applyHistory(apply);
     }
 
+    // 지원자 채용 현황 변경 버튼 클릭 -> 변경
+    @PutMapping("/update/status")
+    public ApiResponse updateApplyStatus(@RequestBody Apply apply) throws Exception {
+        return formMailApplyService.updateApplyStatus(apply);
+    }
 }

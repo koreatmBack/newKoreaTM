@@ -490,6 +490,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
                 ,"/v1/formMail_admin/find/recruitTeam" , "/api/v1/formMail_admin/find/recruitTeam"
                 ,"/v1/formMail_apply/applyList", "/api/v1/formMail_apply/applyList"
+                ,"/v1/formMail_apply/find/history", "/api/v1/formMail_apply/find/history"
+                ,"/v1/formMail_apply/update/status", "/api/v1/formMail_apply/update/status"
 
         };
 
@@ -502,7 +504,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
                 ,"/v1/formMail_admin/find/recruitTeam" , "/api/v1/formMail_admin/find/recruitTeam"
                 ,"/v1/formMail_apply/applyList", "/api/v1/formMail_apply/applyList"
-
+                ,"/v1/formMail_apply/find/history", "/api/v1/formMail_apply/find/history"
+                ,"/v1/formMail_apply/update/status", "/api/v1/formMail_apply/update/status"
         };
 
 

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
@@ -169,6 +170,27 @@ public class formMail_applyService {
         }
         return applyResponse;
     }
+
+    // 지원자 채용 현황 변경 버튼 클릭 -> 변경
+    public ApiResponse updateApplyStatus(@RequestBody Apply apply) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int updateApplyStatus = applyMapper.updateApplyStatus(apply);
+            if(updateApplyStatus == 1) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("채용 현황 변경 성공");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("채용 현황 변경 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
+
+
 
 }
 

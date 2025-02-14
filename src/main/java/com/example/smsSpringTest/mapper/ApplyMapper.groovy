@@ -173,5 +173,14 @@ interface ApplyMapper {
     """)
     List<Apply> applyHistory(@Param("apply") Apply apply)
 
+    // 지원자 채용 현황 변경 버튼 클릭 -> 변경
+    @Update("""
+        UPDATE formmail_apply
+        SET apply_status = #{apply.applyStatus}
+        WHERE apply_id = #{apply.applyId}
+    """)
+    int updateApplyStatus(@Param("apply") Apply apply)
+
+
 }
 
