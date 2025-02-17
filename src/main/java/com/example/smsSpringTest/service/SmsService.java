@@ -61,15 +61,17 @@ public class SmsService {
 
     // 폼메일용 문자 전송
     public SmsResponse sendSms(SmsForm smsForm) throws IOException {
-
-
         SmsResponse smsResponse = new SmsResponse();
-//        log.info("서비스 smsForm = " + smsForm);
-        log.info("서비스 try 전 호출 됨");
         try{
 
+            // 만약 010-1234-5678로 넘어오면
+            if(StringUtils.hasText(smsForm.getSPhone())){
+                String[] parts = smsForm.getSPhone().split("-");
+                smsForm.setSPhone1(parts[0]);
+                smsForm.setSPhone2(parts[1]);
+                smsForm.setSPhone3(parts[2]);
+            }
 
-            log.info("try 후 호출 됨");
             URL obj = new URL(apiUrl);
 
             HttpsURLConnection con= (HttpsURLConnection) obj.openConnection();

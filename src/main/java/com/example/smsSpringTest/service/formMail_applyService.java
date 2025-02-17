@@ -58,7 +58,7 @@ public class formMail_applyService {
 
 
             // 시리얼 넘버 생성 -> 중복처리 필요 x
-            String serialNumber = UUID.randomUUID().toString();
+            String serialNumber = UUID.randomUUID().toString().substring(0, 8);
             apply.setApplyId(serialNumber);
             int addApply = applyMapper.addApply(apply);
             if(addApply == 1) {

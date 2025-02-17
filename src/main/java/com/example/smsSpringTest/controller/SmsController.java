@@ -53,13 +53,7 @@ public class SmsController {
 
     @PostMapping("/sendSms") // 폼에서 데이터 전송하는 url
     public SmsResponse sendSms(@RequestBody SmsForm smsForm) throws Exception{
-        log.info("컨트롤러 smsForm = " + smsForm);
-        SmsResponse smsResponse = new SmsResponse();
-
-        smsResponse = smsService.sendSms(smsForm);
-
-
-        return smsResponse;
+        return smsService.sendSms(smsForm);
     }
 
     // 잡사이트용 본인인증 (문자 전송)
