@@ -88,6 +88,7 @@ interface ApplyMapper {
         <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
         <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>
+        <if test="apply.aid != null">AND aid = #{apply.aid}</if>
         <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>                
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
@@ -115,6 +116,7 @@ interface ApplyMapper {
         <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
         <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>        
+        <if test="apply.aid != null">AND aid = #{apply.aid}</if>
         <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>        
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
