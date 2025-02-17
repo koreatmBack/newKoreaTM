@@ -118,7 +118,7 @@ interface ApplyMapper {
         <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>        
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
-            <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
+            <when test="apply.searchType == '연락처'">AND REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
         </choose>
         ORDER BY 
         <choose>
