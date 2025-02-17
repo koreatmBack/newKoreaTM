@@ -6,6 +6,14 @@ import org.apache.ibatis.annotations.*
 @Mapper
 interface ApplyMapper {
 
+    // 시리얼 넘버 생성 전, 이미 있는 시리얼 넘버인지 체킹
+    @Select("""
+        SELECT count(*)
+        FROM formmail_apply
+        WHERE aid = #{serialNumber}
+    """)
+    int dupAidCheck(@Param("serialNumber") String serialNumber)
+
     // 지원자 등록
     @Insert("""
         Insert INTO formmail_apply(
