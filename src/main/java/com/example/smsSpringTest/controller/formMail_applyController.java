@@ -65,5 +65,17 @@ public class formMail_applyController {
         return formMailApplyService.updateAllInterview();
     }
 
+    // 지원자 삭제하기 (일괄 삭제까지 가능)
+    @DeleteMapping("/delete")
+    public ApiResponse deleteApply(@RequestBody ApplyRequest applyRequest) throws Exception {
+        return formMailApplyService.deleteApply(applyRequest);
+    }
+
+    // 면접 시간 설정에 따라 채용현황 자동 변환 (당일면접, 익일면접, 면접예정)
+    // 면접 시간 수정 및 면접 시간 선택 후 설정 버튼 클릭시 사용할 API임
+    @PutMapping("/edit/interviewTime")
+    public ApiResponse editInterviewTime(@RequestBody Apply apply) throws Exception {
+        return formMailApplyService.editInterviewTime(apply);
+    }
 
 }

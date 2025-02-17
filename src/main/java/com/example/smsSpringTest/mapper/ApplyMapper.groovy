@@ -63,7 +63,6 @@ interface ApplyMapper {
            <if test="apply.applyGender != null"> apply_gender = #{apply.applyGender},   </if>
            <if test="apply.applyAddress != null"> apply_address = #{apply.applyAddress},   </if>
            <if test="apply.applyPhone  != null"> apply_phone = #{apply.applyPhone},   </if>
-           <if test="apply.interviewTime  != null"> interview_time = #{apply.interviewTime},   </if>
            <if test="apply.addressDetail != null"> address_detail  = #{apply.addressDetail},   </if>     
            <if test="apply.sido != null"> sido  = #{apply.sido},   </if>     
            <if test="apply.sigungu != null"> sigungu  = #{apply.sigungu},   </if>     
@@ -92,7 +91,7 @@ interface ApplyMapper {
         <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>                
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
-            <when test="apply.searchType == '연락처'">AND apply_phone = #{apply.searchKeyword} </when>
+            <when test="apply.searchType == '연락처'">AND REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
         </choose>
         ORDER BY 
         <choose>
@@ -176,7 +175,7 @@ interface ApplyMapper {
     """)
     List<Apply> applyHistory(@Param("apply") Apply apply)
 
-    // 지원자 채용 현황 변경 버튼 클릭 -> 변경
+    // 지원자 채용 현황 변경 버튼 일괄 클릭 -> 변경
     @Update("""
 <script>
         UPDATE formmail_apply
@@ -208,5 +207,27 @@ interface ApplyMapper {
         AND apply_status = '당일면접'
     """)
     int checkTodayInterview();
+
+    // 지원자 삭제 (일괄 삭제까지 가능)
+    @Delete("""
+<script>
+        DELETE FROM formmail_apply
+        WHERE apply_id IN 
+        <foreach item="apply" collection="applyIds" open="(" separator="," close=")">
+            #{apply.applyId}
+        </foreach>
+</script>        
+    """)
+    int deleteApply(@Param("applyIds") List<Apply> applyIds)
+
+    // 면접 시간 설정에 따라 채용현황 자동 변환 (당일면접, 익일면접, 면접예정)
+    // 면접 시간 선택 후 설정 버튼 클릭시 사용할 API임
+    @Update("""
+        UPDATE formmail_apply
+        SET interview_time = #{apply.interviewTime}
+           ,apply_status = #{apply.applyStatus}
+        WHERE apply_id = #{apply.applyId}   
+    """)
+    int editInterviewTime(@Param("apply") Apply apply)
 }
 

@@ -2,11 +2,11 @@ package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity
 import com.example.smsSpringTest.entity.PhoneNum
+import com.example.smsSpringTest.model.Apply
 import com.example.smsSpringTest.model.FormMailAdmin
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser
 import org.apache.ibatis.annotations.*
-
 /*
 
     ADMIN 용 mapper
@@ -310,12 +310,5 @@ interface AdminMapper {
     """)
     List<FormMailAdmin> recruitTeamList()
 
-    @Select("""
-        SELECT count(*)
-        FROM formmail_admin
-        WHERE team = '채용'
-        AND use_status = 1
-    """)
-    int recruitTeamListCount()
 
 }

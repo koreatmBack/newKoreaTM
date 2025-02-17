@@ -84,12 +84,12 @@ public class formMail_applyService {
 
         try{
 
-            if(apply.getInterviewTime() != null && apply.getApplyStatus() == null) {
-                // 면접시간이 변경되며 채용현황은 변경하지 않았을때
-                // 자동으로 당일면접, 익일면접, 면접예정으로 변환
-                String applyStatus = getInterviewStatus(apply.getInterviewTime());
-                apply.setApplyStatus(applyStatus);
-            }
+//            if(apply.getInterviewTime() != null && apply.getApplyStatus() == null) {
+//                // 면접시간이 변경되며 채용현황은 변경하지 않았을때
+//                // 자동으로 당일면접, 익일면접, 면접예정으로 변환
+//                String applyStatus = getInterviewStatus(apply.getInterviewTime());
+//                apply.setApplyStatus(applyStatus);
+//            }
 
             int updateApply = applyMapper.updateApply(apply);
             if(updateApply == 1) {
@@ -107,26 +107,7 @@ public class formMail_applyService {
         return apiResponse;
     }
 
-    // 오늘 날짜와 비교하여 당일면접, 익일면접, 면접예정 체크 후 반환
-    public static String getInterviewStatus(String applyDateStr) {
-        // 날짜 형식 지정 (문자열을 날짜로 변환)
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime applyDateTime = LocalDateTime.parse(applyDateStr, formatter);
 
-        // 오늘 날짜 가져오기
-        LocalDate today = LocalDate.now();
-        LocalDate applyDate = applyDateTime.toLocalDate();
-
-        // 면접 상태 판별
-        if (applyDate.isEqual(today)) {
-            return "당일면접";
-        } else if (applyDate.isEqual(today.plusDays(1))) {
-            return "익일면접";
-        } else if (applyDate.isAfter(today)) {
-            return "면접예정";
-        }
-        return "기타"; // 혹시 모를 예외 처리
-    }
 
     // 지원자 전체 조회
     public ApplyResponse applyList(Apply apply) throws Exception {
@@ -253,6 +234,67 @@ public class formMail_applyService {
         return apiResponse;
     }
 
+    // 지원자 삭제하기 (일괄 삭제까지 가능)
+    public ApiResponse deleteApply(ApplyRequest applyRequest) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int deleteApply = applyMapper.deleteApply(applyRequest.getApplyIds());
+            if(deleteApply != 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("지원자 삭제 성공");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("지원자 삭제 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
+
+    // 면접 시간 설정에 따라 채용현황 자동 변환 (당일면접, 익일면접, 면접예정)
+    // 면접 시간 선택 후 설정 버튼 클릭시 사용할 API임
+    public ApiResponse editInterviewTime(Apply apply) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            String applyStatus = getInterviewStatus(apply.getInterviewTime());
+            apply.setApplyStatus(applyStatus);
+            int editInterviewTime = applyMapper.editInterviewTime(apply);
+            if(editInterviewTime != 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("면접 시간 설정 및 채용 현황 변경 성공");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("면접 시간 설정 및 채용 현황 변경 실패");
+            }
+        } catch (Exception e) {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
+
+    // 오늘 날짜와 비교하여 당일면접, 익일면접, 면접예정 체크 후 반환
+    public static String getInterviewStatus(String applyDateStr) {
+        // 날짜 형식 지정 (문자열을 날짜로 변환)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime applyDateTime = LocalDateTime.parse(applyDateStr, formatter);
+
+        // 오늘 날짜 가져오기
+        LocalDate today = LocalDate.now();
+        LocalDate applyDate = applyDateTime.toLocalDate();
+
+        // 면접 상태 판별
+        if (applyDate.isEqual(today)) {
+            return "당일면접";
+        } else if (applyDate.isEqual(today.plusDays(1))) {
+            return "익일면접";
+        } else if (applyDate.isAfter(today)) {
+            return "면접예정";
+        }
+        return "기타"; // 혹시 모를 예외 처리
+    }
 
 }
 

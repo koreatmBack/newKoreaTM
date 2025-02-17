@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
+import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
@@ -167,5 +168,7 @@ public class formMail_adminController {
     public AdminResponse recruitTeamList() throws Exception {
         return formMailAdminService.recruitTeamList();
     }
+
+
 
 }

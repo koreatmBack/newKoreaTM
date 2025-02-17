@@ -489,10 +489,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_admin/delPhoneNum" , "/api/v1/formMail_admin/delPhoneNum"
                 ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
                 ,"/v1/formMail_admin/find/recruitTeam" , "/api/v1/formMail_admin/find/recruitTeam"
+                ,"/v1/formMail_apply/delete" , "/api/v1/formMail_apply/delete"
                 ,"/v1/formMail_apply/applyList", "/api/v1/formMail_apply/applyList"
                 ,"/v1/formMail_apply/find/history", "/api/v1/formMail_apply/find/history"
                 ,"/v1/formMail_apply/update/status", "/api/v1/formMail_apply/update/status"
                 ,"/v1/formMail_apply/update/all/interviewTime", "/api/v1/formMail_apply/update/all/interviewTime"
+                ,"/v1/formMail_apply/edit/interviewTime", "/api/v1/formMail_apply/edit/interviewTime"
 
         };
 
@@ -504,9 +506,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_admin/delPhoneNum" , "/api/v1/formMail_admin/delPhoneNum"
                 ,"/v1/formMail_admin/findUserName" , "/api/v1/formMail_admin/findUserName"
                 ,"/v1/formMail_admin/find/recruitTeam" , "/api/v1/formMail_admin/find/recruitTeam"
+                ,"/v1/formMail_apply/delete" , "/api/v1/formMail_apply/delete"
                 ,"/v1/formMail_apply/applyList", "/api/v1/formMail_apply/applyList"
                 ,"/v1/formMail_apply/find/history", "/api/v1/formMail_apply/find/history"
                 ,"/v1/formMail_apply/update/status", "/api/v1/formMail_apply/update/status"
+                ,"/v1/formMail_apply/edit/interviewTime", "/api/v1/formMail_apply/edit/interviewTime"
+
         };
 
 

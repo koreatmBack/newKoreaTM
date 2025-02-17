@@ -5,6 +5,7 @@ import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
+import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
@@ -778,6 +779,8 @@ public class formMail_adminService {
         }
         return adminResponse;
     }
+
+
 
 
 }
