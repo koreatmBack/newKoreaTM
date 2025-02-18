@@ -40,7 +40,7 @@ public class formMail_applyService {
             int blackListCheck = applyMapper.blackListCheck(apply);
             if(blackListCheck != 0) {
                 apiResponse.setCode("E001");
-                apiResponse.setMessage("블랙리스트입니다.");
+                apiResponse.setMessage("블랙리스트 지원자입니다.");
                 return apiResponse;
             }
 
@@ -128,6 +128,13 @@ public class formMail_applyService {
 
             log.info("page = " + page + " size = " + size + " offset = " + offset + " totalCount = " + totalCount);
             applyResponse.setApplyList(applyMapper.applyList(apply));
+
+            if(StringUtils.hasText(apply.getManagerId())){
+                // 만약 매니저 id 값이 요청 값에 있으면
+                totalCount = applyMapper.applyListSameManagerIdCount(apply);
+                applyResponse.setApplyList(applyMapper.applyListSameManagerId(apply));
+                log.info(applyMapper.applyListSameManagerId(apply).toString());
+            }
 
             if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
                 int totalPages = (int) Math.ceil((double) totalCount / size );

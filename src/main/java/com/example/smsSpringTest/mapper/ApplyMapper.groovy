@@ -79,7 +79,7 @@ interface ApplyMapper {
            <if test="apply.applyCareer != null"> apply_career  = #{apply.applyCareer},   </if>     
            <if test="apply.managerMemo != null"> manager_memo  = #{apply.managerMemo},   </if>     
            <if test="apply.managerName != null"> manager_name = #{apply.managerName},   </if>     
-           <if test="apply.interviewQna != null"> interview_qna  = #{apply.interviewQna},   </if>     
+           <if test="apply.surveyStatus != null"> survey_status  = #{apply.surveyStatus},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
@@ -97,14 +97,14 @@ interface ApplyMapper {
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
         <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>
         <if test="apply.aid != null">AND aid = #{apply.aid}</if>
-        <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>                
+        <if test="apply.surveyStatus != null">AND survey_status = #{apply.surveyStatus}</if>                
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
         </choose>
         ORDER BY 
         <choose>
-            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(interview_qna, '미발송', '발송', '완료'), interview_time DESC </when>
+            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(survey_status, '미발송', '발송', '완료'), interview_time DESC </when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
             <otherwise> apply_date DESC </otherwise>
@@ -125,14 +125,14 @@ interface ApplyMapper {
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
         <if test="apply.applyPath != null">AND apply_path = #{apply.applyPath}</if>        
         <if test="apply.aid != null">AND aid = #{apply.aid}</if>
-        <if test="apply.interviewQna != null">AND interview_qna = #{apply.interviewQna}</if>        
+        <if test="apply.surveyStatus != null">AND survey_status = #{apply.surveyStatus}</if>        
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
             <when test="apply.searchType == '연락처'">AND REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
         </choose>
         ORDER BY 
         <choose>
-            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(interview_qna, '미발송', '발송', '완료'), apply_date DESC </when>
+            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(survey_status, '미발송', '발송', '완료'), apply_date DESC </when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
             <otherwise> apply_date DESC </otherwise>
@@ -255,6 +255,71 @@ interface ApplyMapper {
         WHERE apply_id = #{apply.applyId}
     """)
     String survey(@Param("apply") Apply apply)
+
+    // ----- managerId가 일치할 때 formNo, rName, userName, rank 도 보내기 위함 --------
+    // 지원자 전체 조회 (페이징 처리)
+    @Select("""
+<script>
+        SELECT fa.*
+              ,fd.form_no
+              ,fd.r_name
+              ,fd.user_name
+              ,fd.rank
+        FROM formmail_apply fa
+        LEFT JOIN formmail_admin fd ON fd.user_id = fa.manager_id 
+        WHERE 1=1
+        <if test="apply.managerId != null">AND fa.manager_id = #{apply.managerId}</if>
+        <if test="apply.applyStatus != null">AND fa.apply_status = #{apply.applyStatus}</if>
+        <if test="apply.applyCareer != null">AND fa.apply_career = #{apply.applyCareer}</if>
+        <if test="apply.applyPath != null">AND fa.apply_path = #{apply.applyPath}</if>
+        <if test="apply.aid != null">AND fa.aid = #{apply.aid}</if>
+        <if test="apply.surveyStatus != null">AND fa.survey_status = #{apply.surveyStatus}</if>                
+        <choose>
+            <when test="apply.searchType == '이름'">AND fa.apply_name = #{apply.searchKeyword} </when>
+            <when test="apply.searchType == '연락처'">AND REPLACE(fa.apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
+        </choose>
+        ORDER BY 
+        <choose>
+            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(fa.survey_status, '미발송', '발송', '완료'), fa.interview_time DESC </when>
+            <when test="apply.interviewSort == '내림차순'"> fa.interview_time DESC </when>
+            <when test="apply.interviewSort == '오름차순'"> fa.interview_time ASC </when>
+            <otherwise> fa.apply_date DESC </otherwise>
+        </choose>
+        LIMIT #{apply.size} OFFSET #{apply.offset}
+</script>                
+    """)
+    List<Apply> applyListSameManagerId(@Param("apply") Apply apply)
+
+    // 지원자 전체 수
+    @Select("""
+<script>
+        SELECT count(*)
+        FROM formmail_apply fa
+        LEFT JOIN formmail_admin fd ON fd.user_id = fa.manager_id 
+        WHERE 1=1
+        <if test="apply.managerId != null">AND fa.manager_id = #{apply.managerId}</if>
+        <if test="apply.applyStatus != null">AND fa.apply_status = #{apply.applyStatus}</if>
+        <if test="apply.applyCareer != null">AND fa.apply_career = #{apply.applyCareer}</if>
+        <if test="apply.applyPath != null">AND fa.apply_path = #{apply.applyPath}</if>        
+        <if test="apply.aid != null">AND fa.aid = #{apply.aid}</if>
+        <if test="apply.surveyStatus != null">AND fa.survey_status = #{apply.surveyStatus}</if>        
+        <choose>
+            <when test="apply.searchType == '이름'">AND fa.apply_name = #{apply.searchKeyword} </when>
+            <when test="apply.searchType == '연락처'">AND REPLACE(fa.apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
+        </choose>
+        ORDER BY 
+        <choose>
+            <when test="apply.interviewQnaSort == '내림차순'"> FIELD(fa.survey_status, '미발송', '발송', '완료'), fa.apply_date DESC </when>
+            <when test="apply.interviewSort == '내림차순'"> fa.interview_time DESC </when>
+            <when test="apply.interviewSort == '오름차순'"> fa.interview_time ASC </when>
+            <otherwise> fa.apply_date DESC </otherwise>
+        </choose>
+        
+</script>          
+    """)
+    int applyListSameManagerIdCount(@Param("apply") Apply apply)
+
+    // ------------------------ ---------------------------------
 
 }
 

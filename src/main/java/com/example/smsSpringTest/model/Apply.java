@@ -63,7 +63,7 @@ public class Apply {
 
     private String interviewSort; // 면접시간 기준 정렬 키값
 
-    private String interviewQna; // 면접 질의서
+    private String surveyStatus; // 면접 질의서
 
     private String interviewQnaSort; // 면접 질의서 기준 내림차순 정렬
 
@@ -82,5 +82,14 @@ public class Apply {
     private int size;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int offset;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String formNo;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String rName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String userName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String rank;
 
 }
