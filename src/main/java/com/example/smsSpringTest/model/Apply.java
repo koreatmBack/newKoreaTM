@@ -65,11 +65,13 @@ public class Apply {
 
     private String surveyStatus; // 면접 질의서
 
-    private String interviewQnaSort; // 면접 질의서 기준 내림차순 정렬
+    private String surveyStatusSort; // 면접 질의서 기준 내림차순 정렬
 
     private String applyCareer; // 신입 or 경력
 
     private String managerMemo; // 담당자 메모
+
+    private String interviewMemo; // 면접 메모
 
     private String survey; // 면접질의서 url
 
