@@ -23,6 +23,10 @@ public class ApplyResponse extends ApiResponse{
     private List<Apply> applyList;
 
     private String survey;
+    private String formNo;
+    private String rName;
+    private String userName;
+    private String rank;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;

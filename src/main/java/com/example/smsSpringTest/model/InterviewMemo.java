@@ -26,8 +26,8 @@ public class InterviewMemo {
     private String managerId;
     private String managerName;
 
-    private String rName; // 요청받을 값
-    private String userId; // 요청받을 값
+//    private String rName; // 요청받을 값
+//    private String userId; // 요청받을 값
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int page;

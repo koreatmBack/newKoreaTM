@@ -1,8 +1,10 @@
 package com.example.smsSpringTest.service;
 
+import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.ApplyMapper;
 import com.example.smsSpringTest.model.Apply;
 import com.example.smsSpringTest.model.ApplyRequest;
+import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.InterviewMemo;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
@@ -31,6 +33,7 @@ import java.util.UUID;
 public class formMail_applyService {
 
     private final ApplyMapper applyMapper;
+    private final AdminMapper adminMapper;
 
     // 지원자 등록
     public ApiResponse addApply(Apply apply) throws Exception {
@@ -133,9 +136,15 @@ public class formMail_applyService {
 
             if(StringUtils.hasText(apply.getManagerId())){
                 // 만약 매니저 id 값이 요청 값에 있으면
-                totalCount = applyMapper.applyListSameManagerIdCount(apply);
-                applyResponse.setApplyList(applyMapper.applyListSameManagerId(apply));
-                log.info(applyMapper.applyListSameManagerId(apply).toString());
+                FormMailAdmin fm = adminMapper.findOneAdmin(apply.getManagerId());
+                applyResponse.setFormNo(fm.getFormNo());
+                applyResponse.setRName(fm.getRName());
+                applyResponse.setUserName(fm.getUserName());
+                applyResponse.setRank(fm.getRank());
+
+//                totalCount = applyMapper.applyListSameManagerIdCount(apply);
+//                applyResponse.setApplyList(applyMapper.applyListSameManagerId(apply));
+//                log.info(applyMapper.applyListSameManagerId(apply).toString());
             }
 
             if(applyResponse.getApplyList() != null && !applyResponse.getApplyList().isEmpty()){
