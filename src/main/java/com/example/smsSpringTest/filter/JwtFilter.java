@@ -493,7 +493,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_apply/edit/interviewTime", "/api/v1/formMail_apply/edit/interviewTime"
                 ,"/v1/formMail_apply/add/survey", "/api/v1/formMail_apply/add/survey"
                 ,"/v1/formMail_apply/find/survey", "/api/v1/formMail_apply/find/survey"
-
+                ,"/v1/formMail_apply/add/interviewMemo", "/api/v1/formMail_apply/add/interviewMemo"
+                ,"/v1/formMail_apply/find/all/interviewMemo", "/api/v1/formMail_apply/find/all/interviewMemo"
 
         };
 
@@ -512,6 +513,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_apply/edit/interviewTime", "/api/v1/formMail_apply/edit/interviewTime"
                 ,"/v1/formMail_apply/add/survey", "/api/v1/formMail_apply/add/survey"
                 ,"/v1/formMail_apply/find/survey", "/api/v1/formMail_apply/find/survey"
+                ,"/v1/formMail_apply/add/interviewMemo", "/api/v1/formMail_apply/add/interviewMemo"
+                ,"/v1/formMail_apply/find/all/interviewMemo", "/api/v1/formMail_apply/find/all/interviewMemo"
 
         };
 
