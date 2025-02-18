@@ -5,6 +5,7 @@ import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.InterviewMemo;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
+import com.example.smsSpringTest.model.response.InterviewMemoResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -97,5 +98,9 @@ public class formMail_applyController {
         return formMailApplyService.addInterviewMemo(im);
     }
 
-
+    // 면접 메모 조회
+    @PostMapping("/find/all/interviewMemo")
+    public InterviewMemoResponse findAllnterviewMemo(@RequestBody InterviewMemo im) throws Exception {
+        return formMailApplyService.findAllnterviewMemo(im);
+    }
 }

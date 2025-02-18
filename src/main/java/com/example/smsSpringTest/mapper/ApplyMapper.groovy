@@ -328,10 +328,14 @@ interface ApplyMapper {
              mid
             ,apply_id
             ,content
+            ,manager_id
+            ,manager_name
         ) VALUES (
             #{im.mid}
             ,#{im.applyId}
             ,#{im.content}
+            ,#{im.userId}
+            ,#{im.rName}
         )
     """)
     int addInterviewMemo(@Param("im") InterviewMemo im)
@@ -353,7 +357,20 @@ interface ApplyMapper {
     int addAndUptInterviewMemo(@Param("im") InterviewMemo im)
 
     // 면접 메모 조회하기
+    @Select("""
+        SELECT *
+        FROM interview_memo
+        ORDER BY reg_date DESC
+        LIMIT #{im.size} OFFSET #{im.offset} 
+    """)
+    List<InterviewMemo> interviewMemoList(@Param("im") InterviewMemo im)
 
+    // 면접 메모 총 개수
+    @Select("""
+        SELECT count(*)
+        FROM interview_memo
+    """)
+    int interviewMemoListCount()
 
 }
 

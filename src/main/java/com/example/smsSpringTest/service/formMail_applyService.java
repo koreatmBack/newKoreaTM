@@ -6,6 +6,7 @@ import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.InterviewMemo;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
+import com.example.smsSpringTest.model.response.InterviewMemoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -365,7 +366,34 @@ public class formMail_applyService {
     }
 
     // 면접 메모 조회하기
+    public InterviewMemoResponse findAllnterviewMemo(InterviewMemo im) throws Exception {
+        InterviewMemoResponse interviewMemoResponse = new InterviewMemoResponse();
+        try {
+            int page = im.getPage();
+            int size = im.getSize();
+            int offset = (page - 1) * size ;
+            int totalCount = applyMapper.interviewMemoListCount();
+            im.setOffset(offset);
 
+            interviewMemoResponse.setInterviewMemoList(applyMapper.interviewMemoList(im));
+            if(interviewMemoResponse.getInterviewMemoList() != null &&
+            !interviewMemoResponse.getInterviewMemoList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                interviewMemoResponse.setTotalCount(totalCount);
+                interviewMemoResponse.setTotalPages(totalPages);
+                interviewMemoResponse.setCode("C000");
+                interviewMemoResponse.setMessage("면접 메모 조회 성공");
+            } else {
+                interviewMemoResponse.setCode("E001");
+                interviewMemoResponse.setMessage("면접 메모 조회 실패");
+            }
+        } catch (Exception e) {
+            interviewMemoResponse.setCode("E001");
+            interviewMemoResponse.setMessage("Error");
+            log.info(e.getMessage());
+        }
+        return interviewMemoResponse;
+    }
 
 
 
