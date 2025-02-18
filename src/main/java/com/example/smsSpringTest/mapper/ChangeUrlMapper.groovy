@@ -25,4 +25,12 @@ interface ChangeUrlMapper {
         WHERE short_url = #{short}
     """)
     String originalUrl(@Param("short") String shortUrl)
+
+    @Select("""
+        SELECT count(*)
+        FROM formmail_change_url
+        WHERE original_url = #{origin}
+    """)
+    int dupCheckOrigin(@Param("origin") String originUrl)
+
 }

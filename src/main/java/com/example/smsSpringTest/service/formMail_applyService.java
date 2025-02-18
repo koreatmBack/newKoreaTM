@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
@@ -280,6 +281,46 @@ public class formMail_applyService {
         return apiResponse;
     }
 
+    //면접 질의서 url 저장
+    public ApiResponse addSurvey(Apply apply) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            int addSurvey = applyMapper.addSurvey(apply);
+            if(addSurvey > 0) {
+                apiResponse.setCode("C000");
+                apiResponse.setMessage("면접 질의서 url 저장 성공");
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("면접 질의서 url 저장 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+        }
+        return apiResponse;
+    }
+
+    // 면접 질의서 있는지 체킹
+    public ApplyResponse findSurvey(Apply apply) throws Exception {
+        ApplyResponse applyResponse = new ApplyResponse();
+        try {
+            String survey = applyMapper.survey(apply);
+            if (StringUtils.hasText(survey)) {
+                applyResponse.setCode("C000");
+                applyResponse.setMessage("면접 질의서 있음");
+                applyResponse.setSurvey(survey);
+            } else {
+                applyResponse.setCode("E001");
+                applyResponse.setMessage("면접 질의서 없음");
+            }
+        } catch (Exception e) {
+            applyResponse.setCode("E001");
+            applyResponse.setMessage("Error!!!");
+        }
+        return applyResponse;
+    }
+
+
     // 오늘 날짜와 비교하여 당일면접, 익일면접, 면접예정 체크 후 반환
     public static String getInterviewStatus(String applyDateStr) {
         // 날짜 형식 지정 (문자열을 날짜로 변환)
@@ -300,6 +341,8 @@ public class formMail_applyService {
         }
         return "기타"; // 혹시 모를 예외 처리
     }
+
+
 
 }
 

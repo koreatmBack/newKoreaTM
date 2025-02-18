@@ -73,12 +73,13 @@ public class CommonController {
         return mapService.findNearbySubwayStations(y, x);
     }
 
+    // url 단축하기
     @PostMapping("/change/url/short")
     public UrlResponse generateShortenUrl(@RequestBody UrlShorten url) throws Exception {
         return commonService.generateShortenUrl(url);
     }
 
-    // 단축 URL을 통해 리다이렉트 처리
+    // 단축 URL을 통해 리다이렉트 처리 ( 다시 원래 url 리턴)
     @PostMapping("/change/url/original")
     public UrlResponse redirect(@RequestBody UrlShorten url) throws Exception {
 

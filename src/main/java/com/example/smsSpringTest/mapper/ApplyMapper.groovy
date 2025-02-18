@@ -239,5 +239,22 @@ interface ApplyMapper {
         WHERE apply_id = #{apply.applyId}   
     """)
     int editInterviewTime(@Param("apply") Apply apply)
+
+    // 면접 질의서 url 저장
+    @Update("""
+        UPDATE formmail_apply
+        SET survey = #{apply.survey}
+        WHERE apply_id = #{apply.applyId}
+    """)
+    int addSurvey(@Param("apply") Apply apply)
+
+    // 면접 질의서 있는지 체킹
+    @Select("""
+        SELECT survey
+        FROM formmail_apply
+        WHERE apply_id = #{apply.applyId}
+    """)
+    String survey(@Param("apply") Apply apply)
+
 }
 

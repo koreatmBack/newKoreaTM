@@ -71,6 +71,8 @@ public class Apply {
 
     private String managerMemo; // 담당자 메모
 
+    private String survey; // 면접질의서 url
+
     private String searchType;    // 검색타입
     private String searchKeyword; // 검색어
 

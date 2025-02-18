@@ -78,4 +78,16 @@ public class formMail_applyController {
         return formMailApplyService.editInterviewTime(apply);
     }
 
+    //면접 질의서 url 저장
+    @PutMapping("/add/survey")
+    public ApiResponse addSurvey(@RequestBody Apply apply) throws Exception {
+        return formMailApplyService.addSurvey(apply);
+    }
+
+    // 면접 질의서 있는지 체킹
+    @PostMapping("/find/survey")
+    public ApplyResponse findSurvey(@RequestBody Apply apply) throws Exception {
+        return formMailApplyService.findSurvey(apply);
+    }
+
 }

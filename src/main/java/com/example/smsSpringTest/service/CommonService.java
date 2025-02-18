@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 
 /**
  * author : 신기훈
@@ -116,21 +117,38 @@ public class CommonService {
         try {
             String originalUrl = url.getOriginalUrl();
             String shortURL = base62.generateShortUrl(originalUrl);
-            // 4글자로 자르기 (만약 길이가 4자 이상이면)
-            if (shortURL.length() > 4) {
-                shortURL = shortURL.substring(0, 4);  // 첫 4글자만 사용
+            log.info("shortURL = " + shortURL);
+            // 8글자로 자르기 (만약 길이가 8자 이상이면)
+            if (shortURL.length() > 8) {
+                shortURL = shortURL.substring(0, 8);  // 첫 8글자만 사용
             }
             log.info("original = " + originalUrl);
             log.info("shortURL = " + shortURL);
 
-            int changeUrl = changeUrlMapper.changeUrl(originalUrl, shortURL);
+            // 도메인 부분 추출
+            URI uri = new URI(originalUrl);
+            String domain = uri.getScheme() + "://" + uri.getHost() + "/";
+
+            // 최종 단축 URL 생성
+            String finalShortUrl = domain + shortURL;
+            log.info("finalShorUrl = " + finalShortUrl);
+
+            int dupCheckOrigin = changeUrlMapper.dupCheckOrigin(originalUrl);
+            if(dupCheckOrigin != 0) {
+                // 이미 변환된 값이 있으면
+                urlResponse.setCode("C000");
+                urlResponse.setMessage("이미 변환된 url이 존재합니다.");
+                urlResponse.setShortUrl(finalShortUrl);
+                return urlResponse;
+            }
+            int changeUrl = changeUrlMapper.changeUrl(originalUrl, finalShortUrl);
             if(changeUrl == 0) {
                 urlResponse.setCode("C003");
                 urlResponse.setMessage("변환 실패");
              } else {
                 urlResponse.setCode("C000");
                 urlResponse.setMessage("변환 성공");
-                urlResponse.setShortUrl(shortURL);
+                urlResponse.setShortUrl(finalShortUrl);
             }
 
         } catch (Exception e) {
@@ -142,6 +160,7 @@ public class CommonService {
         return urlResponse;
     }
 
+    // 단축 URL을 통해 리다이렉트 처리 ( 다시 원래 url 리턴)
     public UrlResponse getOriginalUrlByShortUrl(UrlShorten url) {
         UrlResponse urlResponse = new UrlResponse();
         try {
