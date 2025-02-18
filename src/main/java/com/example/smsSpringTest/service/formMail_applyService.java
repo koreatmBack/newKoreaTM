@@ -3,6 +3,7 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.mapper.ApplyMapper;
 import com.example.smsSpringTest.model.Apply;
 import com.example.smsSpringTest.model.ApplyRequest;
+import com.example.smsSpringTest.model.InterviewMemo;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import lombok.RequiredArgsConstructor;
@@ -326,6 +327,57 @@ public class formMail_applyService {
         }
         return applyResponse;
     }
+
+    // 면접 메모 등록하는 API
+    public ApiResponse addInterviewMemo(InterviewMemo im) throws Exception {
+        ApiResponse apiResponse = new ApiResponse();
+        try {
+            // 시리얼 넘버 생성
+            String serialNumber = UUID.randomUUID().toString().substring(0, 8);
+            int dupMidCheck = applyMapper.dupMidCheck(serialNumber);
+            if(dupMidCheck != 0) {
+                // 중복이라면 다시
+                serialNumber = UUID.randomUUID().toString().substring(0, 8);
+            }
+            im.setMid(serialNumber);
+            int addInterviewMemo = applyMapper.addInterviewMemo(im);
+            if(addInterviewMemo > 0) {
+                // 테이블에 등록 성공
+                // 지원자 테이블에도 추가하기
+                int addAndUptInterviewMemo = applyMapper.addAndUptInterviewMemo(im);
+                if(addAndUptInterviewMemo > 0) {
+                    apiResponse.setCode("C000");
+                    apiResponse.setMessage("면접 메모 테이블 및 지원자 테이블 등록 성공");
+                } else {
+                    apiResponse.setCode("E001");
+                    apiResponse.setMessage("면접 메모 테이블에는 성공 , 지원자 테이블에는 실패");
+                }
+            } else {
+                apiResponse.setCode("E001");
+                apiResponse.setMessage("모두 저장 실패");
+            }
+        } catch (Exception e) {
+            apiResponse.setCode("E001");
+            apiResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return apiResponse;
+    }
+
+    // 면접 메모 조회하기
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // 오늘 날짜와 비교하여 당일면접, 익일면접, 면접예정 체크 후 반환

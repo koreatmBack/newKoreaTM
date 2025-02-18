@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Apply
+import com.example.smsSpringTest.model.InterviewMemo
 import org.apache.ibatis.annotations.*
 
 @Mapper
@@ -320,6 +321,39 @@ interface ApplyMapper {
     int applyListSameManagerIdCount(@Param("apply") Apply apply)
 
     // ------------------------ ---------------------------------
+
+    // 인터뷰 메모 등록하기
+    @Insert("""
+        INSERT INTO interview_memo (
+             mid
+            ,apply_id
+            ,content
+        ) VALUES (
+            #{im.mid}
+            ,#{im.applyId}
+            ,#{im.content}
+        )
+    """)
+    int addInterviewMemo(@Param("im") InterviewMemo im)
+
+    // 인터뷰 메모 mid 중복 체크
+    @Select("""
+        SELECT count(*)
+        FROM interview_memo
+        WHERE mid = #{mid}
+    """)
+    int dupMidCheck(@Param("mid") String mid)
+
+    // 지원자 테이블 인터뷰 메모 컬럼에도 추가
+    @Update("""
+        Update formmail_apply 
+        SET interview_memo = #{im.content}
+        WHERE apply_id = #{im.applyId}
+    """)
+    int addAndUptInterviewMemo(@Param("im") InterviewMemo im)
+
+    // 면접 메모 조회하기
+
 
 }
 

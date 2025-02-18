@@ -2,6 +2,7 @@ package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Apply;
 import com.example.smsSpringTest.model.ApplyRequest;
+import com.example.smsSpringTest.model.InterviewMemo;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
@@ -89,5 +90,12 @@ public class formMail_applyController {
     public ApplyResponse findSurvey(@RequestBody Apply apply) throws Exception {
         return formMailApplyService.findSurvey(apply);
     }
+
+    // 면접 메모 등록하는 API
+    @PostMapping("/add/interviewMemo")
+    public ApiResponse addInterviewMemo(@RequestBody InterviewMemo im) throws Exception {
+        return formMailApplyService.addInterviewMemo(im);
+    }
+
 
 }
