@@ -327,6 +327,7 @@ interface AdminMapper {
             AND (REPLACE(r_phone, '-', '') = REPLACE(#{sms.rPhone}, '-', '')
             OR RIGHT(REPLACE(r_phone, '-', ''), 4) = #{sms.rPhone})
         </if>
+        <if test="sms.sendStatus != null"> AND send_status = #{sms.sendStatus} </if>
         ORDER BY send_date DESC
         LIMIT #{sms.size} OFFSET #{sms.offset}
 </script>        
@@ -349,6 +350,7 @@ interface AdminMapper {
             AND (REPLACE(r_phone, '-', '') = REPLACE(#{sms.rPhone}, '-', '')
             OR RIGHT(REPLACE(r_phone, '-', ''), 4) = #{sms.rPhone})
         </if>
+        <if test="sms.sendStatus != null"> AND send_status = #{sms.sendStatus} </if>
 </script>        
     """)
     int smsListCount(@Param("sms") SmsForm sms)
