@@ -16,12 +16,20 @@ interface SmsMapper {
             s_phone
             , r_phone
             , sms_type
-            , msg
+            , content
+            , subject
+            , send_status
+            , manager_id
+            , manager_name
         ) VALUES (
             #{sms.sPhone}
             , #{sms.rPhone}
             , #{sms.smsType}
-            , #{sms.msg}
+            , #{sms.content}
+            , #{sms.subject}
+            , #{sms.sendStatus}
+            , #{sms.managerId}
+            , #{sms.managerName}
         )
     """)
     int addMsg(@Param("sms") SmsForm sms)

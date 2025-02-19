@@ -2,11 +2,12 @@ package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity
 import com.example.smsSpringTest.entity.PhoneNum
-import com.example.smsSpringTest.model.Apply
 import com.example.smsSpringTest.model.FormMailAdmin
+import com.example.smsSpringTest.model.SmsForm
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser
 import org.apache.ibatis.annotations.*
+
 /*
 
     ADMIN 용 mapper
@@ -310,5 +311,46 @@ interface AdminMapper {
     """)
     List<FormMailAdmin> recruitTeamList()
 
+    // 문자 내역 조회
+    @Select("""
+<script>
+        SELECT *
+        FROM formmail_sms
+        WHERE 1=1
+        <if test="sms.managerId != null">AND manager_id = #{sms.managerId}</if>
+        <if test="sms.smsType != null">AND sms_type = #{sms.smsType}</if>
+        <if test="sms.sPhone != null and sms.sPhone.trim() != '' and sms.sPhone.matches('^[0-9\\\\-]+\$')">
+            AND (REPLACE(s_phone, '-', '') = REPLACE(#{sms.sPhone}, '-', '')
+            OR RIGHT(REPLACE(s_phone, '-', ''), 4) = #{sms.sPhone})
+        </if>
+        <if test="sms.rPhone != null">
+            AND (REPLACE(r_phone, '-', '') = REPLACE(#{sms.rPhone}, '-', '')
+            OR RIGHT(REPLACE(r_phone, '-', ''), 4) = #{sms.rPhone})
+        </if>
+        ORDER BY send_date DESC
+        LIMIT #{sms.size} OFFSET #{sms.offset}
+</script>        
+    """)
+    List<SmsForm> smsList(@Param("sms") SmsForm sms)
+
+    // 문자 내역 조회 개수
+    @Select("""
+<script>
+        SELECT count(*)
+        FROM formmail_sms
+        WHERE 1=1
+        <if test="sms.managerId != null">AND manager_id = #{sms.managerId}</if>
+        <if test="sms.smsType != null">AND sms_type = #{sms.smsType}</if>
+        <if test="sms.sPhone != null">
+            AND (REPLACE(s_phone, '-', '') = REPLACE(#{sms.sPhone}, '-', '')
+            OR RIGHT(REPLACE(s_phone, '-', ''), 4) = #{sms.sPhone})
+        </if>
+        <if test="sms.rPhone != null">
+            AND (REPLACE(r_phone, '-', '') = REPLACE(#{sms.rPhone}, '-', '')
+            OR RIGHT(REPLACE(r_phone, '-', ''), 4) = #{sms.rPhone})
+        </if>
+</script>        
+    """)
+    int smsListCount(@Param("sms") SmsForm sms)
 
 }

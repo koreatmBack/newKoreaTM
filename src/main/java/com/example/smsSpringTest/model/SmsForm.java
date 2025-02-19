@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * author : 신기훈
  * date : 2024-09-20
@@ -20,10 +18,11 @@ import java.time.LocalDateTime;
 public class SmsForm {
     private String smsType;
     private String subject;
-    private String msg;
+    private String content;
     @JsonProperty("rPhone")
     private String rPhone;
 
+    @JsonProperty("sPhone")
     private String sPhone;
 
     @JsonProperty("sPhone1")
@@ -36,5 +35,16 @@ public class SmsForm {
     private String rTime;
     private String testFlag;
 
-    private LocalDateTime date;
+    private String sendDate;
+    private String managerId;
+    private String managerName;
+    private String sendStatus;
+    private int no;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int page;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int size;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
+    private int offset;
 }

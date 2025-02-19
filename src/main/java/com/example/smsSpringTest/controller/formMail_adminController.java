@@ -1,14 +1,11 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
-import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.FormMailAdmin;
+import com.example.smsSpringTest.model.SmsForm;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
-import com.example.smsSpringTest.model.response.AccessResponse;
-import com.example.smsSpringTest.model.response.AdminResponse;
-import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.RefResponse;
+import com.example.smsSpringTest.model.response.*;
 import com.example.smsSpringTest.service.formMail_adminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -169,6 +166,11 @@ public class formMail_adminController {
         return formMailAdminService.recruitTeamList();
     }
 
+    // 문자 내역 조회
+    @PostMapping("/find/smsList")
+    public SmsResponse findSmsList(@RequestBody SmsForm smsForm) throws Exception {
+        return formMailAdminService.findSmsList(smsForm);
+    }
 
 
 }

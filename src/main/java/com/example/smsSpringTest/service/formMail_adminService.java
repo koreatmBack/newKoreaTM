@@ -5,14 +5,11 @@ import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
-import com.example.smsSpringTest.model.ApplyRequest;
 import com.example.smsSpringTest.model.FormMailAdmin;
+import com.example.smsSpringTest.model.SmsForm;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
-import com.example.smsSpringTest.model.response.AccessResponse;
-import com.example.smsSpringTest.model.response.AdminResponse;
-import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.RefResponse;
+import com.example.smsSpringTest.model.response.*;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -780,7 +777,34 @@ public class formMail_adminService {
         return adminResponse;
     }
 
+    // 문자 내역 조회하기
+    public SmsResponse findSmsList(SmsForm sms) throws Exception {
+        SmsResponse smsResponse = new SmsResponse();
+        try {
+            int page = sms.getPage();
+            int size = sms.getSize();
+            int offset = (page - 1) * size;
+            int totalCount = adminMapper.smsListCount(sms);
+            sms.setOffset(offset);
 
+            smsResponse.setSmsList(adminMapper.smsList(sms));
+            if(smsResponse.getSmsList() != null && !smsResponse.getSmsList().isEmpty()) {
+                int totalPages = (int) Math.ceil((double) totalCount / size);
+                smsResponse.setTotalPages(totalPages);
+                smsResponse.setTotalCount(totalCount);
+                smsResponse.setCount("C000");
+                smsResponse.setMessage("문자 내역 조회 성공");
+            } else {
+                smsResponse.setCount("E001");
+                smsResponse.setMessage("문자 내역 조회 실패");
+            }
+        } catch (Exception e) {
+            smsResponse.setCount("E001");
+            smsResponse.setMessage("Error !!!");
+            log.info(e.getMessage());
+        }
+        return smsResponse;
+    }
 
 
 }

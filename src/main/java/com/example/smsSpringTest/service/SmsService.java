@@ -1,18 +1,26 @@
 package com.example.smsSpringTest.service;
 
+import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.SmsMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.SmsForm;
+import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SmsResponse;
+import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
@@ -46,6 +54,11 @@ public class SmsService {
 
     private final SmsMapper smsMapper;
     private final JobUserMapper jobUserMapper;
+    private final AdminMapper adminMapper;
+    private final HttpServletResponse response;
+    private final HttpServletRequest request;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // sms 유저 id
     @Value("${sms.userId}")
@@ -63,6 +76,35 @@ public class SmsService {
     public SmsResponse sendSms(SmsForm smsForm) throws IOException {
         SmsResponse smsResponse = new SmsResponse();
         try{
+            // 로그인 유저인지 체크
+            Cookie cookies[] = request.getCookies();
+            String accessToken = "";
+//            CafeUser user = new CafeUser();
+            String userId = "";
+            // 만약 쿠키가 있다면
+            for(Cookie cookie : cookies) {
+                if("accesstoken".equals(cookie.getName())){
+                    accessToken = cookie.getValue();
+                }
+            }
+
+            // 쿠키가 없다면
+            if(!StringUtils.hasText(accessToken)){
+                smsResponse.setCode("E401");
+                smsResponse.setMessage("로그인 상태가 아닙니다.");
+                return smsResponse;
+            }
+
+            // AccessToken 검증
+            if(jwtTokenProvider.validateToken(accessToken).equals("ACCESS")){
+                //AccessToken에서 authentication 가져오기
+                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+                userId = authentication.getName();
+            }
+
+            User user = adminMapper.user(userId);
+            String managerName = user.getRName();
+            String managerId = userId;
 
             // 만약 010-1234-5678로 넘어오면
             if(StringUtils.hasText(smsForm.getSPhone())){
@@ -70,6 +112,10 @@ public class SmsService {
                 smsForm.setSPhone1(parts[0]);
                 smsForm.setSPhone2(parts[1]);
                 smsForm.setSPhone3(parts[2]);
+//                log.info("smsForm.getSPhone = " + smsForm.getSPhone());
+//                log.info(smsForm.getSPhone1());
+//                log.info(smsForm.getSPhone2());
+//                log.info(smsForm.getSPhone3());
             }
 
             URL obj = new URL(apiUrl);
@@ -93,7 +139,7 @@ public class SmsService {
                     +"&secure="+base64Encode(secureKey)
 
 //                    +"&msg="+base64Encode(smsForm.getMsg())+"&sphone="+base64Encode(smsForm.getSphone())
-                    +"&msg="+base64Encode(smsForm.getMsg())+"&sPhone1="+base64Encode(smsForm.getSPhone1())+"&sPhone2="+base64Encode(smsForm.getSPhone2())+"&sPhone3="+base64Encode(smsForm.getSPhone3())
+                    +"&msg="+base64Encode(smsForm.getContent())+"&sPhone1="+base64Encode(smsForm.getSPhone1())+"&sPhone2="+base64Encode(smsForm.getSPhone2())+"&sPhone3="+base64Encode(smsForm.getSPhone3())
 
                     +"&mode="+base64Encode("1")+"&smsType="+base64Encode(smsForm.getSmsType())+"&rDate"+base64Encode(smsForm.getRDate())+"&rTime"+base64Encode(smsForm.getRTime()); // SMS/LMS 여부
 
@@ -157,7 +203,7 @@ public class SmsService {
                 String sms_url = base64Encode("https://sslsms.cafe24.com/sms_sender.php"); // SMS 전송요청 URL
                 String user_id = base64Encode(smsId); // SMS아이디
                 String secure = base64Encode(secureKey);//인증키
-                String msg = base64Encode(smsForm.getMsg());
+                String msg = base64Encode(smsForm.getContent());
                 String rPhone = base64Encode(smsForm.getRPhone());
                 String sPhone1 = base64Encode(smsForm.getSPhone1());
                 String sPhone2 = base64Encode(smsForm.getSPhone2());
@@ -298,12 +344,18 @@ public class SmsService {
                     String originSphone = smsForm.getSPhone1() +"-" +smsForm.getSPhone2()+"-"+smsForm.getSPhone3();
                     String originRphone = smsForm.getRPhone();
                     String originSmsType = smsForm.getSmsType();
-                    String originMsg = smsForm.getMsg();
+                    String originMsg = smsForm.getContent();
 
+                    if(smsForm.getSmsType().equals("L")) {
+                        smsForm.setSubject(smsForm.getSubject());
+                    }
                     smsForm.setSPhone(originSphone);
                     smsForm.setRPhone(originRphone);
                     smsForm.setSmsType(originSmsType);
-                    smsForm.setMsg(originMsg);
+                    smsForm.setContent(originMsg);
+                    smsForm.setManagerId(managerId);
+                    smsForm.setManagerName(managerName);
+                    smsForm.setSendStatus("발송성공");
 
                     int addMsg = smsMapper.addMsg(smsForm);
                     if(addMsg == 1){
@@ -316,12 +368,28 @@ public class SmsService {
 //                    return Result; // 실패시
                     smsResponse.setCode("E002");
                     smsResponse.setMessage(Result);
+                    String originSphone = smsForm.getSPhone1() +"-" +smsForm.getSPhone2()+"-"+smsForm.getSPhone3();
+                    String originRphone = smsForm.getRPhone();
+                    String originSmsType = smsForm.getSmsType();
+                    String originMsg = smsForm.getContent();
+
+                    if(smsForm.getSmsType().equals("L")) {
+                        smsForm.setSubject(smsForm.getSubject());
+                    }
+                    smsForm.setSPhone(originSphone);
+                    smsForm.setRPhone(originRphone);
+                    smsForm.setSmsType(originSmsType);
+                    smsForm.setContent(originMsg);
+                    smsForm.setManagerId(managerId);
+                    smsForm.setManagerName(managerName);
+                    smsForm.setSendStatus("발송실패");
+
+                    int addMsg = smsMapper.addMsg(smsForm);
+
                 }
+                smsResponse.setCount(Count);
             }else{
 
-                //logger.error("POST request not worked");
-                log.info("문자 테스트 실패");
-//                return "실패";
                 smsResponse.setCode("E001");
                 smsResponse.setMessage("오류가 발생하였습니다.");
             }

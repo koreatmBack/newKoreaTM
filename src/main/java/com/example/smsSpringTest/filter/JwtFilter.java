@@ -324,7 +324,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private boolean isAllowedURI(String requestURI) {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         String[] allowedURIs = {
-                "/v1/formMail/sendSms", "/api/v1/formMail/sendSms",
+//                "/v1/formMail/sendSms", "/api/v1/formMail/sendSms",
                 "/v1/formMail/cert/sms", "/api/v1/formMail/cert/sms",
                 "/v1/formMail_admin/join", "/api/v1/formMail_admin/join",
                 "/v1/formMail_admin/login", "/api/v1/formMail_admin/login",
@@ -477,7 +477,9 @@ public class JwtFilter extends OncePerRequestFilter {
         };
 
         String[] subAdminEndPoints = {
-                "/v1/formMail_admin/findOneAdmin" , "/api/v1/formMail_admin/findOneAdmin"
+                "/v1/formMail/sendSms", "/api/v1/formMail/sendSms"
+                ,"/v1/formMail_admin/find/smsList", "/api/v1/formMail_admin/find/smsList"
+                ,"/v1/formMail_admin/findOneAdmin" , "/api/v1/formMail_admin/findOneAdmin"
                 ,"/v1/formMail_admin/adminList" , "/api/v1/formMail_admin/adminList"
                 ,"/v1/formMail_admin/findAdmins" , "/api/v1/formMail_admin/findAdmins"
                 ,"/v1/formMail_admin/addPhoneNum" , "/api/v1/formMail_admin/addPhoneNum"
@@ -496,10 +498,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_apply/add/interviewMemo", "/api/v1/formMail_apply/add/interviewMemo"
                 ,"/v1/formMail_apply/find/all/interviewMemo", "/api/v1/formMail_apply/find/all/interviewMemo"
 
+
         };
 
         String[] managerEndPoints = {
-                "/v1/formMail_admin/findOneAdmin" , "/api/v1/formMail_admin/findOneAdmin"
+                "/v1/formMail/sendSms", "/api/v1/formMail/sendSms"
+                ,"/v1/formMail_admin/find/smsList", "/api/v1/formMail_admin/find/smsList"
+                ,"/v1/formMail_admin/findOneAdmin" , "/api/v1/formMail_admin/findOneAdmin"
                 ,"/v1/formMail_admin/findAdmins" , "/api/v1/formMail_admin/findAdmins"
                 ,"/v1/formMail_admin/addPhoneNum" , "/api/v1/formMail_admin/addPhoneNum"
                 ,"/v1/formMail_admin/allPhoneNumList" , "/api/v1/formMail_admin/allPhoneNumList"
