@@ -81,6 +81,7 @@ interface ApplyMapper {
            <if test="apply.managerMemo != null"> manager_memo  = #{apply.managerMemo},   </if>     
            <if test="apply.managerName != null"> manager_name = #{apply.managerName},   </if>     
            <if test="apply.surveyStatus != null"> survey_status  = #{apply.surveyStatus},   </if>     
+           <if test="apply.blacklist != null"> blacklist  = #{apply.blacklist},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    

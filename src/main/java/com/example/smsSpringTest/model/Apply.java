@@ -74,6 +74,7 @@ public class Apply {
     private String interviewMemo; // 면접 메모
 
     private String survey; // 면접질의서 url
+    private String blacklist; // 블랙리스트 사유
 
     private String searchType;    // 검색타입
     private String searchKeyword; // 검색어

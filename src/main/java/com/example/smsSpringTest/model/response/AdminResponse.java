@@ -2,6 +2,7 @@ package com.example.smsSpringTest.model.response;
 
 import com.example.smsSpringTest.entity.PhoneNum;
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
+import com.example.smsSpringTest.model.Statistics;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.findUser;
 import com.example.smsSpringTest.model.FormMailAdmin;
@@ -35,6 +36,7 @@ public class AdminResponse extends ApiResponse{
     private List<PhoneNum> phoneNumList;
     private List<findUser> findUserList;
 //    private List<FormMailAdmin> managerList;
+    private Statistics statistics;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;

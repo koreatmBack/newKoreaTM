@@ -172,5 +172,9 @@ public class formMail_adminController {
         return formMailAdminService.findSmsList(smsForm);
     }
 
-
+    // 폼메일 데일리 통계 조회
+    @PostMapping("/see/daily/statistics")
+    public AdminResponse dailyStatistics() throws Exception {
+        return formMailAdminService.dailyStatistics();
+    }
 }

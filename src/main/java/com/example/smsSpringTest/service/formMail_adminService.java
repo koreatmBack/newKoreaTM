@@ -3,6 +3,7 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
 import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.CommonMapper;
+import com.example.smsSpringTest.mapper.StatisticsMapper;
 import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.FormMailAdmin;
@@ -40,6 +41,7 @@ import java.time.LocalDate;
 public class formMail_adminService {
 
     private final CommonMapper commonMapper;
+    private final StatisticsMapper statisticsMapper;
     private final AdminMapper adminMapper;
     private final JobUserMapper jobUserMapper;
     private final CafeconUserMapper cafeconUserMapper;
@@ -806,6 +808,25 @@ public class formMail_adminService {
         return smsResponse;
     }
 
+    // 지원자 리스트에서 실시간으로 볼 통계
+    public AdminResponse dailyStatistics() throws Exception {
+        AdminResponse adminResponse = new AdminResponse();
+        try {
+            adminResponse.setStatistics(statisticsMapper.dailyStatistics());
+            if(StringUtils.hasText(adminResponse.getStatistics().getDate())){
+                adminResponse.setCode("C000");
+                adminResponse.setMessage("데일리 통계 조회 성공");
+            } else {
+                adminResponse.setCode("E001");
+                adminResponse.setMessage("데일리 통계 조회 실패");
+            }
+        } catch (Exception e) {
+            adminResponse.setCode("E001");
+            adminResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
+        }
+        return adminResponse;
+    }
 
 }
 
