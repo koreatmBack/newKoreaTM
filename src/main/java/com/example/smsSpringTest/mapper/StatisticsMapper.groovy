@@ -68,4 +68,12 @@ interface StatisticsMapper {
     """)
     Statistics dailyStatistics()
 
+    // 증감 값 구하기 위해 DB에서 하루 전 데이터 가져오기
+    @Select("""
+        SELECT *
+        FROM formmail_statistics
+        WHERE date = DATE_ADD(CURDATE(), INTERVAL -1 DAY)
+    """)
+    Statistics yesterdayStatistics()
+
 }

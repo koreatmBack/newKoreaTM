@@ -27,4 +27,10 @@ public class Statistics {
     private int yesterdayInterviewAttend;   // 전일 면접 참석 수
     private int tomorrowInterviewExpect;    //익일 면접 예정 수
 
+    private int totalApplyChangeValue; // 총 지원자 증감
+    private int totalAvailableChangeValue; // 총 가용수 증감
+    private int todayInterviewExpectChangeValue; // 당일 면접 예정 증감
+    private int yesterdayInterviewAttendChangeValue; // 전일 면접 참석 증감
+    private int tomorrowInterviewExpectChangeValue; // 익일 면접 예정 증감
+
 }

@@ -8,6 +8,7 @@ import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
 import com.example.smsSpringTest.model.FormMailAdmin;
 import com.example.smsSpringTest.model.SmsForm;
+import com.example.smsSpringTest.model.Statistics;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.response.*;
@@ -816,6 +817,33 @@ public class formMail_adminService {
             if(StringUtils.hasText(adminResponse.getStatistics().getDate())){
                 adminResponse.setCode("C000");
                 adminResponse.setMessage("데일리 통계 조회 성공");
+
+                // 증감 값 구하기
+
+                // 오늘 데이터들
+                Statistics daily = statisticsMapper.dailyStatistics();
+
+                // 어제 데이터들
+                Statistics yesterday = statisticsMapper.yesterdayStatistics();
+                if(yesterday != null) {
+                    int totalApplyChangeValue = 0; // 총 지원자 증감
+                    int totalAvailableChangeValue = 0; // 총 가용수 증감
+                    int todayInterviewExpectChangeValue = 0; // 당일 면접 예정 증감
+                    int yesterdayInterviewAttendChangeValue = 0; // 전일 면접 참석 증감
+                    int tomorrowInterviewExpectChangeValue = 0; // 익일 면접 예정 증감
+
+                    totalApplyChangeValue = daily.getTotalApply() - yesterday.getTotalApply();
+                    totalAvailableChangeValue = daily.getTotalAvailable() - yesterday.getTotalAvailable();
+                    todayInterviewExpectChangeValue = daily.getTodayInterviewExpect() - yesterday.getTodayInterviewExpect();
+                    yesterdayInterviewAttendChangeValue = daily.getYesterdayInterviewAttend() - yesterday.getYesterdayInterviewAttend();
+                    tomorrowInterviewExpectChangeValue = daily.getTomorrowInterviewExpect() - yesterday.getTomorrowInterviewExpect();
+
+                    daily.setTotalApplyChangeValue(totalApplyChangeValue);
+                    daily.setTotalAvailableChangeValue(totalAvailableChangeValue);
+                    daily.setTodayInterviewExpectChangeValue(todayInterviewExpectChangeValue);
+                    daily.setYesterdayInterviewAttendChangeValue(yesterdayInterviewAttendChangeValue);
+                    daily.setTomorrowInterviewExpectChangeValue(tomorrowInterviewExpectChangeValue);
+                }
             } else {
                 adminResponse.setCode("E001");
                 adminResponse.setMessage("데일리 통계 조회 실패");
