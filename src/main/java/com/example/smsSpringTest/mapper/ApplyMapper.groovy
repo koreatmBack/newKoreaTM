@@ -35,6 +35,7 @@ interface ApplyMapper {
            , apply_career
            , manager_memo
            , manager_name
+           , apply_age
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -53,6 +54,7 @@ interface ApplyMapper {
             ,#{apply.applyCareer}
             ,#{apply.managerMemo}
             ,#{apply.managerName}
+            ,#{apply.applyAge}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -83,6 +85,7 @@ interface ApplyMapper {
            <if test="apply.surveyStatus != null"> survey_status  = #{apply.surveyStatus},   </if>     
            <if test="apply.interviewTime != null"> interview_time  = #{apply.interviewTime},   </if>     
            <if test="apply.blacklist != null"> blacklist  = #{apply.blacklist},   </if>     
+           <if test="apply.applyAge != null"> apply_age  = #{apply.applyAge},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    

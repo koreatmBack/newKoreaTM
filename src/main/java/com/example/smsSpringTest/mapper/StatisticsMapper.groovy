@@ -129,6 +129,7 @@ interface StatisticsMapper {
     Statistics yesterdayManagerStatistics(@Param("managerId") String managerId)
 
 
+
     // 당일 면접 질의서 현황
 
 

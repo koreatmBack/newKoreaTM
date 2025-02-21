@@ -60,6 +60,8 @@ public class Apply {
 
     private String applyPath;
 
+    private String applyAge;
+
     private String lastModified;
 
     private String interviewSort; // 면접시간 기준 정렬 키값
