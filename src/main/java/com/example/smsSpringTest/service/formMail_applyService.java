@@ -95,12 +95,12 @@ public class formMail_applyService {
 
         try{
 
-//            if(apply.getInterviewTime() != null && apply.getApplyStatus() == null) {
-//                // 면접시간이 변경되며 채용현황은 변경하지 않았을때
-//                // 자동으로 당일면접, 익일면접, 면접예정으로 변환
-//                String applyStatus = getInterviewStatus(apply.getInterviewTime());
-//                apply.setApplyStatus(applyStatus);
-//            }
+            if(apply.getInterviewTime() != null && apply.getApplyStatus() == null) {
+                // 면접시간이 변경되며 채용현황은 변경하지 않았을때
+                // 자동으로 당일면접, 익일면접, 면접예정으로 변환
+                String applyStatus = getInterviewStatus(apply.getInterviewTime());
+                apply.setApplyStatus(applyStatus);
+            }
 
             int updateApply = applyMapper.updateApply(apply);
             if(updateApply == 1) {
