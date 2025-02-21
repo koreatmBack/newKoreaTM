@@ -2,6 +2,7 @@ package com.example.smsSpringTest.model.response;
 
 import com.example.smsSpringTest.model.Apply;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -24,7 +25,10 @@ public class ApplyResponse extends ApiResponse{
 
     private String survey;
     private String formNo;
+
+    @JsonProperty("rName")
     private String rName;
+
     private String userName;
     private String rank;
 

@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -88,8 +89,11 @@ public class Apply {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String formNo;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("rName")
     private String rName;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String userName;
     @JsonInclude(JsonInclude.Include.NON_NULL)
