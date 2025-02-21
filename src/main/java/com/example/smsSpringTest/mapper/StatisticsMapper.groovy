@@ -42,7 +42,7 @@ interface StatisticsMapper {
         SUM(CASE WHEN DATE(apply_date) = #{yesterday} AND apply_status IN 
         ('신규DB','당일면접','익일면접','면접예정','면접참석', '면접불참', '면접포기','위촉자','합격자','교육중', '부재', '당부', '보류', '취소')
         THEN 1 ELSE 0 END) AS total_available,
-        SUM(CASE WHEN DATE(interview_time) = #{yesterday} THEN 1 ELSE 0 END) AS today_interview_expect,
+        SUM(CASE WHEN DATE(interview_time) = #{yesterday} AND apply_status = '당일면접' THEN 1 ELSE 0 END) AS today_interview_expect,
         SUM(CASE WHEN DATE(interview_time) = #{twoDaysAgo} AND apply_status = '면접참석' THEN 1 ELSE 0 END) AS yesterday_interview_attend,
         SUM(CASE WHEN DATE(interview_time) = #{today} AND apply_status = '익일면접' THEN 1 ELSE 0 END) AS tomorrow_interview_expect
     FROM formmail_apply
