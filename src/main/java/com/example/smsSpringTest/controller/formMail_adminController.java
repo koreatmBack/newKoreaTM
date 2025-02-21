@@ -174,7 +174,7 @@ public class formMail_adminController {
 
     // 폼메일 데일리 통계 조회
     @PostMapping("/see/daily/statistics")
-    public AdminResponse dailyStatistics() throws Exception {
-        return formMailAdminService.dailyStatistics();
+    public AdminResponse dailyStatistics(@RequestParam(value = "managerId", required = false) String managerId) throws Exception {
+        return formMailAdminService.dailyStatistics(managerId);
     }
 }

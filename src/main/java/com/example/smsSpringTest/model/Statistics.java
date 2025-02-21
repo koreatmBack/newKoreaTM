@@ -33,4 +33,5 @@ public class Statistics {
     private int yesterdayInterviewAttendChangeValue; // 전일 면접 참석 증감
     private int tomorrowInterviewExpectChangeValue; // 익일 면접 예정 증감
 
+    private String managerId;
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * author : 신기훈
@@ -47,7 +48,15 @@ public class statisticsTasks {
 
         log.info(statistics.toString());
 
+        // 전체 통계 저장
         int saveStatistics = statisticsMapper.saveStatistics(statistics);
+
+        // 매니저 통계 저장
+        List<Statistics> managerStatistics = statisticsMapper.managerStatistics(yesterday, today, twoDaysAgo);
+        for(Statistics stats : managerStatistics) {
+            stats.setDate(yesterday);
+            statisticsMapper.saveManagerStatistics(stats);
+        }
 
     }
 }

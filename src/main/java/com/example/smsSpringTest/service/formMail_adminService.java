@@ -810,10 +810,10 @@ public class formMail_adminService {
     }
 
     // 지원자 리스트에서 실시간으로 볼 통계
-    public AdminResponse dailyStatistics() throws Exception {
+    public AdminResponse dailyStatistics(String managerId) throws Exception {
         AdminResponse adminResponse = new AdminResponse();
         try {
-            adminResponse.setStatistics(statisticsMapper.dailyStatistics());
+            adminResponse.setStatistics(statisticsMapper.dailyStatistics(managerId));
             if(StringUtils.hasText(adminResponse.getStatistics().getDate())){
                 adminResponse.setCode("C000");
                 adminResponse.setMessage("데일리 통계 조회 성공");
@@ -821,10 +821,14 @@ public class formMail_adminService {
                 // 증감 값 구하기
 
                 // 오늘 데이터들
-                Statistics daily = statisticsMapper.dailyStatistics();
+                Statistics daily = statisticsMapper.dailyStatistics(managerId);
 
                 // 어제 데이터들
                 Statistics yesterday = statisticsMapper.yesterdayStatistics();
+                if(StringUtils.hasText(managerId)){
+                    // 만약 매니저 id별로 조회일 때
+                    yesterday = statisticsMapper.yesterdayManagerStatistics(managerId);
+                }
                 if(yesterday != null) {
                     int totalApplyChangeValue = 0; // 총 지원자 증감
                     int totalAvailableChangeValue = 0; // 총 가용수 증감
