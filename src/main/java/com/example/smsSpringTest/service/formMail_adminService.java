@@ -411,14 +411,18 @@ public class formMail_adminService {
         log.info("회원 정보 : " + admin);
         try {
             String userId = admin.getUserId();
-            adminResponse.setFormMailAdmin(adminMapper.findOneAdmin(userId));
-            adminResponse.setCode("C000");
-            adminResponse.setMessage("조회 성공");
+            if(StringUtils.hasText(userId)) {
+                adminResponse.setFormMailAdmin(adminMapper.findOneAdmin(userId));
+                adminResponse.setCode("C000");
+                adminResponse.setMessage("조회 성공");
+            } else {
+                adminResponse.setCode("E001");
+                adminResponse.setMessage("조회 실패");
+            }
         } catch (Exception e) {
             adminResponse.setCode("E001");
             adminResponse.setMessage("다시 조회해주세요.");
         }
-
         return adminResponse;
     }
 
