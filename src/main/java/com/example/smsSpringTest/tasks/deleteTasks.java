@@ -87,7 +87,7 @@ public class deleteTasks {
     }
 
 
-    @Scheduled(cron = "0 40 10 * * * " , zone = "Asia/Seoul")
+    @Scheduled(cron = "0 44 10 * * * " , zone = "Asia/Seoul")
     public void test() throws Exception {
         log.info("delete task test");
     }
