@@ -130,3 +130,10 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "scheduledtasks"

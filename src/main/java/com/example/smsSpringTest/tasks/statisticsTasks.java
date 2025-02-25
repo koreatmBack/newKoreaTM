@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,12 +21,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-//@Transactional
+@Transactional
 public class statisticsTasks {
 
     private final StatisticsMapper statisticsMapper;
 
-    @Scheduled(cron = "0 8 10 * * *") // 매일 실행  초,분,시간, * * *
+    @Scheduled(cron = "0 18 10 * * *") // 매일 실행  초,분,시간, * * *
     public void saveStatistics() {
 
         LocalDate today1 = LocalDate.now(); // 오늘 날짜
