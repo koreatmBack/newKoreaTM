@@ -349,7 +349,7 @@ public class SmsService {
                     if(smsForm.getSmsType().equals("L")) {
                         smsForm.setSubject(smsForm.getSubject());
                     }
-                    smsForm.setSPhone(originSphone);
+                    smsForm.setSPhone(smsForm.getSPhone());
                     smsForm.setRPhone(originRphone);
                     smsForm.setSmsType(originSmsType);
                     smsForm.setContent(originMsg);
@@ -376,7 +376,7 @@ public class SmsService {
                     if(smsForm.getSmsType().equals("L")) {
                         smsForm.setSubject(smsForm.getSubject());
                     }
-                    smsForm.setSPhone(originSphone);
+                    smsForm.setSPhone(smsForm.getSPhone());
                     smsForm.setRPhone(originRphone);
                     smsForm.setSmsType(originSmsType);
                     smsForm.setContent(originMsg);
