@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -86,6 +87,11 @@ public class deleteTasks {
         commonMapper.deleteAllEmailCode();
     }
 
+    @Scheduled(cron = "0 54 10 * * * " , zone = "Asia/Seoul")
+    public void test() throws Exception {
+        LocalDateTime today = LocalDateTime.now();
+        log.info("today = " + today);
+    }
 
 
 }
