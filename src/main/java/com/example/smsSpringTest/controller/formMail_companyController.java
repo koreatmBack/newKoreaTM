@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.entity.formMail_company;
+import com.example.smsSpringTest.model.Company;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.CompanyResponse;
@@ -25,7 +25,7 @@ public class formMail_companyController {
 
     // 고객사 등록
     @PostMapping("/add")
-    public ApiResponse addCompany(@RequestBody formMail_company comp) throws Exception{
+    public ApiResponse addCompany(@RequestBody Company comp) throws Exception{
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -47,7 +47,7 @@ public class formMail_companyController {
 
     // 고객사 수정
     @PutMapping("/updateCompany")
-    public ApiResponse updateCompany(@RequestBody formMail_company comp) throws Exception{
+    public ApiResponse updateCompany(@RequestBody Company comp) throws Exception{
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -58,7 +58,7 @@ public class formMail_companyController {
 
     // 고객사 삭제
     @DeleteMapping("/deleteCompany")
-    public ApiResponse deleteCompany(@RequestBody formMail_company comp) throws Exception {
+    public ApiResponse deleteCompany(@RequestBody Company comp) throws Exception {
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -69,7 +69,7 @@ public class formMail_companyController {
 
     // cid 일치하는 고객사 정보 반환
     @PostMapping("/findCompany")
-    public CompanyResponse findCompany(@RequestBody formMail_company comp) throws Exception {
+    public CompanyResponse findCompany(@RequestBody Company comp) throws Exception {
         CompanyResponse companyResponse = new CompanyResponse();
         companyResponse = formMailCompanyService.findCompany(comp);
         return companyResponse;

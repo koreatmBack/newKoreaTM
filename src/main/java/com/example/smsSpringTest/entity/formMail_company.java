@@ -61,4 +61,6 @@ public class formMail_company {
     private String sido;
 
     private String sigungu;
+
+    private Boolean surveyProceed; // 면접 질의서 진행 구분
 }

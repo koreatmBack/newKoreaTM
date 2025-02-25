@@ -2,10 +2,8 @@ package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.mapper.AdminMapper;
 import com.example.smsSpringTest.mapper.ApplyMapper;
-import com.example.smsSpringTest.model.Apply;
-import com.example.smsSpringTest.model.ApplyRequest;
-import com.example.smsSpringTest.model.FormMailAdmin;
-import com.example.smsSpringTest.model.InterviewMemo;
+import com.example.smsSpringTest.mapper.CompanyMapper;
+import com.example.smsSpringTest.model.*;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.ApplyResponse;
 import com.example.smsSpringTest.model.response.InterviewMemoResponse;
@@ -34,6 +32,7 @@ public class formMail_applyService {
 
     private final ApplyMapper applyMapper;
     private final AdminMapper adminMapper;
+    private final CompanyMapper companyMapper;
 
     // 지원자 등록
     public ApiResponse addApply(Apply apply) throws Exception {
@@ -71,6 +70,16 @@ public class formMail_applyService {
                 serialNumber = UUID.randomUUID().toString().substring(0, 8);
             }
             apply.setApplyId(serialNumber);
+
+            // 면접 질의서 진행중인 고객사인지 체크
+//            Apply findOne = applyMapper.findOne(apply);
+            String cid = apply.getCid();
+            Company comp = companyMapper.findOneComp(cid);
+            if(comp.getSurveyProceed()) {
+                // 면접 질의서 진행중임
+                apply.setSurveyTarget(true);
+            }
+
             int addApply = applyMapper.addApply(apply);
             if(addApply == 1) {
                 apiResponse.setCode("C000");
@@ -100,6 +109,15 @@ public class formMail_applyService {
                 // 자동으로 당일면접, 익일면접, 면접예정으로 변환
                 String applyStatus = getInterviewStatus(apply.getInterviewTime());
                 apply.setApplyStatus(applyStatus);
+            }
+
+            Apply findOne = applyMapper.findOne(apply);
+            if(apply.getInterviewTime() != null && findOne.getSurveyTarget()) {
+                // 면접 시간이 변경 될 때, 지원 고객사가 면접 질의 고객사이고
+                if(!StringUtils.hasText(findOne.getSurveyStatus())){
+                    // 아직 미발송, 발송, 완료 상태가 아닐 때 미발송 추가해주기
+                    apply.setSurveyStatus("미발송");
+                }
             }
 
             int updateApply = applyMapper.updateApply(apply);

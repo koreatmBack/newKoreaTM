@@ -1,14 +1,9 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.entity.formMail_company
+
+import com.example.smsSpringTest.model.Company
 import com.example.smsSpringTest.model.Paging
-import com.example.smsSpringTest.model.findCompany
-import org.apache.ibatis.annotations.Delete
-import org.apache.ibatis.annotations.Insert
-import org.apache.ibatis.annotations.Mapper
-import org.apache.ibatis.annotations.Param
-import org.apache.ibatis.annotations.Select
-import org.apache.ibatis.annotations.Update
+import org.apache.ibatis.annotations.*
 
 @Mapper
 interface CompanyMapper {
@@ -31,6 +26,7 @@ interface CompanyMapper {
             , industry
             , sido
             , sigungu
+            , survey_proceed
         ) VALUES (
             #{comp.cid}
             , #{comp.companyName}
@@ -48,9 +44,10 @@ interface CompanyMapper {
             , #{comp.industry}
             , #{comp.sido}
             , #{comp.sigungu}
+            , #{comp.surveyProceed}
         )
     """)
-    int addComp(@Param("comp") formMail_company comp)
+    int addComp(@Param("comp") Company comp)
 
 //    // 고객사 아이디 중복처리
 //    @Select("""
@@ -79,11 +76,12 @@ interface CompanyMapper {
         , fa.r_name
         , fa.user_name
         , fa.position
+        , fc.surveyProceed
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.mid = fa.user_id 
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
-    List<findCompany> companyList(@Param("paging") Paging paging)
+    List<Company> companyList(@Param("paging") Paging paging)
 
     // 고객사 수 조회
     @Select("""
@@ -111,12 +109,13 @@ interface CompanyMapper {
         , fa.user_name
         , fa.position
         , fa.m_phone
+        , fc.surveyProceed
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.mid = fa.user_id
         WHERE fc.cid = #{cid}
         LIMIT 1;
     """)
-    List<findCompany> findCompany(@Param("cid") String cid)
+    List<Company> findCompany(@Param("cid") String cid)
 
 //    // cid 일치하는 고객사 정보 반환하기
 //    @Select("""
@@ -171,11 +170,14 @@ interface CompanyMapper {
             <if test="comp.industry != null">
                 industry = #{comp.industry},
             </if>
+            <if test="comp.surveyProceed != null">
+                survey_proceed = #{comp.surveyProceed},
+            </if>
         </set>
         WHERE cid = #{comp.cid} 
     </script>
     """)
-    int updateCompany(@Param("comp") formMail_company comp)
+    int updateCompany(@Param("comp") Company comp)
 
 
     // 고객사 삭제
@@ -185,7 +187,7 @@ interface CompanyMapper {
         AND company_name = #{comp.companyName}
         AND company_branch = #{comp.companyBranch}
     """)
-    int deleteCompany(@Param("comp") formMail_company comp)
+    int deleteCompany(@Param("comp") Company comp)
 
     // 삭제한 사람의 로그
     @Insert("""
@@ -201,6 +203,14 @@ interface CompanyMapper {
             , 'company'
         )
     """)
-    int deleteLog(@Param("comp") formMail_company comp)
+    int deleteLog(@Param("comp") Company comp)
+
+    // 고객사 하나 찾기
+    @Select("""
+        SELECT *
+        FROM formmail_company
+        WHERE cid = #{cid}
+    """)
+    Company findOneComp(@Param("cid") String cid)
 
 }

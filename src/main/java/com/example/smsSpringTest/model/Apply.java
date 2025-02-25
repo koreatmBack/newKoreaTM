@@ -79,6 +79,8 @@ public class Apply {
     private String survey; // 면접질의서 url
     private String blacklist; // 블랙리스트 사유
 
+    private Boolean surveyTarget; // 면접질의 추적
+
     private String searchType;    // 검색타입
     private String searchKeyword; // 검색어
 

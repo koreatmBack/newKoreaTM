@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class findCompany {
+public class Company {
 
     private String cid;
 
@@ -28,8 +28,13 @@ public class findCompany {
 
     private String manager1;
 
+    private String manager2;
+
     @JsonProperty("cPhone1")
     private String cPhone1;
+
+    @JsonProperty("cPhone2")
+    private String cPhone2;
 
     private String channel;
 
@@ -57,4 +62,9 @@ public class findCompany {
 
     private String industry;
 
+    private String sido;
+
+    private String sigungu;
+
+    private Boolean surveyProceed; // 면접 질의서 진행 구분
 }

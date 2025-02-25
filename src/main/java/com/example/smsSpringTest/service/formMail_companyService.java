@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.service;
 
-import com.example.smsSpringTest.entity.formMail_company;
 import com.example.smsSpringTest.mapper.CompanyMapper;
+import com.example.smsSpringTest.model.Company;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.CompanyResponse;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import java.util.Random;
 
 /**
  * author : 신기훈
@@ -27,13 +27,20 @@ public class formMail_companyService {
 //    private final RedisTemplate<String, Object> redisTemplate;
 
     // 고객사 등록
-    public ApiResponse addCompany(formMail_company comp) throws Exception{
-        log.info("서비스 comp => " + comp);
+    public ApiResponse addCompany(Company comp) throws Exception{
+//        log.info("서비스 comp => " + comp);
         ApiResponse apiResponse = new ApiResponse();
 
         try{
                 // cid 시리얼 넘버 생성 -> 중복처리 필요 x
-                String serialNumber = UUID.randomUUID().toString();
+//                String serialNumber = UUID.randomUUID().toString().substring(0, 8);
+            Random random = new Random();
+            String serialNumber = "c";
+
+            for (int i = 0; i < 7; i++) {
+                serialNumber += random.nextInt(10); // 0~9 랜덤 숫자 추가
+            }
+
                 comp.setCid(serialNumber);
                 int result = companyMapper.addComp(comp);
                 log.info("result = " + result);
@@ -102,10 +109,10 @@ public class formMail_companyService {
 
 
     // 고객사 수정
-    public ApiResponse updateCompany(formMail_company comp) throws Exception {
+    public ApiResponse updateCompany(Company comp) throws Exception {
 
         ApiResponse apiResponse = new ApiResponse();
-        log.info("comp = " + comp);
+//        log.info("comp = " + comp);
         try{
             int updateCompany = companyMapper.updateCompany(comp);
 
@@ -134,7 +141,7 @@ public class formMail_companyService {
 
 
     // 고객사 삭제
-    public ApiResponse deleteCompany(formMail_company comp) throws Exception {
+    public ApiResponse deleteCompany(Company comp) throws Exception {
 
         ApiResponse apiResponse = new ApiResponse();
         log.info("comp = "  + comp);
@@ -179,7 +186,7 @@ public class formMail_companyService {
 
 
     // cid 일치하는 고객사 정보 반환
-    public CompanyResponse findCompany(formMail_company comp) throws Exception {
+    public CompanyResponse findCompany(Company comp) throws Exception {
 
         CompanyResponse companyResponse = new CompanyResponse();
 

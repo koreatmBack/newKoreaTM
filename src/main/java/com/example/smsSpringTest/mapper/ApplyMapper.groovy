@@ -36,6 +36,7 @@ interface ApplyMapper {
            , manager_memo
            , manager_name
            , apply_age
+           , survey_target
         ) VALUES (
             #{apply.applyId}
             ,#{apply.aid}
@@ -55,6 +56,7 @@ interface ApplyMapper {
             ,#{apply.managerMemo}
             ,#{apply.managerName}
             ,#{apply.applyAge}
+            ,#{apply.surveyTarget}
         )
     """)
     int addApply(@Param("apply") Apply apply)
@@ -86,6 +88,7 @@ interface ApplyMapper {
            <if test="apply.interviewTime != null"> interview_time  = #{apply.interviewTime},   </if>     
            <if test="apply.blacklist != null"> blacklist  = #{apply.blacklist},   </if>     
            <if test="apply.applyAge != null"> apply_age  = #{apply.applyAge},   </if>     
+           <if test="apply.surveyTarget != null"> survey_target  = #{apply.surveyTarget},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
     </script>    
@@ -261,6 +264,14 @@ interface ApplyMapper {
         WHERE apply_id = #{apply.applyId}
     """)
     String survey(@Param("apply") Apply apply)
+
+    // 지원자 한명 조회 (객체)
+    @Select("""
+        SELECT *
+        FROM formmail_apply
+        WHERE apply_id = #{apply.applyId}
+    """)
+    Apply findOne(@Param("apply") Apply apply)
 
 //    // ----- managerId가 일치할 때 formNo, rName, userName, rank 도 보내기 위함 --------
 //    // 지원자 전체 조회 (페이징 처리)

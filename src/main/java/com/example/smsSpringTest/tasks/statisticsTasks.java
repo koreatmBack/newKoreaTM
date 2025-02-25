@@ -26,7 +26,7 @@ public class statisticsTasks {
 
     private final StatisticsMapper statisticsMapper;
 
-    @Scheduled(cron = "0 5 0 * * *" , zone = "Asia/Seoul") // 매일 실행  초,분,시간, * * *
+    @Scheduled(cron = "0 5 0 * * *") // 매일 실행  초,분,시간, * * *
     public void saveStatistics() {
 
         LocalDate today1 = LocalDate.now(); // 오늘 날짜

@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.model.response;
 
 import com.example.smsSpringTest.entity.formMail_company;
-import com.example.smsSpringTest.model.findCompany;
+import com.example.smsSpringTest.model.Company;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -22,8 +22,8 @@ import java.util.List;
 public class CompanyResponse extends ApiResponse{
 
     private formMail_company formMailCompany;
-    private findCompany company;
-    private List<findCompany> companyList;
+    private Company company;
+    private List<Company> companyList;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)  // 기본값(0)일 때 제외
     private int totalPages;
