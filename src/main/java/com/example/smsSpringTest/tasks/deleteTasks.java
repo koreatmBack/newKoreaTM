@@ -87,6 +87,10 @@ public class deleteTasks {
     }
 
 
+    @Scheduled(cron = "0 24 10 * * * ")
+    public void test() throws Exception {
+        log.info("delete task test");
+    }
 
 
 }

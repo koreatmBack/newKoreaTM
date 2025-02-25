@@ -136,4 +136,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: "scheduledtasks"
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    scheduledtasks:
+      enabled: true
