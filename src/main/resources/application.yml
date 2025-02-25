@@ -130,15 +130,3 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
-    scheduledtasks:
-      enabled: true
