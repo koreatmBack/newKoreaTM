@@ -256,6 +256,7 @@ interface ApplyMapper {
     @Update("""
         UPDATE formmail_apply
         SET survey = #{apply.survey}
+            ,survey_status = '완료'
         WHERE apply_id = #{apply.applyId}
     """)
     int addSurvey(@Param("apply") Apply apply)

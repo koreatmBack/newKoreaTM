@@ -434,7 +434,6 @@ public class formMail_applyService {
 
 
 
-
     // 오늘 날짜와 비교하여 당일면접, 익일면접, 면접예정 체크 후 반환
     public static String getInterviewStatus(String applyDateStr) {
         // 날짜 형식 지정 (문자열을 날짜로 변환)
