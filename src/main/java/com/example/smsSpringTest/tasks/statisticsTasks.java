@@ -52,13 +52,37 @@ public class statisticsTasks {
         // 전체 통계 저장
         int saveStatistics = statisticsMapper.saveStatistics(statistics);
 
+//        // 매니저 통계 저장
+//        List<Statistics> managerStatistics = statisticsMapper.managerStatistics(yesterday, today, twoDaysAgo);
+//        for(Statistics stats : managerStatistics) {
+//            stats.setDate(yesterday);
+//            statisticsMapper.saveManagerStatistics(stats);
+//        }
+
+    }
+
+    // 매니저 통계 저장
+    @Scheduled(cron = "0 5 0 * * *") // 매일 실행  초,분,시간, * * *
+    public void saveManagerStatistics() {
+        LocalDate today1 = LocalDate.now(); // 오늘 날짜
+        LocalDate yesterday1 = today1.minusDays(1); // 하루 전
+        LocalDate twoDaysAgo1 = today1.minusDays(2); // 이틀 전
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String today = today1.format(formatter); // 오늘 날짜
+        String yesterday = yesterday1.format(formatter); // 하루 전
+        String twoDaysAgo = twoDaysAgo1.format(formatter); // 이틀 전
+
+        log.info("today = " + today);
+        log.info("yesterday = " + yesterday);
+        log.info("twoDaysAgo = " + twoDaysAgo);
+
         // 매니저 통계 저장
         List<Statistics> managerStatistics = statisticsMapper.managerStatistics(yesterday, today, twoDaysAgo);
         for(Statistics stats : managerStatistics) {
             stats.setDate(yesterday);
             statisticsMapper.saveManagerStatistics(stats);
         }
-
     }
 
     // 당일 면접 질의서 현황 저장
