@@ -2,6 +2,7 @@ package com.example.smsSpringTest.tasks;
 
 import com.example.smsSpringTest.mapper.StatisticsMapper;
 import com.example.smsSpringTest.model.Statistics;
+import com.example.smsSpringTest.model.SurveyStatistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,11 +51,6 @@ public class statisticsTasks {
 
         // 전체 통계 저장
         int saveStatistics = statisticsMapper.saveStatistics(statistics);
-        if(saveStatistics == 0) {
-            log.info("1 실패");
-        } else {
-            log.info("1 성공");
-        }
 
         // 매니저 통계 저장
         List<Statistics> managerStatistics = statisticsMapper.managerStatistics(yesterday, today, twoDaysAgo);
@@ -64,4 +60,13 @@ public class statisticsTasks {
         }
 
     }
+
+    // 당일 면접 질의서 현황 저장
+    @Scheduled(cron = "0 50 23 * * *") // 매일 밤 23시 50분 실행
+    public void saveSurveyStatistics() throws Exception {
+        // ㅡㅡㅡㅡㅡㅡㅡㅡ 당일 면접 질의서 현황 저장 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+        SurveyStatistics surveyStatistics = statisticsMapper.surveyStatistics();
+        int saveSurveyStatistics = statisticsMapper.saveSurveyStatistics(surveyStatistics);
+    }
+
 }

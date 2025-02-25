@@ -34,4 +34,11 @@ public class Statistics {
     private int tomorrowInterviewExpectChangeValue; // 익일 면접 예정 증감
 
     private String managerId;
+
+    // 당일 면접 질의서 현황 통계
+    private int totalCompanies; // 진행중 고객사 수
+    private int totalApplicant; // 총 대상자 수 (지원자 수)
+    private int sentCount; // 발송된 설문 수
+    private int pendingCount; // 미발송된 설문 수
+    private int completedCount; // 완료된 설문 수
 }

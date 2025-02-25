@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.model.response;
 
 import com.example.smsSpringTest.model.Survey;
+import com.example.smsSpringTest.model.SurveyStatistics;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -24,5 +25,7 @@ public class SurveyResponse extends ApiResponse{
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int survId;
+
+    private SurveyStatistics surveyStatistics;
 
 }

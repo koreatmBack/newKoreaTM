@@ -113,7 +113,7 @@ interface ApplyMapper {
         </choose>
         ORDER BY 
         <choose>
-            <when test="apply.surveyStatusSort == '내림차순'"> FIELD(survey_status, '미발송', '발송', '완료'), interview_time DESC </when>
+            <when test="apply.surveyStatusSort == '내림차순'"> FIELD(survey_status, '미발송', '발송', '완료'), interview_time ASC </when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
             <otherwise> apply_date DESC </otherwise>

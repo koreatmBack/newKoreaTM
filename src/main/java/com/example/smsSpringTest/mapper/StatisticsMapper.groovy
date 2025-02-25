@@ -1,6 +1,7 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Statistics
+import com.example.smsSpringTest.model.SurveyStatistics
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
@@ -56,6 +57,26 @@ interface StatisticsMapper {
         )
     """)
     int saveManagerStatistics(@Param("stat") Statistics stat)
+
+    // 00시 05분에 저장시킬 당일 면접 현황 통계 데이터
+    @Insert("""
+        INSERT INTO formmail_survey_statistics(
+            date
+            , total_companies
+            , total_applicants
+            , sent_count
+            , pending_count
+            , completed_count
+        ) VALUES (
+            #{stat.date}
+            ,#{stat.totalCompanies}
+            ,#{stat.totalApplicants}
+            ,#{stat.sentCount}
+            ,#{stat.pendingCount}
+            ,#{stat.completedCount}
+        )
+    """)
+    int saveSurveyStatistics(@Param("stat") SurveyStatistics stat)
 
     // 전체 통계에 필요한 데이터 찾기 (저장용)
     @Select("""
@@ -131,6 +152,23 @@ interface StatisticsMapper {
 
 
     // 당일 면접 질의서 현황
-
+    @Select("""
+       SELECT 
+           (SELECT COUNT(*) 
+            FROM formmail_company fc 
+            WHERE fc.com_proceed = '1' 
+       AND fc.survey_proceed = '1') AS total_companies,
+       COUNT(*) AS total_applicants,
+       SUM(CASE WHEN fa.survey_status = '미발송' THEN 1 ELSE 0 END) AS pending_count,
+       SUM(CASE WHEN fa.survey_status IN ('발송','완료') THEN 1 ELSE 0 END) AS sent_count,
+       SUM(CASE WHEN fa.survey_status = '완료' THEN 1 ELSE 0 END) AS completed_count,
+       CURDATE() AS date
+       FROM formmail_apply fa
+       JOIN formmail_company fc ON fa.cid = fc.cid
+       WHERE fc.survey_proceed = '1'  
+       AND fc.com_proceed = '1'
+       AND DATE(fa.interview_time) = CURDATE()
+    """)
+    SurveyStatistics surveyStatistics()
 
 }

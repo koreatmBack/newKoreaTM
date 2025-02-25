@@ -864,5 +864,24 @@ public class formMail_adminService {
         return adminResponse;
     }
 
+    public SurveyResponse surveyStatistics() throws Exception {
+        SurveyResponse surveyResponse = new SurveyResponse();
+        try {
+               surveyResponse.setSurveyStatistics(statisticsMapper.surveyStatistics());
+               if(StringUtils.hasText(surveyResponse.getSurveyStatistics().getDate())){
+                   surveyResponse.setCode("C000");
+                   surveyResponse.setMessage("당일 면접 통계 성공");
+               } else {
+                   surveyResponse.setCode("E001");
+                   surveyResponse.setMessage("당일 면접 통계 실패");
+               }
+        } catch (Exception e) {
+            surveyResponse.setCode("E001");
+            surveyResponse.setMessage("Error !!!");
+            log.info(e.getMessage());
+        }
+        return surveyResponse;
+    }
+
 }
 

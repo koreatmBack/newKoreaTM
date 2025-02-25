@@ -63,4 +63,5 @@ public class formMail_company {
     private String sigungu;
 
     private Boolean surveyProceed; // 면접 질의서 진행 구분
+    private Boolean comProceed; // 고객사 진행 구분
 }

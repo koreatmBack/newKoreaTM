@@ -27,6 +27,7 @@ interface CompanyMapper {
             , sido
             , sigungu
             , survey_proceed
+            , com_proceed
         ) VALUES (
             #{comp.cid}
             , #{comp.companyName}
@@ -45,6 +46,7 @@ interface CompanyMapper {
             , #{comp.sido}
             , #{comp.sigungu}
             , #{comp.surveyProceed}
+            , #{comp.comProceed}
         )
     """)
     int addComp(@Param("comp") Company comp)
@@ -77,6 +79,7 @@ interface CompanyMapper {
         , fa.user_name
         , fa.position
         , fc.surveyProceed
+        , fc.comProceed
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.mid = fa.user_id 
         LIMIT #{paging.size} OFFSET #{paging.offset}
@@ -110,6 +113,7 @@ interface CompanyMapper {
         , fa.position
         , fa.m_phone
         , fc.surveyProceed
+        , fc.comProceed
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.mid = fa.user_id
         WHERE fc.cid = #{cid}
@@ -172,6 +176,9 @@ interface CompanyMapper {
             </if>
             <if test="comp.surveyProceed != null">
                 survey_proceed = #{comp.surveyProceed},
+            </if>
+            <if test="comp.comProceed != null">
+                com_proceed = #{com.comProceed},
             </if>
         </set>
         WHERE cid = #{comp.cid} 
