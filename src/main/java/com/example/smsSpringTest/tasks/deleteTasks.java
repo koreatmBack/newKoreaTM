@@ -87,7 +87,7 @@ public class deleteTasks {
         commonMapper.deleteAllEmailCode();
     }
 
-    @Scheduled(cron = "0 54 10 * * * " , zone = "Asia/Seoul")
+    @Scheduled(cron = "0 02 11 * * * ")
     public void test() throws Exception {
         LocalDateTime today = LocalDateTime.now();
         log.info("today = " + today);
