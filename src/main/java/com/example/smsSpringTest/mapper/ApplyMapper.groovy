@@ -101,6 +101,7 @@ interface ApplyMapper {
         SELECT *
         FROM formmail_apply
         WHERE 1=1
+        AND survey_target = '1'
         <if test="apply.managerId != null">AND manager_id = #{apply.managerId}</if>
         <if test="apply.applyStatus != null">AND apply_status = #{apply.applyStatus}</if>
         <if test="apply.applyCareer != null">AND apply_career = #{apply.applyCareer}</if>
@@ -113,7 +114,9 @@ interface ApplyMapper {
         </choose>
         ORDER BY 
         <choose>
-            <when test="apply.surveyStatusSort == '내림차순'"> FIELD(survey_status, '미발송', '발송', '완료'), interview_time ASC </when>
+            <when test="apply.surveyStatusSort == '오름차순'"> 
+                FIELD(survey_status, '미발송', '발송', '완료'), interview_time ASC 
+            </when>
             <when test="apply.interviewSort == '내림차순'"> interview_time DESC </when>
             <when test="apply.interviewSort == '오름차순'"> interview_time ASC </when>
             <otherwise> apply_date DESC </otherwise>
