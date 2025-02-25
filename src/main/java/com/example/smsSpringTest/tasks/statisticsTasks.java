@@ -26,8 +26,8 @@ public class statisticsTasks {
 
     private final StatisticsMapper statisticsMapper;
 
-    @Scheduled(cron = "0 40 9 * * *") // 매일 실행  초,분,시간, * * *
-    public void saveStatistics() throws Exception {
+    @Scheduled(cron = "0 57 9 * * *") // 매일 실행  초,분,시간, * * *
+    public void saveStatistics() {
 
         LocalDate today1 = LocalDate.now(); // 오늘 날짜
         LocalDate yesterday1 = today1.minusDays(1); // 하루 전
@@ -50,6 +50,11 @@ public class statisticsTasks {
 
         // 전체 통계 저장
         int saveStatistics = statisticsMapper.saveStatistics(statistics);
+        if(saveStatistics == 0) {
+            log.info("1 실패");
+        } else {
+            log.info("1 성공");
+        }
 
         // 매니저 통계 저장
         List<Statistics> managerStatistics = statisticsMapper.managerStatistics(yesterday, today, twoDaysAgo);

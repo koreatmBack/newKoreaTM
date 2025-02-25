@@ -6,7 +6,7 @@ spring:
   profiles.active: "local"
   config:
     import: "optional:classpath:application-secret.yml"
-
+  timezone: Asia/Seoul
   main:
     web-application-type: servlet
   servlet:
