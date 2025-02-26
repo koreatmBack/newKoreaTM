@@ -168,6 +168,7 @@ interface StatisticsMapper {
        WHERE fc.survey_proceed = '1'  
        AND fc.com_proceed = '1'
        AND DATE(fa.interview_time) = CURDATE()
+       AND fa.apply_status IN ('당일면접')
     """)
     SurveyStatistics surveyStatistics()
 

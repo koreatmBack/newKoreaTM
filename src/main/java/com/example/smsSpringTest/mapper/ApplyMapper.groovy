@@ -214,9 +214,16 @@ interface ApplyMapper {
     @Update("""
 <script>
         UPDATE formmail_apply
-        SET apply_status = '익일면접'
-        WHERE DATE(STR_TO_DATE(interview_time, '%Y-%m-%d %H:%i')) = DATE_ADD(CURDATE(), INTERVAL 1 DAY)
-        AND apply_status = '면접예정'
+        SET apply_status = CASE 
+        WHEN apply_status = '면접예정' 
+            AND DATE(STR_TO_DATE(interview_time, '%Y-%m-%d %H:%i')) = DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+        THEN '익일면접'
+        WHEN apply_status = '익일면접' 
+            AND DATE(STR_TO_DATE(interview_time, '%Y-%m-%d %H:%i')) = CURDATE()
+        THEN '당일면접'
+        ELSE apply_status
+        END
+        WHERE apply_status IN ('면접예정', '익일면접')
 </script>
     """)
     int updateAllInterview()
