@@ -40,8 +40,8 @@ public class Company {
 
     private String companyBranch;
 
-    @JsonProperty("mid")
-    private String mid;
+    @JsonProperty("managerId")
+    private String managerId;
 
     @JsonProperty("rName")
     private String rName;

@@ -870,10 +870,10 @@ public class formMail_adminService {
                surveyResponse.setSurveyStatistics(statisticsMapper.surveyStatistics());
                if(StringUtils.hasText(surveyResponse.getSurveyStatistics().getDate())){
                    surveyResponse.setCode("C000");
-                   surveyResponse.setMessage("당일 면접 통계 성공");
+                   surveyResponse.setMessage("당일 면접 질의서 현황 조회 성공");
                } else {
                    surveyResponse.setCode("E001");
-                   surveyResponse.setMessage("당일 면접 통계 실패");
+                   surveyResponse.setMessage("당일 면접 질의서 현황 조회 실패");
                }
         } catch (Exception e) {
             surveyResponse.setCode("E001");

@@ -19,7 +19,7 @@ interface CompanyMapper {
             , manager2
             , c_phone1
             , c_phone2
-            , mid
+            , manager_id
             , survey_type
             , partner
             , address
@@ -38,7 +38,7 @@ interface CompanyMapper {
             , #{comp.manager2}
             , #{comp.cPhone1}
             , #{comp.cPhone2}
-            , #{comp.mid.userId}
+            , #{comp.managerId}
             , #{comp.surveyType}
             , #{comp.partner}
             , #{comp.address}
@@ -71,7 +71,7 @@ interface CompanyMapper {
         , fc.manager1
         , fc.c_phone1
         , fc.partner
-        , fc.mid
+        , fc.manager_id
         , fc.survey_type
         , fc.address
         , fc.industry
@@ -81,7 +81,7 @@ interface CompanyMapper {
         , fc.surveyProceed
         , fc.comProceed
         FROM formmail_company fc
-        JOIN formmail_admin fa ON fc.mid = fa.user_id 
+        JOIN formmail_admin fa ON fc.manager_id = fa.user_id 
         LIMIT #{paging.size} OFFSET #{paging.offset}
     """)
     List<Company> companyList(@Param("paging") Paging paging)
@@ -104,7 +104,7 @@ interface CompanyMapper {
         , fc.manager1
         , fc.c_phone1
         , fc.partner
-        , fc.mid
+        , fc.manager_id
         , fc.survey_type
         , fc.address
         , fc.industry
@@ -115,7 +115,7 @@ interface CompanyMapper {
         , fc.surveyProceed
         , fc.comProceed
         FROM formmail_company fc
-        JOIN formmail_admin fa ON fc.mid = fa.user_id
+        JOIN formmail_admin fa ON fc.manager_id = fa.user_id
         WHERE fc.cid = #{cid}
         LIMIT 1;
     """)
@@ -159,8 +159,8 @@ interface CompanyMapper {
             <if test="comp.cPhone2 != null">
                 c_phone2 = #{comp.cPhone2},
             </if>
-            <if test="comp.mid != null and comp.mid.userId != null">
-                mid = #{comp.mid.userId},
+            <if test="comp.managerId != null">
+                manager_id = #{comp.managerId},
             </if>
             <if test="comp.surveyType != null">
                 survey_type = #{comp.surveyType},
@@ -204,7 +204,7 @@ interface CompanyMapper {
             , company_branch
             , type
         ) VALUES (
-            #{comp.mid.userId}
+            #{comp.managerId}
             , #{comp.companyName}
             , #{comp.companyBranch}
             , 'company'
