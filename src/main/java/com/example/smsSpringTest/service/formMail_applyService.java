@@ -112,11 +112,14 @@ public class formMail_applyService {
             }
 
             Apply findOne = applyMapper.findOne(apply);
+//            log.info("findOne = " + findOne);
             if(apply.getInterviewTime() != null && findOne.getSurveyTarget()) {
                 // 면접 시간이 변경 될 때, 지원 고객사가 면접 질의 고객사이고
                 if(!StringUtils.hasText(findOne.getSurveyStatus())){
                     // 아직 미발송, 발송, 완료 상태가 아닐 때 미발송 추가해주기
+//                    log.info("여기 안찍힘?");
                     apply.setSurveyStatus("미발송");
+//                    apply.setSurveyTarget(true);
                 }
             }
 

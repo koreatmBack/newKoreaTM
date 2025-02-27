@@ -140,7 +140,10 @@ interface ApplyMapper {
         <if test="apply.surveyStatus != null">AND survey_status = #{apply.surveyStatus}</if>        
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
-            <when test="apply.searchType == '연락처'">AND REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
+            <when test="apply.searchType == '연락처'">
+            AND (REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '')
+            OR RIGHT(REPLACE(apply_phone, '-', ''), 4) = #{apply.searchKeyword})
+            </when>
         </choose>
         ORDER BY 
         <choose>
