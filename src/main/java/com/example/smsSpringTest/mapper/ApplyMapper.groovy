@@ -76,18 +76,18 @@ interface ApplyMapper {
            <if test="apply.applyGender != null"> apply_gender = #{apply.applyGender},   </if>
            <if test="apply.applyAddress != null"> apply_address = #{apply.applyAddress},   </if>
            <if test="apply.applyPhone  != null"> apply_phone = #{apply.applyPhone},   </if>
-           <if test="apply.addressDetail != null"> address_detail  = #{apply.addressDetail},   </if>     
-           <if test="apply.sido != null"> sido  = #{apply.sido},   </if>     
-           <if test="apply.sigungu != null"> sigungu  = #{apply.sigungu},   </if>     
-           <if test="apply.applyStatus != null"> apply_status  = #{apply.applyStatus},   </if>     
-           <if test="apply.applyPath != null"> apply_path  = #{apply.applyPath},   </if>     
-           <if test="apply.applyCareer != null"> apply_career  = #{apply.applyCareer},   </if>     
-           <if test="apply.managerMemo != null"> manager_memo  = #{apply.managerMemo},   </if>     
+           <if test="apply.addressDetail != null"> address_detail = #{apply.addressDetail},   </if>     
+           <if test="apply.sido != null"> sido = #{apply.sido},   </if>     
+           <if test="apply.sigungu != null"> sigungu = #{apply.sigungu},   </if>     
+           <if test="apply.applyStatus != null"> apply_status = #{apply.applyStatus},   </if>     
+           <if test="apply.applyPath != null"> apply_path = #{apply.applyPath},   </if>     
+           <if test="apply.applyCareer != null"> apply_career = #{apply.applyCareer},   </if>     
+           <if test="apply.managerMemo != null"> manager_memo = #{apply.managerMemo},   </if>     
            <if test="apply.managerName != null"> manager_name = #{apply.managerName},   </if>     
-           <if test="apply.surveyStatus != null"> survey_status  = #{apply.surveyStatus},   </if>     
-           <if test="apply.interviewTime != null"> interview_time  = #{apply.interviewTime},   </if>     
-           <if test="apply.blacklist != null"> blacklist  = #{apply.blacklist},   </if>     
-           <if test="apply.applyAge != null"> apply_age  = #{apply.applyAge},   </if>     
+           <if test="apply.surveyStatus != null"> survey_status = #{apply.surveyStatus},   </if>     
+           <if test="apply.interviewTime != null"> interview_time = #{apply.interviewTime},   </if>     
+           <if test="apply.blacklist != null"> blacklist = #{apply.blacklist},   </if>     
+           <if test="apply.applyAge != null"> apply_age = #{apply.applyAge},   </if>     
            <if test="apply.surveyTarget != null"> survey_target  = #{apply.surveyTarget},   </if>     
        </set> 
         WHERE apply_id = #{apply.applyId}
