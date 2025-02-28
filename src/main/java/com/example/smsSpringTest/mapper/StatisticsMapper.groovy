@@ -160,7 +160,7 @@ interface StatisticsMapper {
        AND fc.survey_proceed = '1') AS total_companies,
        COUNT(*) AS total_applicants,
        SUM(CASE WHEN fa.survey_status = '미발송' THEN 1 ELSE 0 END) AS pending_count,
-       SUM(CASE WHEN fa.survey_status IN ('발송','완료') THEN 1 ELSE 0 END) AS sent_count,
+       SUM(CASE WHEN fa.survey_status IN ('발송함','완료') THEN 1 ELSE 0 END) AS sent_count,
        SUM(CASE WHEN fa.survey_status = '완료' THEN 1 ELSE 0 END) AS completed_count,
        CURDATE() AS date
        FROM formmail_apply fa
