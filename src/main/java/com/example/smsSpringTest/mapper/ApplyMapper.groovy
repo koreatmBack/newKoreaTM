@@ -11,7 +11,7 @@ interface ApplyMapper {
     @Select("""
         SELECT count(*)
         FROM formmail_apply
-        WHERE aid = #{serialNumber}
+        WHERE apply_id = #{serialNumber}
     """)
     int dupAidCheck(@Param("serialNumber") String serialNumber)
 
@@ -110,8 +110,10 @@ interface ApplyMapper {
         <if test="apply.surveyStatusSort != null">AND survey_target = '1' </if>                
         <choose>
             <when test="apply.searchType == '이름'">AND apply_name = #{apply.searchKeyword} </when>
-            <when test="apply.searchType == '연락처'">AND REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '') </when>
-        </choose>
+            <when test="apply.searchType == '연락처'">
+            AND (REPLACE(apply_phone, '-', '') = REPLACE(#{apply.searchKeyword}, '-', '')
+            OR RIGHT(REPLACE(apply_phone, '-', ''), 4) = #{apply.searchKeyword})
+            </when>        </choose>
         ORDER BY 
         <choose>
             <when test="apply.surveyStatusSort == '오름차순'"> 
