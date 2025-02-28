@@ -153,11 +153,13 @@ interface StatisticsMapper {
 
     // 당일 면접 질의서 현황
     @Select("""
+<script>
        SELECT 
            (SELECT COUNT(*) 
             FROM formmail_company fc 
-            WHERE fc.com_proceed = '1' 
-       AND fc.survey_proceed = '1') AS total_companies,
+            WHERE fc.com_proceed = '1'
+            <if test="managerId != null"> AND fc.manager_id = #{managerId} </if> 
+            AND fc.survey_proceed = '1') AS total_companies,
        COUNT(*) AS total_applicants,
        SUM(CASE WHEN fa.survey_status = '미발송' THEN 1 ELSE 0 END) AS pending_count,
        SUM(CASE WHEN fa.survey_status IN ('발송함','완료') THEN 1 ELSE 0 END) AS sent_count,
@@ -169,7 +171,9 @@ interface StatisticsMapper {
        AND fc.com_proceed = '1'
        AND DATE(fa.interview_time) = CURDATE()
        AND fa.apply_status IN ('당일면접')
+       <if test="managerId != null"> AND fa.manager_id = #{managerId} </if> 
+</script>       
     """)
-    SurveyStatistics surveyStatistics()
+    SurveyStatistics surveyStatistics(@Param("managerId") String managerId)
 
 }

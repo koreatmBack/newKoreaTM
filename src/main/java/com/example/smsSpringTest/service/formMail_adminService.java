@@ -864,10 +864,10 @@ public class formMail_adminService {
         return adminResponse;
     }
 
-    public SurveyResponse surveyStatistics() throws Exception {
+    public SurveyResponse surveyStatistics(String managerId) throws Exception {
         SurveyResponse surveyResponse = new SurveyResponse();
         try {
-               surveyResponse.setSurveyStatistics(statisticsMapper.surveyStatistics());
+               surveyResponse.setSurveyStatistics(statisticsMapper.surveyStatistics(managerId));
                if(StringUtils.hasText(surveyResponse.getSurveyStatistics().getDate())){
                    surveyResponse.setCode("C000");
                    surveyResponse.setMessage("당일 면접 질의서 현황 조회 성공");

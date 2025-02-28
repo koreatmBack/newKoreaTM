@@ -180,7 +180,7 @@ public class formMail_adminController {
 
     // 당일 면접 질의 현황 통계
     @PostMapping("/see/daily/surveyStatistics")
-    public SurveyResponse surveyStatistics() throws Exception {
-        return formMailAdminService.surveyStatistics();
+    public SurveyResponse surveyStatistics(@RequestParam(value = "managerId", required = false) String managerId) throws Exception {
+        return formMailAdminService.surveyStatistics(managerId);
     }
 }

@@ -88,8 +88,9 @@ public class statisticsTasks {
     // 당일 면접 질의서 현황 저장
     @Scheduled(cron = "0 50 23 * * *") // 매일 밤 23시 50분 실행
     public void saveSurveyStatistics() throws Exception {
+        String managerId = null;
         // ㅡㅡㅡㅡㅡㅡㅡㅡ 당일 면접 질의서 현황 저장 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-        SurveyStatistics surveyStatistics = statisticsMapper.surveyStatistics();
+        SurveyStatistics surveyStatistics = statisticsMapper.surveyStatistics(managerId);
         int saveSurveyStatistics = statisticsMapper.saveSurveyStatistics(surveyStatistics);
     }
 
