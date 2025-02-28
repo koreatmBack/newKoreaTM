@@ -266,7 +266,10 @@ interface ApplyMapper {
     @Update("""
         UPDATE formmail_apply
         SET survey = #{apply.survey}
-            ,survey_status = '완료'
+            ,survey_status = CASE 
+                             WHEN #{apply.survey} LIKE 's/%' THEN '완료'
+                             ELSE survey_status 
+                            END
         WHERE apply_id = #{apply.applyId}
     """)
     int addSurvey(@Param("apply") Apply apply)
