@@ -83,6 +83,7 @@ public class InsuranceService {
         } catch (Exception e) {
             insuranceResponse.setCode("E001");
             insuranceResponse.setMessage("Error!!!");
+            log.info(e.getMessage());
         }
         return insuranceResponse;
     }
