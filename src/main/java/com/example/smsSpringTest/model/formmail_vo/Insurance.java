@@ -25,4 +25,5 @@ public class Insurance {
     private String name; // 보험명
 
     private List<String> names; //보험명들
+    private String searchKeyword; // 검색어
 }

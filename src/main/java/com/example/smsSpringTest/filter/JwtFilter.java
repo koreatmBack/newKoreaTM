@@ -391,7 +391,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/cafecon/user/reset/pwd" , "/v1/cafecon/user/reset/pwd"
                 ,"/v1/formMail_apply/addApply" , "/api/v1/formMail_apply/addApply"
                 ,"/api/v1/formMail/insurance/add", "/v1/formMail/insurance/add"
-
+                ,"/api/v1/formMail/insurance", "/v1/formMail/insurance"
         };
 
         for (String allowedURI : allowedURIs) {

@@ -34,4 +34,12 @@ interface InsuranceMapper {
     """)
     int deleteInsurance(@Param("ins") Insurance ins)
 
+    // name 검색 기능. 포함된 것
+    @Select("""
+        SELECT type , name
+        FROM formmail_insurance
+        WHERE name LIKE concat('%','#{ins.searchKeyword}','%')
+    """)
+    List<Insurance> searchName(@Param("ins") Insurance ins)
+
 }

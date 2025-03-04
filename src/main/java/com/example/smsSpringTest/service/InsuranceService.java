@@ -3,6 +3,7 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.mapper.InsuranceMapper;
 import com.example.smsSpringTest.model.formmail_vo.Insurance;
 import com.example.smsSpringTest.model.response.ApiResponse;
+import com.example.smsSpringTest.model.response.formmail.InsuranceResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,25 @@ public class InsuranceService {
             log.info(e.getMessage());
         }
         return apiResponse;
+    }
+
+    // name 검색 기능. 포함된 것
+    public InsuranceResponse searchName(Insurance ins) throws Exception {
+        InsuranceResponse insuranceResponse = new InsuranceResponse();
+        try {
+            insuranceResponse.setInsuranceList(insuranceMapper.searchName(ins));
+            if(insuranceResponse.getInsuranceList() != null && !insuranceResponse.getInsuranceList().isEmpty()) {
+                insuranceResponse.setCode("C000");
+                insuranceResponse.setMessage("검색 성공");
+            } else {
+                insuranceResponse.setCode("E001");
+                insuranceResponse.setMessage("검색 실패");
+            }
+        } catch (Exception e) {
+            insuranceResponse.setCode("E001");
+            insuranceResponse.setMessage("Error!!!");
+        }
+        return insuranceResponse;
     }
 
 }
