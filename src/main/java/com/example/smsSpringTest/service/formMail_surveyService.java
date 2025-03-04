@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.mapper.SurveyMapper;
-import com.example.smsSpringTest.model.Survey;
+import com.example.smsSpringTest.model.formmail_vo.Survey;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SurveyResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.model.MapVO;
-import com.example.smsSpringTest.model.response.MapResponse;
+import com.example.smsSpringTest.model.response.jobsite.MapResponse;
 import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

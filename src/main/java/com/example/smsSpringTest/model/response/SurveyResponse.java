@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.model.response;
 
-import com.example.smsSpringTest.model.Survey;
-import com.example.smsSpringTest.model.SurveyStatistics;
+import com.example.smsSpringTest.model.formmail_vo.Survey;
+import com.example.smsSpringTest.model.formmail_vo.SurveyStatistics;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 

@@ -5,7 +5,7 @@ import com.example.smsSpringTest.mapper.cafecon.CafeconUserMapper;
 import com.example.smsSpringTest.model.cafecon.*;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
-import com.example.smsSpringTest.model.response.AccessResponse;
+import com.example.smsSpringTest.model.response.formmail.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;

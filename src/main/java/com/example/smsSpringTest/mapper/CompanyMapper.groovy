@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.mapper
 
 
-import com.example.smsSpringTest.model.Company
+import com.example.smsSpringTest.model.formmail_vo.Company
 import com.example.smsSpringTest.model.Paging
 import org.apache.ibatis.annotations.*
 

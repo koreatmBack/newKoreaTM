@@ -1,6 +1,7 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.jobsite;
 
 import com.example.smsSpringTest.model.jobsite.Notice;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NoticeResponse extends ApiResponse{
+public class NoticeResponse extends ApiResponse {
 
     private List<Notice> noticeList;
     private Notice findOneNotice;

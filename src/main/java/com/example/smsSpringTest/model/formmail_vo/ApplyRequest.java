@@ -1,4 +1,4 @@
-package com.example.smsSpringTest.model;
+package com.example.smsSpringTest.model.formmail_vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -6,10 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * author : 신기훈
- * date : 2024-12-23
- * comment : 지역 vo
+ * date : 2025-02-14
+ * comment : 지원자 관련 vo
  */
 
 @Data
@@ -17,9 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Regions {
-
-    private String sido;
-    private String sigungu;
-    private String dongEubMyun;
+public class ApplyRequest {
+    private String applyStatus;
+    private List<Apply> applyIds;
 }

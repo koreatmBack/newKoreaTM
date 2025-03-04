@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.controller.jobsite;
 
-import com.example.smsSpringTest.model.Apply;
-import com.example.smsSpringTest.model.response.AccessResponse;
+import com.example.smsSpringTest.model.formmail_vo.Apply;
+import com.example.smsSpringTest.model.response.formmail.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
 import com.example.smsSpringTest.service.jobsite.jobsite_commonService;

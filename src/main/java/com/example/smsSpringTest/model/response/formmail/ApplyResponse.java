@@ -1,6 +1,7 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.formmail;
 
-import com.example.smsSpringTest.model.Apply;
+import com.example.smsSpringTest.model.formmail_vo.Apply;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -19,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplyResponse extends ApiResponse{
+public class ApplyResponse extends ApiResponse {
 
     private List<Apply> applyList;
 

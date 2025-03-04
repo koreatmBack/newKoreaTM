@@ -1,4 +1,4 @@
-package com.example.smsSpringTest.model;
+package com.example.smsSpringTest.model.formmail_vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

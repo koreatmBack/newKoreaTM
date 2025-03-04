@@ -1,4 +1,4 @@
-package com.example.smsSpringTest.model;
+package com.example.smsSpringTest.model.formmail_vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -10,8 +10,8 @@ import java.util.List;
 
 /**
  * author : 신기훈
- * date : 2025-02-14
- * comment : 지원자 관련 vo
+ * date : 2025-03-04
+ * comment : 보험 관련 vo
  */
 
 @Data
@@ -19,7 +19,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplyRequest {
-    private String applyStatus;
-    private List<Apply> applyIds;
+public class Insurance {
+    private int no;
+    private String type; // 보험 타입
+    private String name; // 보험명
+
+    private List<String> names; //보험명들
 }

@@ -1,9 +1,9 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.model.Company;
+import com.example.smsSpringTest.model.formmail_vo.Company;
 import com.example.smsSpringTest.model.Paging;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.CompanyResponse;
+import com.example.smsSpringTest.model.response.formmail.CompanyResponse;
 import com.example.smsSpringTest.service.formMail_companyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

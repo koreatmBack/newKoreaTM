@@ -2,7 +2,7 @@ package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity
 import com.example.smsSpringTest.entity.PhoneNum
-import com.example.smsSpringTest.model.FormMailAdmin
+import com.example.smsSpringTest.model.formmail_vo.FormMailAdmin
 import com.example.smsSpringTest.model.SmsForm
 import com.example.smsSpringTest.model.User
 import com.example.smsSpringTest.model.findUser

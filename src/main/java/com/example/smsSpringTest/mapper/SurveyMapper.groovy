@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.model.Survey
+import com.example.smsSpringTest.model.formmail_vo.Survey
 import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper

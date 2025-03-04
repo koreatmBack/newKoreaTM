@@ -1,8 +1,8 @@
 package com.example.smsSpringTest.tasks;
 
 import com.example.smsSpringTest.mapper.StatisticsMapper;
-import com.example.smsSpringTest.model.Statistics;
-import com.example.smsSpringTest.model.SurveyStatistics;
+import com.example.smsSpringTest.model.formmail_vo.Statistics;
+import com.example.smsSpringTest.model.formmail_vo.SurveyStatistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

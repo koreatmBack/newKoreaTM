@@ -1,8 +1,9 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.ad;
 
-import com.example.smsSpringTest.model.Regions;
+import com.example.smsSpringTest.model.jobsite.Regions;
 import com.example.smsSpringTest.model.ad.*;
-import com.example.smsSpringTest.model.findCompanyAndUser;
+import com.example.smsSpringTest.model.formmail_vo.findCompanyAndUser;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AdResponse extends ApiResponse{
+public class AdResponse extends ApiResponse {
 
     private List<fmAd> fmAdList;
     private List<AdRequest> findFmAdList;

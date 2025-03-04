@@ -10,7 +10,7 @@ import com.example.smsSpringTest.model.ad.fmAd;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
 import com.example.smsSpringTest.model.jobsite.*;
-import com.example.smsSpringTest.model.response.AdResponse;
+import com.example.smsSpringTest.model.response.ad.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.jobsite.BookMarkResponse;
 import com.example.smsSpringTest.model.response.jobsite.JobUserResponse;

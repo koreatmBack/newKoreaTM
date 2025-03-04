@@ -1,5 +1,6 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.formmail;
 
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccessResponse extends ApiResponse{
+public class AccessResponse extends ApiResponse {
 
     private int limit;  // 쿠키 (access토큰) 남은시간 반환하기
     private int point;

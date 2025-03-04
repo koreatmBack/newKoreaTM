@@ -390,6 +390,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 , "/api/v1/cafecon/user/dupCheck/phone" , "/v1/cafecon/user/dupCheck/phone"
                 , "/api/v1/cafecon/user/reset/pwd" , "/v1/cafecon/user/reset/pwd"
                 ,"/v1/formMail_apply/addApply" , "/api/v1/formMail_apply/addApply"
+                ,"/api/v1/formMail/insurance/add", "/v1/formMail/insurance/add"
 
         };
 
@@ -499,7 +500,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 ,"/v1/formMail_apply/find/survey", "/api/v1/formMail_apply/find/survey"
                 ,"/v1/formMail_apply/add/interviewMemo", "/api/v1/formMail_apply/add/interviewMemo"
                 ,"/v1/formMail_apply/find/all/interviewMemo", "/api/v1/formMail_apply/find/all/interviewMemo"
-
+                ,"/v1/formMail/insurance/delete" ,"/api/v1/formMail/insurance/delete"
 
         };
 

@@ -3,7 +3,7 @@ package com.example.smsSpringTest.controller.cafecon;
 import com.example.smsSpringTest.model.cafecon.BizApi;
 import com.example.smsSpringTest.model.cafecon.Coupon;
 import com.example.smsSpringTest.model.cafecon.PointLog;
-import com.example.smsSpringTest.model.response.AccessResponse;
+import com.example.smsSpringTest.model.response.formmail.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.cafecon.CouponResponse;
 import com.example.smsSpringTest.service.cafecon.CafeconCommonService;

@@ -1,5 +1,6 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.jobsite;
 
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SalaryResponse extends ApiResponse{
+public class SalaryResponse extends ApiResponse {
 
     private int hourSalary; // 시급
     private int dailySalary; // 일급

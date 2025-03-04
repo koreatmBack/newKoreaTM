@@ -3,7 +3,7 @@ package com.example.smsSpringTest.service;
 import com.example.smsSpringTest.mapper.NoticeMapper;
 import com.example.smsSpringTest.model.jobsite.Notice;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.NoticeResponse;
+import com.example.smsSpringTest.model.response.jobsite.NoticeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

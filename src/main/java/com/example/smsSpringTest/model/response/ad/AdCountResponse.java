@@ -1,5 +1,6 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.ad;
 
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -15,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AdCountResponse extends ApiResponse{
+public class AdCountResponse extends ApiResponse {
 
     private int totalAds;
 

@@ -2,7 +2,7 @@ package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.jobsite.Notice;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.NoticeResponse;
+import com.example.smsSpringTest.model.response.jobsite.NoticeResponse;
 import com.example.smsSpringTest.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

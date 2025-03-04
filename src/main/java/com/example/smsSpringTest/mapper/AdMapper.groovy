@@ -1,9 +1,9 @@
 package com.example.smsSpringTest.mapper
 
 import com.example.smsSpringTest.model.Paging
-import com.example.smsSpringTest.model.Regions
+import com.example.smsSpringTest.model.jobsite.Regions
 import com.example.smsSpringTest.model.ad.*
-import com.example.smsSpringTest.model.formMail_file
+import com.example.smsSpringTest.model.formmail_vo.formMail_file
 import org.apache.ibatis.annotations.*
 
 @Mapper

@@ -1,4 +1,4 @@
-package com.example.smsSpringTest.model;
+package com.example.smsSpringTest.model.jobsite;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * author : 신기훈
- * date : 2024-11-14
- * comment : 이메일 전송용 vo
+ * date : 2024-12-23
+ * comment : 지역 vo
  */
 
 @Data
@@ -17,8 +17,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EmailMessage {
-    private String to;
-    private String subject;
-    private String message;
+public class Regions {
+
+    private String sido;
+    private String sigungu;
+    private String dongEubMyun;
 }

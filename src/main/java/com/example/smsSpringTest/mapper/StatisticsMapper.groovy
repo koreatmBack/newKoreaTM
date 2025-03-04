@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.mapper
 
-import com.example.smsSpringTest.model.Statistics
-import com.example.smsSpringTest.model.SurveyStatistics
+import com.example.smsSpringTest.model.formmail_vo.Statistics
+import com.example.smsSpringTest.model.formmail_vo.SurveyStatistics
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
@@ -157,9 +157,10 @@ interface StatisticsMapper {
        SELECT 
            (SELECT COUNT(*) 
             FROM formmail_company fc 
-            WHERE fc.com_proceed = '1'
+            WHERE 1=1
+            AND fc.survey_proceed = '1'
             <if test="managerId != null"> AND fc.manager_id = #{managerId} </if> 
-            AND fc.survey_proceed = '1') AS total_companies,
+            ) AS total_companies,
        COUNT(*) AS total_applicants,
        SUM(CASE WHEN fa.survey_status = '미발송' THEN 1 ELSE 0 END) AS pending_count,
        SUM(CASE WHEN fa.survey_status IN ('발송함','완료') THEN 1 ELSE 0 END) AS sent_count,
@@ -168,7 +169,6 @@ interface StatisticsMapper {
        FROM formmail_apply fa
        JOIN formmail_company fc ON fa.cid = fc.cid
        WHERE fc.survey_proceed = '1'  
-       AND fc.com_proceed = '1'
        AND DATE(fa.interview_time) = CURDATE()
        AND fa.apply_status IN ('당일면접')
        <if test="managerId != null"> AND fa.manager_id = #{managerId} </if> 

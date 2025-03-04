@@ -1,10 +1,10 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.model.EmailMessage;
+import com.example.smsSpringTest.model.jobsite.EmailMessage;
 import com.example.smsSpringTest.model.S3Upload;
 import com.example.smsSpringTest.model.UrlShorten;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.MapResponse;
+import com.example.smsSpringTest.model.response.jobsite.MapResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.model.response.UrlResponse;
 import com.example.smsSpringTest.service.CommonService;

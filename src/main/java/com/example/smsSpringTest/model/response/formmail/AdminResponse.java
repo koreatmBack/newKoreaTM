@@ -1,11 +1,12 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.formmail;
 
 import com.example.smsSpringTest.entity.PhoneNum;
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
-import com.example.smsSpringTest.model.Statistics;
+import com.example.smsSpringTest.model.formmail_vo.Statistics;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.findUser;
-import com.example.smsSpringTest.model.FormMailAdmin;
+import com.example.smsSpringTest.model.formmail_vo.FormMailAdmin;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -23,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AdminResponse extends ApiResponse{
+public class AdminResponse extends ApiResponse {
 
     private FormMailAdminEntity formMailAdminEntity;
     private FormMailAdmin formMailAdmin;

@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.service;
 
 import com.example.smsSpringTest.mapper.jobsite.JobUserMapper;
-import com.example.smsSpringTest.model.EmailMessage;
+import com.example.smsSpringTest.model.jobsite.EmailMessage;
 import com.example.smsSpringTest.model.jobsite.Cert;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import lombok.RequiredArgsConstructor;

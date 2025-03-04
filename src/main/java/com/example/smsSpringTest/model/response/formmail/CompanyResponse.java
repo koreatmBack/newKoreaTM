@@ -1,7 +1,8 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.formmail;
 
 import com.example.smsSpringTest.entity.formMail_company;
-import com.example.smsSpringTest.model.Company;
+import com.example.smsSpringTest.model.formmail_vo.Company;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CompanyResponse extends ApiResponse{
+public class CompanyResponse extends ApiResponse {
 
     private formMail_company formMailCompany;
     private Company company;

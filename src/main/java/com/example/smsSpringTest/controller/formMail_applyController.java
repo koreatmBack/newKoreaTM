@@ -1,11 +1,11 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.model.Apply;
-import com.example.smsSpringTest.model.ApplyRequest;
-import com.example.smsSpringTest.model.InterviewMemo;
+import com.example.smsSpringTest.model.formmail_vo.Apply;
+import com.example.smsSpringTest.model.formmail_vo.ApplyRequest;
+import com.example.smsSpringTest.model.formmail_vo.InterviewMemo;
 import com.example.smsSpringTest.model.response.ApiResponse;
-import com.example.smsSpringTest.model.response.ApplyResponse;
-import com.example.smsSpringTest.model.response.InterviewMemoResponse;
+import com.example.smsSpringTest.model.response.formmail.ApplyResponse;
+import com.example.smsSpringTest.model.response.formmail.InterviewMemoResponse;
 import com.example.smsSpringTest.service.formMail_applyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

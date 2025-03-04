@@ -1,14 +1,14 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.model.Paging;
-import com.example.smsSpringTest.model.Regions;
+import com.example.smsSpringTest.model.jobsite.Regions;
 import com.example.smsSpringTest.model.ad.AdImageRequest;
 import com.example.smsSpringTest.model.ad.AdNearInfo;
 import com.example.smsSpringTest.model.ad.AdRequest;
 import com.example.smsSpringTest.model.ad.fmAd;
-import com.example.smsSpringTest.model.formMail_file;
-import com.example.smsSpringTest.model.response.AdCountResponse;
-import com.example.smsSpringTest.model.response.AdResponse;
+import com.example.smsSpringTest.model.formmail_vo.formMail_file;
+import com.example.smsSpringTest.model.response.ad.AdCountResponse;
+import com.example.smsSpringTest.model.response.ad.AdResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.S3UploadResponse;
 import com.example.smsSpringTest.service.formMail_adService;

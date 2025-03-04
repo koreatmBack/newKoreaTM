@@ -1,7 +1,7 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.model.Salary;
-import com.example.smsSpringTest.model.response.SalaryResponse;
+import com.example.smsSpringTest.model.jobsite.Salary;
+import com.example.smsSpringTest.model.response.jobsite.SalaryResponse;
 import com.example.smsSpringTest.service.SalaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

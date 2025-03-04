@@ -1,6 +1,6 @@
 package com.example.smsSpringTest.controller;
 
-import com.example.smsSpringTest.model.Survey;
+import com.example.smsSpringTest.model.formmail_vo.Survey;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.model.response.SurveyResponse;
 import com.example.smsSpringTest.service.formMail_surveyService;

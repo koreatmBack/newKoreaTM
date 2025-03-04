@@ -1,6 +1,7 @@
-package com.example.smsSpringTest.model.response;
+package com.example.smsSpringTest.model.response.formmail;
 
-import com.example.smsSpringTest.model.InterviewMemo;
+import com.example.smsSpringTest.model.formmail_vo.InterviewMemo;
+import com.example.smsSpringTest.model.response.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InterviewMemoResponse extends ApiResponse{
+public class InterviewMemoResponse extends ApiResponse {
 
     private List<InterviewMemo> interviewMemoList;
 

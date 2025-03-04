@@ -1,4 +1,4 @@
-package com.example.smsSpringTest.model;
+package com.example.smsSpringTest.model.jobsite;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

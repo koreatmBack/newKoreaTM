@@ -3,7 +3,7 @@ package com.example.smsSpringTest.service.jobsite;
 import com.example.smsSpringTest.mapper.jobsite.JobCommonMapper;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.common.Token;
-import com.example.smsSpringTest.model.response.AccessResponse;
+import com.example.smsSpringTest.model.response.formmail.AccessResponse;
 import com.example.smsSpringTest.model.response.ApiResponse;
 import com.example.smsSpringTest.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;

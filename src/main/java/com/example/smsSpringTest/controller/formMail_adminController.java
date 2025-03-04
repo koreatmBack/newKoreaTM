@@ -1,11 +1,13 @@
 package com.example.smsSpringTest.controller;
 
 import com.example.smsSpringTest.entity.FormMailAdminEntity;
-import com.example.smsSpringTest.model.FormMailAdmin;
+import com.example.smsSpringTest.model.formmail_vo.FormMailAdmin;
 import com.example.smsSpringTest.model.SmsForm;
 import com.example.smsSpringTest.model.User;
 import com.example.smsSpringTest.model.common.RefToken;
 import com.example.smsSpringTest.model.response.*;
+import com.example.smsSpringTest.model.response.formmail.AccessResponse;
+import com.example.smsSpringTest.model.response.formmail.AdminResponse;
 import com.example.smsSpringTest.service.formMail_adminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
