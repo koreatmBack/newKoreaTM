@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Insurance {
-    private int no;
+//    private int no;
     private String type; // 보험 타입
     private String name; // 보험명
 

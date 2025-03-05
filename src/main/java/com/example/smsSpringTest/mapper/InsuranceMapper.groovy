@@ -36,9 +36,18 @@ interface InsuranceMapper {
 
     // name 검색 기능. 포함된 것
     @Select("""
+<script>
         SELECT type, name
         FROM formmail_insurance
-        WHERE name LIKE CONCAT('%',#{ins.searchKeyword},'%')
+        WHERE 1=1
+        <if test="ins.type != null">
+        AND type = #{ins.type}
+        AND name = #{ins.searchKeyword}
+        </if>
+        <if test="ins.type == null">
+        AND name LIKE CONCAT('%',#{ins.searchKeyword},'%')
+        </if>
+</script>  
     """)
     List<Insurance> searchName(@Param("ins") Insurance ins)
 
