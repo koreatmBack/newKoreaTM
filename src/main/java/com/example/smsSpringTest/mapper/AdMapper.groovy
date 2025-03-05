@@ -14,6 +14,7 @@ interface AdMapper {
 <script>
         INSERT INTO formmail_ad(
             aid
+            , cid
             , start_date
             , end_date
             , heaven
@@ -91,6 +92,7 @@ interface AdMapper {
             , company_user_id
         ) VALUES (
             #{ad.aid}
+            , #{ad.cid}
             , #{ad.startDate}
             , #{ad.endDate}
             , #{ad.heaven}

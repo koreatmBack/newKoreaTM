@@ -43,14 +43,14 @@ public class formMail_companyService {
 
                 comp.setCid(serialNumber);
 
-            // 등록시 고객사 진행 구분 값 없으면 0
-            if(comp.getComProceed() == null) {
-                comp.setComProceed(false);
-            }
-            // 등록시 면접 질의 진행 구분 값 없으면 0
-            if(comp.getSurveyProceed() == null) {
-                comp.setSurveyProceed(false);
-            }
+//            // 등록시 고객사 진행 구분 값 없으면 0
+//            if(comp.getComProceed() == null) {
+//                comp.setComProceed(false);
+//            }
+//            // 등록시 면접 질의 진행 구분 값 없으면 0
+//            if(comp.getSurveyProceed() == null) {
+//                comp.setSurveyProceed(false);
+//            }
 
                 int result = companyMapper.addComp(comp);
                 log.info("result = " + result);

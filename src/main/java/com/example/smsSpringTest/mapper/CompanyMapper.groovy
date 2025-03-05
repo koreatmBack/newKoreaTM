@@ -11,42 +11,130 @@ interface CompanyMapper {
     @Insert("""
         INSERT INTO formmail_company(
             cid
-            , company_name
-            , gubun
-            , channel
-            , company_branch
-            , manager1
-            , manager2
-            , c_phone1
-            , c_phone2
-            , manager_id
-            , survey_type
-            , partner
-            , address
-            , industry
-            , sido
-            , sigungu
-            , survey_proceed
-            , com_proceed
+            ,com_name_alias
+            ,manager_id
+            ,com_center
+            ,com_ins_type
+            ,com_name
+            ,com_channel
+            ,com_spot
+            ,com_phone
+            ,com_address
+            ,head_name
+            ,head_phone
+            ,leader_name
+            ,leader_phone
+            ,manager
+            ,manager1
+            ,manager2
+            ,manager3
+            ,general
+            ,gen_phone
+            ,affiliation
+            ,head_count
+            ,location
+            ,work_start
+            ,work_end
+            ,work_time
+            ,lunch_time
+            ,rest_time
+            ,work_type
+            ,park
+            ,cafe
+            ,com_photo
+            ,business
+            ,use_db
+            ,merch
+            ,min_age
+            ,max_age
+            ,reward
+            ,int_type
+            ,int_time
+            ,int_count
+            ,edu_cost
+            ,edu_inst
+            ,first_pay
+            ,guar_pay
+            ,guar_period
+            ,ave_pay
+            ,top_pay
+            ,bonus
+            ,promo
+            ,bond
+            ,bond_pay
+            ,welfare
+            ,welf_etc
+            ,prevEmp
+            ,empSch
+            ,strength
+            ,propose
+            ,suggest
+            ,profile
+            ,empAdmin
+            ,visitMeet
         ) VALUES (
             #{comp.cid}
-            , #{comp.companyName}
-            , #{comp.gubun}
-            , #{comp.channel}
-            , #{comp.companyBranch}
+            , #{comp.comNameAlias}
+            , #{comp.managerId}
+            , #{comp.comCenter}
+            , #{comp.comInsType}
+            , #{comp.comName}
+            , #{comp.comChannel}
+            , #{comp.comSpot}
+            , #{comp.comPhone}
+            , #{comp.comAddress}
+            , #{comp.headName}
+            , #{comp.headPhone}
+            , #{comp.leaderName}
+            , #{comp.leaderPhone}
+            , #{comp.manager}
             , #{comp.manager1}
             , #{comp.manager2}
-            , #{comp.cPhone1}
-            , #{comp.cPhone2}
-            , #{comp.managerId}
-            , #{comp.surveyType}
-            , #{comp.partner}
-            , #{comp.address}
-            , #{comp.industry}
-            , #{comp.sido}
-            , #{comp.sigungu}
-            , #{comp.surveyProceed}
-            , #{comp.comProceed}
+            , #{comp.manager3}
+            , #{comp.general}
+            , #{comp.genPhone}
+            , #{comp.affiliation}
+            , #{comp.headCount}
+            , #{comp.location}
+            , #{comp.workStart}
+            , #{comp.workEnd}
+            , #{comp.workTime}
+            , #{comp.lunchTime}
+            , #{comp.restTime}
+            , #{comp.workType}
+            , #{comp.park}
+            , #{comp.cafe}
+            , #{comp.comPhoto}
+            , #{comp.business}
+            , #{comp.useDb}
+            , #{comp.merch}
+            , #{comp.minAge}
+            , #{comp.maxAge}
+            , #{comp.reward}
+            , #{comp.intType}
+            , #{comp.intTime}
+            , #{comp.intCount}
+            , #{comp.eduCost}
+            , #{comp.eduInst}
+            , #{comp.firstPay}
+            , #{comp.guarPay}
+            , #{comp.guarPeriod}
+            , #{comp.avePay}
+            , #{comp.topPay}
+            , #{comp.bonus}
+            , #{comp.promo}
+            , #{comp.bond}
+            , #{comp.bondPay}
+            , #{comp.welfare}
+            , #{comp.welfEtc}
+            , #{comp.prevEmp}
+            , #{comp.empSch}
+            , #{comp.strength}
+            , #{comp.propose}
+            , #{comp.suggest}
+            , #{comp.profile}
+            , #{comp.empAdmin}
+            , #{comp.visitMeet}
         )
     """)
     int addComp(@Param("comp") Company comp)
@@ -64,22 +152,17 @@ interface CompanyMapper {
     @Select("""
         SELECT 
         fc.cid
-        , fc.company_name
-        , fc.gubun
-        , fc.channel
-        , fc.company_branch
-        , fc.manager1
-        , fc.c_phone1
-        , fc.partner
+        , fc.com_name
+        , fc.com_ins_type
+        , fc.com_channel
+        , fc.com_spot
+        , fc.manager
         , fc.manager_id
-        , fc.survey_type
-        , fc.address
-        , fc.industry
+        , fc.com_address
         , fa.r_name
         , fa.user_name
         , fa.position
         , fc.surveyProceed
-        , fc.comProceed
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.manager_id = fa.user_id 
         LIMIT #{paging.size} OFFSET #{paging.offset}
@@ -97,23 +180,18 @@ interface CompanyMapper {
     @Select("""
         SELECT
         fc.cid
-        , fc.company_name
-        , fc.gubun
-        , fc.channel
-        , fc.company_branch
-        , fc.manager1
-        , fc.c_phone1
-        , fc.partner
+        , fc.com_name
+        , fc.com_ins_type
+        , fc.com_channel
+        , fc.com_spot
+        , fc.manager
         , fc.manager_id
-        , fc.survey_type
-        , fc.address
-        , fc.industry
+        , fc.com_address
         , fa.r_name
         , fa.user_name
         , fa.position
         , fa.m_phone
         , fc.surveyProceed
-        , fc.comProceed
         FROM formmail_company fc
         JOIN formmail_admin fa ON fc.manager_id = fa.user_id
         WHERE fc.cid = #{cid}
@@ -135,51 +213,68 @@ interface CompanyMapper {
     <script>
         UPDATE formmail_company
         <set>
-            <if test="comp.companyName != null">
-                company_name = #{comp.companyName},
-            </if>
-            <if test="comp.gubun != null">
-                gubun = #{comp.gubun},
-            </if>
-            <if test="comp.channel != null">
-                channel = #{comp.channel},
-            </if>
-            <if test="comp.companyBranch != null">
-                company_branch = #{comp.companyBranch},
-            </if>
-            <if test="comp.manager1 != null">
-                manager1 = #{comp.manager1},
-            </if>
-            <if test="comp.manager2 != null">
-                manager2 = #{comp.manager2},
-            </if>
-            <if test="comp.cPhone1 != null">
-                c_phone1 = #{comp.cPhone1},
-            </if>
-            <if test="comp.cPhone2 != null">
-                c_phone2 = #{comp.cPhone2},
-            </if>
-            <if test="comp.managerId != null">
-                manager_id = #{comp.managerId},
-            </if>
-            <if test="comp.surveyType != null">
-                survey_type = #{comp.surveyType},
-            </if>
-            <if test="comp.partner != null">
-                partner = #{comp.partner},
-            </if>
-            <if test="comp.address != null">
-                address = #{comp.address},
-            </if>
-            <if test="comp.industry != null">
-                industry = #{comp.industry},
-            </if>
-            <if test="comp.surveyProceed != null">
-                survey_proceed = #{comp.surveyProceed},
-            </if>
-            <if test="comp.comProceed != null">
-                com_proceed = #{com.comProceed},
-            </if>
+            <if test="comp.managerId != null"> manager_id = #{comp.managerId}, </if>
+            <if test="comp.comCenter != null"> com_center = #{comp.comCenter}, </if>
+            <if test="comp.comInsType != null"> com_ins_type = #{comp.comInsType}, </if>
+            <if test="comp.comName != null"> com_name = #{comp.comName}, </if>            
+            <if test="comp.comChannel != null"> com_channel = #{comp.comChannel}, </if>
+            <if test="comp.comSpot != null"> com_spot = #{comp.comSpot}, </if>
+            <if test="comp.comPhone != null"> com_phone = #{comp.comPhone}, </if>
+            <if test="comp.comAddress != null"> com_address = #{comp.comAddress}, </if>
+            <if test="comp.headName != null"> head_name = #{comp.headName}, </if>
+            <if test="comp.headPhone != null"> head_phone = #{comp.headPhone}, </if>
+            <if test="comp.leaderName != null"> leader_name = #{comp.leaderName}, </if>
+            <if test="comp.leaderPhone != null"> leader_phone = #{comp.leaderPhone}, </if>
+            <if test="comp.manager != null"> manager = #{comp.manager}, </if>
+            <if test="comp.manager1 != null"> manager1 = #{comp.manager1}, </if>            
+            <if test="comp.manager2 != null"> manager2 = #{comp.manager2}, </if>            
+            <if test="comp.manager3 != null"> manager3 = #{comp.manager3}, </if>
+            <if test="comp.general != null"> general = #{com.general}, </if>
+            <if test="comp.genPhone != null"> gen_phone = #{com.genPhone}, </if>            
+            <if test="comp.affiliation != null"> affiliation = #{com.affiliation}, </if>            
+            <if test="comp.headCount != null"> head_count = #{com.headCount}, </if>            
+            <if test="comp.location != null"> location = #{com.location}, </if>            
+            <if test="comp.workStart != null"> work_start  = #{com.workStart}, </if>            
+            <if test="comp.workEnd != null"> work_end = #{com.workEnd}, </if>            
+            <if test="comp.workTime != null"> work_time = #{com.workTime}, </if>            
+            <if test="comp.lunchTime != null"> lunch_time = #{com.lunchTime}, </if>            
+            <if test="comp.restTime != null"> rest_time = #{com.restTime}, </if>            
+            <if test="comp.workType != null"> work_type = #{com.workType}, </if>            
+            <if test="comp.park != null"> park = #{com.park}, </if>            
+            <if test="comp.cafe != null"> cafe = #{com.cafe}, </if>            
+            <if test="comp.comPhoto != null"> com_photo = #{com.comPhoto}, </if>            
+            <if test="comp.business != null"> business = #{com.business}, </if>            
+            <if test="comp.useDb != null"> user_db = #{com.useDb}, </if>            
+            <if test="comp.merch != null"> merch = #{com.merch}, </if>            
+            <if test="comp.minAge != null"> min_age = #{com.minAge}, </if>            
+            <if test="comp.maxAge != null"> max_age = #{com.maxAge}, </if>            
+            <if test="comp.reward != null"> reward = #{com.reward}, </if>            
+            <if test="comp.intType != null"> int_type = #{com.intType}, </if>            
+            <if test="comp.intTime != null"> int_time = #{com.intTime}, </if>            
+            <if test="comp.intCount != null"> int_count = #{com.intCount}, </if>            
+            <if test="comp.eduCost != null"> edu_cost = #{com.eduCost}, </if>            
+            <if test="comp.eduInst != null"> edu_inst = #{com.eduInst}, </if>            
+            <if test="comp.firstPay != null"> first_pay = #{com.firstPay}, </if>            
+            <if test="comp.guarPay != null"> guar_pay = #{com.guarPay}, </if>            
+            <if test="comp.guarPeriod != null"> guar_period = #{com.guarPeriod}, </if>            
+            <if test="comp.avePay != null"> ave_pay = #{com.avePay}, </if>            
+            <if test="comp.topPay != null"> top_pay = #{com.topPay}, </if>            
+            <if test="comp.bonus != null"> bonus = #{com.bonus}, </if>            
+            <if test="comp.promo != null"> promo = #{com.promo}, </if>            
+            <if test="comp.bond != null"> bond = #{com.bond}, </if>            
+            <if test="comp.bondPay != null"> bond_pay = #{com.bondPay}, </if>            
+            <if test="comp.welfare != null"> welfare = #{com.welfare}, </if>            
+            <if test="comp.welfEtc != null"> welf_etc = #{com.welfEtc}, </if>            
+            <if test="comp.prevEmp != null"> prev_emp = #{com.prevEmp}, </if>            
+            <if test="comp.empSch != null"> emp_sch = #{com.empSch}, </if>            
+            <if test="comp.strength != null"> strength = #{com.strength}, </if>            
+            <if test="comp.propose != null"> propose = #{com.propose}, </if>            
+            <if test="comp.suggest != null"> suggest = #{com.suggest}, </if>            
+            <if test="comp.profile != null"> profile = #{com.profile}, </if>            
+            <if test="comp.empAdmin != null"> emp_admin = #{com.empAdmin}, </if>            
+            <if test="comp.visitMeet != null"> visit_meet = #{com.visitMeet}, </if>            
+            <if test="comp.surveyProceed != null"> survey_proceed = #{com.surveyProceed}, </if>            
+            upt_date = sysdate()
         </set>
         WHERE cid = #{comp.cid} 
     </script>
