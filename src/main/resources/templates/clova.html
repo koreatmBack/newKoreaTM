@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <script type="text/javascript">
+        window.clovaChatbotInit = function () {
+            clovaChatbot.init({
+                chatbotKey: '[${chatbotKey}]',  <!-- 타임리프 표현식으로 chatbotKey 값 삽입 -->
+                domainId: '[${domainId}]',  <!-- 타임리프 표현식으로 domainId 값 삽입 -->
+                domainCode: '[${domainCode}]',  <!-- 타임리프 표현식으로 domainCode 값 삽입 -->
+                domainName: '[${domainName}]',  <!-- 타임리프 표현식으로 domainName 값 삽입 -->
+                iframeType: '[${iframeType}]',  <!-- 타임리프 표현식으로 iframeType 값 삽입 -->
+                language: '[${language}]'  <!-- 타임리프 표현식으로 language 값 삽입 -->
+            });
+        };
+    </script>
+    <script type="text/javascript" src="https://static.naver.com/clova-chatbot/js/widget.js"></script>
+</head>
+<body>
+<button onclick="clovaChatbot.open()">Chat with us</button>
+</body>
+</html>

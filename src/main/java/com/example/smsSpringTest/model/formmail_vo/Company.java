@@ -23,7 +23,7 @@ public class Company {
     private String comNameAlias; // 고객사 고유번호
     private String managerId;   // 코티 파트너 id
     private String comCenter;   // 사업단
-    private String comInsType;  // 보험사 구분 (생명 or 손해)
+    private String comGubun;  // 보험사 구분 (생명 or 손해)
     private String comName;     // 보험사명
     private String comChannel;  // 채널
     private String comSpot;     // 지점명
@@ -37,7 +37,7 @@ public class Company {
     private String manager1;    // 추가 담당자1
     private String manager2;    // 추가 담당자2
     private String manager3;    // 추가 담당자3
-    private String general;     // 총무
+    private String genName;     // 총무
     private String genPhone;    // 총무 연락처
     private String affiliation; // 상담사 소속
     private String headCount;   // 직원 수

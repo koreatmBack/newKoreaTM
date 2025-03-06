@@ -11,10 +11,10 @@ interface CompanyMapper {
     @Insert("""
         INSERT INTO formmail_company(
             cid
-            ,com_name_alias
+            ,com_gubun
             ,manager_id
             ,com_center
-            ,com_ins_type
+            ,com_gubun
             ,com_name
             ,com_channel
             ,com_spot
@@ -28,7 +28,7 @@ interface CompanyMapper {
             ,manager1
             ,manager2
             ,manager3
-            ,general
+            ,gen_name
             ,gen_phone
             ,affiliation
             ,head_count
@@ -77,7 +77,7 @@ interface CompanyMapper {
             , #{comp.comNameAlias}
             , #{comp.managerId}
             , #{comp.comCenter}
-            , #{comp.comInsType}
+            , #{comp.comGubun}
             , #{comp.comName}
             , #{comp.comChannel}
             , #{comp.comSpot}
@@ -91,7 +91,7 @@ interface CompanyMapper {
             , #{comp.manager1}
             , #{comp.manager2}
             , #{comp.manager3}
-            , #{comp.general}
+            , #{comp.genName}
             , #{comp.genPhone}
             , #{comp.affiliation}
             , #{comp.headCount}
@@ -153,7 +153,7 @@ interface CompanyMapper {
         SELECT 
         fc.cid
         , fc.com_name
-        , fc.com_ins_type
+        , fc.com_gubun
         , fc.com_channel
         , fc.com_spot
         , fc.manager
@@ -181,7 +181,7 @@ interface CompanyMapper {
         SELECT
         fc.cid
         , fc.com_name
-        , fc.com_ins_type
+        , fc.com_gubun
         , fc.com_channel
         , fc.com_spot
         , fc.manager
@@ -215,7 +215,7 @@ interface CompanyMapper {
         <set>
             <if test="comp.managerId != null"> manager_id = #{comp.managerId}, </if>
             <if test="comp.comCenter != null"> com_center = #{comp.comCenter}, </if>
-            <if test="comp.comInsType != null"> com_ins_type = #{comp.comInsType}, </if>
+            <if test="comp.comGubun != null"> com_gubun = #{comp.comGubun}, </if>
             <if test="comp.comName != null"> com_name = #{comp.comName}, </if>            
             <if test="comp.comChannel != null"> com_channel = #{comp.comChannel}, </if>
             <if test="comp.comSpot != null"> com_spot = #{comp.comSpot}, </if>
@@ -229,7 +229,7 @@ interface CompanyMapper {
             <if test="comp.manager1 != null"> manager1 = #{comp.manager1}, </if>            
             <if test="comp.manager2 != null"> manager2 = #{comp.manager2}, </if>            
             <if test="comp.manager3 != null"> manager3 = #{comp.manager3}, </if>
-            <if test="comp.general != null"> general = #{com.general}, </if>
+            <if test="comp.genName != null"> gen_name = #{com.genName}, </if>
             <if test="comp.genPhone != null"> gen_phone = #{com.genPhone}, </if>            
             <if test="comp.affiliation != null"> affiliation = #{com.affiliation}, </if>            
             <if test="comp.headCount != null"> head_count = #{com.headCount}, </if>            

@@ -1,0 +1,257 @@
+/* 챗봇 버튼 스타일 */
+
+/* 챗봇 창 숨김 상태 */
+
+/**
+#chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+**/
+
+#chatbot-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    border: none;
+    border-radius: 30%;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* 챗봇 창 스타일 */
+#chatbot-container {
+    width: 350px; /* 챗봇 창의 넓이 설정 */
+    height: 650px; /* 챗봇 창의 높이 설정 */
+    background-color: #fff; /* 배경색 */
+    border-radius: 15px; /* 둥근 모서리 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 */
+    position: fixed; /* 화면 고정 */
+    bottom: 110px; /* 화면 하단에 위치 */
+    right: 40px; /* 화면 오른쪽에 위치 */
+    display: none; /* 기본적으로 숨김 */
+    flex-direction: column; /* 세로로 요소 배치 */
+    padding: 15px; /* 내부 여백 */
+    overflow-y: auto; /* 스크롤이 필요할 경우 세로 스크롤 */
+    overflow-x: hidden; /* 가로 스크롤 숨기기 */
+    max-height: 650px; /* 최대 높이 설정 */
+}
+
+#chatbot-header {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+/*    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;*/
+    font-weight: bold;
+
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* 닫기 버튼 스타일 (예쁘게) */
+#close-chatbot {
+    background-color: #e74c3c; /* 빨간색 배경 */
+    color: white; /* 흰색 텍스트 */
+    border: none;
+    font-size: 20px;
+    border-radius: 50%; /* 원형으로 */
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* 클릭할 수 있음을 나타내는 손 모양 */
+    transition: background-color 0.3s ease; /* 배경색 변화 부드럽게 */
+}
+
+/* 닫기 버튼 호버 시 */
+#close-chatbot:hover {
+    background-color: #c0392b; /* 호버 시 조금 더 어두운 빨간색 */
+}
+
+#chatbot-messages {
+/*    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;*/
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 기본 정렬을 왼쪽으로 설정 */
+    overflow-y: auto;
+    lex-grow: 1; /* 남은 공간을 채우기 위한 설정 */
+    max-height: calc(100% - 120px); /* 입력창 공간을 제외한 나머지 공간 차지 */
+}
+
+/*
+.message {
+    padding: 8px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 80%;
+}
+
+.user {
+    align-self: flex-end;
+    background-color: #0078ff;
+    color: white;
+}
+
+.bot {
+    align-self: flex-start;
+    background-color: #f1f1f1;
+}
+
+
+
+#chatbot-input {
+    display: none;
+    border-top: 1px solid #ccc;
+    padding: 5px;
+}
+
+#user-message {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+}
+
+#send-message {
+    background-color: #0078ff;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+*/
+
+/* 오류 메시지 스타일 */
+.message.error {
+    background-color: #ffdddd; /* 오류 메시지 배경 */
+    color: #e74c3c; /* 빨간색 텍스트 */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+}
+
+/* 채팅 입력창 영역 */
+#chatbot-input {
+    display: none; /* 처음에는 숨기기 */
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    position: absolute; /* 절대 위치로 설정 */
+    bottom: 0; /* 화면 맨 아래에 고정 */
+    width: 100%; /* 전체 너비 차지 */
+    background-color: #fff; /* 배경색 설정 */
+    padding: 10px;
+    left : 3px;
+    box-sizing: border-box;
+}
+
+/* 입력창 스타일 */
+#user-message {
+    width: 80%; /* 입력창의 너비 */
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+}
+
+/* 전송 버튼 스타일 */
+#send-message {
+    background-color: #3498db; /* 전송 버튼 색 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* 텍스트가 세로로 나오지 않게 가로로 유지 */
+    text-align: center; /* 텍스트를 수평 중앙에 배치 */
+    display: inline-block; /* 버튼을 인라인 블록으로 설정하여 텍스트가 한 줄로 나오게 설정 */
+}
+
+/* 전송 버튼 호버 효과 */
+#send-message:hover {
+    background-color: #2980b9; /* 호버 시 조금 더 어두운 색상 */
+}
+
+
+.message {
+    padding: 8px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 80%;
+}
+
+/* 사용자의 메시지 */
+.user {
+    align-self: flex-end; /* 사용자의 메시지는 오른쪽 정렬 */
+    background-color: #d1f7c4; /* 사용자 메시지 배경 */
+    color: #333;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    width: auto; /* 텍스트에 맞춰 너비가 자동으로 조정되도록 설정 */
+    max-width: 80%; /* 최대 너비를 80%로 설정 (너무 길어지지 않도록 제한) */
+    word-wrap: break-word; /* 긴 단어가 있을 때 줄 바꿈 */
+}
+
+/* 봇 메세지 */
+.bot {
+    align-self: flex-start;
+    background-color: #f1f1f1; /* 봇 메시지 배경 */
+    color: #333;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    max-width: 80%; /* 메시지 너비 제한 */
+ }
+
+
+/* 문의하기 버튼 스타일 */
+#inquire-btn {
+    display: none; /* 처음에는 보이지 않도록 설정 */
+    background-color: #4CAF50; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    border: none; /* 버튼 테두리 제거 */
+    padding: 10px 20px; /* 버튼 안쪽 여백 */
+    font-size: 16px; /* 글자 크기 */
+    border-radius: 5px; /* 버튼 둥글기 */
+    cursor: pointer; /* 커서 모양을 손 모양으로 */
+    position: absolute; /* 챗봇 창 안에서 고정 위치 */
+    bottom: 70px; /* 하단 여백 */
+    left: 50%; /* 가운데 정렬 */
+    transform: translateX(-50%); /* 정확히 가운데 오도록 */
+    transition: background-color 0.3s ease; /* 배경색 변화 시 부드러운 전환 */
+}
+
+/* 버튼에 호버 효과 */
+#inquire-btn:hover {
+    background-color: #45a049; /* 마우스를 올렸을 때 배경색 변화 */
+}
+
+/* 버튼 클릭 시 효과 */
+#inquire-btn:active {
+    background-color: #388e3c; /* 클릭할 때 배경색 변화 */
+}

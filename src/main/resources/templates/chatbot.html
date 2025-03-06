@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clova 챗봇</title>
+    <link rel="stylesheet" th:href="@{/css/chatbot.css}">
+    <script th:src="@{/js/chatbot.js}" defer></script>
+</head>
+<body>
+
+<!-- 챗봇 버튼 -->
+<!--<button id="chatbot-btn">💬</button>-->
+<button id="chatbot-btn"><img width="50" height="50" src="https://img.icons8.com/color/48/filled-topic.png" alt="filled-topic"/></button>
+
+<!-- 챗봇 창 -->
+<div id="chatbot-container" class="hidden" style="display: none;">
+    <div id="chatbot-header">
+        <span> Goalba 챗봇</span>
+        <button id="close-chatbot">✖</button>
+    </div>
+    <div id="chatbot-messages"></div>
+
+    <!-- 문의하기 버튼 (챗봇 창 내부에 위치) -->
+    <button id="inquire-btn" style="display: none;">문의하기</button>
+
+    <div id="chatbot-input">
+        <input type="text" id="user-message" placeholder="메시지를 입력하세요..." />
+        <button id="send-message">전송</button>
+    </div>
+</div>
+
+</body>
+</html>
