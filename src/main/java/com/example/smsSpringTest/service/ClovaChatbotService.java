@@ -16,7 +16,9 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * author : 신기훈
@@ -31,8 +33,8 @@ public class ClovaChatbotService {
 
 //    @Value("${cloud.aws.s3.bucket}")
 //    private String bucket;
-    private static final String secretKey = "SlVVUUZReHlkZ05ab0J2eFl4eERxTkhzaG1teWVDQ3Y=";
-    private static final String apiUrl = "https://pefgqdyyki.apigw.ntruss.com/custom/v1/17047/67a373d472b6ead3f75a71c1cc5f3a055f71e03ceaeafd74359472dcadc14022";
+    private static final String secretKey = "";
+    private static final String apiUrl = "";
 
 //    private final RestTemplate restTemplate;
 //    private final ObjectMapper objectMapper;
@@ -146,9 +148,43 @@ public class ClovaChatbotService {
                 JsonObject bubbles = (JsonObject) bubblesArray.get(0);
                 JsonObject data = (JsonObject) bubbles.get("data");
                 String description = "";
-                description = data.get("description").getAsString();
+
+                if (data.has("cover")) {
+                    // 만약 폼 답변일때
+                    JsonObject cover = data.getAsJsonObject("cover");
+                    if (cover.has("data")) {
+                        JsonObject coverData = cover.getAsJsonObject("data");
+                        if (coverData.has("description")) {
+                            description = coverData.get("description").getAsString();
+                        }
+                    }
+                } else {
+                    // 일반 답변
+                    description = data.get("description").getAsString();
+                }
                 chatMessage = description;
             log.info("최종 메세지 = " + chatMessage);
+
+                // Title 리스트 가져오기 (객관식 폼 답변 때)
+                List<String> titles = new ArrayList<>();
+                if (data.has("contentTable")) {
+                    JsonArray contentTable = data.getAsJsonArray("contentTable");
+                    for (int i = 0; i < contentTable.size(); i++) {
+                        JsonArray row = contentTable.get(i).getAsJsonArray();
+                        for (int j = 0; j < row.size(); j++) {
+                            JsonObject cell = row.get(j).getAsJsonObject();
+                            if (cell.has("data")) {
+                                JsonObject cellData = cell.getAsJsonObject("data");
+                                if (cellData.has("title")) {
+                                    titles.add(cellData.get("title").getAsString());
+                                }
+                            }
+                        }
+                    }
+                }
+
+                log.info("title = " + titles);
+
             } catch (Exception e) {
                 log.info("error : " + e.getMessage(), e);
 //                e.printStackTrace();

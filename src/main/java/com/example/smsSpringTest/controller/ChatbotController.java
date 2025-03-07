@@ -4,7 +4,6 @@ import com.example.smsSpringTest.service.ClovaChatbotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,14 +22,7 @@ public class ChatbotController {
     private final ClovaChatbotService clovaChatbotService;
 
     @GetMapping("")
-    public String chatbotPage(Model model){
-//        model.addAttribute("chatbotKey", "SlVVUUZReHlkZ05ab0J2eFl4eERxTkhzaG1teWVDQ3Y=");
-//        model.addAttribute("domainId", "17047");
-//        model.addAttribute("domainCode", "ChatBotSKH");
-//        model.addAttribute("domainName", "ChatBotSKH");
-//        model.addAttribute("iframeType", "modal");
-//        model.addAttribute("language", "ko");
-//        return "clova"; // chatbot.html 연결
+    public String chatbotPage(){
         return "chatbot"; // chatbot.html 연결
     }
 
