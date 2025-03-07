@@ -45,8 +45,7 @@ interface CompanyMapper {
             ,business
             ,use_db
             ,merch
-            ,min_age
-            ,max_age
+            ,interview_target
             ,reward
             ,int_type
             ,int_time
@@ -61,7 +60,6 @@ interface CompanyMapper {
             ,bonus
             ,promo
             ,bond
-            ,bond_pay
             ,welfare
             ,welf_etc
             ,prevEmp
@@ -108,8 +106,7 @@ interface CompanyMapper {
             , #{comp.business}
             , #{comp.useDb}
             , #{comp.merch}
-            , #{comp.minAge}
-            , #{comp.maxAge}
+            , #{comp.interviewTarget}
             , #{comp.reward}
             , #{comp.intType}
             , #{comp.intTime}
@@ -124,7 +121,6 @@ interface CompanyMapper {
             , #{comp.bonus}
             , #{comp.promo}
             , #{comp.bond}
-            , #{comp.bondPay}
             , #{comp.welfare}
             , #{comp.welfEtc}
             , #{comp.prevEmp}
@@ -246,8 +242,7 @@ interface CompanyMapper {
             <if test="comp.business != null"> business = #{com.business}, </if>            
             <if test="comp.useDb != null"> user_db = #{com.useDb}, </if>            
             <if test="comp.merch != null"> merch = #{com.merch}, </if>            
-            <if test="comp.minAge != null"> min_age = #{com.minAge}, </if>            
-            <if test="comp.maxAge != null"> max_age = #{com.maxAge}, </if>            
+            <if test="comp.interviewTarget != null"> interview_target = #{com.interviewTarget}, </if>                    
             <if test="comp.reward != null"> reward = #{com.reward}, </if>            
             <if test="comp.intType != null"> int_type = #{com.intType}, </if>            
             <if test="comp.intTime != null"> int_time = #{com.intTime}, </if>            
@@ -262,7 +257,6 @@ interface CompanyMapper {
             <if test="comp.bonus != null"> bonus = #{com.bonus}, </if>            
             <if test="comp.promo != null"> promo = #{com.promo}, </if>            
             <if test="comp.bond != null"> bond = #{com.bond}, </if>            
-            <if test="comp.bondPay != null"> bond_pay = #{com.bondPay}, </if>            
             <if test="comp.welfare != null"> welfare = #{com.welfare}, </if>            
             <if test="comp.welfEtc != null"> welf_etc = #{com.welfEtc}, </if>            
             <if test="comp.prevEmp != null"> prev_emp = #{com.prevEmp}, </if>            

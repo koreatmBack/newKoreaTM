@@ -54,8 +54,7 @@ public class Company {
     private String business;    // 업무 형태
     private String useDb;       // 사용DB
     private String merch;       // 주력 판매상품
-    private String minAge;      // 면접 가능 최소 나이
-    private String maxAge;      // 면접 가능 최대 나이
+    private String interviewTarget; // 면접 가능 대상
     private String reward;      // 면접비 or 면접 선물
     private String intType;     // 면접 진행 방식
     private String intTime;     // 면접 가능 시간대
@@ -70,7 +69,6 @@ public class Company {
     private String bonus;       // 성과급(보너스)
     private String promo;       // 프로모션
     private String bond;        // 이행보증 유/무
-    private String bondPay;     // 이행보증 금액
     private String welfare;     // 복지사항
     private String welfEtc;     // 기타 복지사항
     private String prevEmp;     // 기존 채용 방식
