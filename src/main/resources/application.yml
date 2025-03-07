@@ -86,7 +86,7 @@ sms:
   secureKey: ${SMS_SECURE}
 
 holiday:
-  service-key: ${HOLIDAY_KEY}
+  service-key: holiday~
 
 jwt:
   secret: ${JWT_SECRET}
@@ -105,9 +105,12 @@ naver:
   redirect-uri: https://goalba.co.kr/naver-login
 #  redirect-uri: https://d1hw28kg3ibv9b.cloudfront.net/v1/jobsite/user/login/naver
 #  redirect-uri: http://localhost:8080/v1/jobsite/user/login/naver
+#  map:
+#   client-id: ${NAVER_MAP_CLIENT_ID}
+#   client-secret: ${NAVER_MAP_CLIENT_SECRET}
   map:
-   client-id: ${NAVER_MAP_CLIENT_ID}
-   client-secret: ${NAVER_MAP_CLIENT_SECRET}
+   client-id: abcd
+   client-secret: abcd
   search:
     client-id: ${NAVER_SEARCH_CLIENT_ID}
     client-secret: ${NAVER_SEARCH_CLIENT_SECRET}
